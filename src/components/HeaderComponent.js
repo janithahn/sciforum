@@ -17,29 +17,29 @@ function MainDrawer({ handleDrawerClose, classes, open, theme }) {
             classes={{ paper: classes.drawerPaper }}
         >
             <div className={classes.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
-                <ChevronLeft/>
-            </IconButton>
+                <IconButton onClick={handleDrawerClose}>
+                    <ChevronLeft/>
+                </IconButton>
             </div>
             <Divider />
             <div className={classes.drawerContainer}>
-            <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <Inbox/> : <Mail />}</ListItemIcon>
-                <ListItemText primary={text} />
-                </ListItem>
-            ))}
-            </List>
-            <Divider />
-            <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
-                <ListItemText primary={text} />
-                </ListItem>
-            ))}
-            </List>
+                <List>
+                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                        <ListItem button key={text}>
+                        <ListItemIcon>{index % 2 === 0 ? <Inbox/> : <Mail />}</ListItemIcon>
+                        <ListItemText primary={text} />
+                        </ListItem>
+                    ))}
+                </List>
+                <Divider />
+                <List>
+                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                        <ListItem button key={text}>
+                        <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
+                        <ListItemText primary={text} />
+                        </ListItem>
+                    ))}
+                </List>
             </div>
         </Drawer>
     );
@@ -61,7 +61,7 @@ export default function Header(props) {
     return (
         <div className={classes.root}>
             <CssBaseline/>
-            <AppBar position="fixed"
+            <AppBar position='dense'
                 className={clsx(classes.appBar, {
                     [classes.appBarShift]: open,
                 })}
