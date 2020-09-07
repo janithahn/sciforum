@@ -1,37 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, createMuiTheme, CircularProgress } from '@material-ui/core';
-import { deepPurple } from '@material-ui/core/colors';
+import { ThemeProvider, CircularProgress, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import NotFound from './NotFoundComponent';
 import { useHistory } from 'react-router-dom';
 import Editor from './EditorComponent';
 import EditorDraft from './EditorDraftComponent';
-
-const theme = createMuiTheme({
-    typography: {
-        fontFamily: 'Recursive'
-    },
-    palette: {
-      primary: deepPurple,
-    },
-  });
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '25ch',
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { theme, useStyles } from '../styles/postsStyles';
 
 export default function EditPost(props) {
   const classes = useStyles();
@@ -58,33 +33,25 @@ export default function EditPost(props) {
           <div>
             <ThemeProvider theme={theme}>
                 <form onSubmit={handleSubmit}>
+                    <Typography variant="h6" gutterBottom>
+                      Title
+                    </Typography>
                     <TextField
-                    id="title"
-                    label="Title"
-                    value={title}
-                    name="title"
-                    onInput={e => setTitle(e.target.value)}
-                    style={{ margin: 8 }}
-                    placeholder="Enter title here"
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
+                      className={classes.textField}
+                      id="title"
+                      value={title}
+                      name="title"
+                      onInput={e => setTitle(e.target.value)}
+                      margin="none"
+                      size="small"
+                      InputLabelProps={{
+                          shrink: true,
+                      }}
+                      variant="outlined"
                     />
-                    <TextField
-                    id="body"
-                    label="Question"
-                    value={body}
-                    name="body"
-                    onInput={e => setQuestion(e.target.value)}
-                    style={{ margin: 8 }}
-                    placeholder="Body of the question"
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    />
+                    <Typography className={classes.typo} variant="h6" gutterBottom>
+                      Question
+                    </Typography>
                     <Editor setQuestion={setQuestion} data={body}/>
                     <Button
                         type="submit"
@@ -97,7 +64,6 @@ export default function EditPost(props) {
                 </form>
             </ThemeProvider>
           </div>
-          <EditorDraft body={body}/>
         </div>
       );
     }else {

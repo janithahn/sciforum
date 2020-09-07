@@ -6,7 +6,7 @@ const MentionPlugin = ClassicEditor.builtinPlugins.find(
     plugin => plugin.pluginName == 'Mention'
 );
 
-export default function Editor(props) {
+export default function PostViewer(props) {
     return(
         <CKEditor id="editor"
             editor={ ClassicEditor }
@@ -25,19 +25,12 @@ export default function Editor(props) {
             onFocus={ ( event, editor ) => {
                 console.log( 'Focus.', editor );
             } }
-            disabled={false}
+            disabled={true}
+            config={editorConfig}
         />
     );
 }
 
 const editorConfig = {
-    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'Link' ],
-    heading: {
-        options: [
-            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
-        ]
-    },
-    removePlugins: ['Heading', 'Link'],
+    toolbar: [],
 };
