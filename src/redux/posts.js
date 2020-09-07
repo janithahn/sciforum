@@ -1,19 +1,19 @@
 import * as ActionTypes from './ActionTypes';
 
 export const Posts = (state = {
-        isLoading: true,
+        status: 'idle',
         errMess: null,
         posts: []
     }, action) => {
     switch(action.type) {
         case ActionTypes.ADD_POST:
-            return {...state, isLoading: false, errMess: null, posts: action.payload}
+            return {...state, status: 'succeeded', errMess: null, posts: action.payload}
 
         case ActionTypes.POST_LOADING:
-            return {...state, isLoading: true, errMess: null, posts: []}
+            return {...state, status: 'loading', errMess: null, posts: []}
         
         case ActionTypes.POST_FAILED:
-            return {...state, isLoading: false, errMess: action.payload, posts: []}
+            return {...state, status: 'falied', errMess: action.payload, posts: []}
 
         default:
             return state;

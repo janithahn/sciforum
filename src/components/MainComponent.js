@@ -5,17 +5,20 @@ import Sample from './SampleComponent';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from '../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts } from '../redux/ActionCreators';
+import { fetchPosts, postPost, editPost } from '../redux/ActionCreators';
 import Footer from './FooterComponent';
 import SignUp from './SignUpComponent';
 import SignIn from './SignInComponent';
 import MainDrawer from './DrawerComponent';
 import PostDetail from './PostDetailComponent';
+import CreatePost from  './CreatePostComponent';
+import EditPost from './EditPostComponent';
+import NotFound from './NotFoundComponent';
 
 function Main() {
     const posts = useSelector(state => state.Posts);
-    const dispatch = useDispatch();
     const location = useLocation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchPosts())
@@ -32,24 +35,27 @@ function Main() {
         setOpen(false);
     };
 
-    const HomePage = () => {
+    const PostDetailView = ({match}) => {
+        console.log(posts);
         return(
-            <Home
-                posts={posts.posts}
-                postsLoading={posts.isLoading}
-                postsFailed={posts.errMess}
+            <PostDetail
+                post={posts.posts.filter((post) => post.id === parseInt(match.params.postId))[0]}
+                postLoading={posts.status}
+                postFailed={posts.errMess}
                 classes={classes}
+                match={match}
             />
         );
     };
 
-    const PostDetailView = ({match}) => {
+    const PostEditView = ({match}) => {
         return(
-            <PostDetail 
+            <EditPost 
                 post={posts.posts.filter((post) => post.id === parseInt(match.params.postId))[0]}
-                postLoading={posts.isLoading}
+                postLoading={posts.status}
                 postFailed={posts.errMess}
                 classes={classes}
+                editPost={(post) => dispatch(editPost(post))}
             />
         );
     };
@@ -60,12 +66,16 @@ function Main() {
             {location.pathname !== '/signup' && location.pathname !== '/signin' && <MainDrawer open={open} classes={classes} handleDrawerClose={handleDrawerClose}/>}
             <main className={location.pathname !== '/signup' && location.pathname !== '/signin' && classes.content}>
                 <Switch>
-                    <Route exact path="/" component={HomePage} />
+                    <Route exact path="/" component={() => <Home classes={classes}/>} />
+                    <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
                     <Route path="/questions/:postId" component={PostDetailView}/>
+                    <Route path="/posts/:postId/edit" component={PostEditView}/>
                     <Route exact path="/sample" component={Sample}/>
                     <Route exact path="/signup" component={() => <SignUp/>} />
                     <Route exact path="/signin" component={() => <SignIn/>}/>
-                    <Redirect to="/" />
+                    <Route exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
+                    <Route component={NotFound}/>
+                    <Redirect to="/"/>
                 </Switch>
             </main>
             <Footer/>

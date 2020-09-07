@@ -2,6 +2,8 @@ import React from 'react';
 import { IconButton, Drawer, Hidden, List, Divider, ListItemIcon, ListItemText, MenuItem, Link, useTheme } from '@material-ui/core';
 import { Inbox, ChevronLeft, Home } from '@material-ui/icons';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchPosts } from '../redux/ActionCreators';
 
 function RenderDrawer({ handleDrawerClose, classes, open, variant, handleSelectedItem, selected }) {
 
@@ -40,8 +42,13 @@ export default function MainDrawer(props) {
     const location = useLocation();
     const [selected, setLocation] = React.useState(location.pathname);
 
+    const dispatch = useDispatch();
+
     const handleSelectedItem = (val) => {
         setLocation(val);
+        if(selected === '/') {
+            dispatch(fetchPosts('From the Drawer'));
+        }
     }
 
     return(
