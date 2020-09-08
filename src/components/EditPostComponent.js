@@ -30,7 +30,6 @@ export default function EditPost(props) {
     if(props.post !== undefined) {
       return (
         <div className={classes.root}>
-          <div>
             <ThemeProvider theme={theme}>
                 <form onSubmit={handleSubmit}>
                     <Typography variant="h6" gutterBottom>
@@ -63,7 +62,6 @@ export default function EditPost(props) {
                   </Button>
                 </form>
             </ThemeProvider>
-          </div>
         </div>
       );
     }else {

@@ -45,7 +45,7 @@ export default function Home(props) {
         return(
             <div>
                 <Link to="/ask" style={{textDecoration: 'none'}}>
-                    <Button color='secondary' variant="contained">Ask a Question</Button>
+                    <Button style={{position: 'relative', left: '87.63%'}} color='secondary' variant="contained">Ask a Question</Button>
                 </Link>
                 {PostsList}
             </div>

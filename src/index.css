@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.editor .ck-editor__editable {
+  min-height: 20em;
+  resize: vertical;
+  overflow: auto;
+}
