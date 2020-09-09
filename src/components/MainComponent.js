@@ -14,6 +14,7 @@ import PostDetail from './PostDetailComponent';
 import CreatePost from  './CreatePostComponent';
 import EditPost from './EditPostComponent';
 import NotFound from './NotFoundComponent';
+import MDBCustomFooter from './MDBFooterComponent';
 
 function Main() {
     const posts = useSelector(state => state.Posts);
