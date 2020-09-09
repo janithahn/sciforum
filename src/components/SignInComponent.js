@@ -13,7 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { deepPurple } from '@material-ui/core/colors';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core';
+import { theme, useStylesSignin as useStyles } from '../styles/signinSignupStyles';
 
 function Copyright() {
   return (
@@ -27,48 +28,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-const theme = createMuiTheme({
-  typography: {
-      fontFamily: 'Recursive'
-  },
-  palette: {
-    primary: deepPurple,
-  },
-});
-
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(3),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: theme.spacing(3),
-    backgroundColor: '#fafafa',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.light,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    paddingLeft: theme.spacing(3),
-    paddingTop: theme.spacing(10),
-    [theme.breakpoints.up('md')]: {
-        paddingLeft: theme.spacing(3),
-        paddingTop: theme.spacing(10),
-    },
-  },
-}));
 
 export default function SignIn() {
   const classes = useStyles();

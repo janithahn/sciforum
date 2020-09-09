@@ -9,9 +9,8 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core';
-import { deepPurple } from '@material-ui/core/colors';
+import { ThemeProvider } from '@material-ui/core';
+import { theme, useStylesSignUp as useStyles, ValidationTextField } from '../styles/signinSignupStyles';
 
 function Copyright() {
   return (
@@ -25,65 +24,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-const theme = createMuiTheme({
-    typography: {
-        fontFamily: 'Recursive'
-    },
-    palette: {
-      primary: deepPurple,
-    },
-  });
-
-const ValidationTextField = withStyles({
-    root: {
-        '& input:valid + fieldset': {
-        borderColor: 'black',
-        borderWidth: 2,
-        },
-        '& input:after:invalid + fieldset': {
-        borderColor: 'red',
-        borderWidth: 2,
-        },
-        '& input:valid:focus + fieldset': {
-        borderLeftWidth: 6,
-        padding: '4px !important', // override inline-style
-        },
-    },
-})(TextField);
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(3),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.light,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  multilineColor: {
-    color:'red'
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    paddingLeft: theme.spacing(3),
-    paddingTop: theme.spacing(10),
-    [theme.breakpoints.up('md')]: {
-        paddingLeft: theme.spacing(3),
-        paddingTop: theme.spacing(10),
-    },
-  }
-}));
 
 export default function SignUp() {
   const classes = useStyles();
