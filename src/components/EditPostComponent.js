@@ -22,6 +22,10 @@ export default function EditPost(props) {
         //alert("Title: " + event.target.elements.title.value + "\n" + "Question: " + body);
   }
 
+  function handleCancel() {
+    history.push(`/questions/${id}/`);
+  }
+
   if(props.postLoading === 'loading') {
     return(<CircularProgress color="secondary" size={15}/>);
   }else if(props.postFailed) {
@@ -59,6 +63,14 @@ export default function EditPost(props) {
                         className={classes.submit}
                     >
                     Submit
+                  </Button>
+                  <Button
+                        onClick={handleCancel}
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
+                    Cancel
                   </Button>
                 </form>
             </ThemeProvider>
