@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Divider, Container, Button } from '@material-ui/core';
 import { fetchPosts } from '../redux/ActionCreators';
+import QuestionViewCard from './QuestionViewCardComponent';
 
 function RenderCard({item}) {
     return(
@@ -35,7 +36,7 @@ export default function Home(props) {
         }
     }, [postsStatus, dispatch]);
 
-    const PostsList = posts.posts.map((post) => <RenderCard key={post.id} item={post}/>);
+    const PostsList = posts.posts.map((post) => <QuestionViewCard key={post.id} item={post}/>);
 
     if(posts.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
@@ -45,7 +46,7 @@ export default function Home(props) {
         return(
             <div>
                 <Link to="/ask" style={{textDecoration: 'none'}}>
-                    <Button style={{position: 'relative', left: '87.63%'}} color='secondary' variant="contained">Ask a Question</Button>
+                    <Button style={{position: 'relative', left: '86.66%'}} color='secondary' variant="contained">Ask a Question</Button>
                 </Link>
                 {PostsList}
             </div>
