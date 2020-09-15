@@ -11,6 +11,19 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { ThemeProvider } from '@material-ui/core';
 import { theme, useStylesSignUp as useStyles, ValidationTextField } from '../styles/signinSignupStyles';
+import { Control, Form, Errors } from 'react-redux-form';
+
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => (val) && (val.length >= len);
+const isNumber = (val) => !isNaN(Number(val));
+const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
+
+function handleSubmit(values) {
+  alert("Current State is: " + JSON.stringify(values));
+  //this.props.postFeedback(values);
+  //this.props.resetFeedbackForm();
+}
 
 function Copyright() {
   return (
@@ -39,7 +52,7 @@ export default function SignUp() {
           Sign up
         </Typography>
         <ThemeProvider theme={theme}>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <ValidationTextField
@@ -73,6 +86,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                aria-describedby="email-errors"
               />
             </Grid>
             <Grid item xs={12}>
@@ -84,6 +98,18 @@ export default function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <ValidationTextField
+                variant="outlined"
+                required
+                fullWidth
+                name="passwordConfirm"
+                label="Confirm Password"
+                type="password"
+                id="passwordConfirm"
                 autoComplete="current-password"
               />
             </Grid>

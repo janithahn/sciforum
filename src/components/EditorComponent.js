@@ -8,7 +8,7 @@ const MentionPlugin = ClassicEditor.builtinPlugins.find(
 
 export default function Editor(props) {
     return(
-        <div class="editor">
+        <div className="editor">
             <CKEditor id="editor"
                 editor={ ClassicEditor }
                 data={props.data}
@@ -27,20 +27,29 @@ export default function Editor(props) {
                     console.log( 'Focus.', editor );
                 } }
                 disabled={false}
-                config={{height: 800}}
+                config={editorConfig}
             />
         </div>
     );
 }
 
 const editorConfig = {
-    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'Link' ],
-    heading: {
-        options: [
-            { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-            { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-            { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+    toolbarGroup: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 
+        [
+            'numberedList', 'imageUpload', 'blockQuote',
+            'insertTable', 'mediaEmbed', 'undo', 'redo'
+        ]
+    ],
+    image: {
+        toolbar: [ 'imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight' ],
+        styles: [ 'full', 'alignLeft', 'alignRight' ]
+    },
+    table: {
+        contentToolbar: [
+            'tableColumn',
+            'tableRow',
+            'mergeTableCells'
         ]
     },
-    removePlugins: ['Heading', 'Link'],
+
 };

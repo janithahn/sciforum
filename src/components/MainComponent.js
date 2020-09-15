@@ -18,6 +18,7 @@ import MDBCustomFooter from './MDBFooterComponent';
 
 function Main() {
     const posts = useSelector(state => state.Posts);
+    const auth = useSelector(state => state.Auth);
     const location = useLocation();
     const dispatch = useDispatch();
 
@@ -38,6 +39,7 @@ function Main() {
 
     const PostDetailView = ({match}) => {
         console.log(posts);
+        console.log(auth);
         return(
             <PostDetail
                 post={posts.posts.filter((post) => post.id === parseInt(match.params.postId))[0]}

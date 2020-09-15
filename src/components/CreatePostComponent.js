@@ -21,6 +21,10 @@ export default function CreatePost(props) {
         //alert("Title: " + event.target.elements.title.value + "\n" + "Question: " + body);
   }
 
+  function handleCancel() {
+    history.push("/questions");
+  }
+
   return (
     <div className={classes.root}>
         <ThemeProvider theme={theme}>
@@ -53,6 +57,14 @@ export default function CreatePost(props) {
                   className={classes.submit}
               >
                 Submit
+              </Button>
+              <Button
+                    onClick={handleCancel}
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                >
+                Cancel
               </Button>
             </form>
         </ThemeProvider>

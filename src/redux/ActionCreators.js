@@ -1,6 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 
+//POSTS
 export const fetchPosts = () => async (dispatch) => {
     dispatch(postLoading());
 
@@ -70,3 +71,95 @@ export const deletePost = (post, history) => (dispatch, getState) => {
     })
     .catch(error => console.log(error));
 };
+
+// AUTHENTICATION
+export const requestLogin = (creds) => {
+    return ({
+        type: ActionTypes.LOGIN_REQUEST,
+        creds
+    });
+}
+
+export const loginSuccess = (response) => {
+    return({
+        type: ActionTypes.LOGIN_SUCCESS,
+        token: response.token
+    });
+}
+
+export const loginError = (loginErrMessage) => {
+    return({
+        type: ActionTypes.LOGIN_FAILURE,
+        loginErrMessage
+    });
+}
+
+const checkAuthTimeout = expirationTime => dispatch => {
+    dispatch(
+        setTimeout(() => {
+            dispatch(logout());
+        }, expirationTime * 1000)
+    );
+}
+
+export const loginUser = (creds) => (dispatch) => {
+    dispatch(requestLogin(creds));
+
+    axios.post('http://localhost:8000/rest-auth/login/', {
+        username: creds.username,
+        password: creds.password
+    })
+    .then(res => {
+        const token = res.data.key;
+        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        localStorage.setItem('token', token);
+        localStorage.setItem('expirationDate', expirationDate);
+        dispatch(loginSuccess(res));
+        dispatch(checkAuthTimeout(3600));
+    })
+    .catch(error => {
+        dispatch(loginError(error));
+    });
+}
+
+export const requestLogout = () => {
+    return {
+      type: ActionTypes.LOGOUT_REQUEST
+    }
+}
+  
+export const logoutSuccess = () => {
+    return {
+      type: ActionTypes.LOGOUT_SUCCESS
+    }
+}
+
+export const logout = () => (dispatch) => {
+    dispatch(requestLogout());
+    localStorage.removeItem('user');
+    localStorage.removeItem('expirationDate');
+    dispatch(logoutSuccess());
+}
+
+//SIGNUP
+export const signupUser = (creds) => (dispatch) => {
+    dispatch(requestLogin(creds));
+
+    axios.post('http://localhost:8000/rest-auth/register/', {
+        username: creds.username,
+        password1: creds.password1,
+        password2: creds.password2,
+        email: creds.email
+    })
+    .then(res => {
+        const token = res.data.key;
+        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        localStorage.setItem('token', token);
+        localStorage.setItem('expirationDate', expirationDate);
+        dispatch(loginSuccess(res));
+        dispatch(checkAuthTimeout(3600));
+    })
+    .catch(error => {
+        dispatch(loginError(error));
+    });
+}
