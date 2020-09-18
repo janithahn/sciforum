@@ -40,8 +40,9 @@ export default function Home(props) {
 
     if(posts.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
-    }else if(posts.postsFailed) {
-        return(<h4>Error loading!</h4>);
+    }else if(posts.status === 'failed') {
+        //console.log(posts.errMess);
+        return(<h4>Error loading...!</h4>);
     } else {
         return(
             <div>

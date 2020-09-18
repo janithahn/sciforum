@@ -34,7 +34,7 @@ export default function PostDetail(props) {
     if(props.postLoading === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
     }else if(props.postFailed) {
-        return(<h4>Error loading!</h4>);
+        return(<h4>Error loading...!</h4>);
     } else {
         if(props.post !== undefined) {
             return(

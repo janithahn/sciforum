@@ -81,15 +81,15 @@ export const useStylesSignin = makeStyles((theme) => ({
 export  const ValidationTextField = withStyles({
     root: {
         '& input:valid + fieldset': {
-        borderColor: 'black',
-        borderWidth: 2,
+        borderColor: 'gray',
+        borderWidth: 0.5,
         },
         '& input:after:invalid + fieldset': {
         borderColor: 'red',
         borderWidth: 2,
         },
         '& input:valid:focus + fieldset': {
-        borderLeftWidth: 6,
+        borderLeftWidth: 4,
         padding: '4px !important', // override inline-style
         },
     },

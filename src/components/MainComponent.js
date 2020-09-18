@@ -67,7 +67,7 @@ function Main() {
         <div>
             <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open}/>
             {location.pathname !== '/signup' && location.pathname !== '/signin' && <MainDrawer open={open} classes={classes} handleDrawerClose={handleDrawerClose}/>}
-            <main className={location.pathname !== '/signup' && location.pathname !== '/signin' && classes.content}>
+            <main className={(location.pathname !== '/signup' && location.pathname !== '/signin') ? classes.content: undefined}>
                 <Switch>
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
@@ -81,7 +81,7 @@ function Main() {
                     <Redirect to="/"/>
                 </Switch>
             </main>
-            <Footer/>
+            {(location.pathname !== '/signup' && location.pathname !== '/signin') ? <Footer/>: undefined}
         </div>
     );
 }
