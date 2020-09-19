@@ -5,6 +5,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import SignIn from './SignInComponent';
 import { useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/ActionCreators';
 
 function LoginModal({openModal, classes, handleModalClose, ref}) {
     return(
@@ -21,7 +23,7 @@ function LoginModal({openModal, classes, handleModalClose, ref}) {
             }}
         >
         <Fade in={openModal}>
-          <SignIn/>
+          <SignIn handleModalClose={handleModalClose}/>
         </Fade>
       </Modal>
     );
@@ -29,8 +31,12 @@ function LoginModal({openModal, classes, handleModalClose, ref}) {
 
 const Header = (props) => {
 
+    const dispatch = useDispatch();
+    const auth = useSelector(state => state.Auth);
     const [openModal, setOpenModal] = React.useState(false);
     const location = useLocation();
+
+    console.log(auth);
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -70,7 +76,7 @@ const Header = (props) => {
                         inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    {location.pathname !== '/signup' && location.pathname !== '/signin' && <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>}
+                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <Button color="inherit" onClick={() => dispatch(logout())}>Logout</Button>)}
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>
             </AppBar>

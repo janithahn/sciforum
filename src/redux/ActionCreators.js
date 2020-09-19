@@ -83,40 +83,41 @@ export const requestLogin = (creds) => {
 export const loginSuccess = (response) => {
     return({
         type: ActionTypes.LOGIN_SUCCESS,
-        token: response.token
+        token: response.data.key
     });
 }
 
 export const loginError = (loginErrMessage) => {
     return({
         type: ActionTypes.LOGIN_FAILURE,
-        loginErrMessage
+        errMess: loginErrMessage
     });
 }
 
-const checkAuthTimeout = expirationTime => dispatch => {
+const checkAuthTimeout = expirationTime => dispatch => (
     dispatch(
         setTimeout(() => {
             dispatch(logout());
         }, expirationTime * 1000)
-    );
-}
+    )
+);
 
 export const loginUser = (creds) => (dispatch) => {
     dispatch(requestLogin(creds));
 
-    axios.post('http://localhost:8000/rest-auth/login/', {
+    return axios.post('http://localhost:8000/rest-auth/login/', {
         username: creds.username,
         password: creds.password,
-        rememberMe: creds.rememberMe,
+        //rememberMe: creds.rememberMe,
     })
     .then(res => {
+        //console.log(res);
         const token = res.data.key;
         const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem('token', token);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
-        dispatch(checkAuthTimeout(3600));
+        //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
         dispatch(loginError(error));
@@ -138,6 +139,7 @@ export const logoutSuccess = () => {
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     dispatch(logoutSuccess());
 }

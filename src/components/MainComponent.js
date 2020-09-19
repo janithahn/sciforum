@@ -63,6 +63,17 @@ function Main() {
         );
     };
 
+    const PrivateRoute = ({ component: Component, ...rest }) => (
+        <Route {...rest} render={() => (
+            !auth.isAuthenticated
+            ? <Component />
+            : <Redirect to={{
+                pathname: '/',
+                state: { from: location.pathname }
+                }} />
+        )} />
+    );
+
     return (
         <div>
             <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open}/>
@@ -74,8 +85,8 @@ function Main() {
                     <Route path="/questions/:postId" component={PostDetailView}/>
                     <Route path="/posts/:postId/edit" component={PostEditView}/>
                     <Route exact path="/sample" component={Sample}/>
-                    <Route exact path="/signup" component={() => <SignUp/>} />
-                    <Route exact path="/signin" component={() => <SignIn/>}/>
+                    <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
+                    <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <Route exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
                     <Route component={NotFound}/>
                     <Redirect to="/"/>
