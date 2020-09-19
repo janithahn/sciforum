@@ -14,6 +14,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import PasswordStrengthBar from 'react-password-strength-bar';
 import { DisplayFormikState } from '../shared/DisplayFormikState';
+import { signupUser } from '../redux/ActionCreators';
+import { useDispatch, useSelector } from 'react-redux';
 
 /*function handleSubmit(values) {
   alert("Current State is: " + JSON.stringify(values));
@@ -36,6 +38,7 @@ function Copyright() {
 
 export default function SignUp() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [isSubmitionCompleted, setSubmitionCompleted] = React.useState(false);
   const [isPasswordFocused, setPasswordFocus] = React.useState(false);
 
@@ -86,6 +89,7 @@ export default function SignUp() {
           onSubmit={(values, {setSubmitting}) => {
             alert(JSON.stringify(values));
             //setSubmitting(true);
+            dispatch(signupUser(values))
           }}
           validationSchema={signupSchema}
         >

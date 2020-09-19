@@ -16,6 +16,8 @@ import { theme, useStylesSignin as useStyles } from '../styles/signinSignupStyle
 import { Formik } from 'formik';
 import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
+import { loginUser } from '../redux/ActionCreators';
+import { useDispatch } from 'react-redux';
 
 function Copyright() {
   return (
@@ -44,6 +46,7 @@ const signinSchema = Yup.object().shape({
 
 export default function SignIn() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [isRememberMe, setRememberMe] = React.useState(false);
 
   return (
@@ -61,6 +64,7 @@ export default function SignIn() {
             initialValues={{username: '', email: '', password: '', rememberMe: false}}
             onSubmit={(values, {isSubmitting}) => {
               alert(JSON.stringify(values));
+              dispatch(loginUser(values));
             }}
             validationSchema={signinSchema}
           >

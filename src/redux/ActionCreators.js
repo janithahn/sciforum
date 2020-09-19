@@ -107,7 +107,8 @@ export const loginUser = (creds) => (dispatch) => {
 
     axios.post('http://localhost:8000/rest-auth/login/', {
         username: creds.username,
-        password: creds.password
+        password: creds.password,
+        rememberMe: creds.rememberMe,
     })
     .then(res => {
         const token = res.data.key;
@@ -143,6 +144,7 @@ export const logout = () => (dispatch) => {
 
 //SIGNUP
 export const signupUser = (creds) => (dispatch) => {
+    //console.log(creds);
     dispatch(requestLogin(creds));
 
     axios.post('http://localhost:8000/rest-auth/register/', {
