@@ -86,8 +86,7 @@ export default function SignUp() {
         
         <Formik
           initialValues={{username: '', /*firstname: '', lastname: '',*/ email: '', password1: '', password2: ''}}
-          onSubmit={(values, {setSubmitting}) => {
-            alert(JSON.stringify(values));
+          onSubmit={(values) => {
             //setSubmitting(true);
             dispatch(signupUser(values))
           }}

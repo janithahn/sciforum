@@ -149,7 +149,7 @@ export const signupUser = (creds) => (dispatch) => {
     //console.log(creds);
     dispatch(requestLogin(creds));
 
-    axios.post('http://localhost:8000/rest-auth/register/', {
+    axios.post('http://localhost:8000/rest-auth/registration/', {
         username: creds.username,
         password1: creds.password1,
         password2: creds.password2,
@@ -161,7 +161,7 @@ export const signupUser = (creds) => (dispatch) => {
         localStorage.setItem('token', token);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
-        dispatch(checkAuthTimeout(3600));
+        //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
         dispatch(loginError(error));
