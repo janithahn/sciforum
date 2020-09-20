@@ -90,6 +90,14 @@ function Main() {
         }
     };
 
+    const PrivateRoutPostCreate = ({ component: Component, ...rest }) => (
+        <Route {...rest} render={() => (
+            auth.isAuthenticated
+            ? <Component/>
+            : <Redirect to='/signIn' />
+        )} />
+    );
+
     return (
         <div>
             <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open}/>
@@ -103,7 +111,7 @@ function Main() {
                     <Route exact path="/sample" component={Sample}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
-                    <Route exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
+                    <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
                     <Route component={NotFound}/>
                     <Redirect to="/"/>
                 </Switch>

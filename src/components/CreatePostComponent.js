@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { theme, useStyles } from '../styles/postsStyles';
 import Editor from './EditorComponent';
+import { useSelector } from 'react-redux';
 
 export default function CreatePost(props) {
   const classes = useStyles();
@@ -13,10 +14,13 @@ export default function CreatePost(props) {
   const [body, setQuestion] = React.useState('');
 
   const history = useHistory();
+  const auth = useSelector(state => state.Auth);
+
+  console.log(props);
 
   function handleSubmit(event) {
         //event.preventDefault();
-        props.postPost({title, body});
+        props.postPost({title, body, owner: auth.currentUserId});
         history.push('/questions');
         //alert("Title: " + event.target.elements.title.value + "\n" + "Question: " + body);
   }

@@ -37,7 +37,8 @@ export const postPost = (post) => (dispatch, getState) => {
     console.log(getState());
     axios.post('http://localhost:8000/api/', {
         title: post.title,
-        body: post.body
+        body: post.body,
+        owner: post.owner,
     })
     .then(res => {
         console.log(res);
