@@ -7,19 +7,20 @@ import { useHistory } from 'react-router-dom';
 import Editor from './EditorComponent';
 import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from '../styles/postsStyles';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 export default function EditPost(props) {
   const classes = useStyles();
+  const history = useHistory();
   const [title, setTitle] = React.useState(props.post === undefined ? '': props.post.title);
   const [body, setQuestion] = React.useState(props.post === undefined ? '': props.post.body);
   const id = props.post === undefined ? null: props.post.id;
 
-  const history = useHistory();
-
   function handleSubmit(event) {
-        props.editPost({id, title, body});
-        history.push(`/questions/${id}/`);
-        //alert("Title: " + event.target.elements.title.value + "\n" + "Question: " + body);
+    props.editPost({id, title, body, owner: props.post.owner});
+    history.push(`/questions/${id}/`);
+    //alert("Title: " + event.target.elements.title.value + "\n" + "Question: " + body);
   }
 
   function handleCancel() {

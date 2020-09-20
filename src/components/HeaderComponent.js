@@ -19,7 +19,7 @@ function LoginModal({openModal, classes, handleModalClose, ref}) {
             closeAfterTransition
             BackdropComponent={Backdrop}
             BackdropProps={{
-            timeout: 500,
+                timeout: 500,
             }}
         >
         <Fade in={openModal}>
@@ -36,7 +36,7 @@ const Header = (props) => {
     const [openModal, setOpenModal] = React.useState(false);
     const location = useLocation();
 
-    console.log(auth);
+    //console.log(auth);
 
     const handleModalOpen = () => {
         setOpenModal(true);

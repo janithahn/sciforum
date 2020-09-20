@@ -51,7 +51,8 @@ export const editPost = (post) => (dispatch, getState) => {
     console.log(post);
     axios.put(`http://localhost:8000/api/${post.id}/`, {
         title: post.title,
-        body: post.body
+        body: post.body,
+        owner: post.owner
     })
     .then(res => {
         console.log(res);
@@ -83,7 +84,9 @@ export const requestLogin = (creds) => {
 export const loginSuccess = (response) => {
     return({
         type: ActionTypes.LOGIN_SUCCESS,
-        token: response.data.key
+        token: response.data.token,
+        currentUserId: response.data.user_id,
+        currentUserEmail: response.data.email,
     });
 }
 
@@ -105,16 +108,20 @@ const checkAuthTimeout = expirationTime => dispatch => (
 export const loginUser = (creds) => (dispatch) => {
     dispatch(requestLogin(creds));
 
-    return axios.post('http://localhost:8000/rest-auth/login/', {
+    return axios.post('http://localhost:8000/api-token-auth/', {
         username: creds.username,
         password: creds.password,
         //rememberMe: creds.rememberMe,
     })
     .then(res => {
-        //console.log(res);
-        const token = res.data.key;
+        console.log(res);
+        const token = res.data.token;
+        const currentUserId = res.data.user_id;
+        const currentUserEmail = res.data.email;
         const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem('token', token);
+        localStorage.setItem('userId', currentUserId);
+        localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
         //dispatch(checkAuthTimeout(3600));
@@ -138,7 +145,8 @@ export const logoutSuccess = () => {
 
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
-    localStorage.removeItem('user');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     dispatch(logoutSuccess());

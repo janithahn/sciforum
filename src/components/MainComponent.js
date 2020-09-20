@@ -15,6 +15,7 @@ import CreatePost from  './CreatePostComponent';
 import EditPost from './EditPostComponent';
 import NotFound from './NotFoundComponent';
 import MDBCustomFooter from './MDBFooterComponent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function Main() {
     const posts = useSelector(state => state.Posts);
@@ -38,8 +39,8 @@ function Main() {
     };
 
     const PostDetailView = ({match}) => {
-        console.log(posts);
-        console.log(auth);
+        //console.log(posts);
+        //console.log(auth);
         return(
             <PostDetail
                 post={posts.posts.filter((post) => post.id === parseInt(match.params.postId))[0]}
@@ -51,10 +52,10 @@ function Main() {
         );
     };
 
-    const PostEditView = ({match}) => {
+    const PostEditView = ({postId}) => {
         return(
             <EditPost 
-                post={posts.posts.filter((post) => post.id === parseInt(match.params.postId))[0]}
+                post={posts.posts.filter((post) => post.id === parseInt(postId))[0]}
                 postLoading={posts.status}
                 postFailed={posts.errMess}
                 classes={classes}
@@ -63,7 +64,7 @@ function Main() {
         );
     };
 
-    const PrivateRoute = ({ component: Component, ...rest }) => (
+    const PrivateRoute = ({ component: Component, ...rest }) => {console.log(rest.computedMatch.params); return (
         <Route {...rest} render={() => (
             !auth.isAuthenticated
             ? <Component />
@@ -72,7 +73,22 @@ function Main() {
                 state: { from: location.pathname }
                 }} />
         )} />
-    );
+    )};
+
+    const PrivateRoutPostEdit = ({ component: Component, ...rest }) => {
+        const postId = rest.computedMatch.params.postId;
+        const post = posts.posts.filter((post) => post.id === parseInt(postId))[0]
+
+        if(post !== undefined) {
+            return (<Route {...rest} render={() => (
+                auth.isAuthenticated && post.owner == auth.currentUserId
+                ? <Component postId={post.id}/>
+                : <Redirect to='/' />
+            )} />)
+        } else {
+            return (<CircularProgress/>)
+        }
+    };
 
     return (
         <div>
@@ -83,7 +99,7 @@ function Main() {
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
                     <Route path="/questions/:postId" component={PostDetailView}/>
-                    <Route path="/posts/:postId/edit" component={PostEditView}/>
+                    <PrivateRoutPostEdit path="/posts/:postId/edit" component={PostEditView}/>
                     <Route exact path="/sample" component={Sample}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
