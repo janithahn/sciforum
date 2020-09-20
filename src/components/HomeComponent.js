@@ -1,34 +1,17 @@
 import React from 'react';
-import { Card, CardText, CardBody, CardTitle } from 'reactstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Divider, Container, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { fetchPosts } from '../redux/ActionCreators';
 import QuestionViewCard from './QuestionViewCardComponent';
-
-function RenderCard({item}) {
-    return(
-            <Container>
-                <Card id="homeCard">
-                    <CardBody>
-                        <CardTitle>{item.title}</CardTitle>
-                        <CardText>{item.body}</CardText>
-                        <Link to={`/questions/${item.id}`}>Read more</Link>
-                    </CardBody>
-                </Card>
-                <Divider/>
-            </Container>
-    );
-    
-}
 
 export default function Home(props) {
     const posts = useSelector(state => state.Posts);
     const postsStatus = useSelector(state => state.Posts.status);
     const dispatch = useDispatch();
 
-    const [postList, setPostList] = React.useState(posts.posts.map((post) => <RenderCard key={post.id} item={post}/>));
+    //const [postList, setPostList] = React.useState(posts.posts.map((post) => <RenderCard key={post.id} item={post}/>));
 
     React.useEffect(() => {
         if(postsStatus === 'idle') {

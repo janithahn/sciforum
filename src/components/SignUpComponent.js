@@ -13,9 +13,9 @@ import { theme, useStylesSignUp as useStyles, ValidationTextField } from '../sty
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import PasswordStrengthBar from 'react-password-strength-bar';
-import { DisplayFormikState } from '../shared/DisplayFormikState';
+//import { DisplayFormikState } from '../shared/DisplayFormikState';
 import { signupUser } from '../redux/ActionCreators';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 /*function handleSubmit(values) {
   alert("Current State is: " + JSON.stringify(values));
@@ -39,7 +39,7 @@ function Copyright() {
 export default function SignUp() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [isSubmitionCompleted, setSubmitionCompleted] = React.useState(false);
+  //const [isSubmitionCompleted, setSubmitionCompleted] = React.useState(false);
   const [isPasswordFocused, setPasswordFocus] = React.useState(false);
 
   const signupSchema = Yup.object().shape({
@@ -95,8 +95,8 @@ export default function SignUp() {
           {(props) => {
             //console.log(props);
             const {
-              values, touched, errors, dirty, isSubmitting, handleChange,
-              handleBlur, handleSubmit, handleReset
+              values, touched, errors, /*dirty, isSubmitting, handleReset,*/ handleChange,
+              handleBlur, handleSubmit,
             } = props;
             return(
               <form className={classes.form} onSubmit={handleSubmit}>

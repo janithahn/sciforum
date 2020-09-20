@@ -14,11 +14,10 @@ import Container from '@material-ui/core/Container';
 import { ThemeProvider } from '@material-ui/core';
 import { theme, useStylesSignin as useStyles } from '../styles/signinSignupStyles';
 import { useFormik } from 'formik';
-import { DisplayFormikState } from '../shared/DisplayFormikState';
+//import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
 import { loginUser } from '../redux/ActionCreators';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 function Copyright() {
   return (
@@ -46,13 +45,10 @@ const signinSchema = Yup.object().shape({
 export default function SignIn(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const auth = useSelector(state => state.Auth);
-  const history = useHistory();
-  const [isRememberMe, setRememberMe] = React.useState(false);
 
   const formik = useFormik({
     initialValues: {username: '', email: '', password: '', rememberMe: false},
-    onSubmit: (values, {}) => {
+    onSubmit: (values) => {
       //alert(JSON.stringify(values));
       dispatch(loginUser(values));
       props.handleModalClose();

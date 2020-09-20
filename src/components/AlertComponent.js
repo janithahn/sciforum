@@ -8,8 +8,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { deletePost } from '../redux/ActionCreators';
 import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
-import { fetchPosts } from '../redux/ActionCreators';
+import { useHistory } from 'react-router-dom';
+//import { fetchPosts } from '../redux/ActionCreators';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -18,7 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function AlertDialogSlide(props) {
     const dispatch = useDispatch();
     const history = useHistory();
-    const location = useLocation();
+    //const location = useLocation();
 
     //React.useEffect(history.push('/questions'), [location]);
 

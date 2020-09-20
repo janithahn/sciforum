@@ -5,10 +5,8 @@ import Button from '@material-ui/core/Button';
 import NotFound from './NotFoundComponent';
 import { useHistory } from 'react-router-dom';
 import Editor from './EditorComponent';
-import EditorDraft from './EditorDraftComponent';
+//import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from '../styles/postsStyles';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 
 export default function EditPost(props) {
   const classes = useStyles();

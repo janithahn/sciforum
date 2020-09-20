@@ -14,7 +14,7 @@ import PostDetail from './PostDetailComponent';
 import CreatePost from  './CreatePostComponent';
 import EditPost from './EditPostComponent';
 import NotFound from './NotFoundComponent';
-import MDBCustomFooter from './MDBFooterComponent';
+//;import MDBCustomFooter from './MDBFooterComponent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 function Main() {
