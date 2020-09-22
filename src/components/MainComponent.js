@@ -14,14 +14,16 @@ import PostDetail from './PostDetailComponent';
 import CreatePost from  './CreatePostComponent';
 import EditPost from './EditPostComponent';
 import NotFound from './NotFoundComponent';
-//;import MDBCustomFooter from './MDBFooterComponent';
+//import MDBCustomFooter from './MDBFooterComponent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-function Main() {
+function Main(props) {
     const posts = useSelector(state => state.Posts);
     const auth = useSelector(state => state.Auth);
     const location = useLocation();
     const dispatch = useDispatch();
+
+    //console.log(auth);
 
     useEffect(() => {
         dispatch(fetchPosts())
@@ -64,7 +66,7 @@ function Main() {
         );
     };
 
-    const PrivateRoute = ({ component: Component, ...rest }) => {console.log(rest.computedMatch.params); return (
+    const PrivateRoute = ({ component: Component, ...rest }) => (
         <Route {...rest} render={() => (
             !auth.isAuthenticated
             ? <Component />
@@ -73,7 +75,7 @@ function Main() {
                 state: { from: location.pathname }
                 }} />
         )} />
-    )};
+    );
 
     const PrivateRoutPostEdit = ({ component: Component, ...rest }) => {
         const postId = rest.computedMatch.params.postId;
@@ -94,7 +96,7 @@ function Main() {
         <Route {...rest} render={() => (
             auth.isAuthenticated
             ? <Component/>
-            : <Redirect to='/signIn' />
+            : props.history.push('/signin') //or you can add <Redirect to="/signin"/> here
         )} />
     );
 

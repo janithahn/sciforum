@@ -109,7 +109,7 @@ const checkAuthTimeout = expirationTime => dispatch => (
 export const loginUser = (creds) => (dispatch) => {
     dispatch(requestLogin(creds));
 
-    return axios.post('http://localhost:8000/api-token-auth/', {
+    return axios.post('http://localhost:8000/user/login/', {
         username: creds.username,
         password: creds.password,
         //rememberMe: creds.rememberMe,
@@ -158,21 +158,27 @@ export const signupUser = (creds) => (dispatch) => {
     //console.log(creds);
     dispatch(requestLogin(creds));
 
-    axios.post('http://localhost:8000/rest-auth/registration/', {
+    axios.post('http://localhost:8000/user/register/', {
         username: creds.username,
         password1: creds.password1,
         password2: creds.password2,
         email: creds.email
     })
     .then(res => {
-        const token = res.data.key;
+        console.log(res);
+        const token = res.data.token;
+        const currentUserId = res.data.user_id;
+        const currentUserEmail = res.data.email;
         const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem('token', token);
+        localStorage.setItem('userId', currentUserId);
+        localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
         //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
+        console.log(error);
         dispatch(loginError(error));
     });
 }
