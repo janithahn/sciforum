@@ -182,3 +182,50 @@ export const signupUser = (creds) => (dispatch) => {
         dispatch(loginError(error));
     });
 }
+
+//RETRIVE USER INFO
+export const fetchUser = (auth) => (dispatch) => {
+    dispatch(userLoading());
+
+    axios.get(`http://localhost:8000/users/${auth.currentUserId}/`, {
+        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addUser(res));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(userFailed(error));
+    })
+}
+
+export const userLoading = () => ({
+    type: ActionTypes.USER_LOADING
+});
+
+export const userFailed = (errmess) => ({
+    type: ActionTypes.USER_FAILED,
+    payload: errmess
+});
+
+export const addUser = (user) => ({
+    type: ActionTypes.ADD_USER,
+    payload: user
+});
+
+export const updateUser = (auth, username, firstname) => (dispatch) => {
+    axios.put(`http://localhost:8000/users/${auth.currentUserId}/update/`, {
+        username,
+        first_name: firstname,
+    },
+    {
+        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+    })
+    .then(res => {
+        console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}

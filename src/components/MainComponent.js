@@ -5,7 +5,7 @@ import Sample from './SampleComponent';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from '../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts, postPost, editPost } from '../redux/ActionCreators';
+import { fetchPosts, postPost, editPost, fetchUser, updateUser } from '../redux/ActionCreators';
 import Footer from './FooterComponent';
 import SignUp from './SignUpComponent';
 import SignIn from './SignInComponent';
@@ -20,14 +20,21 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 function Main(props) {
     const posts = useSelector(state => state.Posts);
     const auth = useSelector(state => state.Auth);
+    const user = useSelector(state => state.User);
     const location = useLocation();
     const dispatch = useDispatch();
 
     //console.log(auth);
 
     useEffect(() => {
-        dispatch(fetchPosts())
+        dispatch(fetchPosts());
+        dispatch(fetchUser(auth));
     }, [dispatch]);
+    
+    if(user.user !== null) {
+        console.log(user.user.data.username);
+        dispatch(updateUser(auth, user.user.data.username, "Janitha"));
+    }
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
