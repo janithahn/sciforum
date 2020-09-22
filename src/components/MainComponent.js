@@ -29,10 +29,10 @@ function Main(props) {
     useEffect(() => {
         dispatch(fetchPosts());
         dispatch(fetchUser(auth));
-    }, [dispatch]);
+    }, [dispatch, auth]);
     
     if(user.user !== null) {
-        console.log(user.user.data.username);
+        //console.log(user.user.data.username);
         dispatch(updateUser(auth, user.user.data.username, "Janitha"));
     }
 

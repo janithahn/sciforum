@@ -11,13 +11,13 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, FormHelperText } from '@material-ui/core';
 import { theme, useStylesSignin as useStyles } from '../styles/signinSignupStyles';
 import { useFormik } from 'formik';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
 import { loginUser } from '../redux/ActionCreators';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Copyright() {
   return (
@@ -45,13 +45,30 @@ const signinSchema = Yup.object().shape({
 export default function SignIn(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const auth = useSelector(state => state.Auth);
+  const [credentialError, setCredentialError] = React.useState('');
+
+  const loginErrMess = null;
+  //console.log(auth.status);
+  
+  React.useEffect(() => {
+    console.log(auth);
+    if(auth.status === 'failed' && auth.errMess) {
+      setCredentialError(auth.errMess.response.data.non_field_errors[0]);
+    }else if(auth.status === 'loading') {
+      setCredentialError('');
+    }
+    if(auth.isAuthenticated) {
+      setCredentialError('');
+      props.handleModalClose();
+    }
+  });
 
   const formik = useFormik({
     initialValues: {username: '', email: '', password: '', rememberMe: false},
     onSubmit: (values) => {
       //alert(JSON.stringify(values));
       dispatch(loginUser(values));
-      props.handleModalClose();
       /*if(auth.isAuthenticated) {
         return(<Redirect to="/questions"/>);
       }*/
@@ -70,6 +87,7 @@ export default function SignIn(props) {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          <FormHelperText error="true" variant="outlined">{credentialError}</FormHelperText>
           <form className={classes.form} onSubmit={formik.handleSubmit}>
             <TextField
               variant="outlined"

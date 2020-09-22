@@ -106,10 +106,10 @@ const checkAuthTimeout = expirationTime => dispatch => (
     )
 );
 
-export const loginUser = (creds) => (dispatch) => {
+export const loginUser = (creds) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
-    return axios.post('http://localhost:8000/user/login/', {
+    return await axios.post('http://localhost:8000/user/login/', {
         username: creds.username,
         password: creds.password,
         //rememberMe: creds.rememberMe,
@@ -183,7 +183,7 @@ export const signupUser = (creds) => (dispatch) => {
     });
 }
 
-//RETRIVE USER INFO
+//RETREIVING USER INFORMATION
 export const fetchUser = (auth) => (dispatch) => {
     dispatch(userLoading());
 

@@ -6,6 +6,7 @@ export const Auth = (state = {
         token: localStorage.getItem('token'),
         currentUserId: localStorage.getItem('userId'),
         currentUserEmail: localStorage.getItem('userEmail'),
+        errMess: null,
     }, action) => {
     switch (action.type) {
 
@@ -19,8 +20,8 @@ export const Auth = (state = {
             return {...state,
                 status: 'succeeded',
                 isAuthenticated: true,
-                errMess: '',
-                token: action.token,
+                errMess: null,
+                token: action,
                 currentUserId: action.currentUserId,
                 currentUserEmail: action.currentUserEmail,
             };
@@ -29,7 +30,7 @@ export const Auth = (state = {
             return {...state,
                 status: 'failed',
                 isAuthenticated: false,
-                errMess: action.message
+                errMess: action.errMess
             };
 
         case ActionTypes.LOGOUT_REQUEST:
