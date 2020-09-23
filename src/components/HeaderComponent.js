@@ -30,12 +30,12 @@ function LoginModal({openModal, classes, handleModalClose, ref}) {
     );
 }
 
-const DropDown = (props) => {
+const DropDown = ({username, anchorEl, setAnchorEl, handleDropDownClose, handleLogOut, handleClick}) => {
 
     return(
         <div>
-            <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={props.handleClick}>
-                {props.username}
+            <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                {username}
             </Button>
             <Menu
                 elevation={2}
@@ -48,13 +48,13 @@ const DropDown = (props) => {
                     vertical: 'top',
                     horizontal: 'center',
                 }}
-                open={Boolean(props.isDropDown)}
+                open={Boolean(anchorEl)}
                 keepMounted
-                anchorEl={props.isDropDown}
-                onClose={props.handleDropDown}   
+                anchorEl={anchorEl}
+                onClose={() => setAnchorEl(null)}   
             >
-                <MenuItem onClick={props.handleDropDown}>Profile</MenuItem>
-                <MenuItem onClick={props.handleLogOut}>Logout</MenuItem>
+                <MenuItem onClick={handleDropDownClose}>Profile</MenuItem>
+                <MenuItem onClick={handleLogOut}>Logout</MenuItem>
             </Menu>
         </div>
     );
@@ -65,31 +65,19 @@ const Header = (props) => {
     const auth = useSelector(state => state.Auth);
     const user = useSelector(state => state.User);
     const [openModal, setOpenModal] = React.useState(false);
-    const [isDropDown, setDropDown] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const [currentUser, setCurrentUser] = React.useState('');
     const location = useLocation();
     const dispatch = useDispatch();
 
-    //console.log(auth);
-    
-    /*if(props.user.user !== null) {
-        console.log(props.user);
-        setCurrentUser(props.user.user.data.username);
-    }*/
-
     React.useEffect(() => {
-        console.log(user.user);
         if(user.user) {
             setCurrentUser(user.user.data.username);
         }
     });
 
-    const handleDropDown = () => {
-        setDropDown(null);
-    }
-
     const handleClick = (event) => {
-        setDropDown(event.currentTarget);
+        setAnchorEl(event.currentTarget);
     }
 
     const handleModalOpen = () => {
@@ -101,6 +89,7 @@ const Header = (props) => {
     };
 
     const handleLogOut = () => {
+        setAnchorEl(null);
         dispatch(logout());
     }
 
@@ -134,7 +123,7 @@ const Header = (props) => {
                         inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <DropDown username={currentUser} handleLogOut={handleLogOut} handleClick={handleClick} isDropDown={isDropDown} handleDropDown={handleDropDown}/>)}
+                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <DropDown username={currentUser} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)}
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>
             </AppBar>

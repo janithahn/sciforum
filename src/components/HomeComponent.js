@@ -2,7 +2,7 @@ import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Grid } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { fetchPosts } from '../redux/ActionCreators';
 import QuestionViewCard from './QuestionViewCardComponent';
 
@@ -28,12 +28,12 @@ export default function Home(props) {
         return(<h4>Error loading...!</h4>);
     } else {
         return(
-            <Grid justify="center" alignItems="center" style={{flexGrow: 1}}>
+            <div>
                 <Link to="/ask" style={{textDecoration: 'none'}}>
                     <Button style={{position: 'relative', flexGrow: 1, marginBottom: 10}} color='secondary' variant="contained">Ask a Question</Button>
                 </Link>
                 {PostsList}
-            </Grid>
+            </div>
         );
     }
 }
