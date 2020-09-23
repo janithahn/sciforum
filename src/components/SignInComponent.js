@@ -52,14 +52,13 @@ export default function SignIn(props) {
   //console.log(auth.status);
   
   React.useEffect(() => {
-    console.log(auth);
     if(auth.status === 'failed' && auth.errMess) {
       setCredentialError(auth.errMess.response.data.non_field_errors[0]);
-    }else if(auth.status === 'loading') {
+    }else {
       setCredentialError('');
     }
     if(auth.isAuthenticated) {
-      setCredentialError('');
+      //setCredentialError('');
       props.handleModalClose();
     }
   });
@@ -87,7 +86,7 @@ export default function SignIn(props) {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <FormHelperText error="true" variant="outlined">{credentialError}</FormHelperText>
+          <FormHelperText error={true} variant="outlined">{credentialError}</FormHelperText>
           <form className={classes.form} onSubmit={formik.handleSubmit}>
             <TextField
               variant="outlined"

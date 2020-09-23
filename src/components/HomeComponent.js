@@ -30,7 +30,7 @@ export default function Home(props) {
         return(
             <div>
                 <Link to="/ask" style={{textDecoration: 'none'}}>
-                    <Button style={{position: 'relative', left: '86.66%'}} color='secondary' variant="contained">Ask a Question</Button>
+                    <Button style={{position: 'relative', left: '86.56%', marginBottom: 10}} color='secondary' variant="contained">Ask a Question</Button>
                 </Link>
                 {PostsList}
             </div>

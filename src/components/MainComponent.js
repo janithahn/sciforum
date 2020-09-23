@@ -28,13 +28,13 @@ function Main(props) {
 
     useEffect(() => {
         dispatch(fetchPosts());
-        dispatch(fetchUser(auth));
-    }, [dispatch, auth]);
+        //dispatch(fetchUser(auth));
+    }, [dispatch]);
     
-    if(user.user !== null) {
+    /*if(user.user !== null) {
         //console.log(user.user.data.username);
         dispatch(updateUser(auth, user.user.data.username, "Janitha"));
-    }
+    }*/
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -103,7 +103,7 @@ function Main(props) {
         <Route {...rest} render={() => (
             auth.isAuthenticated
             ? <Component/>
-            : props.history.push('/signin') //or you can add <Redirect to="/signin"/> here
+            : <Redirect to="/signin"/> //or you can add props.history.push('/signin') here
         )} />
     );
 

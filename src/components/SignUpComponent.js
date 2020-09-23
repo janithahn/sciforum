@@ -8,14 +8,14 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, FormHelperText } from '@material-ui/core';
 import { theme, useStylesSignUp as useStyles, ValidationTextField } from '../styles/signinSignupStyles';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import PasswordStrengthBar from 'react-password-strength-bar';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
 import { signupUser } from '../redux/ActionCreators';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 /*function handleSubmit(values) {
   alert("Current State is: " + JSON.stringify(values));
@@ -39,6 +39,8 @@ function Copyright() {
 export default function SignUp() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const auth = useSelector(state => state.Auth);
+  const [credentialError, setCredentialError] = React.useState('');
   //const [isSubmitionCompleted, setSubmitionCompleted] = React.useState(false);
   const [isPasswordFocused, setPasswordFocus] = React.useState(false);
 
@@ -72,6 +74,17 @@ export default function SignUp() {
       .required('Required')
   });
 
+  React.useEffect(() => {
+    if(auth.status === 'failed' && auth.errMess) {
+      setCredentialError(auth.errMess.response.data.username[0]);
+    }else {
+      setCredentialError('');
+    }
+    /*if(auth.isAuthenticated) {
+      setCredentialError('');
+    }*/
+  });
+
   return (
     <Container component="main" maxWidth="xs" className={classes.content}>
       <CssBaseline />
@@ -82,6 +95,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+        <FormHelperText error={true} variant="outlined">{credentialError}</FormHelperText>
         <ThemeProvider theme={theme}>
         
         <Formik
