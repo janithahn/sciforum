@@ -125,6 +125,7 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
+        dispatch(fetchUser(token, currentUserId));
         //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
@@ -175,6 +176,7 @@ export const signupUser = (creds) => (dispatch) => {
         localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
+        dispatch(fetchUser(token, currentUserId));
         //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
@@ -184,11 +186,11 @@ export const signupUser = (creds) => (dispatch) => {
 }
 
 //RETREIVING USER INFORMATION
-export const fetchUser = (auth) => (dispatch) => {
+export const fetchUser = (token, currentUserId) => (dispatch) => {
     dispatch(userLoading());
 
-    axios.get(`http://localhost:8000/users/${auth.currentUserId}/`, {
-        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+    axios.get(`http://localhost:8000/users/${currentUserId}/`, {
+        "headers": token !== null ? {Authorization: "Token " + token}: undefined
     })
     .then(res => {
         console.log(res);

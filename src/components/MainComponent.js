@@ -20,20 +20,16 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 function Main(props) {
     const posts = useSelector(state => state.Posts);
     const auth = useSelector(state => state.Auth);
-    const user = useSelector(state => state.User);
+    //const user = useSelector(state => state.User);
     const location = useLocation();
     const dispatch = useDispatch();
 
     useEffect(() => {
         if(auth.isAuthenticated) {
-            dispatch(fetchUser(auth));
+            dispatch(fetchUser(auth.token, auth.currentUserId));
         }
         dispatch(fetchPosts());
     }, [dispatch]);
-
-    if(user.user) {
-        console.log(user.user.data);
-    }
     
     /*if(user.user !== null) {
         dispatch(updateUser(auth, user.user.data.username, "Janitha"));

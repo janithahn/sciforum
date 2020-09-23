@@ -78,6 +78,7 @@ const Header = (props) => {
     }*/
 
     React.useEffect(() => {
+        console.log(user.user);
         if(user.user) {
             setCurrentUser(user.user.data.username);
         }
