@@ -28,13 +28,14 @@ function Main(props) {
 
     useEffect(() => {
         dispatch(fetchPosts());
-        //dispatch(fetchUser(auth));
     }, [dispatch]);
+
+    console.log(auth);
     
-    /*if(user.user !== null) {
+    if(user.user !== null) {
         //console.log(user.user.data.username);
         dispatch(updateUser(auth, user.user.data.username, "Janitha"));
-    }*/
+    }
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);

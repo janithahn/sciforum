@@ -76,13 +76,12 @@ export default function SignUp() {
 
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {
-      setCredentialError(auth.errMess.response.data.username[0]);
+      if(auth.errMess.response.data.username && auth.errMess.response.data.email) {setCredentialError("A user is already registered with this username and email.")}
+      else if(auth.errMess.response.data.username) {setCredentialError(auth.errMess.response.data.username[0])}
+      else if(auth.errMess.response.data.email) {setCredentialError(auth.errMess.response.data.email[0])}
     }else {
       setCredentialError('');
     }
-    /*if(auth.isAuthenticated) {
-      setCredentialError('');
-    }*/
   });
 
   return (
