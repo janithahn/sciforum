@@ -47,9 +47,6 @@ export default function SignIn(props) {
   const dispatch = useDispatch();
   const auth = useSelector(state => state.Auth);
   const [credentialError, setCredentialError] = React.useState('');
-
-  const loginErrMess = null;
-  //console.log(auth.status);
   
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {
@@ -61,7 +58,7 @@ export default function SignIn(props) {
       //setCredentialError('');
       props.handleModalClose();
     }
-  });
+  }, [auth, setCredentialError, props]);
 
   const formik = useFormik({
     initialValues: {username: '', email: '', password: '', rememberMe: false},

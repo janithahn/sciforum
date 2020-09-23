@@ -29,7 +29,7 @@ function Main(props) {
             dispatch(fetchUser(auth.token, auth.currentUserId));
         }
         dispatch(fetchPosts());
-    }, [dispatch]);
+    }, [dispatch, auth]);
     
     /*if(user.user !== null) {
         dispatch(updateUser(auth, user.user.data.username, "Janitha"));

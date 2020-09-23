@@ -74,7 +74,7 @@ const Header = (props) => {
         if(user.user) {
             setCurrentUser(user.user.data.username);
         }
-    });
+    }, [user.user]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -90,6 +90,7 @@ const Header = (props) => {
 
     const handleLogOut = () => {
         setAnchorEl(null);
+        setCurrentUser('');
         dispatch(logout());
     }
 
