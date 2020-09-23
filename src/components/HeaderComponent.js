@@ -1,12 +1,13 @@
 import React from 'react';
-import { AppBar, Toolbar, InputBase,  IconButton, Typography, Button, CssBaseline, Modal, Backdrop, Fade, Link } from '@material-ui/core';
+import { AppBar, Toolbar, InputBase,  IconButton, Typography, Button, 
+    CssBaseline, Modal, Backdrop, Fade, Link, Menu, MenuItem } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import SignIn from './SignInComponent';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/ActionCreators';
+import { logout, fetchUser } from '../redux/ActionCreators';
 
 function LoginModal({openModal, classes, handleModalClose, ref}) {
     return(
@@ -29,14 +30,66 @@ function LoginModal({openModal, classes, handleModalClose, ref}) {
     );
 }
 
+const DropDown = (props) => {
+
+    return(
+        <div>
+            <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={props.handleClick}>
+                {props.username}
+            </Button>
+            <Menu
+                elevation={2}
+                getContentAnchorEl={null}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+                open={Boolean(props.isDropDown)}
+                keepMounted
+                anchorEl={props.isDropDown}
+                onClose={props.handleDropDown}   
+            >
+                <MenuItem onClick={props.handleDropDown}>Profile</MenuItem>
+                <MenuItem onClick={props.handleLogOut}>Logout</MenuItem>
+            </Menu>
+        </div>
+    );
+}
+
 const Header = (props) => {
 
-    const dispatch = useDispatch();
     const auth = useSelector(state => state.Auth);
+    const user = useSelector(state => state.User);
     const [openModal, setOpenModal] = React.useState(false);
+    const [isDropDown, setDropDown] = React.useState(null);
+    const [currentUser, setCurrentUser] = React.useState('');
     const location = useLocation();
+    const dispatch = useDispatch();
 
     //console.log(auth);
+    
+    /*if(props.user.user !== null) {
+        console.log(props.user);
+        setCurrentUser(props.user.user.data.username);
+    }*/
+
+    React.useEffect(() => {
+        if(user.user) {
+            setCurrentUser(user.user.data.username);
+        }
+    });
+
+    const handleDropDown = () => {
+        setDropDown(null);
+    }
+
+    const handleClick = (event) => {
+        setDropDown(event.currentTarget);
+    }
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -45,6 +98,10 @@ const Header = (props) => {
     const handleModalClose = () => {
         setOpenModal(false);
     };
+
+    const handleLogOut = () => {
+        dispatch(logout());
+    }
 
     return (
         <div className={props.classes.root}>
@@ -58,11 +115,11 @@ const Header = (props) => {
                     {location.pathname !== '/signup' && location.pathname !== '/signin' && <IconButton edge="start" className={clsx(props.classes.menuButton, props.open && props.classes.hide)} onClick={props.handleDrawerOpen} color="inherit" aria-label="menu">
                         <MenuIcon />
                     </IconButton>}
-                    <Link href="/" color="inherit" underline="none" variant="body2" className={props.classes.title}>
-                        <Typography variant="h6" className={props.classes.title}>
+                    <Typography className={props.classes.title}>
+                        <Link href="/" color="inherit" underline="none" variant="h6">
                             sciForum
-                        </Typography>
-                    </Link>
+                        </Link>
+                    </Typography>
                     <div className={props.classes.search}>
                         <div className={props.classes.searchIcon}>
                             <Search />
@@ -76,7 +133,7 @@ const Header = (props) => {
                         inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <Button color="inherit" onClick={() => dispatch(logout())}>Logout</Button>)}
+                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <DropDown username={currentUser} handleLogOut={handleLogOut} handleClick={handleClick} isDropDown={isDropDown} handleDropDown={handleDropDown}/>)}
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>
             </AppBar>

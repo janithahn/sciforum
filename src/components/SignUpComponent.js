@@ -82,7 +82,7 @@ export default function SignUp() {
     }else {
       setCredentialError('');
     }
-  });
+  }, [setCredentialError, auth.status, auth.errMess]);
 
   return (
     <Container component="main" maxWidth="xs" className={classes.content}>

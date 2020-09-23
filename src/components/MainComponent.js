@@ -24,18 +24,20 @@ function Main(props) {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    //console.log(auth);
-
     useEffect(() => {
+        if(auth.isAuthenticated) {
+            dispatch(fetchUser(auth));
+        }
         dispatch(fetchPosts());
     }, [dispatch]);
 
-    console.log(auth);
-    
-    if(user.user !== null) {
-        //console.log(user.user.data.username);
-        dispatch(updateUser(auth, user.user.data.username, "Janitha"));
+    if(user.user) {
+        console.log(user.user.data);
     }
+    
+    /*if(user.user !== null) {
+        dispatch(updateUser(auth, user.user.data.username, "Janitha"));
+    }*/
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
