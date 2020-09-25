@@ -1,11 +1,12 @@
 import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
+import { baseUrl } from '../shared/baseUrl';
 
 //POSTS
 export const fetchPosts = () => async (dispatch) => {
     dispatch(postLoading());
 
-    axios.get('http://localhost:8000/api/')
+    axios.get(baseUrl + '/api/')
     .then(response => {
         //console.log(response);
         return response;
@@ -35,22 +36,22 @@ export const postPost = (post) => (dispatch, getState) => {
     console.log(post.title);
     console.log(post.body);
     console.log(getState());
-    axios.post('http://localhost:8000/api/', {
+    axios.post(baseUrl + '/api/', {
         title: post.title,
         body: post.body,
         owner: post.owner,
     })
     .then(res => {
+        dispatch(fetchPosts());
         console.log(res);
         console.log("Question submitted successfully!");
-        dispatch(fetchPosts());
     })
     .catch(error => console.log(error));
 };
 
 export const editPost = (post) => (dispatch, getState) => {
     console.log(post);
-    axios.put(`http://localhost:8000/api/${post.id}/`, {
+    axios.put(baseUrl + `/api/${post.id}/`, {
         title: post.title,
         body: post.body,
         owner: post.owner
@@ -64,11 +65,11 @@ export const editPost = (post) => (dispatch, getState) => {
 };
 
 export const deletePost = (post, history) => (dispatch, getState) => {
-    axios.delete(`http://localhost:8000/api/${post.id}/`)
+    axios.delete(baseUrl + `/api/${post.id}/`)
     .then(res => {
+        dispatch(fetchPosts());
         console.log(res);
         console.log("Question deleted successfully!");
-        dispatch(fetchPosts());
         history.push('/questions');
     })
     .catch(error => console.log(error));
@@ -87,6 +88,7 @@ export const loginSuccess = (response) => {
         type: ActionTypes.LOGIN_SUCCESS,
         token: response.data.token,
         currentUserId: response.data.user_id,
+        currentUser: response.data.username,
         currentUserEmail: response.data.email,
     });
 }
@@ -109,23 +111,25 @@ const checkAuthTimeout = expirationTime => dispatch => (
 export const loginUser = (creds) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
-    return await axios.post('http://localhost:8000/user/login/', {
+    return await axios.post(baseUrl + '/user/login/', {
         username: creds.username,
         password: creds.password,
         //rememberMe: creds.rememberMe,
     })
     .then(res => {
-        console.log(res);
+        console.log(res.data.username);
         const token = res.data.token;
         const currentUserId = res.data.user_id;
         const currentUserEmail = res.data.email;
+        const currentUser = res.data.username;
         const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem('token', token);
         localStorage.setItem('userId', currentUserId);
+        localStorage.setItem('username', currentUser);
         localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
-        dispatch(fetchUser(token, currentUserId));
+        dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
@@ -148,6 +152,7 @@ export const logoutSuccess = () => {
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
     localStorage.removeItem('userId');
+    localStorage.removeItem('username');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
@@ -159,7 +164,7 @@ export const signupUser = (creds) => (dispatch) => {
     //console.log(creds);
     dispatch(requestLogin(creds));
 
-    axios.post('http://localhost:8000/user/register/', {
+    axios.post(baseUrl + '/user/register/', {
         username: creds.username,
         password1: creds.password1,
         password2: creds.password2,
@@ -170,13 +175,15 @@ export const signupUser = (creds) => (dispatch) => {
         const token = res.data.token;
         const currentUserId = res.data.user_id;
         const currentUserEmail = res.data.email;
+        const currentUser = res.data.username;
         const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
         localStorage.setItem('token', token);
         localStorage.setItem('userId', currentUserId);
+        localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
-        dispatch(fetchUser(token, currentUserId));
+        dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
@@ -186,10 +193,10 @@ export const signupUser = (creds) => (dispatch) => {
 }
 
 //RETREIVING USER INFORMATION
-export const fetchUser = (token, currentUserId) => (dispatch) => {
+export const fetchUser = (token, currentUser) => (dispatch) => {
     dispatch(userLoading());
 
-    axios.get(`http://localhost:8000/users/${currentUserId}/`, {
+    axios.get(baseUrl + `/users/${currentUser}/`, {
         "headers": token !== null ? {Authorization: "Token " + token}: undefined
     })
     .then(res => {
@@ -217,7 +224,7 @@ export const addUser = (user) => ({
 });
 
 export const updateUser = (auth, username, firstname) => (dispatch) => {
-    axios.put(`http://localhost:8000/users/${auth.currentUserId}/update/`, {
+    axios.put(baseUrl + `/users/${auth.currentUserId}/update/`, {
         username,
         first_name: firstname,
     },

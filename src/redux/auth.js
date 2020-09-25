@@ -5,6 +5,7 @@ export const Auth = (state = {
         isAuthenticated: localStorage.getItem('token') ? true: false,
         token: localStorage.getItem('token'),
         currentUserId: localStorage.getItem('userId'),
+        currentUser: localStorage.getItem('username'),
         currentUserEmail: localStorage.getItem('userEmail'),
         errMess: null,
     }, action) => {
@@ -23,6 +24,7 @@ export const Auth = (state = {
                 errMess: null,
                 token: action,
                 currentUserId: action.currentUserId,
+                currentUser: action.currentUser,
                 currentUserEmail: action.currentUserEmail,
             };
 

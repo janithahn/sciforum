@@ -3,10 +3,12 @@ import TextField from '@material-ui/core/TextField';
 import { ThemeProvider, CircularProgress, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import NotFound from './NotFoundComponent';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Redirect } from 'react-router-dom';
 import Editor from './EditorComponent';
 //import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from '../styles/postsStyles';
+import { fetchPosts } from '../redux/ActionCreators';
+import { useDispatch } from 'react-redux';
 
 export default function EditPost(props) {
   const classes = useStyles();
@@ -15,10 +17,12 @@ export default function EditPost(props) {
   const [body, setQuestion] = React.useState(props.post === undefined ? '': props.post.body);
   const id = props.post === undefined ? null: props.post.id;
 
+  const dispatch = useDispatch();
+
   function handleSubmit(event) {
     props.editPost({id, title, body, owner: props.post.owner});
+    //dispatch(fetchPosts());
     history.push(`/questions/${id}/`);
-    //alert("Title: " + event.target.elements.title.value + "\n" + "Question: " + body);
   }
 
   function handleCancel() {

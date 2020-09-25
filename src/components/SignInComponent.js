@@ -63,7 +63,6 @@ export default function SignIn(props) {
   const formik = useFormik({
     initialValues: {username: '', email: '', password: '', rememberMe: false},
     onSubmit: (values) => {
-      //alert(JSON.stringify(values));
       dispatch(loginUser(values));
       /*if(auth.isAuthenticated) {
         return(<Redirect to="/questions"/>);
@@ -98,7 +97,7 @@ export default function SignIn(props) {
               error={formik.errors.username && formik.touched.username}
               helperText={(formik.errors.username && formik.touched.username) && formik.errors.username}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              //onBlur={formik.handleBlur}
             />
             <TextField
               variant="outlined"
@@ -114,7 +113,7 @@ export default function SignIn(props) {
               error={formik.errors.password && formik.touched.password}
               helperText={(formik.errors.password && formik.touched.password) && formik.errors.password}
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              //onBlur={formik.handleBlur}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" onChange={(event) => formik.setFieldValue('rememberMe', event.target.checked)}/>}

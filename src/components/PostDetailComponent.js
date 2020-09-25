@@ -39,7 +39,6 @@ export default function PostDetail(props) {
         setOpen(false);
     };
 
-
     if(props.postLoading === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
     }else if(props.postFailed) {

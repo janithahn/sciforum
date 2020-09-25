@@ -16,8 +16,6 @@ export default function CreatePost(props) {
   const history = useHistory();
   const auth = useSelector(state => state.Auth);
 
-  console.log(props);
-
   function handleSubmit(event) {
         //event.preventDefault();
         props.postPost({title, body, owner: auth.currentUserId});

@@ -15,21 +15,32 @@ import CreatePost from  './CreatePostComponent';
 import EditPost from './EditPostComponent';
 import NotFound from './NotFoundComponent';
 //import MDBCustomFooter from './MDBFooterComponent';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import UserProfile from './user/ProfileComponent';
+import { Loading } from './LoadingComponent';
 
 function Main(props) {
     const posts = useSelector(state => state.Posts);
     const auth = useSelector(state => state.Auth);
-    //const user = useSelector(state => state.User);
+    const user = useSelector(state => state.User);
     const location = useLocation();
     const dispatch = useDispatch();
 
+    const [currentUser, setCurrentUser] = React.useState(null);
+
     useEffect(() => {
         if(auth.isAuthenticated) {
-            dispatch(fetchUser(auth.token, auth.currentUserId));
+            dispatch(fetchUser(auth.token, auth.currentUser));
         }
         dispatch(fetchPosts());
     }, [dispatch, auth]);
+
+    useEffect(() => {
+        if(user.user) {
+            setCurrentUser(user.user.data.username);
+        }
+    }, [user.user]);
+    
+    console.log(auth);
     
     /*if(user.user !== null) {
         dispatch(updateUser(auth, user.user.data.username, "Janitha"));
@@ -94,7 +105,7 @@ function Main(props) {
                 : <Redirect to='/' />
             )} />)
         } else {
-            return (<CircularProgress/>)
+            return (<Loading/>)
         }
     };
 
@@ -105,6 +116,21 @@ function Main(props) {
             : <Redirect to="/signin"/> //or you can add props.history.push('/signin') here
         )} />
     );
+
+    /*const PrivateRoutUserProfile = ({component: Component, ...rest}) => (
+        <Route {...rest} render={() => (
+            auth.isAuthenticated ? <Component/>: <Redirect to=""/>
+        )}
+        />
+    )*/
+
+    const ErrorRoute = ({component: Component, ...rest}) => (
+        <Route {...rest} render={() => (
+            user.user === ('idle' || 'loading' || 'succeeded') ? <Loading/>: <Component/>
+        )}/>
+    );
+
+    console.log(user.status);
 
     return (
         <div>
@@ -120,6 +146,7 @@ function Main(props) {
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
+                    <Route path={`/${currentUser}`} component={() => <UserProfile/>}/>
                     <Route component={NotFound}/>
                     <Redirect to="/"/>
                 </Switch>
