@@ -117,7 +117,7 @@ export const loginUser = (creds) => async (dispatch) => {
         //rememberMe: creds.rememberMe,
     })
     .then(res => {
-        console.log(res.data.username);
+        console.log(res);
         const token = res.data.token;
         const currentUserId = res.data.user_id;
         const currentUserEmail = res.data.email;

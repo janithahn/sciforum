@@ -66,15 +66,8 @@ const Header = (props) => {
     const user = useSelector(state => state.User);
     const [openModal, setOpenModal] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [currentUser, setCurrentUser] = React.useState('');
     const location = useLocation();
     const dispatch = useDispatch();
-
-    React.useEffect(() => {
-        if(user.user) {
-            setCurrentUser(user.user.data.username);
-        }
-    }, [user.user]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -90,7 +83,6 @@ const Header = (props) => {
 
     const handleLogOut = () => {
         setAnchorEl(null);
-        setCurrentUser('');
         dispatch(logout());
     }
 
@@ -124,7 +116,7 @@ const Header = (props) => {
                         inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <DropDown username={currentUser} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)}
+                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <DropDown username={auth.currentUser} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)}
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>
             </AppBar>

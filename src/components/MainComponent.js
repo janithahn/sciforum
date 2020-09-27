@@ -40,7 +40,7 @@ function Main(props) {
         }
     }, [user.user]);
     
-    console.log(auth);
+    //console.log(auth);
     
     /*if(user.user !== null) {
         dispatch(updateUser(auth, user.user.data.username, "Janitha"));
@@ -130,7 +130,7 @@ function Main(props) {
         )}/>
     );
 
-    console.log(user.status);
+    //console.log(user.status);
 
     return (
         <div>
