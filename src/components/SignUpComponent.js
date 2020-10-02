@@ -8,8 +8,13 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { ThemeProvider, FormHelperText } from '@material-ui/core';
-import { theme, useStylesSignUp as useStyles, ValidationTextField } from '../styles/signinSignupStyles';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputLabel from '@material-ui/core/InputLabel';
+import { ThemeProvider, FormHelperText, FormControl } from '@material-ui/core';
+import { theme, useStylesSignUp as useStyles, ValidationTextField, ValidationOutlinedInput } from '../styles/signinSignupStyles';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import PasswordStrengthBar from 'react-password-strength-bar';
@@ -43,6 +48,7 @@ export default function SignUp() {
   const [credentialError, setCredentialError] = React.useState('');
   //const [isSubmitionCompleted, setSubmitionCompleted] = React.useState(false);
   const [isPasswordFocused, setPasswordFocus] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const signupSchema = Yup.object().shape({
     username: Yup.string()
@@ -52,7 +58,7 @@ export default function SignUp() {
     /*firstname: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('Required'),
+      .required('Required'), 
     lastname: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
@@ -74,11 +80,24 @@ export default function SignUp() {
       .required('Required')
   });
 
+  const handleClickShowPassword = () => {
+    //setValues({ ...values, showPassword: !values.showPassword });
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {
-      if(auth.errMess.response.data.username && auth.errMess.response.data.email) {setCredentialError("A user is already registered with this username and email.")}
-      else if(auth.errMess.response.data.username) {setCredentialError(auth.errMess.response.data.username[0])}
-      else if(auth.errMess.response.data.email) {setCredentialError(auth.errMess.response.data.email[0])}
+      if(auth.errMess.response) {
+        if(auth.errMess.response.data.username && auth.errMess.response.data.email) {setCredentialError("A user is already registered with this username and email.")}
+        else if(auth.errMess.response.data.username) {setCredentialError(auth.errMess.response.data.username[0])}
+        else if(auth.errMess.response.data.email) {setCredentialError(auth.errMess.response.data.email[0])}
+      }else {
+        setCredentialError('Server error! Please try again!');
+      }
     }else {
       setCredentialError('');
     }
@@ -163,7 +182,7 @@ export default function SignUp() {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <ValidationTextField
+                   {/*<ValidationTextField
                       variant="outlined"
                       fullWidth
                       name="password1"
@@ -178,7 +197,35 @@ export default function SignUp() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       onFocus={() => setPasswordFocus(true)}
+                   />*/}
+                   <FormControl fullWidth variant="outlined">
+                    <InputLabel error={errors.password1 && touched.password1} htmlFor="outlined-adornment-password">Password</InputLabel>
+                    <ValidationOutlinedInput
+                      id="password1"
+                      name="password1"
+                      fullWidth
+                      type={showPassword ? 'text' : 'password'}
+                      value={values.password1}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      onFocus={() => setPasswordFocus(true)}
+                      error={errors.password1 && touched.password1}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      labelWidth={70}
                     />
+                    <FormHelperText error={true} variant="outlined">{(errors.password1 && touched.password1) && errors.password1}</FormHelperText>
+                  </FormControl>
                     {isPasswordFocused && values.password1.length > 3 && <PasswordStrengthBar password={values.password1}/>}
                   </Grid>
                   <Grid item xs={12}>

@@ -11,7 +11,12 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { ThemeProvider, FormHelperText } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputLabel from '@material-ui/core/InputLabel';
+import { ThemeProvider, FormHelperText, OutlinedInput, FormControl } from '@material-ui/core';
 import { theme, useStylesSignin as useStyles } from '../styles/signinSignupStyles';
 import { useFormik } from 'formik';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
@@ -47,10 +52,15 @@ export default function SignIn(props) {
   const dispatch = useDispatch();
   const auth = useSelector(state => state.Auth);
   const [credentialError, setCredentialError] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {
-      setCredentialError(auth.errMess.response.data.non_field_errors[0]);
+      if(auth.errMess.response) {
+        setCredentialError(auth.errMess.response.data.non_field_errors[0]);
+      } else {
+        setCredentialError('Server error! Please try again!');
+      }  
     }else {
       setCredentialError('');
     }
@@ -70,6 +80,15 @@ export default function SignIn(props) {
     },
     validationSchema: signinSchema
   });
+
+  const handleClickShowPassword = () => {
+    //setValues({ ...values, showPassword: !values.showPassword });
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -99,7 +118,7 @@ export default function SignIn(props) {
               onChange={formik.handleChange}
               //onBlur={formik.handleBlur}
             />
-            <TextField
+            {/*<TextField
               variant="outlined"
               margin="normal"
               fullWidth
@@ -114,7 +133,33 @@ export default function SignIn(props) {
               helperText={(formik.errors.password && formik.touched.password) && formik.errors.password}
               onChange={formik.handleChange}
               //onBlur={formik.handleBlur}
-            />
+            />*/}
+            <FormControl fullWidth variant="outlined">
+              <InputLabel error={formik.errors.password && formik.touched.password} htmlFor="outlined-adornment-password">Password</InputLabel>
+              <OutlinedInput
+                id="password"
+                name="password"
+                fullWidth
+                type={showPassword ? 'text' : 'password'}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.errors.password && formik.touched.password}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                labelWidth={70}
+              />
+              <FormHelperText error={true} variant="outlined">{(formik.errors.password && formik.touched.password) && formik.errors.password}</FormHelperText>
+            </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" onChange={(event) => formik.setFieldValue('rememberMe', event.target.checked)}/>}
               label="Remember me"

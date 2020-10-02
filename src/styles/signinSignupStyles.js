@@ -1,4 +1,4 @@
-import { createMuiTheme, makeStyles, withStyles, TextField } from '@material-ui/core';
+import { createMuiTheme, makeStyles, withStyles, TextField, OutlinedInput } from '@material-ui/core';
 import { deepPurple } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
@@ -94,3 +94,20 @@ export  const ValidationTextField = withStyles({
         },
     },
 })(TextField);
+
+export  const ValidationOutlinedInput = withStyles({
+  root: {
+      '& input:valid + fieldset': {
+      borderColor: 'gray',
+      borderWidth: 0.5,
+      },
+      '& input:after:invalid + fieldset': {
+      borderColor: 'red',
+      borderWidth: 2,
+      },
+      '& input:valid:focus + fieldset': {
+      borderLeftWidth: 4,
+      padding: '4px !important', // override inline-style
+      },
+  },
+})(OutlinedInput);

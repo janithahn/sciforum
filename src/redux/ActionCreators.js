@@ -223,10 +223,57 @@ export const addUser = (user) => ({
     payload: user
 });
 
-export const updateUser = (auth, username, firstname) => (dispatch) => {
-    axios.put(baseUrl + `/users/${auth.currentUserId}/update/`, {
-        username,
+export const updateUser = (auth, firstname) => (dispatch) => {
+    axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
+        username: auth.currentUser,
         first_name: firstname,
+    },
+    {
+        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+    })
+    .then(res => {
+        console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+//RETREIVING USER PROFILE
+export const fetchUserProfile = (token, currentUserId) => (dispatch) => {
+    dispatch(userProfileLoading());
+
+    axios.get(baseUrl + `/profile_api/${currentUserId}/`, {
+        "headers": token !== null ? {Authorization: "Token " + token}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addUserProfile(res));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(userProfileFailed(error));
+    })
+}
+
+export const userProfileLoading = () => ({
+    type: ActionTypes.USER_PROFILE_LOADING
+});
+
+export const userProfileFailed = (errmess) => ({
+    type: ActionTypes.USER_PROFILE_FAILED,
+    payload: errmess
+});
+
+export const addUserProfile = (user) => ({
+    type: ActionTypes.ADD_USER_PROFILE,
+    payload: user
+});
+
+export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
+    axios.patch(baseUrl + `/users/${auth.currentUserId}/`, {
+        user: auth.currentUserId,
+        aboutMe: aboutMe,
     },
     {
         "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined

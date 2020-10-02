@@ -5,7 +5,7 @@ import Sample from './SampleComponent';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from '../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts, postPost, editPost, fetchUser, updateUser } from '../redux/ActionCreators';
+import { fetchPosts, postPost, editPost, fetchUser, updateUser, fetchUserProfile } from '../redux/ActionCreators';
 import Footer from './FooterComponent';
 import SignUp from './SignUpComponent';
 import SignIn from './SignInComponent';
@@ -15,7 +15,8 @@ import CreatePost from  './CreatePostComponent';
 import EditPost from './EditPostComponent';
 import NotFound from './NotFoundComponent';
 //import MDBCustomFooter from './MDBFooterComponent';
-import UserProfile from './user/ProfileComponent';
+//import ProfileDetails from './user/ProfileComponent';
+import Account from './user/index';
 import { Loading } from './LoadingComponent';
 
 function Main(props) {
@@ -43,8 +44,10 @@ function Main(props) {
     //console.log(auth);
     
     /*if(user.user !== null) {
-        dispatch(updateUser(auth, user.user.data.username, "Janitha"));
+        dispatch(updateUser(auth, "Janitha"));
     }*/
+
+    //dispatch(fetchUserProfile(auth.token, auth.currentUserId));    
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -146,7 +149,7 @@ function Main(props) {
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
-                    <Route path={`/${currentUser}`} component={() => <UserProfile/>}/>
+                    <Route path={`/${currentUser}`} component={() => <Account/>}/>
                     <Route component={NotFound}/>
                     <Redirect to="/"/>
                 </Switch>
