@@ -19,7 +19,7 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   submit: {
-    margin: theme.spacing(3, 1, 2),
+    margin: theme.spacing(3, 2, 2),
   },
   typo: {
     marginTop: '20px',
@@ -28,4 +28,12 @@ export const useStyles = makeStyles((theme) => ({
     height: 100,
     width: 100
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalTextField: {
+    margin: theme.spacing(2, 0, 1),
+  }
 }));

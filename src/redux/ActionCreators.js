@@ -223,10 +223,30 @@ export const addUser = (user) => ({
     payload: user
 });
 
-export const updateUser = (auth, firstname) => (dispatch) => {
+export const updateUser = (auth, firstname, lastname, aboutMe) => (dispatch) => {
     axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
-        username: auth.currentUser,
         first_name: firstname,
+        last_name: lastname,
+        profile: {
+            aboutMe: aboutMe,
+        },
+    },
+    {
+        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+    })
+    .then(res => {
+        console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
+    axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
+        profile: {
+            aboutMe: aboutMe,
+        },
     },
     {
         "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
@@ -271,7 +291,7 @@ export const addUserProfile = (user) => ({
 });
 
 export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
-    axios.patch(baseUrl + `/users/${auth.currentUserId}/`, {
+    axios.patch(baseUrl + `/users/${auth.currentUser}/`, {
         user: auth.currentUserId,
         aboutMe: aboutMe,
     },

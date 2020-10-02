@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import {
   Box,
   Button,
@@ -13,80 +11,65 @@ import {
   ThemeProvider
 } from '@material-ui/core';
 import { theme, useStyles } from './styles/profileStyles';
-import { Formik } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUser } from '../../redux/ActionCreators';
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
-
-const ProfileDetails = ({ className, ...rest }) => {
+export default function ProfileDetails() {
   const classes = useStyles();
+  const auth = useSelector(state => state.Auth);
+  const user = useSelector(state => state.User);
+  const dispatch = useDispatch();
+
+  //console.log(user.user.data.first_name);
+
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    firstName: user.user.data.first_name,
+    lastName: user.user.data.last_name,
+    email: user.user.data.email,
+    username: user.user.data.username,
+    aboutMe: user.user.data.profile.aboutMe,
   });
 
-  const profile = Yup.object().shape({
-    username: Yup.string()
+  const profileSchema = Yup.object().shape({
+    /*username: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('Required'),
-    /*firstname: Yup.string()
+      .required('Required'),*/
+    firstname: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
       .required('Required'),
     lastname: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('Required'),*/
-    email: Yup.string()
+      .required('Required'),
+    /*email: Yup.string()
       .email()
       .required('Required'),
-    password1: Yup.string()
-      .required('Required')
-      .min(4, 'Too Short!'),
-      /*.matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
-      ),*/
-    password2: Yup.string()
-      .test('passwords-match', 'Passwords must match', function(value) {
-        return this.parent.password1 === value;
-      })
-      .required('Required')
+    password: Yup.string()
+      .required('Required'),*/
   });
 
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
-  };
+  const formik = useFormik({
+    initialValues: {
+      username: values.username, 
+      email: values.email, 
+      firstname: values.firstName, 
+      lastname: values.lastName, 
+      aboutMe: values.aboutMe
+    },
+    onSubmit: (values) => {
+      //console.log(values);
+      dispatch(updateUser(auth, values.firstname, values.lastname, values.aboutMe));
+    },
+    validationSchema: profileSchema,
+  });
 
   return (
     <ThemeProvider theme={theme}>
-      <form
-        autoComplete="off"
-        noValidate
-        className={clsx(classes.root, className)}
-        {...rest}
-      >
+      <form className={classes.root} onSubmit={formik.handleSubmit}>
         <Card>
           <CardHeader
             subheader="The information can be edited"
@@ -105,12 +88,14 @@ const ProfileDetails = ({ className, ...rest }) => {
               >
                 <TextField
                   fullWidth
-                  helperText="Please specify the first name"
+                  error={formik.touched.firstname && formik.errors.firstname}
+                  helperText={(formik.errors.firstname && formik.touched.firstname) && formik.errors.firstname}
+                  id="firstname"
                   label="First name"
-                  name="firstName"
-                  onChange={handleChange}
-                  required
-                  value={values.firstName}
+                  name="firstname"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.firstname}
                   variant="outlined"
                 />
               </Grid>
@@ -121,26 +106,32 @@ const ProfileDetails = ({ className, ...rest }) => {
               >
                 <TextField
                   fullWidth
+                  error={formik.touched.lastname && formik.errors.lastname}
+                  helperText={(formik.errors.lastname && formik.touched.lastname) && formik.errors.lastname}
                   label="Last name"
-                  name="lastName"
-                  onChange={handleChange}
-                  required
-                  value={values.lastName}
+                  id="lastname"
+                  name="lastname"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.lastname}
                   variant="outlined"
                 />
               </Grid>
-              <Grid
+              {/*<Grid
                 item
                 md={6}
                 xs={12}
               >
                 <TextField
                   fullWidth
-                  label="Email Address"
+                  error={formik.touched.email && formik.errors.email}
+                  helperText={(formik.errors.email && formik.touched.email) && formik.errors.email}
+                  label="Email"
+                  id="email"
                   name="email"
-                  onChange={handleChange}
-                  required
-                  value={values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
                   variant="outlined"
                 />
               </Grid>
@@ -151,11 +142,30 @@ const ProfileDetails = ({ className, ...rest }) => {
               >
                 <TextField
                   fullWidth
-                  label="Phone Number"
-                  name="phone"
-                  onChange={handleChange}
-                  type="number"
-                  value={values.phone}
+                  error={formik.touched.username && formik.errors.username}
+                  helperText={(formik.errors.username && formik.touched.username) && formik.errors.username}
+                  label="Username"
+                  id="username"
+                  name="username"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  type="text"
+                  value={formik.values.username}
+                  variant="outlined"
+                />
+              </Grid>*/}
+              <Grid
+                item
+                md={6}
+                xs={12}
+              >
+                <TextField
+                  fullWidth
+                  label="About Me"
+                  id="aboutMe"
+                  name="aboutMe"
+                  onChange={formik.handleChange}
+                  value={formik.values.aboutMe}
                   variant="outlined"
                 />
               </Grid>
@@ -164,41 +174,6 @@ const ProfileDetails = ({ className, ...rest }) => {
                 md={6}
                 xs={12}
               >
-                <TextField
-                  fullWidth
-                  label="Country"
-                  name="country"
-                  onChange={handleChange}
-                  required
-                  value={values.country}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  fullWidth
-                  label="Select State"
-                  name="state"
-                  onChange={handleChange}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                  value={values.state}
-                  variant="outlined"
-                >
-                  {states.map((option) => (
-                    <option
-                      key={option.value}
-                      value={option.value}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
               </Grid>
             </Grid>
           </CardContent>
@@ -209,11 +184,12 @@ const ProfileDetails = ({ className, ...rest }) => {
             p={2}
           >
             <Button
+              type="submit"
               color="primary"
               variant="contained"
               className={classes.submit}
             >
-              Save details
+              Save
             </Button>
           </Box>
         </Card>
@@ -221,9 +197,3 @@ const ProfileDetails = ({ className, ...rest }) => {
     </ThemeProvider>
   );
 };
-
-ProfileDetails.propTypes = {
-  className: PropTypes.string
-};
-
-export default ProfileDetails;
