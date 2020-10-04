@@ -129,7 +129,7 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
-        dispatch(fetchUser(token, currentUser));
+        //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
@@ -183,7 +183,7 @@ export const signupUser = (creds) => (dispatch) => {
         localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
         dispatch(loginSuccess(res));
-        dispatch(fetchUser(token, currentUser));
+        //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
@@ -232,7 +232,7 @@ export const updateUser = (auth, firstname, lastname, aboutMe) => (dispatch) => 
         },
     },
     {
-        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined,
     })
     .then(res => {
         console.log(res);
@@ -253,6 +253,25 @@ export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) => (dispatch) => {
+    const headers = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': auth.token !== null ? "Token " + auth.token: undefined
+    }
+
+    axios.patch(baseUrl + `/profile_api/${auth.currentUserId}/`, profileImage,
+    {
+        "headers": headers
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUser(null, usernameFromTheUrl));
     })
     .catch(error => {
         console.log(error);

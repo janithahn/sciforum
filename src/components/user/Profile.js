@@ -24,6 +24,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser } from '../../redux/ActionCreators';
 import UpdateName from './UpdateName';
 import UpdateAboutMe from './UpdateAboutMe';
+import UpdateProfileImage from './UpdateProfileImage';
 
 /*function EditModal({openModal, className, handleModalClose, name, setName}) {
   return(
@@ -51,27 +52,31 @@ const Profile = ({ className, ...rest }) => {
   const user = useSelector(state => state.User);
   const auth = useSelector(state => state.Auth);
 
+  const dispatch = useDispatch();
+
   const [openModal, setOpenModal] = React.useState(false);
   const [modalSelection, setModalSelection] = React.useState(null);
 
-  const dispatch = useDispatch();
-
   const usernameFromTheUrl = rest.match.params.username;
-  
-  console.log(user);
-  //console.log(auth);
-
-  React.useEffect(() => {
-    if(user.status === 'idle') {
-      dispatch(fetchUser(null, usernameFromTheUrl));
-    }
-  }, [user.status, dispatch]);
 
   const [name, setName] = React.useState({
     firstname: user.user ? user.user.data.first_name: null,
     lastname: user.user ? user.user.data.last_name: null,
   });
   const [aboutMe, setAboutMe] = React.useState( user.user ? user.user.data.profile.aboutMe: null);
+  const [profileImage, setProfileImage] = React.useState(user.user ? user.user.data.profile.profileImg: null);
+
+  React.useEffect(() => {
+    if(user.status === 'idle') {
+      dispatch(fetchUser(null, usernameFromTheUrl));
+    }
+  }, [user, dispatch]);
+
+  React.useEffect(() => {
+    if(user.user) {
+      handleUserInfo(user.user.data.first_name, user.user.data.last_name, user.user.data.profile.aboutMe, user.user.data.profile.profileImg);
+    }
+  }, [user]);
 
   const handleModalOpen = (modal) => {
     setOpenModal(true);
@@ -108,7 +113,7 @@ const Profile = ({ className, ...rest }) => {
           style={{textDecoration: 'none', color: 'white', fontSize: 12}} 
           onClick={() => handleModalOpen(selectionType)}
         >
-          edit
+          {selectionType === 'profileImage' ? "change": "edit"}
         </Link>
         : ""
       }
@@ -117,19 +122,14 @@ const Profile = ({ className, ...rest }) => {
     />
   );
 
-  const handleUserInfo = (firstname, lastname, aboutMe) => {
+  const handleUserInfo = (firstname, lastname, aboutMe, profileImage) => {
     setName({
       firstname,
       lastname,
     });
     setAboutMe(aboutMe);
+    setProfileImage(profileImage);
   }
-
-  React.useEffect(() => {
-    if(user.user) {
-      handleUserInfo(user.user.data.first_name, user.user.data.last_name, user.user.data.profile.aboutMe);
-    }
-  }, [user]);
   
   if(user.status === 'loading' || user.status === 'idle') {
     return <CircularProgress color="secondary" size={15}/>
@@ -137,31 +137,22 @@ const Profile = ({ className, ...rest }) => {
     return <h2>Error loading!</h2>
   }else {
     
-    console.log(name);
-    console.log(user.user);
-
-    const displayName = {
-      firstname: user.user.data.first_name,
-      lastname: user.user.data.last_name,
-    };
-    const displayAboutMe = user.user.data.profile.aboutMe;
+    //console.log(name);
+    //console.log(user.user);
+    //console.log(profileImage);
 
     return (
       <ThemeProvider theme={theme}>
-        <Card
-          className={clsx(classes.root, className)}
-          {...rest}
-        >
+        <Card className={clsx(classes.root, className)} {...rest}>
           <CardContent>
-            <Box
-              alignItems="center"
-              display="flex"
-              flexDirection="column"
-            >
-              <Avatar
-                className={classes.avatar}
-                src={'/static/images/avatars/avatar_6.png'}
-              />
+            <Box alignItems="center" display="flex" flexDirection="column">
+
+              <EditTooltip selectionType={"profileImage"} handleModalOpen={handleModalOpen}>
+                <Avatar
+                  className={classes.avatar}
+                  src={profileImage}
+                />
+              </EditTooltip>
 
               <EditTooltip selectionType={"name"} handleModalOpen={handleModalOpen}>
                 <Typography color="textPrimary" gutterBottom variant="h5">
@@ -182,6 +173,8 @@ const Profile = ({ className, ...rest }) => {
                       <UpdateName name={name} setName={setName} handleModalClose={handleModalClose}/>: 
                     modalSelection === 'aboutMe' ?
                       <UpdateAboutMe aboutMe={name} setAboutMe={setAboutMe} handleModalClose={handleModalClose}/>:
+                    modalSelection === 'profileImage' ?
+                      <UpdateProfileImage usernameFromTheUrl={usernameFromTheUrl} profileImage={profileImage} setProfileImage={setProfileImage} handleModalClose={handleModalClose}/>:
                     undefined
                   }
                 </Fade>
@@ -189,16 +182,6 @@ const Profile = ({ className, ...rest }) => {
 
             </Box>
           </CardContent>
-          <Divider />
-          <CardActions>
-            <Button
-              color="primary"
-              fullWidth
-              variant="text"
-            >
-              Upload picture
-            </Button>
-          </CardActions>
         </Card>
       </ThemeProvider>
     );

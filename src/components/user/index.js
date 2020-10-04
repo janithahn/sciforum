@@ -19,8 +19,6 @@ const useStyles = makeStyles((theme) => ({
 const Account = (props) => {
   const classes = useStyles();
 
-  console.log(props);
-
   return (
     <Container className={classes.root} maxWidth="lg">
       <Grid
@@ -29,20 +27,20 @@ const Account = (props) => {
       >
         <Grid
           item
-          lg={4}
+          lg={8}
           md={6}
           xs={12}
         >
           <Profile match={props.match}/>
         </Grid>
-        <Grid
+        {/*<Grid
           item
           lg={8}
           md={6}
           xs={12}
         >
           <ProfileDetails />
-        </Grid>
+        </Grid>*/}
       </Grid>
     </Container>
   );
