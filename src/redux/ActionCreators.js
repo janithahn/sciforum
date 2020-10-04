@@ -196,7 +196,7 @@ export const signupUser = (creds) => (dispatch) => {
 export const fetchUser = (token, currentUser) => (dispatch) => {
     dispatch(userLoading());
 
-    axios.get(baseUrl + `/users/${currentUser}/`, {
+    return axios.get(baseUrl + `/users/${currentUser}/`, {
         "headers": token !== null ? {Authorization: "Token " + token}: undefined
     })
     .then(res => {

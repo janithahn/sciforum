@@ -25,11 +25,11 @@ export default function ProfileDetails() {
   //console.log(user.user.data.first_name);
 
   const [values, setValues] = useState({
-    firstName: user.user.data.first_name,
-    lastName: user.user.data.last_name,
-    email: user.user.data.email,
-    username: user.user.data.username,
-    aboutMe: user.user.data.profile.aboutMe,
+    firstName: user.user ? user.user.data.first_name: null,
+    lastName: user.user ? user.user.data.last_name: null,
+    email: user.user ? user.user.data.email: null,
+    username: user.user ? user.user.data.username: null,
+    aboutMe: user.user ? user.user.data.profile.aboutMe: null,
   });
 
   const profileSchema = Yup.object().shape({

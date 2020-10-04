@@ -5,7 +5,7 @@ import Sample from './SampleComponent';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from '../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts, postPost, editPost, fetchUser, updateUser, fetchUserProfile } from '../redux/ActionCreators';
+import { fetchPosts, postPost, editPost } from '../redux/ActionCreators';
 import Footer from './FooterComponent';
 import SignUp from './SignUpComponent';
 import SignIn from './SignInComponent';
@@ -22,32 +22,16 @@ import { Loading } from './LoadingComponent';
 function Main(props) {
     const posts = useSelector(state => state.Posts);
     const auth = useSelector(state => state.Auth);
-    const user = useSelector(state => state.User);
     const location = useLocation();
     const dispatch = useDispatch();
 
-    const [currentUser, setCurrentUser] = React.useState(null);
-
     useEffect(() => {
-        if(auth.isAuthenticated) {
+        /*if(auth.isAuthenticated) {
             dispatch(fetchUser(auth.token, auth.currentUser));
-        }
+        }*/
+        //dispatch(fetchUser(null, "janithahn"));
         dispatch(fetchPosts());
-    }, [dispatch, auth]);
-
-    useEffect(() => {
-        if(user.user) {
-            setCurrentUser(user.user.data.username);
-        }
-    }, [user.user]);
-    
-    //console.log(auth);
-    
-    /*if(user.user !== null) {
-        dispatch(updateUser(auth, "Janitha"));
-    }*/
-
-    //dispatch(fetchUserProfile(auth.token, auth.currentUserId));    
+    }, [dispatch]);
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -71,6 +55,12 @@ function Main(props) {
                 classes={classes}
                 match={match}
             />
+        );
+    };
+
+    const AccountView = ({match}) => {
+        return(
+            <Account match={match}/>
         );
     };
 
@@ -120,20 +110,11 @@ function Main(props) {
         )} />
     );
 
-    /*const PrivateRoutUserProfile = ({component: Component, ...rest}) => (
-        <Route {...rest} render={() => (
-            auth.isAuthenticated ? <Component/>: <Redirect to=""/>
-        )}
-        />
-    )*/
-
-    const ErrorRoute = ({component: Component, ...rest}) => (
-        <Route {...rest} render={() => (
-            user.user === ('idle' || 'loading' || 'succeeded') ? <Loading/>: <Component/>
-        )}/>
-    );
-
-    //console.log(user.status);
+    const ProfileRoute = ({component: Component, ...rest}) => {
+        //console.log(rest.computedMatch.params.username);
+        //setCurrentUser(rest.computedMatch.params.username);
+        return <Route {...rest}/>
+    };
 
     return (
         <div>
@@ -149,7 +130,7 @@ function Main(props) {
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
-                    <Route path={`/${currentUser}`} component={() => <Account/>}/>
+                    <Route path="/profile/:username" component={AccountView}/>
                     <Route component={NotFound}/>
                     <Redirect to="/"/>
                 </Switch>
