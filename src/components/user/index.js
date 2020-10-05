@@ -33,14 +33,15 @@ const Account = (props) => {
         >
           <Profile match={props.match}/>
         </Grid>
-        {/*<Grid
+        <Grid
           item
-          lg={8}
+          justify="space-between"
+          lg={4}
           md={6}
           xs={12}
         >
-          <ProfileDetails />
-        </Grid>*/}
+          <ProfileDetails match={props.match}/>
+        </Grid>
       </Grid>
     </Container>
   );

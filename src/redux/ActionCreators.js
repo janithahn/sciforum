@@ -266,9 +266,6 @@ export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) =
         'Authorization': auth.token !== null ? "Token " + auth.token: undefined
     }
 
-    console.log(headers);
-    console.log(profileImage);
-
     axios.patch(baseUrl + `/profile_api/${auth.currentUserId}/`, profileImage,
     {
         "headers": headers

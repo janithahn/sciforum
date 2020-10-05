@@ -7,9 +7,9 @@ import clsx from 'clsx';
 import SignIn from './SignInComponent';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, fetchUser } from '../redux/ActionCreators';
+import { logout } from '../redux/ActionCreators';
 
-function LoginModal({openModal, classes, handleModalClose, ref}) {
+function LoginModal({openModal, classes, handleModalClose}) {
     return(
         <Modal
             aria-labelledby="transition-modal-title"
@@ -30,7 +30,7 @@ function LoginModal({openModal, classes, handleModalClose, ref}) {
     );
 }
 
-const DropDown = ({username, anchorEl, setAnchorEl, handleDropDownClose, handleLogOut, handleClick}) => {
+const DropDown = ({username, anchorEl, setAnchorEl, handleLogOut, handleClick}) => {
 
     return(
         <div>
@@ -53,7 +53,9 @@ const DropDown = ({username, anchorEl, setAnchorEl, handleDropDownClose, handleL
                 anchorEl={anchorEl}
                 onClose={() => setAnchorEl(null)}   
             >
-                <MenuItem onClick={handleDropDownClose}>Profile</MenuItem>
+                <Link style={{textDecoration: 'none', color: 'inherit'}} href={`/profile/${username}/`}>
+                    <MenuItem>Profile</MenuItem>
+                </Link>
                 <MenuItem onClick={handleLogOut}>Logout</MenuItem>
             </Menu>
         </div>

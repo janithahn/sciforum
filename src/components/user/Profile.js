@@ -18,13 +18,15 @@ import {
   Backdrop,
   Fade,
   CircularProgress,
+  Grid,
 } from '@material-ui/core';
-import { theme, useStyles } from './styles/profileStyles';
+import { theme, useStyles, CustomTooltip } from './styles/profileStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser } from '../../redux/ActionCreators';
 import UpdateName from './UpdateName';
 import UpdateAboutMe from './UpdateAboutMe';
 import UpdateProfileImage from './UpdateProfileImage';
+import { isEmpty } from '../../shared/AdditionalFunctions';
 
 /*function EditModal({openModal, className, handleModalClose, name, setName}) {
   return(
@@ -104,8 +106,9 @@ const Profile = ({ className, ...rest }) => {
   );
 
   const EditTooltip = ({selectionType, handleModalOpen, ...rest}) => (
-    <Tooltip
+    <CustomTooltip
       {...rest}
+      className={classes.tooltip}
       title={
         auth.isAuthenticated && auth.currentUser === usernameFromTheUrl ?
         <Link 
@@ -118,7 +121,7 @@ const Profile = ({ className, ...rest }) => {
         : ""
       }
       interactive 
-      placement="right"
+      placement={selectionType === 'profileImage' ? "bottom": "top-start"}
     />
   );
 
@@ -143,28 +146,38 @@ const Profile = ({ className, ...rest }) => {
 
     return (
       <ThemeProvider theme={theme}>
-        <Card className={clsx(classes.root, className)} {...rest}>
+        <Card className={clsx(classes.root, className)} {...rest} elevation={0}>
           <CardContent>
-            <Box alignItems="center" display="flex" flexDirection="column">
 
-              <EditTooltip selectionType={"profileImage"} handleModalOpen={handleModalOpen}>
-                <Avatar
-                  className={classes.avatar}
-                  src={profileImage}
-                />
-              </EditTooltip>
+            <Grid container spacing={2}>
 
-              <EditTooltip selectionType={"name"} handleModalOpen={handleModalOpen}>
-                <Typography color="textPrimary" gutterBottom variant="h5">
-                  {`${name.firstname} ${name.lastname}`}
-                </Typography>
-              </EditTooltip>
+              <Grid item>
+                <EditTooltip selectionType={"profileImage"} handleModalOpen={handleModalOpen}>
+                  <Avatar className={classes.avatar} src={profileImage}/>
+                </EditTooltip>
+              </Grid>
 
-              <EditTooltip selectionType={"aboutMe"} handleModalOpen={handleModalOpen}>
-                <Typography color="textPrimary" variant="body1">
-                  {aboutMe}
-                </Typography>
-              </EditTooltip>
+              <Grid item xs={12} sm container>
+                <Grid item justify="center" container direction="column" spacing={2}>
+                  <EditTooltip selectionType={"name"} handleModalOpen={handleModalOpen}>
+                    <Typography color="textPrimary" gutterBottom variant="h5">
+                      {name.firstname === '' && name.lastname === '' && auth.isAuthenticated && usernameFromTheUrl === auth.currentUser ? 
+                        <Link style={{color: 'gray'}}>Name</Link>
+                        : `${name.firstname} ${name.lastname}`
+                      }
+                    </Typography>
+                  </EditTooltip>
+
+                  <EditTooltip selectionType={"aboutMe"} handleModalOpen={handleModalOpen}>
+                    <Typography color="textPrimary" variant="body1">
+                      {aboutMe === '' && auth.isAuthenticated && usernameFromTheUrl === auth.currentUser ? 
+                        <Link style={{color: 'gray'}}>Title</Link>
+                        : aboutMe
+                      }
+                    </Typography>
+                  </EditTooltip>
+                </Grid>
+              </Grid>
 
               <EditModal>
                 <Fade in={openModal}>
@@ -172,7 +185,7 @@ const Profile = ({ className, ...rest }) => {
                     modalSelection === 'name' ? 
                       <UpdateName name={name} setName={setName} handleModalClose={handleModalClose}/>: 
                     modalSelection === 'aboutMe' ?
-                      <UpdateAboutMe aboutMe={name} setAboutMe={setAboutMe} handleModalClose={handleModalClose}/>:
+                      <UpdateAboutMe aboutMe={aboutMe} setAboutMe={setAboutMe} handleModalClose={handleModalClose}/>:
                     modalSelection === 'profileImage' ?
                       <UpdateProfileImage usernameFromTheUrl={usernameFromTheUrl} profileImage={profileImage} setProfileImage={setProfileImage} handleModalClose={handleModalClose}/>:
                     undefined
@@ -180,9 +193,11 @@ const Profile = ({ className, ...rest }) => {
                 </Fade>
               </EditModal>
 
-            </Box>
+            </Grid>
+
           </CardContent>
         </Card>
+        <Divider className={classes.divider}/>
       </ThemeProvider>
     );
   }

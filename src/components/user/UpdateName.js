@@ -28,12 +28,12 @@ export default function UpdateName(props) {
   const profileSchema = Yup.object().shape({
     firstname: Yup.string()
       .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
+      .max(50, 'Too Long!'),
+      //.required('Required'),
     lastname: Yup.string()
       .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
+      .max(50, 'Too Long!'),
+      //.required('Required'),
   });
 
   const formik = useFormik({

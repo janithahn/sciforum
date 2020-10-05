@@ -8,57 +8,63 @@ import {
   Divider,
   Grid,
   TextField,
-  ThemeProvider
+  ThemeProvider,
+  Typography,
+  CircularProgress,
 } from '@material-ui/core';
+import { LocationOn, AccountCircle } from '@material-ui/icons';
 import { theme, useStyles } from './styles/profileStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUser } from '../../redux/ActionCreators';
+import { updateUser, fetchUser } from '../../redux/ActionCreators';
 
-export default function ProfileDetails() {
+export default function ProfileDetails(props) {
+
   const classes = useStyles();
   const auth = useSelector(state => state.Auth);
   const user = useSelector(state => state.User);
   const dispatch = useDispatch();
 
-  //console.log(user.user.data.first_name);
+  const usernameFromTheUrl = props.match.params.username;
 
   const [values, setValues] = useState({
-    firstName: user.user ? user.user.data.first_name: null,
-    lastName: user.user ? user.user.data.last_name: null,
-    email: user.user ? user.user.data.email: null,
-    username: user.user ? user.user.data.username: null,
-    aboutMe: user.user ? user.user.data.profile.aboutMe: null,
+    location: user.user ? user.user.data.profile.location: null,
+    displayName: user.user ? user.user.data.profile.displayName: null,
   });
 
+  React.useEffect(() => {
+    if(user.status === 'idle') {
+      dispatch(fetchUser(null, usernameFromTheUrl));
+    }
+  }, [user, dispatch]);
+
+  React.useEffect(() => {
+    if(user.user) {
+      handleUserInfo(user.user.data.profile.location, user.user.data.profile.displayName);
+    }
+  }, [user]);
+
+  const handleUserInfo = (location, displayName) => {
+    setValues({
+      location,
+      displayName,
+    });
+  }
+
   const profileSchema = Yup.object().shape({
-    /*username: Yup.string()
+    location: Yup.string()
       .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),*/
-    firstname: Yup.string()
+      .max(50, 'Too Long!'),
+    displayName: Yup.string()
       .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
-    lastname: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
-    /*email: Yup.string()
-      .email()
-      .required('Required'),
-    password: Yup.string()
-      .required('Required'),*/
+      .max(50, 'Too Long!'),
   });
 
   const formik = useFormik({
     initialValues: {
-      username: values.username, 
-      email: values.email, 
-      firstname: values.firstName, 
-      lastname: values.lastName, 
-      aboutMe: values.aboutMe
+      location: values.location,
+      displayName: values.displayName,
     },
     onSubmit: (values) => {
       //console.log(values);
@@ -67,133 +73,92 @@ export default function ProfileDetails() {
     validationSchema: profileSchema,
   });
 
-  return (
-    <ThemeProvider theme={theme}>
-      <form className={classes.root} onSubmit={formik.handleSubmit}>
-        <Card>
-          <CardHeader
-            subheader="The information can be edited"
-            title="Profile"
-          />
-          <Divider />
+  //console.log(values.location);
+
+  if(user.status === 'loading' || user.status === 'idle') {
+    return <CircularProgress color="secondary" size={15}/>
+  }else if(user.status === 'failed') {
+    return <h2>Error loading!</h2>
+  }else {
+    return (
+      <ThemeProvider theme={theme}>
+        <Card className={classes.root} elevation={1}>
+          <CardHeader title="Profile"/>
+          <Divider className={classes.divider}/>
           <CardContent>
-            <Grid
-              container
-              spacing={3}
-            >
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  fullWidth
-                  error={formik.touched.firstname && formik.errors.firstname}
-                  helperText={(formik.errors.firstname && formik.touched.firstname) && formik.errors.firstname}
-                  id="firstname"
-                  label="First name"
-                  name="firstname"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.firstname}
-                  variant="outlined"
-                />
+            <Grid container direction="column" justify="center" alignItems="flex-start" spacing={1}>
+              <Grid item>
+                <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
               </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  fullWidth
-                  error={formik.touched.lastname && formik.errors.lastname}
-                  helperText={(formik.errors.lastname && formik.touched.lastname) && formik.errors.lastname}
-                  label="Last name"
-                  id="lastname"
-                  name="lastname"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.lastname}
-                  variant="outlined"
-                />
-              </Grid>
-              {/*<Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  fullWidth
-                  error={formik.touched.email && formik.errors.email}
-                  helperText={(formik.errors.email && formik.touched.email) && formik.errors.email}
-                  label="Email"
-                  id="email"
-                  name="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.email}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  fullWidth
-                  error={formik.touched.username && formik.errors.username}
-                  helperText={(formik.errors.username && formik.touched.username) && formik.errors.username}
-                  label="Username"
-                  id="username"
-                  name="username"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  type="text"
-                  value={formik.values.username}
-                  variant="outlined"
-                />
-              </Grid>*/}
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
-                <TextField
-                  fullWidth
-                  label="About Me"
-                  id="aboutMe"
-                  name="aboutMe"
-                  onChange={formik.handleChange}
-                  value={formik.values.aboutMe}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                md={6}
-                xs={12}
-              >
+              <Grid item>
+                <Typography className={classes.iconWrap}><AccountCircle style={{marginRight: 3}}/>Display name is {values.displayName}</Typography>
               </Grid>
             </Grid>
           </CardContent>
-          <Divider />
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            p={2}
-          >
-            <Button
-              type="submit"
-              color="primary"
-              variant="contained"
-              className={classes.submit}
-            >
-              Save
-            </Button>
-          </Box>
         </Card>
-      </form>
-    </ThemeProvider>
-  );
+        {/*<form className={classes.root} onSubmit={formik.handleSubmit}>
+          <Card className={classes.root} elevation={1}>
+            <CardHeader title="Profile"/>
+            <Divider className={classes.divider} style={{backgroundColor: 'inherit'}}/>
+            <CardContent>
+              <Grid container spacing={3}>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    error={formik.touched.firstname && formik.errors.firstname}
+                    helperText={(formik.errors.firstname && formik.touched.firstname) && formik.errors.firstname}
+                    id="firstname"
+                    label="First name"
+                    name="firstname"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.firstname}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    error={formik.touched.lastname && formik.errors.lastname}
+                    helperText={(formik.errors.lastname && formik.touched.lastname) && formik.errors.lastname}
+                    label="Last name"
+                    id="lastname"
+                    name="lastname"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.lastname}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    label="About Me"
+                    id="aboutMe"
+                    name="aboutMe"
+                    onChange={formik.handleChange}
+                    value={formik.values.aboutMe}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                </Grid>
+              </Grid>
+            </CardContent>
+            <Divider />
+            <Box display="flex" justifyContent="flex-end" p={2} >
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                className={classes.submit}
+              >
+                Save
+              </Button>
+            </Box>
+          </Card>
+        </form>*/}
+      </ThemeProvider>
+    );
+  }
 };
