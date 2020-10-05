@@ -22,7 +22,7 @@ export const Auth = (state = {
                 status: 'succeeded',
                 isAuthenticated: true,
                 errMess: null,
-                token: action,
+                token: action.token,
                 currentUserId: action.currentUserId,
                 currentUser: action.currentUser,
                 currentUserEmail: action.currentUserEmail,

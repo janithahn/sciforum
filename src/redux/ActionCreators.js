@@ -83,13 +83,14 @@ export const requestLogin = (creds) => {
     });
 }
 
-export const loginSuccess = (response) => {
+export const loginSuccess = (token, currentUserId, currentUserEmail, currentUser) => {
+    console.log(token);
     return({
         type: ActionTypes.LOGIN_SUCCESS,
-        token: response.data.token,
-        currentUserId: response.data.user_id,
-        currentUser: response.data.username,
-        currentUserEmail: response.data.email,
+        token,
+        currentUserId,
+        currentUser,
+        currentUserEmail,
     });
 }
 
@@ -128,7 +129,7 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('username', currentUser);
         localStorage.setItem('userEmail', currentUserEmail);
         localStorage.setItem('expirationDate', expirationDate);
-        dispatch(loginSuccess(res));
+        dispatch(loginSuccess(token, currentUserId, currentUserEmail, currentUser));
         //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
@@ -264,6 +265,9 @@ export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) =
         'Content-Type': 'multipart/form-data',
         'Authorization': auth.token !== null ? "Token " + auth.token: undefined
     }
+
+    console.log(headers);
+    console.log(profileImage);
 
     axios.patch(baseUrl + `/profile_api/${auth.currentUserId}/`, profileImage,
     {

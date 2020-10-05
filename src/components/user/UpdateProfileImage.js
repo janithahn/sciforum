@@ -37,17 +37,14 @@ export default function UpdateProfileImage(props) {
         console.log(image);
     }
 
-    console.log(auth);
-
     const handleImageUpload = () => {
         const formData = new FormData();
         formData.append('profileImg', image, image.name);
+        console.log(auth);
         dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
         //dispatch(fetchUser(null, usernameFromTheUrl));
         handleModalClose();
     }
-
-    console.log(user);
 
     const formik = useFormik({
         initialValues: {
