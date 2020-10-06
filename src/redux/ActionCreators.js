@@ -19,16 +19,16 @@ export const fetchPosts = () => async (dispatch) => {
 }
 
 export const postLoading = () => ({
-    type: ActionTypes.POST_LOADING
+    type: ActionTypes.POST_LIST_LOADING
 });
 
 export const postFailed = (errmess) => ({
-    type: ActionTypes.POST_FAILED,
+    type: ActionTypes.POST_LIST_FAILED,
     payload: errmess
 });
 
 export const addPost = (post) => ({
-    type: ActionTypes.ADD_POST,
+    type: ActionTypes.ADD_POST_LIST,
     payload: post
 });
 
