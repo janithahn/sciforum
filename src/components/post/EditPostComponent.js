@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, CircularProgress, Typography } from '@material-ui/core';
+import { ThemeProvider, CircularProgress, Typography, Grid, Divider } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import NotFound from '../alert/NotFoundComponent';
 import { useHistory, Redirect, useParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import Editor from './EditorComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
+import MDEditor from './MDE';
 
 export default function EditPost(props) {
   const classes = useStyles();
@@ -72,7 +73,9 @@ export default function EditPost(props) {
       return (
         <div className={classes.root}>
             <ThemeProvider theme={theme}>
+              <Grid container lg={8} sm xs={12} direction="column" justify="center">
                 <form onSubmit={handleSubmit}>
+                  <Grid item>
                     <Typography variant="h6" gutterBottom>
                       Title
                     </Typography>
@@ -89,27 +92,36 @@ export default function EditPost(props) {
                       }}
                       variant="outlined"
                     />
+                  </Grid>
+                  <Grid item>
                     <Typography className={classes.typo} variant="h6" gutterBottom>
                       Question
                     </Typography>
-                    <Editor setQuestion={setQuestion} data={body}/>
+                    {/*<Editor setQuestion={(values) => setQuestion(values)} data={body}/>*/}
+                    <MDEditor setQuestion={setQuestion} data={body}/>
+                  </Grid>
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        size="small"
+                        variant="outlined"
                     >
                     Submit
                   </Button>
                   <Button
                         onClick={handleCancel}
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         className={classes.submit}
+                        size="small"
+                        variant="outlined"
                     >
                     Cancel
                   </Button>
                 </form>
+              </Grid>
             </ThemeProvider>
         </div>
       );

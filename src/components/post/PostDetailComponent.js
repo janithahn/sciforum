@@ -1,6 +1,6 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, Typography, ThemeProvider } from '@material-ui/core';
+import { Button, Typography, ThemeProvider, Divider, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
@@ -9,15 +9,22 @@ import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchPostDetail } from '../../redux/ActionCreators';
+import { Preview } from './MarkdownPreview';
 
 function RenderCard({title, body}) {
     return(
-       <div>
-           <Typography variant="h6" gutterBottom>
-                {title}
-            </Typography>
-            <PostViewer data={body}/>
-       </div>
+       <Grid container lg={8} sm xs={12} direction="column" spacing={3}>
+           <Grid item>
+                <Typography variant="h6" gutterBottom>
+                    {title}
+                </Typography>
+            </Grid>
+            <Divider/>
+            <Grid item>
+                <Preview source={body}/>
+            </Grid>
+            <Divider/>
+       </Grid>
     );
     
 }
@@ -90,7 +97,9 @@ export default function PostDetail(props) {
                                         className={classes.submit}
                                         type="submit"
                                         variant="contained"
-                                        color="primary"  
+                                        color="primary"
+                                        size="small"
+                                        variant="outlined"
                                     >
                                     Edit
                                     </Button>
@@ -99,8 +108,10 @@ export default function PostDetail(props) {
                                         className={classes.submit}
                                         type="submit"
                                         variant="contained"
-                                        color="primary"
+                                        color="secondary"
                                         onClick={handleClickOpen}
+                                        size="small"
+                                        variant="outlined"
                                     >
                                     Delete
                                 </Button>

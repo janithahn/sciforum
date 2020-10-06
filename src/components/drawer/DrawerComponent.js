@@ -4,6 +4,7 @@ import { Inbox, ChevronLeft, Home } from '@material-ui/icons';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchPosts } from '../../redux/ActionCreators';
+import { useStyles } from './styles/drawerStyles';
 
 function RenderDrawer({ handleDrawerClose, classes, open, variant, handleSelectedItem, selected }) {
 
@@ -42,6 +43,8 @@ export default function MainDrawer(props) {
     const location = useLocation();
     const [selected, setLocation] = React.useState(location.pathname);
 
+    const classes = useStyles();
+
     const dispatch = useDispatch();
 
     const handleSelectedItem = (val) => {
@@ -52,13 +55,13 @@ export default function MainDrawer(props) {
     }
 
     return(
-        <div>
+        <React.Fragment>
             <Hidden smDown>
-                <RenderDrawer variant="permanent" selected={selected} handleSelectedItem={handleSelectedItem} handleDrawerClose={props.handleDrawerClose} classes={props.classes} theme={theme} open={props.open}/>
+                <RenderDrawer variant="permanent" selected={selected} handleSelectedItem={handleSelectedItem} handleDrawerClose={props.handleDrawerClose} classes={classes} theme={theme} open={props.open}/>
             </Hidden>
             <Hidden mdUp>
-                <RenderDrawer variant="persistent" selected={selected} handleSelectedItem={handleSelectedItem} handleDrawerClose={props.handleDrawerClose} classes={props.classes} theme={theme} open={props.open}/>
+                <RenderDrawer variant="persistent" selected={selected} handleSelectedItem={handleSelectedItem} handleDrawerClose={props.handleDrawerClose} classes={classes} theme={theme} open={props.open}/>
             </Hidden>
-        </div>
+        </React.Fragment>
     );
 }

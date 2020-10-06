@@ -59,7 +59,7 @@ export const editPost = (post) => (dispatch, getState) => {
     .then(res => {
         console.log(res);
         console.log("Question updated successfully!");
-        dispatch(fetchPosts());
+        dispatch(fetchPostDetail(post.id));
     })
     .catch(error => console.log(error));
 };

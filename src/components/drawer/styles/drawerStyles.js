@@ -1,0 +1,37 @@
+import { createMuiTheme, makeStyles, useTheme } from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
+
+export const theme = createMuiTheme({
+    typography: {
+        fontFamily: 'Recursive'
+    },
+    palette: {
+        primary: blue,
+    },
+});
+
+const drawerWidth = 240;
+
+export const useStyles = makeStyles((theme) => ({
+    drawer: {
+        [theme.breakpoints.up('md')]: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
+    },
+    drawerPaper: {
+        width: drawerWidth,
+        background: '#eeeeee'
+    },
+    drawerContainer: {
+        overflow: 'auto'
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+    },
+}));
