@@ -25,13 +25,11 @@ function RenderCard({title, body}) {
 export default function PostDetail(props) {
     const classes = useStyles();
     const auth = useSelector(state => state.Auth);
-    const posts = useSelector(state => state.Posts);
     const post = useSelector(state => state.Post);
 
     const dispatch = useDispatch();
 
     const {postId} = useParams(); //another way of approaching for getting the postId from the url other than match.params
-    //const postDetails = posts.posts.filter((post) => post.id === parseInt(postId))[0];
 
     const [open, setOpen] = React.useState(false);
 

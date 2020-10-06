@@ -20,10 +20,8 @@ export default function CreatePost(props) {
   const dispatch = useDispatch();
 
   function handleSubmit(event) {
-        //event.preventDefault();
         dispatch(postPost({title, body, owner: auth.currentUserId}));
         history.push('/questions');
-        //alert("Title: " + event.target.elements.title.value + "\n" + "Question: " + body);
   }
 
   function handleCancel() {

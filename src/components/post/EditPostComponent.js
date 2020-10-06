@@ -31,6 +31,8 @@ export default function EditPost(props) {
 
   const {postId} = useParams();
 
+  console.log(postInfo);
+
   React.useEffect(() => {
     if(post.status === 'idle') {
         dispatch(fetchPostDetail(postId));
@@ -54,7 +56,6 @@ export default function EditPost(props) {
   }
 
   function handleSubmit(event) {
-    //props.editPost({id, title, body, owner: props.post.owner});
     dispatch(editPost({
       id,
       owner,
@@ -87,7 +88,7 @@ export default function EditPost(props) {
                       id="title"
                       value={title}
                       name="title"
-                      onInput={e => setTitle(e.target.value)}
+                      onInput={e => setPostInfo({title: e.target.value})}
                       margin="none"
                       size="small"
                       InputLabelProps={{
@@ -98,7 +99,7 @@ export default function EditPost(props) {
                     <Typography className={classes.typo} variant="h6" gutterBottom>
                       Question
                     </Typography>
-                    <Editor setQuestion={setQuestion} data={body}/>
+                    <Editor setQuestion={setPostInfo} data={postInfo.body}/>
                     <Button
                         type="submit"
                         variant="contained"

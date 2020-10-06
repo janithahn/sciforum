@@ -18,7 +18,7 @@ export default function Editor(props) {
                 onChange={ ( event, editor ) => {
                     const data = editor.getData();
                     console.log( { event, editor, data } );
-                    props.setQuestion(data)
+                    props.setQuestion({body: data})
                 } }
                 onBlur={ ( event, editor ) => {
                     console.log( 'Blur.', editor );

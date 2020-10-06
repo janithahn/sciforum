@@ -21,16 +21,11 @@ import { Loading } from './loading/LoadingComponent';
 
 function Main(props) {
     const posts = useSelector(state => state.Posts);
-    const post = useSelector(state => state.Post);
     const auth = useSelector(state => state.Auth);
     const location = useLocation();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        /*if(auth.isAuthenticated) {
-            dispatch(fetchUser(auth.token, auth.currentUser));
-        }*/
-        //dispatch(fetchUser(null, "janithahn"));
         dispatch(fetchPosts());
     }, [dispatch]);
 
@@ -45,32 +40,9 @@ function Main(props) {
         setOpen(false);
     };
 
-    const PostDetailView = ({match}) => {
-        //console.log(posts);
-        //console.log(auth);
-        return(
-            <PostDetail
-                classes={classes}
-                match={match}
-            />
-        );
-    };
-
     const AccountView = ({match}) => {
         return(
             <Account match={match}/>
-        );
-    };
-
-    const PostEditView = ({postId}) => {
-        return(
-            <EditPost 
-                post={post.post}
-                postLoading={post.status}
-                postFailed={posts.errMess}
-                classes={classes}
-                editPost={(post) => dispatch(editPost(post))}
-            />
         );
     };
 
@@ -108,12 +80,6 @@ function Main(props) {
         )} />
     );
 
-    const ProfileRoute = ({component: Component, ...rest}) => {
-        //console.log(rest.computedMatch.params.username);
-        //setCurrentUser(rest.computedMatch.params.username);
-        return <Route {...rest}/>
-    };
-
     return (
         <div>
             <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open}/>
@@ -122,8 +88,8 @@ function Main(props) {
                 <Switch>
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
-                    <Route path="/questions/:postId" component={PostDetailView}/>
-                    <PrivateRoutPostEdit path="/posts/:postId/edit" component={PostEditView}/>
+                    <Route path="/questions/:postId" component={() => <PostDetail/>}/>
+                    <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost/>}/>
                     <Route exact path="/sample" component={Sample}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
