@@ -3,7 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-import { useStyles } from '../styles/footerStyles';
+import { useStyles } from './styles/footerStyles';
 
 function Copyright() {
   return (

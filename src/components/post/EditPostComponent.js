@@ -2,12 +2,12 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { ThemeProvider, CircularProgress, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import NotFound from './NotFoundComponent';
+import NotFound from '../alert/NotFoundComponent';
 import { useHistory, Redirect } from 'react-router-dom';
 import Editor from './EditorComponent';
 //import EditorDraft from './EditorDraftComponent';
-import { theme, useStyles } from '../styles/postsStyles';
-import { fetchPosts } from '../redux/ActionCreators';
+import { theme, useStyles } from './styles/postsStyles';
+import { fetchPosts } from '../../redux/ActionCreators';
 import { useDispatch } from 'react-redux';
 
 export default function EditPost(props) {

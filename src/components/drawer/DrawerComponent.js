@@ -3,7 +3,7 @@ import { IconButton, Drawer, Hidden, List, Divider, ListItemIcon, ListItemText, 
 import { Inbox, ChevronLeft, Home } from '@material-ui/icons';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchPosts } from '../redux/ActionCreators';
+import { fetchPosts } from '../../redux/ActionCreators';
 
 function RenderDrawer({ handleDrawerClose, classes, open, variant, handleSelectedItem, selected }) {
 

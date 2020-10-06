@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import { ThemeProvider, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
-import { theme, useStyles } from '../styles/postsStyles';
+import { theme, useStyles } from './styles/postsStyles';
 import Editor from './EditorComponent';
 import { useSelector } from 'react-redux';
 

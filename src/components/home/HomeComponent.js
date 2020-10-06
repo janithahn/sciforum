@@ -3,8 +3,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
-import { fetchPosts } from '../redux/ActionCreators';
-import QuestionViewCard from './QuestionViewCardComponent';
+import { fetchPosts } from '../../redux/ActionCreators';
+import QuestionViewCard from '../post/QuestionViewCardComponent';
 
 export default function Home(props) {
     const posts = useSelector(state => state.Posts);

@@ -17,11 +17,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputLabel from '@material-ui/core/InputLabel';
 import { ThemeProvider, FormHelperText, OutlinedInput, FormControl } from '@material-ui/core';
-import { theme, useStylesSignin as useStyles } from '../styles/signinSignupStyles';
+import { theme, useStylesSignin as useStyles } from './styles/signinSignupStyles';
 import { useFormik } from 'formik';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
-import { loginUser } from '../redux/ActionCreators';
+import { loginUser } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Copyright() {

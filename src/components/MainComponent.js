@@ -1,23 +1,23 @@
 import React, { useEffect } from 'react';
-import Header from './HeaderComponent';
-import Home from './HomeComponent';
+import Header from './header/HeaderComponent';
+import Home from './home/HomeComponent';
 import Sample from './SampleComponent';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
-import { useStyles } from '../styles/styles';
+import { useStyles } from './../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPosts, postPost, editPost } from '../redux/ActionCreators';
-import Footer from './FooterComponent';
-import SignUp from './SignUpComponent';
-import SignIn from './SignInComponent';
-import MainDrawer from './DrawerComponent';
-import PostDetail from './PostDetailComponent';
-import CreatePost from  './CreatePostComponent';
-import EditPost from './EditPostComponent';
-import NotFound from './NotFoundComponent';
-//import MDBCustomFooter from './MDBFooterComponent';
+import Footer from './footer/FooterComponent';
+import SignUp from './sign/SignUpComponent';
+import SignIn from './sign/SignInComponent';
+import MainDrawer from './drawer/DrawerComponent';
+import PostDetail from './post/PostDetailComponent';
+import CreatePost from  './post/CreatePostComponent';
+import EditPost from './post/EditPostComponent';
+import NotFound from './alert/NotFoundComponent';
+//import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
-import { Loading } from './LoadingComponent';
+import { Loading } from './loading/LoadingComponent';
 
 function Main(props) {
     const posts = useSelector(state => state.Posts);

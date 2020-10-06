@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import { deletePost } from '../redux/ActionCreators';
+import { deletePost } from '../../redux/ActionCreators';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 //import { fetchPosts } from '../redux/ActionCreators';

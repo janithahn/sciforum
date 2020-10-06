@@ -4,10 +4,10 @@ import { AppBar, Toolbar, InputBase,  IconButton, Typography, Button,
 import { Search } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
-import SignIn from './SignInComponent';
+import SignIn from '../sign/SignInComponent';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/ActionCreators';
+import { logout } from '../../redux/ActionCreators';
 
 function LoginModal({openModal, classes, handleModalClose}) {
     return(

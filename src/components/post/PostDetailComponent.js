@@ -3,9 +3,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button, Typography, ThemeProvider } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
-import NotFound from './NotFoundComponent';
+import NotFound from '../alert/NotFoundComponent';
 import PostViewer from './PostViewerComponent';
-import { theme, useStyles } from '../styles/postsStyles';
+import { theme, useStyles } from './styles/postsStyles';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 

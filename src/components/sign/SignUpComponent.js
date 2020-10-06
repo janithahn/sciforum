@@ -14,12 +14,12 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputLabel from '@material-ui/core/InputLabel';
 import { ThemeProvider, FormHelperText, FormControl } from '@material-ui/core';
-import { theme, useStylesSignUp as useStyles, ValidationTextField, ValidationOutlinedInput } from '../styles/signinSignupStyles';
+import { theme, useStylesSignUp as useStyles, ValidationTextField, ValidationOutlinedInput } from './styles/signinSignupStyles';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import PasswordStrengthBar from 'react-password-strength-bar';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
-import { signupUser } from '../redux/ActionCreators';
+import { signupUser } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 
 /*function handleSubmit(values) {
