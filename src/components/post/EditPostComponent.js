@@ -3,21 +3,55 @@ import TextField from '@material-ui/core/TextField';
 import { ThemeProvider, CircularProgress, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import NotFound from '../alert/NotFoundComponent';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useHistory, Redirect, useParams } from 'react-router-dom';
 import Editor from './EditorComponent';
 //import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from './styles/postsStyles';
-import { fetchPosts } from '../../redux/ActionCreators';
-import { useDispatch } from 'react-redux';
+import { fetchPostDetail } from '../../redux/ActionCreators';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function EditPost(props) {
   const classes = useStyles();
   const history = useHistory();
-  const [title, setTitle] = React.useState(props.post === undefined ? '': props.post.title);
-  const [body, setQuestion] = React.useState(props.post === undefined ? '': props.post.body);
-  const id = props.post === undefined ? null: props.post.id;
 
   const dispatch = useDispatch();
+
+  const post = useSelector(state => state.Post);
+
+  const [title, setTitle] = React.useState(post.post ? post.post.title: '');
+  const [body, setQuestion] = React.useState(post.post ? post.post.body: '');
+
+  const [postInfo, setPostInfo] = React.useState({
+    title: post.post ? post.post.title: null,
+    body: post.post ? post.post.body: null,
+  });
+  const id = post.post ? post.post.id: null;
+  const owner = post.post ? post.post.owner: null;
+  const viewCount = post.post ? post.post.viewCount: null;
+
+  const {postId} = useParams();
+
+  React.useEffect(() => {
+    if(post.status === 'idle') {
+        dispatch(fetchPostDetail(postId));
+    }
+  }, [post, dispatch]);
+
+  React.useEffect(() => {
+  if(post.post) {
+      handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount);
+  }
+  }, [post]);
+
+  const handlePostInfo = (id, owner, title, body, viewCount) => {
+      setPostInfo({
+          title,
+          body,
+      });
+      id = id;
+      owner = owner;
+      viewCount = viewCount;
+  }
 
   function handleSubmit(event) {
     props.editPost({id, title, body, owner: props.post.owner});
@@ -29,12 +63,12 @@ export default function EditPost(props) {
     history.push(`/questions/${id}/`);
   }
 
-  if(props.postLoading === 'loading') {
+  if(post.status === 'loading' || post.status === 'idle') {
     return(<CircularProgress color="secondary" size={15}/>);
-  }else if(props.postFailed) {
+  }else if(post.errMess) {
       return(<h4>Error loading!</h4>);
   } else {
-    if(props.post !== undefined) {
+    if(post.post !== undefined) {
       return (
         <div className={classes.root}>
             <ThemeProvider theme={theme}>

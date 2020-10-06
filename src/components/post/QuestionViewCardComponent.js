@@ -4,7 +4,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { useStyles } from './styles/cardStyles';
-import { Link } from 'react-router-dom';
+import { Link } from '@material-ui/core';
+//import { Link } from 'react-router-dom';
 
 export default function QuestionViewCard(props) {
     const classes = useStyles();
@@ -13,7 +14,7 @@ export default function QuestionViewCard(props) {
         <Card className={classes.root} variant="outlined">
             <CardContent>
                 <CardActions>
-                    <Link to={`/questions/${props.item.id}`} style={{textDecoration: 'none'}}>
+                    <Link href={`/questions/${props.item.id}/`} style={{textDecoration: 'none', color: 'inherit'}}>
                         <Typography variant="h5" component="h2">
                             {props.item.title}
                         </Typography>

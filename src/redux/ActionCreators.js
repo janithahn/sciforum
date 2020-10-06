@@ -4,32 +4,32 @@ import { baseUrl } from '../shared/baseUrl';
 
 //POSTS
 export const fetchPosts = () => async (dispatch) => {
-    dispatch(postLoading());
+    dispatch(postsLoading());
 
     axios.get(baseUrl + '/api/')
     .then(response => {
         //console.log(response);
         return response;
     })
-    .then(posts => dispatch(addPost(posts.data)))
+    .then(posts => dispatch(addPosts(posts.data)))
     .catch(error => {
         console.log(error);
-        dispatch(postFailed(error));
+        dispatch(postsFailed(error));
     });
 }
 
-export const postLoading = () => ({
+export const postsLoading = () => ({
     type: ActionTypes.POST_LIST_LOADING
 });
 
-export const postFailed = (errmess) => ({
+export const postsFailed = (errmess) => ({
     type: ActionTypes.POST_LIST_FAILED,
     payload: errmess
 });
 
-export const addPost = (post) => ({
+export const addPosts = (posts) => ({
     type: ActionTypes.ADD_POST_LIST,
-    payload: post
+    payload: posts
 });
 
 export const postPost = (post) => (dispatch, getState) => {
@@ -74,6 +74,36 @@ export const deletePost = (post, history) => (dispatch, getState) => {
     })
     .catch(error => console.log(error));
 };
+
+//SINGLE_POST
+export const fetchPostDetail = (postId) => async (dispatch) => {
+    dispatch(postLoading());
+
+    axios.get(baseUrl + `/api/${postId}/`)
+    .then(response => {
+        //console.log(response);
+        return response;
+    })
+    .then(post => dispatch(addPost(post.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(postFailed(error));
+    });
+}
+
+export const postLoading = () => ({
+    type: ActionTypes.POST_LOADING
+});
+
+export const postFailed = (errmess) => ({
+    type: ActionTypes.POST_FAILED,
+    payload: errmess
+});
+
+export const addPost = (post) => ({
+    type: ActionTypes.ADD_POST,
+    payload: post
+});
 
 // AUTHENTICATION
 export const requestLogin = (creds) => {

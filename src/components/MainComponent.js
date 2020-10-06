@@ -21,6 +21,7 @@ import { Loading } from './loading/LoadingComponent';
 
 function Main(props) {
     const posts = useSelector(state => state.Posts);
+    const post = useSelector(state => state.Post);
     const auth = useSelector(state => state.Auth);
     const location = useLocation();
     const dispatch = useDispatch();
@@ -49,9 +50,6 @@ function Main(props) {
         //console.log(auth);
         return(
             <PostDetail
-                post={posts.posts.filter((post) => post.id === parseInt(match.params.postId))[0]}
-                postLoading={posts.status}
-                postFailed={posts.errMess}
                 classes={classes}
                 match={match}
             />
@@ -67,8 +65,8 @@ function Main(props) {
     const PostEditView = ({postId}) => {
         return(
             <EditPost 
-                post={posts.posts.filter((post) => post.id === parseInt(postId))[0]}
-                postLoading={posts.status}
+                post={post.post}
+                postLoading={post.status}
                 postFailed={posts.errMess}
                 classes={classes}
                 editPost={(post) => dispatch(editPost(post))}
