@@ -7,7 +7,7 @@ import { useHistory, Redirect, useParams } from 'react-router-dom';
 import Editor from './EditorComponent';
 //import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from './styles/postsStyles';
-import { fetchPostDetail } from '../../redux/ActionCreators';
+import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function EditPost(props) {
@@ -54,7 +54,13 @@ export default function EditPost(props) {
   }
 
   function handleSubmit(event) {
-    props.editPost({id, title, body, owner: props.post.owner});
+    //props.editPost({id, title, body, owner: props.post.owner});
+    dispatch(editPost({
+      id,
+      owner,
+      title: postInfo.title,
+      body: postInfo.body,
+    }));
     //dispatch(fetchPosts());
     history.push(`/questions/${id}/`);
   }

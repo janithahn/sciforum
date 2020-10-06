@@ -75,7 +75,7 @@ export default function PostDetail(props) {
         setOpen(false);
     };
 
-    if(post.status === 'loading') {
+    if(post.status === 'loading' || post.status === 'idle') {
         return(<CircularProgress color="secondary" size={15}/>);
     }else if(post.errMess) {
         return(<h4>Error loading...!</h4>);
@@ -106,7 +106,7 @@ export default function PostDetail(props) {
                                     >
                                     Delete
                                 </Button>
-                                <AlertDialogSlide open={open} handleClose={handleClose} post={postInfo}/>
+                                <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
                             </React.Fragment>
                             : undefined
                         }

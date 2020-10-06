@@ -64,8 +64,8 @@ export const editPost = (post) => (dispatch, getState) => {
     .catch(error => console.log(error));
 };
 
-export const deletePost = (post, history) => (dispatch, getState) => {
-    axios.delete(baseUrl + `/api/${post.id}/`)
+export const deletePost = (postId, history) => (dispatch, getState) => {
+    axios.delete(baseUrl + `/api/${postId}/`)
     .then(res => {
         dispatch(fetchPosts());
         console.log(res);

@@ -23,7 +23,7 @@ export default function AlertDialogSlide(props) {
     //React.useEffect(history.push('/questions'), [location]);
 
     function handleDeletePost() {
-        dispatch(deletePost(props.post, history));
+        dispatch(deletePost(props.postId, history));
         //history.push('/questions');
         props.handleClose();
     }
