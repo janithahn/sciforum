@@ -4,20 +4,46 @@ import { Button, Typography, ThemeProvider, Divider, Grid } from '@material-ui/c
 import { Link } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
-import PostViewer from './PostViewerComponent';
+//import PostViewer from './PostViewerComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchPostDetail } from '../../redux/ActionCreators';
 import { Preview } from './MarkdownPreview';
 
-function RenderCard({title, body}) {
+function RenderCard({title, body, viewCount, created_at, updated_at}) {
+    function getTime(date) {
+        return new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date)
+    }
+
     return(
        <Grid container lg={8} sm xs={12} direction="column" spacing={3}>
            <Grid item>
                 <Typography variant="h6" gutterBottom>
                     {title}
                 </Typography>
+                <Grid container direction="row" alignItems="center" spacing={3}>
+                    <Grid item>
+                        <Typography variant="body2" color="textSecondary">
+                            {viewCount + " Views"}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="body2" color="textSecondary">
+                            {"Active today"}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="body2" color="textSecondary">
+                            {"Created on " + created_at}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="body2" color="textSecondary">
+                            {"Updated on " + updated_at}
+                        </Typography>
+                    </Grid>
+                </Grid>
             </Grid>
             <Divider/>
             <Grid item>
@@ -47,6 +73,8 @@ export default function PostDetail(props) {
     const id = post.post ? post.post.id: null;
     const owner = post.post ? post.post.owner: null;
     const viewCount = post.post ? post.post.viewCount: null;
+    const created_at = post.post ? post.post.created_at: null;
+    const updated_at = post.post ? post.post.updated_at: null;
 
     React.useEffect(() => {
         if(post.status === 'idle') {
@@ -56,11 +84,11 @@ export default function PostDetail(props) {
     
     React.useEffect(() => {
         if(post.post) {
-            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount);
+            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount, post.post.created_at, post.post.updated_at);
         }
     }, [post]);
 
-    const handlePostInfo = (id, owner, title, body, viewCount) => {
+    const handlePostInfo = (id, owner, title, body, viewCount, created_at, updated_at) => {
         setPostInfo({
             title,
             body,
@@ -68,6 +96,8 @@ export default function PostDetail(props) {
         id = id;
         owner = owner;
         viewCount = viewCount;
+        created_at = created_at;
+        updated_at = updated_at
     }
 
     console.log(postInfo);
@@ -89,7 +119,13 @@ export default function PostDetail(props) {
             return(
                 <div>
                     <ThemeProvider theme={theme}>
-                        <RenderCard title={postInfo.title} body={postInfo.body}/>
+                        <RenderCard 
+                            title={postInfo.title} 
+                            body={postInfo.body} 
+                            viewCount={viewCount}
+                            created_at={created_at}
+                            updated_at={updated_at}
+                        />
                         {auth.isAuthenticated && auth.currentUserId == owner ?
                             <React.Fragment>
                                 <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>

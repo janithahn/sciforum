@@ -44,8 +44,6 @@ export default function MDEditor(props) {
   const [value, setValue] = React.useState(props.data);
   const [selectedTab, setSelectedTab] = React.useState("write");
 
-  console.log(props.data);
-
   const save = async function* (data) {
     // Promise that waits for "time" milliseconds
     const wait = function (time) {

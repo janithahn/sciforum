@@ -51,10 +51,9 @@ export const postPost = (post) => (dispatch, getState) => {
 
 export const editPost = (post) => (dispatch, getState) => {
     console.log(post);
-    axios.put(baseUrl + `/api/${post.id}/`, {
+    axios.patch(baseUrl + `/api/${post.id}/`, {
         title: post.title,
         body: post.body,
-        owner: post.owner
     })
     .then(res => {
         console.log(res);
