@@ -48,9 +48,9 @@ export default function PostDetail(props) {
     }, [post, dispatch]);
     
     React.useEffect(() => {
-    if(post.post) {
-        handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount);
-    }
+        if(post.post) {
+            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount);
+        }
     }, [post]);
 
     const handlePostInfo = (id, owner, title, body, viewCount) => {

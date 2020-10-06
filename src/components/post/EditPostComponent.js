@@ -20,18 +20,13 @@ export default function EditPost(props) {
 
   const [title, setTitle] = React.useState(post.post ? post.post.title: '');
   const [body, setQuestion] = React.useState(post.post ? post.post.body: '');
-
-  const [postInfo, setPostInfo] = React.useState({
-    title: post.post ? post.post.title: null,
-    body: post.post ? post.post.body: null,
-  });
   const id = post.post ? post.post.id: null;
   const owner = post.post ? post.post.owner: null;
   const viewCount = post.post ? post.post.viewCount: null;
 
   const {postId} = useParams();
 
-  console.log(postInfo);
+  console.log({title, body});
 
   React.useEffect(() => {
     if(post.status === 'idle') {
@@ -46,10 +41,8 @@ export default function EditPost(props) {
   }, [post]);
 
   const handlePostInfo = (id, owner, title, body, viewCount) => {
-      setPostInfo({
-          title,
-          body,
-      });
+      setTitle(title);
+      setQuestion(body);
       id = id;
       owner = owner;
       viewCount = viewCount;
@@ -59,8 +52,8 @@ export default function EditPost(props) {
     dispatch(editPost({
       id,
       owner,
-      title: postInfo.title,
-      body: postInfo.body,
+      title,
+      body,
     }));
     //dispatch(fetchPosts());
     history.push(`/questions/${id}/`);
@@ -88,7 +81,7 @@ export default function EditPost(props) {
                       id="title"
                       value={title}
                       name="title"
-                      onInput={e => setPostInfo({title: e.target.value})}
+                      onInput={e => setTitle(e.target.value)}
                       margin="none"
                       size="small"
                       InputLabelProps={{
@@ -99,7 +92,7 @@ export default function EditPost(props) {
                     <Typography className={classes.typo} variant="h6" gutterBottom>
                       Question
                     </Typography>
-                    <Editor setQuestion={setPostInfo} data={postInfo.body}/>
+                    <Editor setQuestion={setQuestion} data={body}/>
                     <Button
                         type="submit"
                         variant="contained"

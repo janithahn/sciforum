@@ -7,6 +7,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 );*/
 
 export default function PostViewer(props) {
+    //console.log(props.data);
     return(
             <CKEditor
                 editor={ ClassicEditor }
