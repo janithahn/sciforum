@@ -4,6 +4,8 @@ import * as Showdown from "showdown";
 //import "./styles/MDEStyles.css";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import "draft-js/dist/Draft.css";
+import { ThemeProvider } from '@material-ui/core';
+import { theme } from './styles/postsStyles';
 
 function loadSuggestions(text) {
   return new Promise((accept, reject) => {
@@ -68,25 +70,27 @@ export default function MDEditor(props) {
 
   return (
     <div className="container">
-      <ReactMde
-        value={props.data}
-        onChange={(values) => props.setQuestion(values)}
-        selectedTab={selectedTab}
-        onTabChange={setSelectedTab}
-        generateMarkdownPreview={(markdown) =>
-          Promise.resolve(converter.makeHtml(markdown))
-        }
-        loadSuggestions={loadSuggestions}
-        childProps={{
-          writeButton: {
-            tabIndex: -1
+      <ThemeProvider theme={theme}>
+        <ReactMde
+          value={props.data}
+          onChange={(values) => props.setQuestion(values)}
+          selectedTab={selectedTab}
+          onTabChange={setSelectedTab}
+          generateMarkdownPreview={(markdown) =>
+            Promise.resolve(converter.makeHtml(markdown))
           }
-        }}
-        paste={{
-          saveImage: save
-        }}
-        
-      />
+          loadSuggestions={loadSuggestions}
+          childProps={{
+            writeButton: {
+              tabIndex: -1
+            }
+          }}
+          paste={{
+            saveImage: save
+          }}
+          
+        />
+      </ThemeProvider>
     </div>
   );
 }
