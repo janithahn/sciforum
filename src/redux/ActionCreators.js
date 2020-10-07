@@ -112,13 +112,12 @@ export const requestLogin = (creds) => {
     });
 }
 
-export const loginSuccess = (token, currentUserId, currentUserEmail, currentUser) => {
-    console.log(token);
+export const loginSuccess = (token, currentUser, currentUserId, currentUserEmail) => {
     return({
         type: ActionTypes.LOGIN_SUCCESS,
         token,
-        currentUserId,
         currentUser,
+        currentUserId,
         currentUserEmail,
     });
 }
@@ -130,18 +129,10 @@ export const loginError = (loginErrMessage) => {
     });
 }
 
-const checkAuthTimeout = expirationTime => dispatch => (
-    dispatch(
-        setTimeout(() => {
-            dispatch(logout());
-        }, expirationTime * 1000)
-    )
-);
-
 export const loginUser = (creds) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
-    return await axios.post(baseUrl + '/user/login/', {
+    return await axios.post(baseUrl + '/jwtlogin/', {
         username: creds.username,
         password: creds.password,
         //rememberMe: creds.rememberMe,
@@ -149,18 +140,15 @@ export const loginUser = (creds) => async (dispatch) => {
     .then(res => {
         console.log(res);
         const token = res.data.token;
-        const currentUserId = res.data.user_id;
-        const currentUserEmail = res.data.email;
-        const currentUser = res.data.username;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        const currentUser = res.data.user.username;
+        const currentUserId = res.data.user.id;
+        const currentUserEmail = res.data.user.email;
         localStorage.setItem('token', token);
-        localStorage.setItem('userId', currentUserId);
-        localStorage.setItem('username', currentUser);
-        localStorage.setItem('userEmail', currentUserEmail);
-        localStorage.setItem('expirationDate', expirationDate);
-        dispatch(loginSuccess(token, currentUserId, currentUserEmail, currentUser));
+        localStorage.setItem('currentUser', currentUser);
+        localStorage.setItem('currentUserId', currentUserId);
+        localStorage.setItem('currentUserEmail', currentUserEmail);
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
         //dispatch(fetchUser(token, currentUser));
-        //dispatch(checkAuthTimeout(3600));
     })
     .catch(error => {
         dispatch(loginError(error));
@@ -181,11 +169,10 @@ export const logoutSuccess = () => {
 
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
-    localStorage.removeItem('userEmail');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUserId');
+    localStorage.removeItem('currentUserEmail');
     localStorage.removeItem('token');
-    localStorage.removeItem('expirationDate');
     dispatch(logoutSuccess());
 }
 
@@ -203,16 +190,14 @@ export const signupUser = (creds) => (dispatch) => {
     .then(res => {
         console.log(res);
         const token = res.data.token;
-        const currentUserId = res.data.user_id;
-        const currentUserEmail = res.data.email;
-        const currentUser = res.data.username;
-        const expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        const currentUser = res.data.user.username;
+        const currentUserId = res.data.user.id;
+        const currentUserEmail = res.data.user.email;
         localStorage.setItem('token', token);
-        localStorage.setItem('userId', currentUserId);
         localStorage.setItem('currentUser', currentUser);
-        localStorage.setItem('userEmail', currentUserEmail);
-        localStorage.setItem('expirationDate', expirationDate);
-        dispatch(loginSuccess(res));
+        localStorage.setItem('currentUserId', currentUserId);
+        localStorage.setItem('currentUserEmail', currentUserEmail);
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
         //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
@@ -227,7 +212,7 @@ export const fetchUser = (token, currentUser) => (dispatch) => {
     dispatch(userLoading());
 
     return axios.get(baseUrl + `/users/${currentUser}/`, {
-        "headers": token !== null ? {Authorization: "Token " + token}: undefined
+        "headers": token !== null ? {Authorization: "JWT " + token}: undefined
     })
     .then(res => {
         console.log(res);
@@ -262,7 +247,7 @@ export const updateUser = (auth, firstname, lastname, aboutMe) => (dispatch) => 
         },
     },
     {
-        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined,
+        "headers": auth.token !== null ? {Authorization: "JWT " + auth.token}: undefined,
     })
     .then(res => {
         console.log(res);
@@ -279,7 +264,7 @@ export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
         },
     },
     {
-        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+        "headers": auth.token !== null ? {Authorization: "JWT " + auth.token}: undefined
     })
     .then(res => {
         console.log(res);
@@ -292,7 +277,7 @@ export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
 export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) => (dispatch) => {
     const headers = {
         'Content-Type': 'multipart/form-data',
-        'Authorization': auth.token !== null ? "Token " + auth.token: undefined
+        'Authorization': auth.token !== null ? "JWT " + auth.token: undefined
     }
 
     axios.patch(baseUrl + `/profile_api/${auth.currentUserId}/`, profileImage,
@@ -313,7 +298,7 @@ export const fetchUserProfile = (token, currentUserId) => (dispatch) => {
     dispatch(userProfileLoading());
 
     axios.get(baseUrl + `/profile_api/${currentUserId}/`, {
-        "headers": token !== null ? {Authorization: "Token " + token}: undefined
+        "headers": token !== null ? {Authorization: "JWT " + token}: undefined
     })
     .then(res => {
         console.log(res);
@@ -345,7 +330,7 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
         aboutMe: aboutMe,
     },
     {
-        "headers": auth.token !== null ? {Authorization: "Token " + auth.token}: undefined
+        "headers": auth.token !== null ? {Authorization: "JWT " + auth.token}: undefined
     })
     .then(res => {
         console.log(res);

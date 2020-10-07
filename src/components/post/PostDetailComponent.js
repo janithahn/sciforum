@@ -100,7 +100,7 @@ export default function PostDetail(props) {
         updated_at = updated_at
     }
 
-    console.log(postInfo);
+    //console.log(postInfo);
 
     const handleClickOpen = () => {
         setOpen(true);

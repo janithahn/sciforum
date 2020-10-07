@@ -71,6 +71,8 @@ const Header = (props) => {
     const location = useLocation();
     const dispatch = useDispatch();
 
+    console.log(auth);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     }

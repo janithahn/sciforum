@@ -4,9 +4,9 @@ export const Auth = (state = {
         status: 'idle',
         isAuthenticated: localStorage.getItem('token') ? true: false,
         token: localStorage.getItem('token'),
-        currentUserId: localStorage.getItem('userId'),
-        currentUser: localStorage.getItem('username'),
-        currentUserEmail: localStorage.getItem('userEmail'),
+        currentUser: localStorage.getItem('currentUser'),
+        currentUserId: localStorage.getItem('currentUserId'),
+        currentUserEmail: localStorage.getItem('currentUserEmail'),
         errMess: null,
     }, action) => {
     switch (action.type) {
@@ -23,8 +23,8 @@ export const Auth = (state = {
                 isAuthenticated: true,
                 errMess: null,
                 token: action.token,
-                currentUserId: action.currentUserId,
                 currentUser: action.currentUser,
+                currentUserId: action.currentUserId,
                 currentUserEmail: action.currentUserEmail,
             };
 
