@@ -76,7 +76,7 @@ function Main(props) {
 
         if(post !== undefined) {
             return (<Route {...rest} render={() => (
-                auth.isAuthenticated && post.owner == auth.currentUserId
+                auth.isAuthenticated && post.owner == auth.currentUser
                 ? <Component postId={post.id}/>
                 : <Redirect to='/' />
             )} />)

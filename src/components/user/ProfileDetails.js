@@ -83,18 +83,20 @@ export default function ProfileDetails(props) {
     return (
       <ThemeProvider theme={theme}>
         <Card className={classes.root} elevation={1}>
-          <CardHeader title="Profile"/>
-          <Divider className={classes.divider}/>
-          <CardContent>
-            <Grid container direction="column" justify="center" alignItems="flex-start" spacing={1}>
+          <Grid container direction="column" justify="flex-start" alignItems="flex-start">
+            <Grid item>
+              <CardHeader title="Profile"/>
+            </Grid>
+            <Divider className={classes.divider}/>
+            <CardContent>
               <Grid item>
                 <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
               </Grid>
               <Grid item>
-                <Typography className={classes.iconWrap}><AccountCircle style={{marginRight: 3}}/>Display name is {values.displayName}</Typography>
+                <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
               </Grid>
-            </Grid>
-          </CardContent>
+            </CardContent>
+          </Grid>
         </Card>
         {/*<form className={classes.root} onSubmit={formik.handleSubmit}>
           <Card className={classes.root} elevation={1}>

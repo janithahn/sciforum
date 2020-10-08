@@ -11,26 +11,27 @@ import { useParams } from 'react-router-dom';
 import { fetchPostDetail } from '../../redux/ActionCreators';
 import { Preview } from './MarkdownPreview';
 
-function RenderCard({title, body, viewCount, created_at, updated_at}) {
+function RenderCard({title, body, viewCount, created_at, updated_at, owner}) {
     function getTime(date) {
         return new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date)
     }
 
     return(
-       <Grid container lg={8} sm xs={12} direction="column" spacing={3}>
-           <Grid item>
+       <Grid container direction="column" spacing={1}>
+           <Grid item lg={8} sm xs={12}>
                 <Typography variant="h6" gutterBottom>
                     {title}
                 </Typography>
-                <Grid container direction="row" alignItems="center" spacing={3}>
+                <Grid container direction="row" alignItems="center" spacing={1}>
                     <Grid item>
                         <Typography variant="body2" color="textSecondary">
-                            {viewCount + " Views"}
+                            {"Posted by  "}
+                            <Link style={{textDecoration: 'none'}} to={`/profile/${owner}/`}>{owner}</Link>
                         </Typography>
                     </Grid>
                     <Grid item>
                         <Typography variant="body2" color="textSecondary">
-                            {"Active today"}
+                            {viewCount == 1 ? viewCount + " View": viewCount + " Views"}
                         </Typography>
                     </Grid>
                     <Grid item>
@@ -45,11 +46,15 @@ function RenderCard({title, body, viewCount, created_at, updated_at}) {
                     </Grid>
                 </Grid>
             </Grid>
-            <Divider/>
-            <Grid item>
+            <Grid item lg={8} sm xs={12}>
+                <Divider/>
+            </Grid>
+            <Grid item lg={8} sm xs={12}>
                 <Preview source={body}/>
             </Grid>
-            <Divider/>
+            <Grid item lg={8} sm xs={12}>
+                <Divider/>
+            </Grid>
        </Grid>
     );
     
@@ -125,8 +130,9 @@ export default function PostDetail(props) {
                             viewCount={viewCount}
                             created_at={created_at}
                             updated_at={updated_at}
+                            owner={owner}
                         />
-                        {auth.isAuthenticated && auth.currentUserId == owner ?
+                        {auth.isAuthenticated && auth.currentUser == owner ?
                             <React.Fragment>
                                 <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
                                     <Button

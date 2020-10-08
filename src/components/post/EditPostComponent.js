@@ -73,9 +73,9 @@ export default function EditPost(props) {
       return (
         <div className={classes.root}>
             <ThemeProvider theme={theme}>
-              <Grid container lg={8} sm xs={12} direction="column" justify="center">
+              <Grid container direction="column" justify="center">
                 <form onSubmit={handleSubmit}>
-                  <Grid item>
+                  <Grid item lg={8} sm xs={12}>
                     <Typography variant="h6" gutterBottom>
                       Title
                     </Typography>
@@ -93,7 +93,7 @@ export default function EditPost(props) {
                       variant="outlined"
                     />
                   </Grid>
-                  <Grid item>
+                  <Grid item lg={8} sm xs={12}>
                     <Typography className={classes.typo} variant="h6" gutterBottom>
                       Question
                     </Typography>

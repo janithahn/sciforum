@@ -35,7 +35,6 @@ const Account = (props) => {
         </Grid>
         <Grid
           item
-          justify="space-between"
           lg={4}
           md={6}
           xs={12}
