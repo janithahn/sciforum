@@ -70,7 +70,7 @@ const Profile = ({ className, ...rest }) => {
 
   React.useEffect(() => {
     if(user.status === 'idle') {
-      dispatch(fetchUser(null, usernameFromTheUrl));
+      dispatch(fetchUser(auth.token, usernameFromTheUrl));
     }
   }, [user, dispatch]);
 

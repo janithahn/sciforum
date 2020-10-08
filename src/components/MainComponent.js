@@ -5,7 +5,7 @@ import Sample from './SampleComponent';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts, postPost, editPost } from '../redux/ActionCreators';
+import { fetchPosts, postPost, editPost, logout, getNewToken } from '../redux/ActionCreators';
 import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
 import SignIn from './sign/SignInComponent';
@@ -18,6 +18,7 @@ import NotFound from './alert/NotFoundComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
 import { Loading } from './loading/LoadingComponent';
+import jwt_decode from 'jwt-decode';
 
 function Main(props) {
     const posts = useSelector(state => state.Posts);
@@ -27,6 +28,18 @@ function Main(props) {
 
     useEffect(() => {
         dispatch(fetchPosts());
+        if(localStorage.getItem('token')) {
+            let tokenDecode = jwt_decode(localStorage.getItem('token'));
+            let expDate = (tokenDecode.exp * 1000) - 60000
+            if (expDate <= Date.now()) {
+                localStorage.removeItem('token');
+                dispatch(logout());
+            }else{
+                dispatch(getNewToken(localStorage.getItem('token')));
+            }
+        }else {
+            dispatch(logout());
+        }
     }, [dispatch]);
 
     const classes = useStyles();

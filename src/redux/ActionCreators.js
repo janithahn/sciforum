@@ -104,6 +104,24 @@ export const addPost = (post) => ({
     payload: post
 });
 
+//REFRESH TOKEN
+export const getNewToken = (currentToken) => (dispatch) => {
+
+    console.log({token: currentToken});
+
+    axios.post(baseUrl + '/api-jwt-token-refresh/', {
+        token: currentToken
+    })
+    .then(res => {
+        console.log(res);
+        localStorage.setItem('token', res.data.token);
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(logout());
+    });
+}
+
 // AUTHENTICATION
 export const requestLogin = (creds) => {
     return ({
@@ -181,7 +199,7 @@ export const signupUser = (creds) => (dispatch) => {
     //console.log(creds);
     dispatch(requestLogin(creds));
 
-    axios.post(baseUrl + '/user/register/', {
+    axios.post(baseUrl + '/jwtregister/', {
         username: creds.username,
         password1: creds.password1,
         password2: creds.password2,
@@ -211,8 +229,12 @@ export const signupUser = (creds) => (dispatch) => {
 export const fetchUser = (token, currentUser) => (dispatch) => {
     dispatch(userLoading());
 
+    //dispatch(getNewToken(localStorage.getItem('token')));
+
+    console.log(localStorage.getItem('token'));
+
     return axios.get(baseUrl + `/users/${currentUser}/`, {
-        "headers": token !== null ? {Authorization: "JWT " + token}: undefined
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);
