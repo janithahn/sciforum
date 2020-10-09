@@ -12,7 +12,7 @@ import {
   Typography,
   CircularProgress,
 } from '@material-ui/core';
-import { LocationOn, AccountCircle } from '@material-ui/icons';
+import { LocationOn, AvTimerOutlined } from '@material-ui/icons';
 import { theme, useStyles } from './styles/profileStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -30,7 +30,7 @@ export default function ProfileDetails(props) {
 
   const [values, setValues] = useState({
     location: user.user ? user.user.data.profile.location: null,
-    displayName: user.user ? user.user.data.profile.displayName: null,
+    postViews: user.user ? user.user.data.profile.postViews: null,
   });
 
   React.useEffect(() => {
@@ -41,14 +41,14 @@ export default function ProfileDetails(props) {
 
   React.useEffect(() => {
     if(user.user) {
-      handleUserInfo(user.user.data.profile.location, user.user.data.profile.displayName);
+      handleUserInfo(user.user.data.profile.location, user.user.data.profile.postViews);
     }
   }, [user]);
 
-  const handleUserInfo = (location, displayName) => {
+  const handleUserInfo = (location, postViews) => {
     setValues({
       location,
-      displayName,
+      postViews,
     });
   }
 
@@ -56,15 +56,11 @@ export default function ProfileDetails(props) {
     location: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!'),
-    displayName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!'),
   });
 
   const formik = useFormik({
     initialValues: {
       location: values.location,
-      displayName: values.displayName,
     },
     onSubmit: (values) => {
       //console.log(values);
@@ -93,7 +89,7 @@ export default function ProfileDetails(props) {
                 <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
               </Grid>
               <Grid item>
-                <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
+                <Typography className={classes.iconWrap}><AvTimerOutlined style={{marginRight: 3}}/>{values.postViews + " Total views"}</Typography>
               </Grid>
             </CardContent>
           </Grid>

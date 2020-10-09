@@ -3,7 +3,8 @@ import { deepPurple } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
     typography: {
-        fontFamily: 'Recursive'
+        fontFamily: 'Open Sans',
+        fontSize: 14,
     },
     palette: {
       primary: deepPurple,

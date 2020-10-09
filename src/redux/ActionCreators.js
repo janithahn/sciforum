@@ -187,6 +187,7 @@ export const logoutSuccess = () => {
 
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
+    localStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentUserId');
     localStorage.removeItem('currentUserEmail');
@@ -269,7 +270,7 @@ export const updateUser = (auth, firstname, lastname, aboutMe) => (dispatch) => 
         },
     },
     {
-        "headers": auth.token !== null ? {Authorization: "JWT " + auth.token}: undefined,
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);
@@ -286,7 +287,7 @@ export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
         },
     },
     {
-        "headers": auth.token !== null ? {Authorization: "JWT " + auth.token}: undefined
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);
@@ -299,7 +300,7 @@ export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
 export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) => (dispatch) => {
     const headers = {
         'Content-Type': 'multipart/form-data',
-        'Authorization': auth.token !== null ? "JWT " + auth.token: undefined
+        'Authorization': localStorage.getItem('token') !== null ? "JWT " + localStorage.getItem('token'): undefined
     }
 
     axios.patch(baseUrl + `/profile_api/${auth.currentUserId}/`, profileImage,
@@ -320,7 +321,7 @@ export const fetchUserProfile = (token, currentUserId) => (dispatch) => {
     dispatch(userProfileLoading());
 
     axios.get(baseUrl + `/profile_api/${currentUserId}/`, {
-        "headers": token !== null ? {Authorization: "JWT " + token}: undefined
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);
@@ -352,7 +353,7 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
         aboutMe: aboutMe,
     },
     {
-        "headers": auth.token !== null ? {Authorization: "JWT " + auth.token}: undefined
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);

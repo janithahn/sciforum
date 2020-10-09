@@ -35,7 +35,9 @@ const DropDown = ({username, anchorEl, setAnchorEl, handleLogOut, handleClick}) 
     return(
         <div>
             <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                {username}
+                <Typography variant="body2">
+                    {username}
+                </Typography>
             </Button>
             <Menu
                 elevation={2}
@@ -120,7 +122,14 @@ const Header = (props) => {
                         inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? <Button color="inherit" onClick={() => handleModalOpen()}>Login</Button>: <DropDown username={auth.currentUser} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)}
+                    {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? 
+                        <Button variant="text" color="inherit" onClick={() => handleModalOpen()}>
+                            <Typography variant="body2">
+                                Login
+                            </Typography>
+                        </Button>: 
+                        <DropDown username={auth.currentUser} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
+                    }
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>
             </AppBar>

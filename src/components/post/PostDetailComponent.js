@@ -19,23 +19,23 @@ function RenderCard({title, body, viewCount, created_at, updated_at, owner}) {
     return(
        <Grid container direction="column" spacing={1}>
            <Grid item lg={8} sm xs={12}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h5" gutterBottom>
                     {title}
                 </Typography>
                 <Grid container direction="row" alignItems="center" spacing={1}>
                     <Grid item>
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary">
                             {"Posted by  "}
                             <Link style={{textDecoration: 'none'}} to={`/profile/${owner}/`}>{owner}</Link>
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary">
                             {viewCount == 1 ? viewCount + " View": viewCount + " Views"}
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography variant="body1" color="textSecondary">
                             {"Created on " + created_at}
                         </Typography>
                     </Grid>

@@ -2,7 +2,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 const theme = createMuiTheme({
     typography: {
-        fontFamily: 'Recursive'
+        fontFamily: 'Open Sans'
     },
     palette: {
         primary: {
