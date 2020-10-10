@@ -179,6 +179,18 @@ const Profile = ({ className, ...rest }) => {
                 </Grid>
               </Grid>
 
+              <Grid container direction="row" justify="flex-end" spacing={3}>
+                <Grid item>
+                  <Typography variant="body1" color="textSecondary">Ask Question</Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1" color="textSecondary">Ask question</Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="body1" color="textSecondary">Ask question</Typography>
+                </Grid>
+              </Grid>
+
               <EditModal>
                 <Fade in={openModal}>
                   {

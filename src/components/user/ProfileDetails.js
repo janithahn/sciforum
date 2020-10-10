@@ -13,7 +13,7 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { LocationOn, AvTimerOutlined } from '@material-ui/icons';
-import { theme, useStyles } from './styles/profileStyles';
+import { profileDetailTheme, useStyles } from './styles/profileStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
@@ -77,19 +77,19 @@ export default function ProfileDetails(props) {
     return <h2>Error loading!</h2>
   }else {
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={profileDetailTheme}>
         <Card className={classes.root} elevation={1}>
           <Grid container direction="column" justify="flex-start" alignItems="flex-start">
             <Grid item>
-              <CardHeader title="Profile"/>
+              <CardHeader className={classes.cardHeader} title="Profile"/>
             </Grid>
             <Divider className={classes.divider}/>
-            <CardContent>
+            <CardContent className={classes.cardContent}>
               <Grid item>
                 <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
               </Grid>
               <Grid item>
-                <Typography className={classes.iconWrap}><AvTimerOutlined style={{marginRight: 3}}/>{values.postViews + " Total views"}</Typography>
+                <Typography className={classes.iconWrap}><AvTimerOutlined style={{marginRight: 3}}/>{values.postViews + " Total post views"}</Typography>
               </Grid>
             </CardContent>
           </Grid>

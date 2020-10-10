@@ -12,6 +12,17 @@ export const theme = createMuiTheme({
     //shadows: ['none']
   });
 
+export const profileDetailTheme = createMuiTheme({
+  typography: {
+      fontFamily: 'Open Sans',
+      fontSize: 12
+  },
+  palette: {
+    primary: blue,
+  },
+  //shadows: ['none']
+});
+
 export const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -19,7 +30,10 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: 'inherit',
   },
   cardContent: {
-    padding: 0
+    paddingTop: 0
+  },
+  cardHeader: {
+    paddingBottom: 5,
   },
   textField: {
     width: '100%',

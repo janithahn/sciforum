@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Grid } from '@material-ui/core';
 import { fetchPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function Home(props) {
     const posts = useSelector(state => state.Posts);
@@ -34,7 +35,7 @@ export default function Home(props) {
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
                     </Link>
                 </Grid>
-                {PostsList}
+                    {PostsList}
             </React.Fragment>
         );
     }

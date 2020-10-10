@@ -1,6 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
+import { useDispatch } from 'react-redux';
 
 //POSTS
 export const fetchPosts = () => async (dispatch) => {
@@ -36,10 +37,12 @@ export const postPost = (post) => (dispatch, getState) => {
     console.log(post.title);
     console.log(post.body);
     console.log(getState());
-    axios.post(baseUrl + '/api/', {
+    axios.post(baseUrl + '/api/post/create/', {
         title: post.title,
         body: post.body,
         owner: post.owner,
+    },{
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         dispatch(fetchPosts());
@@ -51,9 +54,11 @@ export const postPost = (post) => (dispatch, getState) => {
 
 export const editPost = (post) => (dispatch, getState) => {
     console.log(post);
-    axios.patch(baseUrl + `/api/${post.id}/`, {
+    axios.patch(baseUrl + `/api/post/${post.id}/update/`, {
         title: post.title,
         body: post.body,
+    },{
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);

@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchPostDetail } from '../../redux/ActionCreators';
 import { Preview } from './MarkdownPreview';
+import TimeAgo from 'react-timeago';
 
 function RenderCard({title, body, viewCount, created_at, updated_at, owner}) {
     function getTime(date) {
@@ -22,26 +23,27 @@ function RenderCard({title, body, viewCount, created_at, updated_at, owner}) {
                 <Typography variant="h5" gutterBottom>
                     {title}
                 </Typography>
-                <Grid container direction="row" alignItems="center" spacing={1}>
+                <Grid container direction="row" alignItems="flex-start" justify="flex-start" spacing={3}>
                     <Grid item>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
                             {"Posted by  "}
-                            <Link style={{textDecoration: 'none'}} to={`/profile/${owner}/`}>{owner}</Link>
+                            <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${owner}/`}>{owner}</Link>
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Typography variant="body1" color="textSecondary">
+                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
                             {viewCount == 1 ? viewCount + " View": viewCount + " Views"}
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Typography variant="body1" color="textSecondary">
-                            {"Created on " + created_at}
+                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                            {/*"Created on " + created_at*/}
+                            {"Created "}<TimeAgo live={false} date={created_at} />
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Typography variant="body2" color="textSecondary">
-                            {"Updated on " + updated_at}
+                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                            {"Updated "}<TimeAgo live={false} date={updated_at} />
                         </Typography>
                     </Grid>
                 </Grid>
