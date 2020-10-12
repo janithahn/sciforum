@@ -28,6 +28,10 @@ export const postsFailed = (errmess) => ({
     payload: errmess
 });
 
+export const resetPosts = () => ({
+    type: ActionTypes.RESET_POST_LIST
+});
+
 export const addPosts = (posts) => ({
     type: ActionTypes.ADD_POST_LIST,
     payload: posts

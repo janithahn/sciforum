@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Grid } from '@material-ui/core';
-import { addPosts, postsFailed, postsLoading } from '../../redux/ActionCreators';
+import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios';
@@ -11,7 +11,6 @@ import { baseUrl } from '../../shared/baseUrl'
 
 export default function Home(props) {
     const posts = useSelector(state => state.Posts);
-    const postsStatus = useSelector(state => state.Posts.status);
     const dispatch = useDispatch();
 
     const [postData, setPostData] = React.useState([]);
@@ -45,7 +44,7 @@ export default function Home(props) {
 
     const fetchPostInfinite = (pageNum) => {
 
-        dispatch(postsLoading());
+        //dispatch(postsLoading());
 
         var url = baseUrl + `/api/?page=${pageNum}`;
         if(nextHref) {
@@ -55,6 +54,7 @@ export default function Home(props) {
         console.log(pageNum);
         axios.get(url)
         .then(posts => {
+            console.log(posts);
             if(posts.data) {
                 let tempData = postData;
                 posts.data.results.map((post) => {
@@ -63,21 +63,22 @@ export default function Home(props) {
 
                 if(posts.data.next) {
                     setPostData(tempData);
-                    dispatch(addPosts(tempData));
+                    //dispatch(addPosts(tempData));
                     setNextHref(posts.data.next);
                 } else {
+                    //dispatch(resetPosts());
                     setHasMoreItems(false);
                 }
             }
         })
         .catch(error => {
             console.log(error);
-            dispatch(postsFailed(error));
+            //dispatch(postsFailed(error));
         });
     }
 
-    //const PostsList = posts.posts.map((post) => <QuestionViewCard key={post.id} item={post}/>);
-    const PostsList = postData.map((post) => <QuestionViewCard key={post.id} item={post}/>);
+    //const PostsList = posts.posts.map((post, key) => <QuestionViewCard key={key} item={post}/>);
+    const PostsList = postData.map((post, key) => <QuestionViewCard key={key} item={post}/>);
 
 
     if(posts.status === 'loading') {

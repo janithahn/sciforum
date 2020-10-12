@@ -4,6 +4,7 @@ export const POST_FAILED = 'POST_FAILED';
 export const ADD_POST_LIST = 'ADD_POST_LIST';
 export const POST_LIST_LOADING = 'POST_LIST_LOADING';
 export const POST_LIST_FAILED = 'POST_LIST_FAILED';
+export const RESET_POST_LIST = 'RESET_POST_LIST';
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';

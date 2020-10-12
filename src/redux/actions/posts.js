@@ -6,6 +6,9 @@ export const Posts = (state = {
         posts: []
     }, action) => {
     switch(action.type) {
+        case ActionTypes.RESET_POST_LIST:
+            return { status: 'idle', errMess: null, posts: [] }
+
         case ActionTypes.ADD_POST_LIST:
             return {...state, status: 'succeeded', errMess: null, posts: action.payload}
             //...state is the spread operator from the ES6 and whatever the state is coming from the state above.
