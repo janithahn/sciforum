@@ -21,13 +21,13 @@ import { Loading } from './loading/LoadingComponent';
 import jwt_decode from 'jwt-decode';
 
 function Main(props) {
-    const posts = useSelector(state => state.Posts);
+    const post = useSelector(state => state.Post);
     const auth = useSelector(state => state.Auth);
     const location = useLocation();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchPosts());
+        //dispatch(fetchPosts());
         if(localStorage.getItem('token')) {
             let tokenDecode = jwt_decode(localStorage.getItem('token'));
             let expDate = (tokenDecode.exp * 1000) - 60000
@@ -71,13 +71,13 @@ function Main(props) {
     );
 
     const PrivateRoutPostEdit = ({ component: Component, ...rest }) => {
-        const postId = rest.computedMatch.params.postId;
-        const post = posts.posts.filter((post) => post.id === parseInt(postId))[0]
+        //const postId = rest.computedMatch.params.postId;
+        //const post = posts.posts.filter((post) => post.id === parseInt(postId))[0]
 
-        if(post !== undefined) {
+        if(post.post) {
             return (<Route {...rest} render={() => (
-                auth.isAuthenticated && post.owner == auth.currentUser
-                ? <Component postId={post.id}/>
+                auth.isAuthenticated && post.post.owner == auth.currentUser
+                ? <Component postId={post.post.id}/>
                 : <Redirect to='/' />
             )} />)
         } else {

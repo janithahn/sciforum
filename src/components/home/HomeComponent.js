@@ -3,24 +3,82 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Grid } from '@material-ui/core';
-import { fetchPosts } from '../../redux/ActionCreators';
+import { addPosts, postsFailed, postsLoading } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
+import axios from 'axios';
+import { baseUrl } from '../../shared/baseUrl'
 
 export default function Home(props) {
     const posts = useSelector(state => state.Posts);
     const postsStatus = useSelector(state => state.Posts.status);
     const dispatch = useDispatch();
 
+    const [postData, setPostData] = React.useState([]);
+    const [hasMoreItems, setHasMoreItems] = React.useState(true);
+    const [nextHref, setNextHref] = React.useState(null);
+
     //const [postList, setPostList] = React.useState(posts.posts.map((post) => <RenderCard key={post.id} item={post}/>));
 
-    React.useEffect(() => {
+    /*React.useEffect(() => {
         if(postsStatus === 'idle') {
             dispatch(fetchPosts())
         }
-    }, [postsStatus, dispatch]);
+    }, [postsStatus, dispatch]);*/
 
-    const PostsList = posts.posts.map((post) => <QuestionViewCard key={post.id} item={post}/>);
+    /*React.useEffect(() => {
+        let isMouted = true;
+        axios.get(baseUrl + '/api/')
+        .then(response => {
+            //console.log(response);
+            return response;
+        })
+        .then(posts => {
+            if(isMouted)
+                setData(posts.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+        return () => { isMouted = false }
+    }, []);*/
+
+    const fetchPostInfinite = (pageNum) => {
+
+        dispatch(postsLoading());
+
+        var url = baseUrl + `/api/?page=${pageNum}`;
+        if(nextHref) {
+            url = nextHref;
+        }
+
+        console.log(pageNum);
+        axios.get(url)
+        .then(posts => {
+            if(posts.data) {
+                let tempData = postData;
+                posts.data.results.map((post) => {
+                    tempData.push(post);
+                });
+
+                if(posts.data.next) {
+                    setPostData(tempData);
+                    dispatch(addPosts(tempData));
+                    setNextHref(posts.data.next);
+                } else {
+                    setHasMoreItems(false);
+                }
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            dispatch(postsFailed(error));
+        });
+    }
+
+    //const PostsList = posts.posts.map((post) => <QuestionViewCard key={post.id} item={post}/>);
+    const PostsList = postData.map((post) => <QuestionViewCard key={post.id} item={post}/>);
+
 
     if(posts.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
@@ -35,7 +93,14 @@ export default function Home(props) {
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
                     </Link>
                 </Grid>
+                <InfiniteScroll
+                    pageStart={0}
+                    loadMore={fetchPostInfinite}
+                    hasMore={hasMoreItems}
+                    loader={<CircularProgress color="secondary" size={15}/>}
+                >
                     {PostsList}
+                </InfiniteScroll>
             </React.Fragment>
         );
     }
