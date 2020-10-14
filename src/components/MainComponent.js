@@ -19,6 +19,7 @@ import NotFound from './alert/NotFoundComponent';
 import Account from './user/index';
 import { Loading } from './loading/LoadingComponent';
 import jwt_decode from 'jwt-decode';
+import GoogleSocialAuth from './GoogleLoginComponent';
 
 function Main(props) {
     const post = useSelector(state => state.Post);
@@ -29,13 +30,17 @@ function Main(props) {
     useEffect(() => {
         //dispatch(fetchPosts());
         if(localStorage.getItem('token')) {
-            let tokenDecode = jwt_decode(localStorage.getItem('token'));
-            let expDate = (tokenDecode.exp * 1000) - 60000
-            if (expDate <= Date.now()) {
-                localStorage.removeItem('token');
-                dispatch(logout());
-            }else{
-                dispatch(getNewToken(localStorage.getItem('token')));
+            try {
+                let tokenDecode = jwt_decode(localStorage.getItem('token'));
+                let expDate = (tokenDecode.exp * 1000)
+                if (expDate <= Date.now()) {
+                    localStorage.clear();
+                    dispatch(logout());
+                }else{
+                    dispatch(getNewToken(localStorage.getItem('token')));
+                }
+            } catch (error) {
+                console.log(error);
             }
         }else {
             dispatch(logout());
@@ -108,6 +113,7 @@ function Main(props) {
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
                     <Route path="/profile/:username" component={AccountView}/>
+                    <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
                     <Route component={NotFound}/>
                     <Redirect to="/"/>
                 </Switch>

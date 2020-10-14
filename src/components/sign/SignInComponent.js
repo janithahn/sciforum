@@ -21,8 +21,10 @@ import { theme, useStylesSignin as useStyles } from './styles/signinSignupStyles
 import { useFormik } from 'formik';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
-import { loginUser } from '../../redux/ActionCreators';
+import { loginUser, loginUserWithGoogle } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
+import GoogleLogin from 'react-google-login';
+import { clientId } from '../../shared/googleApiClientId';
 
 function Copyright() {
   return (
@@ -89,6 +91,11 @@ export default function SignIn(props) {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+
+  const googleResponse = (response) => {
+    console.log(response.tokenObj);
+    dispatch(loginUserWithGoogle(response));
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -173,6 +180,12 @@ export default function SignIn(props) {
             >
               Sign In
             </Button>
+            <GoogleLogin
+              clientId={clientId}
+              buttonText="LOGIN WITH GOOGLE"
+              onSuccess={googleResponse}
+              onFailure={googleResponse}
+            />
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">

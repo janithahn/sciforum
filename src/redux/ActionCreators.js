@@ -235,6 +235,36 @@ export const signupUser = (creds) => (dispatch) => {
     });
 }
 
+//GOOGLE AUTHENTICATION
+export const loginUserWithGoogle = (creds) => async (dispatch) => {
+    dispatch(requestLogin(creds));
+
+    return await axios.post(baseUrl + '/rest-auth/google/', {
+        access_token: creds.tokenObj.access_token,
+        //rememberMe: creds.rememberMe,
+    })
+    .then(res => {
+        console.log(res);
+        const key = res.data.key;
+        localStorage.setItem('key', key);
+        const googleToken = creds.tokenObj.access_token;
+        const token = res.data.token;
+        const currentUser = res.data.user.username;
+        const currentUserId = res.data.user.id;
+        const currentUserEmail = res.data.user.email;
+        localStorage.setItem('googleToken', googleToken);
+        localStorage.setItem('token', token);
+        localStorage.setItem('currentUser', currentUser);
+        localStorage.setItem('currentUserId', currentUserId);
+        localStorage.setItem('currentUserEmail', currentUserEmail);
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
+        //dispatch(fetchUser(token, currentUser));
+    })
+    .catch(error => {
+        dispatch(loginError(error));
+    });
+}
+
 //RETREIVING USER INFORMATION
 export const fetchUser = (token, currentUser) => (dispatch) => {
     dispatch(userLoading());
