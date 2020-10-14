@@ -2,6 +2,7 @@ import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
 import { useDispatch } from 'react-redux';
+import { isJWTExpired } from '../shared/AdditionalFunctions';
 
 //POSTS
 export const fetchPosts = () => async (dispatch) => {
@@ -245,8 +246,6 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        const key = res.data.key;
-        localStorage.setItem('key', key);
         const googleToken = creds.tokenObj.access_token;
         const token = res.data.token;
         const currentUser = res.data.user.username;
@@ -274,7 +273,7 @@ export const fetchUser = (token, currentUser) => (dispatch) => {
     console.log(localStorage.getItem('token'));
 
     return axios.get(baseUrl + `/users/${currentUser}/`, {
-        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+        "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);

@@ -1,3 +1,5 @@
+import jwt_decode from 'jwt-decode';
+
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 export function isEmpty(obj) {
@@ -20,6 +22,16 @@ export function isEmpty(obj) {
     // toString and valueOf enumeration bugs in IE < 9
     for (var key in obj) {
         if (hasOwnProperty.call(obj, key)) return false;
+    }
+
+    return true;
+}
+
+export function isJWTExpired(token) {
+    let tokenDecode = jwt_decode(localStorage.getItem('token'));
+    let expDate = (tokenDecode.exp * 1000) - 60000
+    if (expDate <= Date.now()) {
+        return false;
     }
 
     return true;

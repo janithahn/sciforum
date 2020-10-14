@@ -32,7 +32,7 @@ function Main(props) {
         if(localStorage.getItem('token')) {
             try {
                 let tokenDecode = jwt_decode(localStorage.getItem('token'));
-                let expDate = (tokenDecode.exp * 1000)
+                let expDate = (tokenDecode.exp * 1000) - 60000
                 if (expDate <= Date.now()) {
                     localStorage.clear();
                     dispatch(logout());
