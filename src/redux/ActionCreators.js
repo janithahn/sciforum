@@ -403,3 +403,37 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
         console.log(error);
     })
 }
+
+//ANSWER LIST
+export const fetchAnswers = (postId) => async (dispatch) => {
+    dispatch(answersLoading());
+
+    axios.get(baseUrl + `/answer_api/?postBelong=${postId}`)
+    .then(response => {
+        console.log(response);
+        return response;
+    })
+    .then(answers => dispatch(addAnswers(answers.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(answersFailed(error));
+    });
+}
+
+export const answersLoading = () => ({
+    type: ActionTypes.ANSWER_LIST_LOADING
+});
+
+export const answersFailed = (errmess) => ({
+    type: ActionTypes.ANSWER_LIST_FAILED,
+    payload: errmess
+});
+
+export const resetAnswers = () => ({
+    type: ActionTypes.RESET_ANSWER_LIST
+});
+
+export const addAnswers = (answers) => ({
+    type: ActionTypes.ADD_ANSWER_LIST,
+    payload: answers
+});

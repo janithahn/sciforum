@@ -10,7 +10,8 @@ import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
 import SignIn from './sign/SignInComponent';
 import MainDrawer from './drawer/DrawerComponent';
-import PostDetail from './post/PostDetailComponent';
+//import PostDetail from './post/PostDetailComponent';
+import PostView from './post/index';
 import CreatePost from  './post/CreatePostComponent';
 import EditPost from './post/EditPostComponent';
 import NotFound from './alert/NotFoundComponent';
@@ -106,7 +107,7 @@ function Main(props) {
                 <Switch>
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
-                    <Route path="/questions/:postId" component={() => <PostDetail/>}/>
+                    <Route path="/questions/:postId" component={() => <PostView/>}/>
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost/>}/>
                     <Route exact path="/sample" component={Sample}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
