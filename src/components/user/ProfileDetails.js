@@ -89,7 +89,7 @@ export default function ProfileDetails(props) {
                 <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
               </Grid>
               <Grid item>
-                <Typography className={classes.iconWrap}><AvTimerOutlined style={{marginRight: 3}}/>{values.postViews + " Total post views"}</Typography>
+                <Typography className={classes.iconWrap}><AvTimerOutlined style={{marginRight: 3}}/>{values.postViews == null ? 0 + " Total post views": values.postViews + " Total post views"}</Typography>
               </Grid>
             </CardContent>
           </Grid>

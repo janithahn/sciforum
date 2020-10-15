@@ -11,8 +11,8 @@ export default function GoogleSocialAuth() {
 
     const { signIn, loadedSignIn } = useGoogleLogin({
         onSuccess: googleResponse,
+        onFailure: googleResponse,
         clientId: clientId,
-        cookiePolicy: 'single_host_origin',
     })
 
     return (

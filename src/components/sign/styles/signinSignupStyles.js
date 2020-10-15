@@ -77,6 +77,11 @@ export const useStylesSignin = makeStyles((theme) => ({
           paddingTop: theme.spacing(10),
       },
     },
+    googleButton: {
+      backgroundColor: '#FFFFFF',
+      padding: 0,
+      margin: theme.spacing(0, 0, 2),
+    },
   }));
 
 export  const ValidationTextField = withStyles({

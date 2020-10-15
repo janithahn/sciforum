@@ -244,7 +244,7 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
     return await axios.post(baseUrl + '/rest-auth/google/', {
-        access_token: creds.tokenObj.access_token,
+        access_token: creds.tokenObj.access_token || creds.wc.access_token,
         //rememberMe: creds.rememberMe,
     })
     .then(res => {

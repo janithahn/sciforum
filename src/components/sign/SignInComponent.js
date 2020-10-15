@@ -18,7 +18,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputLabel from '@material-ui/core/InputLabel';
 import { ThemeProvider, FormHelperText, OutlinedInput, FormControl } from '@material-ui/core';
 import { theme, useStylesSignin as useStyles } from './styles/signinSignupStyles';
-import btn_google_light_pressed_ios from './styles/btn_google_light_pressed_ios.svg';
+import btn_google_light_normal_ios from './styles/btn_google_light_normal_ios.svg';
 import { useFormik } from 'formik';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
@@ -94,7 +94,7 @@ export default function SignIn(props) {
   };
 
   const googleResponse = (response) => {
-    console.log(response.tokenObj);
+    console.log(response);
     dispatch(loginUserWithGoogle(response));
   }
 
@@ -196,11 +196,9 @@ export default function SignIn(props) {
               onClick={signIn}
               fullWidth
               variant="contained"
-              color="white"
-              className={classes.submit}
-              style={{padding: 0}}
+              className={classes.googleButton}
             >
-            <img src={btn_google_light_pressed_ios}/>
+            <img src={btn_google_light_normal_ios}/>
             Sign in with Google
             </Button>
             <Grid container>
