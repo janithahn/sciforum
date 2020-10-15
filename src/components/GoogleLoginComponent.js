@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
-import GoogleLogin from 'react-google-login';
+import { GoogleLogin, useGoogleLogin } from 'react-google-login';
+import { Button } from '@material-ui/core';
+import { clientId } from '../shared/googleApiClientId';
 
-export default class GoogleSocialAuth extends Component {
+export default function GoogleSocialAuth() {
 
-  render() {
     const googleResponse = (response) => {
       console.log(response);
     }
+
+    const { signIn, loadedSignIn } = useGoogleLogin({
+        onSuccess: googleResponse,
+        clientId: clientId,
+        cookiePolicy: 'single_host_origin',
+    })
+
     return (
       <div className="App">
         <h1>LOGIN WITH GOOGLE</h1>
+
+        <Button onClick={signIn}><img src="https://img.icons8.com/color/16/000000/google-logo.png"/>LOGIN WITH GOOGLE</Button>
       
         <GoogleLogin
-          clientId="356593815413-t0kp2fptb8m7gvnt42jru818h67a7rvs.apps.googleusercontent.com"
-          buttonText="LOGIN WITH GOOGLE"
-          onSuccess={googleResponse}
-          onFailure={googleResponse}
+            style={{width: '100%'}}
+            clientId={clientId}
+            buttonText="LOGIN WITH GOOGLE"
+            onSuccess={googleResponse}
+            onFailure={googleResponse}
         />
       </div>
     );
-  }
+
 }

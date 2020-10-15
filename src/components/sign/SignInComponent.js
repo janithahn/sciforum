@@ -18,12 +18,13 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputLabel from '@material-ui/core/InputLabel';
 import { ThemeProvider, FormHelperText, OutlinedInput, FormControl } from '@material-ui/core';
 import { theme, useStylesSignin as useStyles } from './styles/signinSignupStyles';
+import btn_google_light_pressed_ios from './styles/btn_google_light_pressed_ios.svg';
 import { useFormik } from 'formik';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
 import { loginUser, loginUserWithGoogle } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
-import GoogleLogin from 'react-google-login';
+import { GoogleLogin, useGoogleLogin } from 'react-google-login';
 import { clientId } from '../../shared/googleApiClientId';
 
 function Copyright() {
@@ -96,6 +97,16 @@ export default function SignIn(props) {
     console.log(response.tokenObj);
     dispatch(loginUserWithGoogle(response));
   }
+
+  const googleResponseOnFailure = (response) => {
+    console.log(response);
+  }
+
+  const { signIn, loaded } = useGoogleLogin({
+    onSuccess: googleResponse,
+    onFailure: googleResponseOnFailure,
+    clientId: clientId,
+  })
 
   return (
     <ThemeProvider theme={theme}>
@@ -180,12 +191,18 @@ export default function SignIn(props) {
             >
               Sign In
             </Button>
-            <GoogleLogin
-              clientId={clientId}
-              buttonText="LOGIN WITH GOOGLE"
-              onSuccess={googleResponse}
-              onFailure={googleResponse}
-            />
+            <Button
+              type="button"
+              onClick={signIn}
+              fullWidth
+              variant="contained"
+              color="white"
+              className={classes.submit}
+              style={{padding: 0}}
+            >
+            <img src={btn_google_light_pressed_ios}/>
+            Sign in with Google
+            </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">

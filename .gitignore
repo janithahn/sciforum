@@ -24,3 +24,5 @@ yarn-error.log*
 
 /src/components/Test.js
 /src/components/Test2.js
+
+/src/shared/googleApiClientId.js

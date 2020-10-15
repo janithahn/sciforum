@@ -1,8 +1,11 @@
 import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
-import { useDispatch } from 'react-redux';
 import { isJWTExpired } from '../shared/AdditionalFunctions';
+
+const headerWithToken = {
+    "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+};
 
 //POSTS
 export const fetchPosts = () => async (dispatch) => {
