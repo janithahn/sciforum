@@ -148,7 +148,7 @@ export default function PostDetail() {
         owner = owner;
         viewCount = viewCount;
         created_at = created_at;
-        updated_at = updated_at
+        updated_at = updated_at;
     }
 
     //console.log(answerContent);

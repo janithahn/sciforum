@@ -77,7 +77,7 @@ export const editPost = (post) => (dispatch, getState) => {
 };
 
 export const deletePost = (postId, history) => (dispatch, getState) => {
-    axios.delete(baseUrl + `/api/${postId}/`)
+    axios.delete(baseUrl + `/api/post/${postId}/delete/`, headerWithToken)
     .then(res => {
         dispatch(fetchPosts());
         console.log(res);
