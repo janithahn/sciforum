@@ -98,7 +98,7 @@ export default function EditPost(props) {
                       Question
                     </Typography>
                     {/*<Editor setQuestion={(values) => setQuestion(values)} data={body}/>*/}
-                    <MDEditor setQuestion={setQuestion} data={body}/>
+                    <MDEditor setText={setQuestion} data={body}/>
                   </Grid>
                     <Button
                         type="submit"

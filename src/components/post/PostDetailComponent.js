@@ -1,6 +1,7 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, Typography, ThemeProvider, Divider, Grid } from '@material-ui/core';
+import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
+import { Button, Typography, ThemeProvider, Divider, Grid, Modal, Backdrop, Fade, Card, CardHeader, CardContent, CssBaseline } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
@@ -11,11 +12,41 @@ import { useParams } from 'react-router-dom';
 import { fetchPostDetail } from '../../redux/ActionCreators';
 import { Preview } from './MarkdownPreview';
 import TimeAgo from 'react-timeago';
+import MDEditor from './MDE';
 
-function RenderCard({title, body, viewCount, created_at, updated_at, owner}) {
-    function getTime(date) {
+function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, ...rest}) {
+    return(
+        <Modal {...rest}
+            open={openModal} 
+            className={classes.modal}
+            onClose={handleModalClose}
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+                timeout: 500,
+            }}
+        >  
+            <Fade in={openModal}>
+            <Card style={{borderStyle: 'none', outline: 'none', borderWidth: 0}}>
+                <CardHeader
+                    title="Drop your answer"
+                />
+                <CardContent>
+                    <MDEditor data={answerContent} setText={setAnswerContent}/>
+                </CardContent>
+            </Card>
+            </Fade>
+        </Modal>
+    );
+}
+
+function RenderCard({title, body, viewCount, created_at, updated_at, owner, handleModalOpen, classes}) {
+
+    /*function getTime(date) {
         return new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date)
-    }
+    }*/
 
     return(
        <Grid container direction="column" spacing={1}>
@@ -23,28 +54,39 @@ function RenderCard({title, body, viewCount, created_at, updated_at, owner}) {
                 <Typography variant="h5" gutterBottom>
                     {title}
                 </Typography>
-                <Grid container direction="row" alignItems="flex-start" justify="flex-start" spacing={3}>
+                <Grid container direction="row" justify="space-between" alignItems="center">
                     <Grid item>
-                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                            {"Posted by  "}
-                            <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${owner}/`}>{owner}</Link>
-                        </Typography>
+                        <Grid container direction="row" alignItems="flex-start" justify="flex-start" spacing={3}>
+                            <Grid item>
+                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                    {"Posted by  "}
+                                    <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${owner}/`}>{owner}</Link>
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                    {viewCount == 1 ? viewCount + " View": viewCount + " Views"}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                    {/*"Created on " + created_at*/}
+                                    {"Created "}<TimeAgo live={false} date={created_at} />
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                    {"Updated "}<TimeAgo live={false} date={updated_at} />
+                                </Typography>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item>
-                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                            {viewCount == 1 ? viewCount + " View": viewCount + " Views"}
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                            {/*"Created on " + created_at*/}
-                            {"Created "}<TimeAgo live={false} date={created_at} />
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                            {"Updated "}<TimeAgo live={false} date={updated_at} />
-                        </Typography>
+                        <Button className={classes.answerButton} onClick={handleModalOpen}>
+                            <Typography className={classes.iconWrap} variant="body2">
+                                <QuestionAnswerRoundedIcon/>{" Answer"}
+                            </Typography>
+                        </Button>
                     </Grid>
                 </Grid>
             </Grid>
@@ -62,7 +104,8 @@ function RenderCard({title, body, viewCount, created_at, updated_at, owner}) {
     
 }
 
-export default function PostDetail(props) {
+export default function PostDetail() {
+
     const classes = useStyles();
     const auth = useSelector(state => state.Auth);
     const post = useSelector(state => state.Post);
@@ -72,6 +115,9 @@ export default function PostDetail(props) {
     const {postId} = useParams(); //another way of approaching for getting the postId from the url other than match.params
 
     const [open, setOpen] = React.useState(false);
+
+    const [openModal, setOpenModal] = React.useState(false);
+    const [answerContent, setAnswerContent] = React.useState('');
 
     const [postInfo, setPostInfo] = React.useState({
         title: post.post ? post.post.title: null,
@@ -107,7 +153,7 @@ export default function PostDetail(props) {
         updated_at = updated_at
     }
 
-    //console.log(postInfo);
+    //console.log(answerContent);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -115,6 +161,14 @@ export default function PostDetail(props) {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleModalOpen = () => {
+      setOpenModal(true);
+    };
+  
+    const handleModalClose = () => {
+      setOpenModal(false);
     };
 
     if(post.status === 'loading' || post.status === 'idle') {
@@ -133,6 +187,15 @@ export default function PostDetail(props) {
                             created_at={created_at}
                             updated_at={updated_at}
                             owner={owner}
+                            classes={classes}
+                            handleModalOpen={handleModalOpen}
+                        />
+                        <AnswerModal 
+                            classes={classes}
+                            openModal={openModal}
+                            answerContent={answerContent}
+                            setAnswerContent={setAnswerContent}
+                            handleModalClose={handleModalClose}
                         />
                         {auth.isAuthenticated && auth.currentUser == owner ?
                             <React.Fragment>
@@ -149,14 +212,14 @@ export default function PostDetail(props) {
                                     </Button>
                                 </Link>
                                 <Button
-                                        className={classes.submit}
-                                        type="submit"
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={handleClickOpen}
-                                        size="small"
-                                        variant="outlined"
-                                    >
+                                    className={classes.submit}
+                                    type="submit"
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={handleClickOpen}
+                                    size="small"
+                                    variant="outlined"
+                                >
                                     Delete
                                 </Button>
                                 <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>

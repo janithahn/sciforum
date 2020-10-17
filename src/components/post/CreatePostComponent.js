@@ -57,7 +57,7 @@ export default function CreatePost(props) {
               <Typography className={classes.typo} variant="h6" gutterBottom>
                 Question
               </Typography>
-              <MDEditor setQuestion={setQuestion} data={body}/>
+              <MDEditor setText={setQuestion} data={body}/>
             </Grid>
               <Button
                   type="submit"

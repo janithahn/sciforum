@@ -71,7 +71,7 @@ export default function MDEditor(props) {
       <ThemeProvider theme={theme}>
         <ReactMde
           value={props.data}
-          onChange={(values) => props.setQuestion(values)}
+          onChange={(values) => props.setText(values)}
           selectedTab={selectedTab}
           onTabChange={setSelectedTab}
           generateMarkdownPreview={(markdown) =>
@@ -86,7 +86,6 @@ export default function MDEditor(props) {
           paste={{
             saveImage: save
           }}
-          
         />
       </ThemeProvider>
     </div>
