@@ -50,6 +50,10 @@ time {
     display: flex;
     flex-direction: row; }
     .mde-header .mde-tabs button {
+      border-style: none;
+      border-width: 0;
+      outline: none;
+      
       border-radius: 2px;
       margin: 6px 3px;
       background-color: transparent;
@@ -79,6 +83,11 @@ time {
       position: relative;
       margin: 0 4px; }
       .mde-header ul.mde-header-group li.mde-header-item button {
+    
+        border-style: none;
+        border-width: 0;
+        outline: none;
+        
         text-align: left;
         cursor: pointer;
         height: 22px;

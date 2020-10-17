@@ -96,12 +96,12 @@ export default function UpdateName(props) {
             p={0}
           >
             <Button
-                onClick={() => handleModalClose()}
-                color="primary"
-                variant="contained"
-                className={classes.submit}
-                >
-                Cancel
+              onClick={() => handleModalClose()}
+              color="primary"
+              variant="contained"
+              className={classes.submit}
+            >
+              Cancel
             </Button>
             <Button
               type="submit"

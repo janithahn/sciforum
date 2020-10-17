@@ -404,7 +404,7 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
     })
 }
 
-//ANSWER LIST
+//ANSWER
 export const fetchAnswers = (postId) => async (dispatch) => {
     dispatch(answersLoading());
 
@@ -437,3 +437,19 @@ export const addAnswers = (answers) => ({
     type: ActionTypes.ADD_ANSWER_LIST,
     payload: answers
 });
+
+export const postAnswer = (postBelong, owner, answerContent) => (dispatch) => {
+    axios.post(baseUrl + `/answer_api/answer/create/`, {
+        postBelong: postBelong,
+        owner: owner,
+        answerContent: answerContent,
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+        dispatch(fetchAnswers(postBelong));
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(answersFailed(error));
+    });
+}
