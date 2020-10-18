@@ -453,3 +453,17 @@ export const postAnswer = (postBelong, owner, answerContent) => (dispatch) => {
         //dispatch(answersFailed(error));
     });
 }
+
+export const updateAnswer = (id, postBelong, answerContent) => (dispatch) => {
+    axios.patch(baseUrl + `/answer_api/answer/${id}/update/`, {
+        answerContent,
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+        dispatch(fetchAnswers(postBelong));
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(answersFailed(error));
+    });
+}

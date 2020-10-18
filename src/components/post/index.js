@@ -1,9 +1,8 @@
 import React from 'react';
 import PostDetail from './PostDetailComponent';
 import Answer from '../answer/answer';
-import { Grid, ThemeProvider } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { theme } from './styles/postsStyles';
 
 export default function PostView() {
 

@@ -27,5 +27,18 @@ export const theme = createMuiTheme({
     submit: {
       margin: theme.spacing(3, 2, 2),
     },
+    editButton: {
+      textTransform: 'none',
+      padding: (0, 3, 0, 3),
+    },
+    iconWrap: {
+      verticalAlign: 'middle',
+      display: 'inline-flex'
+    },
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   }));
   

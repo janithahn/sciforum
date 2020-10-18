@@ -11,10 +11,10 @@ import {
 } from '@material-ui/core';
 import { theme, useStyles } from './styles/answerStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { postAnswer } from '../../redux/ActionCreators';
+import { postAnswer, updateAnswer } from '../../redux/ActionCreators';
 import MDEditor from '../post/MDE';
 
-export default function AnswerModalCard({answerContent, setAnswerContent, postId, handleModalClose}) {
+export default function AnswerModalCard({answerContent, setAnswerContent, postId, answerId, handleModalClose, answerType}) {
 
   const classes = useStyles();
   const auth = useSelector(state => state.Auth);
@@ -25,7 +25,8 @@ export default function AnswerModalCard({answerContent, setAnswerContent, postId
   const handleSubmit = () => {
     if(answerContent.length > 0) {
         setAnswerSubmitError("");
-        dispatch(postAnswer(postId, auth.currentUserId, answerContent));
+        if(answerType === "create") dispatch(postAnswer(postId, auth.currentUserId, answerContent));
+        if(answerType === "update") dispatch(updateAnswer(answerId, postId, answerContent));
         handleModalClose();
     }else {
         setAnswerSubmitError("Your answer cannot be blank!");

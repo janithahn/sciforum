@@ -1,7 +1,7 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
-import { Button, Typography, ThemeProvider, Divider, Grid, Modal, Backdrop, Fade, Card, CardHeader, CardContent, Box } from '@material-ui/core';
+import { Button, Typography, ThemeProvider, Divider, Grid, Modal, Backdrop, Fade } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
@@ -9,7 +9,7 @@ import NotFound from '../alert/NotFoundComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPostDetail, postAnswer } from '../../redux/ActionCreators';
+import { fetchPostDetail } from '../../redux/ActionCreators';
 import { Preview } from './MarkdownPreview';
 import TimeAgo from 'react-timeago';
 import AnswerModalCard from '../answer/answerModalCard';
@@ -34,6 +34,7 @@ function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClo
                     setAnswerContent={setAnswerContent} 
                     postId={postId} 
                     handleModalClose={handleModalClose}
+                    answerType={"create"}
                 />
             </Fade>
         </Modal>

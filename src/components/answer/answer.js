@@ -1,44 +1,89 @@
 import React from 'react';
-import { CircularProgress, Grid, Typography, Divider, Avatar } from '@material-ui/core';
+import { CircularProgress, Grid, Typography, Divider, Avatar, Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import { Preview } from './answerPreview';
 import { fetchAnswers } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
+import { useStyles } from './styles/answerStyles';
+import AnswerModalCard from './answerModalCard';
 
-function AnswerViewCard({answer, key}) {
+function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
+    return(
+        <Modal {...rest}
+            open={openModal} 
+            className={classes.modal}
+            onClose={handleModalClose}
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+                timeout: 300,
+            }}
+        >  
+            <Fade in={openModal}>
+                <AnswerModalCard 
+                    answerContent={answerContent} 
+                    setAnswerContent={setAnswerContent} 
+                    answerId={answerId}
+                    postId={postId} 
+                    handleModalClose={handleModalClose}
+                    answerType={"update"}
+                />
+            </Fade>
+        </Modal>
+    );
+}
+
+function AnswerViewCard({answer, key, handleModalOpen, isAuthenticated, currentUserId}) {
+
+    //console.log(isAuthenticated, currentUserId, answer.owner);
+
+    const classes = useStyles();
+
     return(
         <React.Fragment>
-                <Grid item>
-                    <Grid container direction="column" spacing={1}>
-                        <Grid item>
-                            <Grid container direction="column" spacing={2}>
-                                <Grid item>
-                                    <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
-                                        <Grid item>
-                                            <Avatar alt={answer.ownerAvatar} src={answer.ownerAvatar} />
-                                        </Grid>
-                                        <Grid item>
-                                            <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={0}>
-                                                <Grid item>
-                                                    <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                                        <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${answer.ownerDisplayName}/`}>{answer.ownerDisplayName}</Link>
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                                        <TimeAgo live={false} date={answer.created_at} />
-                                                    </Typography>
-                                                </Grid>
+            <Grid item>
+                <Grid container direction="column" spacing={1}>
+                    <Grid item>
+                        <Grid container direction="column" spacing={2}>
+                            <Grid item>
+                                <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
+                                    <Grid item>
+                                        <Avatar alt={answer.ownerAvatar} src={answer.ownerAvatar} />
+                                    </Grid>
+                                    <Grid item>
+                                        <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={0}>
+                                            <Grid item>
+                                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                                    <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${answer.ownerDisplayName}/`}>{answer.ownerDisplayName}</Link>
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                                    <TimeAgo live={false} date={answer.created_at} />
+                                                </Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                                <Grid item>
-                                    <Preview key={key} source={answer.answerContent}/>
-                                </Grid>
-                                <Grid item>
-                                    <Grid container justify="flex-end">
+                            </Grid>
+                            <Grid item>
+                                <Preview key={key} source={answer.answerContent}/>
+                            </Grid>
+                            <Grid item>
+                                <Grid container justify="flex-end" alignItems="center" spacing={2}>
+                                    {isAuthenticated && answer.owner == currentUserId ?
+                                    <Grid item>
+                                        <Button className={classes.editButton} onClick={() => handleModalOpen(answer)}>
+                                            <Typography className={classes.iconWrap} variant="body2">
+                                                {"Edit"}
+                                            </Typography>
+                                        </Button>
+                                    </Grid>: 
+                                    undefined}
+                                    <Grid item>
                                         <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
                                             {"Updated "}<TimeAgo live={false} date={answer.updated_at} />
                                         </Typography>
@@ -46,26 +91,44 @@ function AnswerViewCard({answer, key}) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <Divider/>
-                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <Divider/>
                     </Grid>
                 </Grid>
-            </React.Fragment>
+            </Grid>
+        </React.Fragment>
     );
 }
 
 export default function Answer(props) {
 
     const answers = useSelector(state => state.Answers)
+    const auth = useSelector(state => state.Auth);
 
-    const [answerContent, setAnswerContent] = React.useState([]);
+    const classes = useStyles();
+
+    const [openModal, setOpenModal] = React.useState(false);
+    const [selectedAnswerContent, setSelectedAnswerContent] = React.useState('');
+    const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
+    const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
 
     const dispatch = useDispatch();
 
     React.useEffect(() => {
         dispatch(fetchAnswers(props.postId));
     }, [dispatch]);
+
+    const handleModalOpen = (answer) => {
+        setSelectedAnswerContent(answer.answerContent);
+        setSelectedAnswerId(answer.id);
+        setSelectedAnswerPostBelong(answer.postBelong);
+        setOpenModal(true);
+    };
+    
+      const handleModalClose = () => {
+        setOpenModal(false);
+      };
 
     if(answers.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
@@ -74,7 +137,15 @@ export default function Answer(props) {
         return(<h4>Error loading...!</h4>);
     }else {
 
-        const AnswersList = answers.answers.map((answer, key) => <AnswerViewCard answer={answer} key={key}/>);
+        const AnswersList = answers.answers.map((answer, key) => 
+            <AnswerViewCard 
+                answer={answer} 
+                key={key} 
+                handleModalOpen={handleModalOpen}
+                isAuthenticated={auth.isAuthenticated}
+                currentUserId={auth.currentUserId}
+            />
+        );
 
         return(
             <React.Fragment>
@@ -93,6 +164,15 @@ export default function Answer(props) {
                         </Grid>
                     </Grid>
                 </Grid>
+                <AnswerEditModal
+                    classes={classes}
+                    openModal={openModal}
+                    answerContent={selectedAnswerContent}
+                    setAnswerContent={setSelectedAnswerContent}
+                    handleModalClose={handleModalClose}
+                    answerId={selectedAnswerId}
+                    postId={selectedAnswerPostBelong}
+                />
             </React.Fragment>
         );
     }
