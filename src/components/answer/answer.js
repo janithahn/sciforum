@@ -1,12 +1,13 @@
 import React from 'react';
-import { CircularProgress, Grid, Typography, Divider, Avatar, Button, Modal, Backdrop, Fade } from '@material-ui/core';
+import { ThemeProvider, CircularProgress, Grid, Typography, Divider, Avatar, Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import { Preview } from './answerPreview';
 import { fetchAnswers } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
-import { useStyles } from './styles/answerStyles';
+import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
+import AlertDialogSlide from './alert';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(
@@ -36,7 +37,7 @@ function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModa
     );
 }
 
-function AnswerViewCard({answer, key, handleModalOpen, isAuthenticated, currentUserId}) {
+function AnswerViewCard({answer, key, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId}) {
 
     //console.log(isAuthenticated, currentUserId, answer.owner);
 
@@ -74,15 +75,32 @@ function AnswerViewCard({answer, key, handleModalOpen, isAuthenticated, currentU
                             </Grid>
                             <Grid item>
                                 <Grid container justify="flex-end" alignItems="center" spacing={2}>
-                                    {isAuthenticated && answer.owner == currentUserId ?
                                     <Grid item>
-                                        <Button className={classes.editButton} onClick={() => handleModalOpen(answer)}>
-                                            <Typography className={classes.iconWrap} variant="body2">
-                                                {"Edit"}
-                                            </Typography>
-                                        </Button>
-                                    </Grid>: 
-                                    undefined}
+                                        <Grid container justify="center" alignItems="center" spacing={0}>
+                                            <Grid item>
+                                                {isAuthenticated && answer.owner == currentUserId ?
+                                                <Grid item>
+                                                    <Button color="primary" className={classes.editButton} onClick={() => handleModalOpen(answer)}>
+                                                        <Typography className={classes.iconWrap} variant="body2">
+                                                            {"Edit"}
+                                                        </Typography>
+                                                    </Button>
+                                                </Grid>: 
+                                                undefined}
+                                            </Grid>
+                                            <Grid item>
+                                                {isAuthenticated && answer.owner == currentUserId ?
+                                                <Grid item>
+                                                    <Button color="secondary" className={classes.editButton} onClick={() => handleDeleteModalOpen(answer)}>
+                                                        <Typography className={classes.iconWrap} variant="body2">
+                                                            {"Delete"}
+                                                        </Typography>
+                                                    </Button>
+                                                </Grid>: 
+                                                undefined}
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                     <Grid item>
                                         <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
                                             {"Updated "}<TimeAgo live={false} date={answer.updated_at} />
@@ -109,6 +127,8 @@ export default function Answer(props) {
     const classes = useStyles();
 
     const [openModal, setOpenModal] = React.useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+
     const [selectedAnswerContent, setSelectedAnswerContent] = React.useState('');
     const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
@@ -126,9 +146,20 @@ export default function Answer(props) {
         setOpenModal(true);
     };
     
-      const handleModalClose = () => {
+    const handleModalClose = () => {
         setOpenModal(false);
-      };
+    };
+
+    const handleDeleteModalOpen = (answer) => {
+        setSelectedAnswerContent(answer.answerContent);
+        setSelectedAnswerId(answer.id);
+        setSelectedAnswerPostBelong(answer.postBelong);
+        setOpenDeleteModal(true);
+    };
+    
+    const handleDeleteModalClose = () => {
+        setOpenDeleteModal(false);
+    };
 
     if(answers.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
@@ -142,6 +173,7 @@ export default function Answer(props) {
                 answer={answer} 
                 key={key} 
                 handleModalOpen={handleModalOpen}
+                handleDeleteModalOpen={handleDeleteModalOpen}
                 isAuthenticated={auth.isAuthenticated}
                 currentUserId={auth.currentUserId}
             />
@@ -149,30 +181,33 @@ export default function Answer(props) {
 
         return(
             <React.Fragment>
-                <Grid container direction="column" spacing={3}>
-                    {answers.answers.length !== 0 ? 
+                <ThemeProvider theme={theme}>
+                    <Grid container direction="column" spacing={3}>
+                        {answers.answers.length !== 0 ? 
+                            <Grid item lg={8} sm xs={12}>
+                                <Grid item>
+                                    <Typography variant="h6">Answers</Typography>
+                                </Grid>
+                                <Divider/>
+                            </Grid>: 
+                        undefined}
                         <Grid item lg={8} sm xs={12}>
-                            <Grid item>
-                                <Typography variant="h6">Answers</Typography>
+                            <Grid container direction="column" spacing={4}>
+                                {AnswersList}
                             </Grid>
-                            <Divider/>
-                        </Grid>: 
-                    undefined}
-                    <Grid item lg={8} sm xs={12}>
-                        <Grid container direction="column" spacing={4}>
-                            {AnswersList}
                         </Grid>
                     </Grid>
-                </Grid>
-                <AnswerEditModal
-                    classes={classes}
-                    openModal={openModal}
-                    answerContent={selectedAnswerContent}
-                    setAnswerContent={setSelectedAnswerContent}
-                    handleModalClose={handleModalClose}
-                    answerId={selectedAnswerId}
-                    postId={selectedAnswerPostBelong}
-                />
+                    <AnswerEditModal
+                        classes={classes}
+                        openModal={openModal}
+                        answerContent={selectedAnswerContent}
+                        setAnswerContent={setSelectedAnswerContent}
+                        handleModalClose={handleModalClose}
+                        answerId={selectedAnswerId}
+                        postId={selectedAnswerPostBelong}
+                    />
+                    <AlertDialogSlide openDeleteModal={openDeleteModal} handleDeleteModalClose={handleDeleteModalClose} answerId={selectedAnswerId} postBelong={selectedAnswerPostBelong}/>
+                </ThemeProvider>
             </React.Fragment>
         );
     }

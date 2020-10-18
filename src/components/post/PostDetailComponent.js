@@ -202,23 +202,17 @@ export default function PostDetail() {
                                 <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
                                     <Button
                                         className={classes.submit}
-                                        type="submit"
-                                        variant="contained"
                                         color="primary"
                                         size="small"
-                                        variant="outlined"
                                     >
                                     Edit
                                     </Button>
                                 </Link>
                                 <Button
                                     className={classes.submit}
-                                    type="submit"
-                                    variant="contained"
                                     color="secondary"
                                     onClick={handleClickOpen}
                                     size="small"
-                                    variant="outlined"
                                 >
                                     Delete
                                 </Button>

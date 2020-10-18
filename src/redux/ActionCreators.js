@@ -467,3 +467,15 @@ export const updateAnswer = (id, postBelong, answerContent) => (dispatch) => {
         //dispatch(answersFailed(error));
     });
 }
+
+export const deleteAnswer = (id, postBelong) => (dispatch) => {
+    axios.delete(baseUrl + `/answer_api/answer/${id}/delete/`, headerWithToken)
+    .then(response => {
+        console.log(response);
+        dispatch(fetchAnswers(postBelong));
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(answersFailed(error));
+    });
+}

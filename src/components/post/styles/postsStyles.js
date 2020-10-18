@@ -19,7 +19,8 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   submit: {
-    margin: theme.spacing(3, 1, 2),
+    margin: theme.spacing(3, 0, 2),
+    textTransform: 'none',
   },
   typo: {
     marginTop: '20px',
@@ -32,6 +33,10 @@ export const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     padding: (1, 3, 1, 3),
 
+  },
+  alertButton: {
+    textTransform: 'none',
+    padding: (1, 3, 1, 3),
   },
   modal: {
     display: 'flex',

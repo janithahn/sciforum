@@ -102,21 +102,17 @@ export default function EditPost(props) {
                   </Grid>
                     <Button
                         type="submit"
-                        variant="contained"
                         color="primary"
                         className={classes.submit}
                         size="small"
-                        variant="outlined"
                     >
                     Submit
                   </Button>
                   <Button
                         onClick={handleCancel}
-                        variant="contained"
                         color="secondary"
                         className={classes.submit}
                         size="small"
-                        variant="outlined"
                     >
                     Cancel
                   </Button>
