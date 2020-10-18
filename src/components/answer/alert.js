@@ -31,7 +31,7 @@ export default function AlertDialogSlide(props) {
             aria-labelledby="alert-dialog-slide-title"
             aria-describedby="alert-dialog-slide-description"
         >
-            <DialogTitle id="alert-dialog-slide-title">{"Delete Post"}</DialogTitle>
+            <DialogTitle id="alert-dialog-slide-title">{"Delete Answer"}</DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
                 Are you sure about deleteting this answer?

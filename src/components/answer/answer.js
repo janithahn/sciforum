@@ -180,18 +180,18 @@ export default function Answer(props) {
         );
 
         return(
-            <React.Fragment>
+            <div className={classes.root}>
                 <ThemeProvider theme={theme}>
                     <Grid container direction="column" spacing={3}>
                         {answers.answers.length !== 0 ? 
-                            <Grid item lg={8} sm xs={12}>
+                            <Grid item>
                                 <Grid item>
                                     <Typography variant="h6">Answers</Typography>
                                 </Grid>
                                 <Divider/>
                             </Grid>: 
                         undefined}
-                        <Grid item lg={8} sm xs={12}>
+                        <Grid item>
                             <Grid container direction="column" spacing={4}>
                                 {AnswersList}
                             </Grid>
@@ -208,7 +208,7 @@ export default function Answer(props) {
                     />
                     <AlertDialogSlide openDeleteModal={openDeleteModal} handleDeleteModalClose={handleDeleteModalClose} answerId={selectedAnswerId} postBelong={selectedAnswerPostBelong}/>
                 </ThemeProvider>
-            </React.Fragment>
+            </div>
         );
     }
 }

@@ -11,10 +11,10 @@ export default function PostView() {
     return(
         <React.Fragment>
             <Grid container direction="column" justify="flex-end" spacing={4}>
-                <Grid item>
+                <Grid item lg={8} sm xs={12}>
                     <PostDetail/>
                 </Grid>
-                <Grid item>
+                <Grid item lg={8} sm xs={12}>
                     <Answer postId={postId}/>
                 </Grid>
             </Grid>

@@ -49,7 +49,7 @@ function RenderCard({title, body, viewCount, created_at, updated_at, owner, hand
 
     return(
        <Grid container direction="column" spacing={1}>
-           <Grid item lg={8} sm xs={12}>
+           <Grid item>
                 <Typography variant="h5" gutterBottom>
                     {title}
                 </Typography>
@@ -89,13 +89,13 @@ function RenderCard({title, body, viewCount, created_at, updated_at, owner, hand
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item lg={8} sm xs={12}>
+            <Grid item>
                 <Divider/>
             </Grid>
-            <Grid item lg={8} sm xs={12}>
+            <Grid item>
                 <Preview source={body}/>
             </Grid>
-            <Grid item lg={8} sm xs={12}>
+            <Grid item>
                 <Divider/>
             </Grid>
        </Grid>
@@ -177,7 +177,7 @@ export default function PostDetail() {
     } else {
         if(post !== undefined) {
             return(
-                <div>
+                <div className={classes.root}>
                     <ThemeProvider theme={theme}>
                         <RenderCard 
                             title={postInfo.title} 
@@ -199,23 +199,29 @@ export default function PostDetail() {
                         />
                         {auth.isAuthenticated && auth.currentUser == owner ?
                             <React.Fragment>
-                                <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
-                                    <Button
-                                        className={classes.submit}
-                                        color="primary"
-                                        size="small"
-                                    >
-                                    Edit
-                                    </Button>
-                                </Link>
-                                <Button
-                                    className={classes.submit}
-                                    color="secondary"
-                                    onClick={handleClickOpen}
-                                    size="small"
-                                >
-                                    Delete
-                                </Button>
+                                <Grid container justify="flex-end" alignItems="center" spacing={0}>
+                                    <Grid item>
+                                        <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
+                                            <Button
+                                                className={classes.submit}
+                                                color="primary"
+                                                size="small"
+                                            >
+                                            Edit
+                                            </Button>
+                                        </Link>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            className={classes.submit}
+                                            color="secondary"
+                                            onClick={handleClickOpen}
+                                            size="small"
+                                        >
+                                            Delete
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                                 <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
                             </React.Fragment>
                             : undefined

@@ -1,10 +1,9 @@
-import { createMuiTheme, makeStyles, withStyles, Tooltip } from '@material-ui/core';
+import { createMuiTheme, makeStyles } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
     typography: {
         fontFamily: 'Open Sans',
-        fontSize: 14
     },
     palette: {
       primary: blue,
@@ -16,6 +15,7 @@ export const theme = createMuiTheme({
     root: {
       display: 'flex',
       flexWrap: 'wrap',
+      flexGrow: 1,
       backgroundColor: 'inherit',
     },
     cardContent: {
