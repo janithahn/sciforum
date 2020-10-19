@@ -36,17 +36,17 @@ export default function EditPost(props) {
   }, [post, dispatch]);
 
   React.useEffect(() => {
-  if(post.post) {
+    if(post.post) {
       handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount);
-  }
+    }
   }, [post]);
 
   const handlePostInfo = (id, owner, title, body, viewCount) => {
-      setTitle(title);
-      setQuestion(body);
-      id = id;
-      owner = owner;
-      viewCount = viewCount;
+    setTitle(title);
+    setQuestion(body);
+    id = id;
+    owner = owner;
+    viewCount = viewCount;
   }
 
   function handleSubmit(event) {
@@ -100,22 +100,28 @@ export default function EditPost(props) {
                     {/*<Editor setQuestion={(values) => setQuestion(values)} data={body}/>*/}
                     <MDEditor setText={setQuestion} data={body}/>
                   </Grid>
-                    <Button
-                        type="submit"
-                        color="primary"
-                        className={classes.submit}
-                        size="small"
-                    >
-                    Submit
-                  </Button>
-                  <Button
-                        onClick={handleCancel}
-                        color="secondary"
-                        className={classes.submit}
-                        size="small"
-                    >
-                    Cancel
-                  </Button>
+                  <Grid container justify="flex-end" alignItems="center" spacing={2}  lg={8} sm xs={12}>
+                    <Grid item>
+                      <Button
+                          type="submit"
+                          color="primary"
+                          className={classes.submit}
+                          size="small"
+                      >
+                        Submit
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                          onClick={handleCancel}
+                          color="primary"
+                          className={classes.submit}
+                          size="small"
+                      >
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </form>
               </Grid>
             </ThemeProvider>
