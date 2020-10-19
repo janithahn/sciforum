@@ -1,5 +1,5 @@
 import { createMuiTheme, makeStyles } from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
+import { blue, blueGrey } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
     typography: {
@@ -9,6 +9,17 @@ export const theme = createMuiTheme({
       primary: blue,
     },
     //shadows: ['none']
+  });
+
+  export const themeVote = createMuiTheme({
+    typography: {
+        fontFamily: 'Open Sans',
+    },
+    palette: {
+      secondary: {
+        main: "#9e9e9e",
+      },
+    },
   });
 
   export const useStyles = makeStyles((theme) => ({

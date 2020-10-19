@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
+import VoteButtons from '../vote/voteButtons';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(
@@ -46,7 +47,7 @@ function AnswerViewCard({answer, key, handleModalOpen, handleDeleteModalOpen, is
     return(
         <React.Fragment>
             <Grid item>
-                <Grid container direction="column" spacing={1}>
+                <Grid container direction="column" spacing={0}>
                     <Grid item>
                         <Grid container direction="column" spacing={2}>
                             <Grid item>
@@ -74,37 +75,44 @@ function AnswerViewCard({answer, key, handleModalOpen, handleDeleteModalOpen, is
                                 <Preview key={key} source={answer.answerContent}/>
                             </Grid>
                             <Grid item>
-                                <Grid container justify="flex-end" alignItems="center" spacing={2}>
+                                <Grid container justify="space-between" alignItems="center" spacing={2}>
                                     <Grid item>
-                                        <Grid container justify="center" alignItems="center" spacing={0}>
-                                            <Grid item>
-                                                {isAuthenticated && answer.owner == currentUserId ?
-                                                <Grid item>
-                                                    <Button color="primary" className={classes.editButton} onClick={() => handleModalOpen(answer)}>
-                                                        <Typography className={classes.iconWrap} variant="body2">
-                                                            {"Edit"}
-                                                        </Typography>
-                                                    </Button>
-                                                </Grid>: 
-                                                undefined}
-                                            </Grid>
-                                            <Grid item>
-                                                {isAuthenticated && answer.owner == currentUserId ?
-                                                <Grid item>
-                                                    <Button color="secondary" className={classes.editButton} onClick={() => handleDeleteModalOpen(answer)}>
-                                                        <Typography className={classes.iconWrap} variant="body2">
-                                                            {"Delete"}
-                                                        </Typography>
-                                                    </Button>
-                                                </Grid>: 
-                                                undefined}
-                                            </Grid>
-                                        </Grid>
+                                        <VoteButtons answerId={answer.id} isAuthenticated={isAuthenticated} currentUserId={currentUserId}/>
                                     </Grid>
                                     <Grid item>
-                                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                            {"Updated "}<TimeAgo live={false} date={answer.updated_at} />
-                                        </Typography>
+                                        <Grid container justify="center" alignItems="center" spacing={1}>
+                                            <Grid item>
+                                                <Grid container justify="center" alignItems="center" spacing={0}>
+                                                    <Grid item>
+                                                        {isAuthenticated && answer.owner == currentUserId ?
+                                                        <Grid item>
+                                                            <Button color="primary" className={classes.editButton} onClick={() => handleModalOpen(answer)}>
+                                                                <Typography className={classes.iconWrap} variant="body2">
+                                                                    {"Edit"}
+                                                                </Typography>
+                                                            </Button>
+                                                        </Grid>: 
+                                                        undefined}
+                                                    </Grid>
+                                                    <Grid item>
+                                                        {isAuthenticated && answer.owner == currentUserId ?
+                                                        <Grid item>
+                                                            <Button color="secondary" className={classes.editButton} onClick={() => handleDeleteModalOpen(answer)}>
+                                                                <Typography className={classes.iconWrap} variant="body2">
+                                                                    {"Delete"}
+                                                                </Typography>
+                                                            </Button>
+                                                        </Grid>: 
+                                                        undefined}
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                                    {"Updated "}<TimeAgo live={false} date={answer.updated_at} />
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>

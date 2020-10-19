@@ -6,6 +6,7 @@ import { Auth } from './actions/auth';
 import { User } from './actions/user';
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
+import { answerVotes } from './actions/votes';
 
 export const ConfigureStore = () => {
     const store = createStore(
@@ -15,6 +16,7 @@ export const ConfigureStore = () => {
             User,
             Post,
             Answers,
+            answerVotes,
         }),
         applyMiddleware(thunk, logger)
     );

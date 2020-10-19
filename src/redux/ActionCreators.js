@@ -479,3 +479,54 @@ export const deleteAnswer = (id, postBelong) => (dispatch) => {
         //dispatch(answersFailed(error));
     });
 }
+
+//ANSWER VOTES
+export const fetchAnswerVotes = (answerId, voteType) => async (dispatch) => {
+    dispatch(answerVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/answervote/?answer=${answerId}&voteType=${voteType}`)
+    .then(response => {
+        console.log(response);
+        return response;
+    })
+    .then(votes => dispatch(addAnswerVotes(votes.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(answerVotesFailed(error));
+    });
+}
+
+export const fetchAnswerVotesDirect = (answerId, voteType, setLikeCount) => (dispatch) => {
+
+    dispatch(answerVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/answervote/?answer=${answerId}&voteType=${voteType}`)
+    .then(response => {
+        console.log(response.data.length);
+        dispatch(addAnswerVotes(response.data));
+        setLikeCount(response.data.length);
+        return response;
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(answerVotesFailed());
+    });
+}
+
+export const answerVotesLoading = () => ({
+    type: ActionTypes.ANSWER_VOTE_LIST_LOADING
+});
+
+export const answerVotesFailed = (errmess) => ({
+    type: ActionTypes.ANSWER_VOTE_LIST_FAILED,
+    payload: errmess
+});
+
+export const resetAnswersVotes = () => ({
+    type: ActionTypes.RESET_ANSWER_VOTE_LIST
+});
+
+export const addAnswerVotes = (votes) => ({
+    type: ActionTypes.ADD_ANSWER_VOTE_LIST,
+    payload: votes
+});
