@@ -496,15 +496,30 @@ export const fetchAnswerVotes = (answerId, voteType) => async (dispatch) => {
     });
 }
 
-export const fetchAnswerVotesDirect = (answerId, voteType, setLikeCount) => (dispatch) => {
+export const fetchAnswerVotesDirect = (answerId, voteType, setCount) => (dispatch) => {
 
-    dispatch(answerVotesLoading());
+    //dispatch(answerVotesLoading());
 
     axios.get(baseUrl + `/vote_api/answervote/?answer=${answerId}&voteType=${voteType}`)
     .then(response => {
-        console.log(response.data.length);
+        //console.log(response.data);
+        //dispatch(addAnswerVotes(response.data));
+        setCount(response.data.length);
+        return response;
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(answerVotesFailed());
+    });
+}
+
+export const fetchAnswerVotesByLoggedInUser = (owner, answer) => (dispatch) => {
+    dispatch(answerVotesLoading);
+
+    axios.get(baseUrl + `/vote_api/answervote/?owner=${owner}&answer=${answer}`)
+    .then(response => {
+        console.log(response.data);
         dispatch(addAnswerVotes(response.data));
-        setLikeCount(response.data.length);
         return response;
     })
     .catch(error => {
@@ -530,3 +545,40 @@ export const addAnswerVotes = (votes) => ({
     type: ActionTypes.ADD_ANSWER_VOTE_LIST,
     payload: votes
 });
+
+export const postAnswerVote = (answer, voteType, owner) => (dispatch) => {
+    axios.post(baseUrl + `/vote_api/answervote/vote/create/`, {
+        answer,
+        voteType,
+        owner
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(updateAnswerVote(answer, voteType, owner));
+    });
+}
+
+export const updateAnswerVote = (answer, newVoteType, owner) => (dispatch) => {
+    axios.patch(baseUrl + `/vote_api/answervote/vote/answer=${answer}&owner=${owner}/update/`, {
+        voteType: newVoteType,
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export const deleteAnswerVote = (answer, voteType, owner) => (dispatch) => {
+    axios.delete(baseUrl + `/vote_api/answervote/vote/answer=${answer}&voteType=${voteType}&owner=${owner}/delete/`, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}

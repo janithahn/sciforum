@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeProvider, CircularProgress, Grid, Typography, Divider, Avatar, Button, Modal, Backdrop, Fade } from '@material-ui/core';
 import { Preview } from './answerPreview';
-import { fetchAnswers } from '../../redux/ActionCreators';
+import { fetchAnswers, fetchAnswerVotesByLoggedInUser } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
@@ -42,6 +42,25 @@ function AnswerViewCard({answer, key, handleModalOpen, handleDeleteModalOpen, is
 
     //console.log(isAuthenticated, currentUserId, answer.owner);
 
+    const dispatch = useDispatch();
+    const answerVotes = useSelector(state => state.answerVotes);
+
+    const [currentUserVoteType, setCurrentUserVoteType] = React.useState({
+        type: '',
+        answer: null,
+    });
+
+    React.useEffect(() => {
+        if(isAuthenticated) {
+            dispatch(fetchAnswerVotesByLoggedInUser(currentUserId, answer.id));
+        }
+    }, []);
+
+    React.useEffect(() => {
+        //console.log(answerVotes.votes);
+        if(answerVotes.votes.length !== 0) setCurrentUserVoteType({type: answerVotes.votes[0].voteType, answer: answerVotes.votes[0].answer});
+    }, [answerVotes.votes]);
+
     const classes = useStyles();
 
     return(
@@ -77,7 +96,12 @@ function AnswerViewCard({answer, key, handleModalOpen, handleDeleteModalOpen, is
                             <Grid item>
                                 <Grid container justify="space-between" alignItems="center" spacing={2}>
                                     <Grid item>
-                                        <VoteButtons answerId={answer.id} isAuthenticated={isAuthenticated} currentUserId={currentUserId}/>
+                                        <VoteButtons 
+                                            answerId={answer.id} 
+                                            isAuthenticated={isAuthenticated} 
+                                            currentUserId={currentUserId}
+                                            currentUserVoteType={currentUserVoteType}
+                                        />
                                     </Grid>
                                     <Grid item>
                                         <Grid container justify="center" alignItems="center" spacing={1}>

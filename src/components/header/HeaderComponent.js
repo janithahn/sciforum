@@ -4,6 +4,7 @@ import { AppBar, Toolbar, InputBase,  IconButton, Typography, Button,
 import { Search } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
+//import LoginModal from '../sign/SignInComponent';
 import SignIn from '../sign/SignInComponent';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';

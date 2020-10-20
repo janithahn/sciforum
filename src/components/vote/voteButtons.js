@@ -1,38 +1,20 @@
 import React from 'react';
 import ThumbDownRoundedIcon from '@material-ui/icons/ThumbDownRounded';
 import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded';
-import { IconButton, Grid, ThemeProvider, Fade, Modal, Backdrop } from '@material-ui/core';
+import { IconButton, Grid, ThemeProvider } from '@material-ui/core';
 import { LikeVotes, DislikeVotes } from '../vote/vote';
-import SignIn from '../sign/SignInComponent';
+import LoginModal from '../sign/LoginModal';
 import { useStyles, themeVote } from './styles/voteStyles';
+import { useDispatch } from 'react-redux';
+import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/ActionCreators';
 
-function LoginModal({openModal, classes, handleModalClose}) {
-    return(
-        <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            className={classes.modal}
-            open={openModal}
-            onClose={handleModalClose}
-            closeAfterTransition
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-                timeout: 500,
-            }}
-        >
-        <Fade in={openModal}>
-          <SignIn handleModalClose={handleModalClose}/>
-        </Fade>
-      </Modal>
-    );
-}
-
- export default function VoteButtons({answerId, isAuthenticated, currentUserId}) {
+ export default function VoteButtons({answerId, isAuthenticated, currentUserId, currentUserVoteType}) {
 
     const classes = useStyles();
 
-    const [likeColorChange, setLikeColorChange] = React.useState("secondary");
-    const [dislikeColorChange, setDislikeColorChange] = React.useState("secondary");
+    const dispatch = useDispatch();
+
+    const [openModal, setOpenModal] = React.useState(false);
 
     const [likeCount, setLikeCount] = React.useState(0);
     const [dislikeCount, setDislikeCount] = React.useState(0);
@@ -40,7 +22,27 @@ function LoginModal({openModal, classes, handleModalClose}) {
     const [likedUser, setLikedUser] = React.useState('');
     const [dislikedUser, setDislikedUser] = React.useState('');
 
-    const [openModal, setOpenModal] = React.useState(false);
+    const [likeColorChange, setLikeColorChange] = React.useState("secondary");
+    const [dislikeColorChange, setDislikeColorChange] = React.useState("secondary");
+
+    React.useEffect(() => {
+        if(isAuthenticated) {
+            if(currentUserVoteType.answer === answerId) {
+                if(currentUserVoteType.type === 'LIKE') {
+                    setLikeColorChange("primary");
+                    setLikedUser(currentUserId);
+                }
+                if(currentUserVoteType.type === 'DISLIKE') {
+                    setDislikeColorChange("primary");
+                    setDislikedUser(currentUserId);
+                }
+                if(currentUserVoteType.type === 'EMPTY') {
+                    setDislikeColorChange("secondary");
+                    //setDislikedUser(currentUserId);
+                }
+            }
+        }
+    }, [currentUserVoteType, isAuthenticated]);
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -51,8 +53,6 @@ function LoginModal({openModal, classes, handleModalClose}) {
     };
 
     const handleLike = () => {
-        /*if(likeColorChange === "secondary") setLikeColorChange("primary");
-        if(likeColorChange === "primary") setLikeColorChange("secondary");*/
         if(isAuthenticated) {
             if(dislikeColorChange === "primary") setDislikeColorChange("secondary");
 
@@ -60,15 +60,17 @@ function LoginModal({openModal, classes, handleModalClose}) {
                 setLikeColorChange("secondary");
                 setLikedUser('');
                 setLikeCount(likeCount - 1);
-                //setDislikeCount(dislikeCount - 1);
+                dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
             }
             if(likedUser != currentUserId) {
                 setLikeColorChange("primary");
                 setLikedUser(currentUserId);
                 setLikeCount(likeCount + 1);
+                dispatch(postAnswerVote(answerId, 'LIKE', currentUserId));
                 if(dislikedUser == currentUserId) {
                     setDislikedUser('');
                     setDislikeCount(dislikeCount - 1);
+                    dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
                 }
             }
         }else {
@@ -77,8 +79,6 @@ function LoginModal({openModal, classes, handleModalClose}) {
     }
 
     const handleDislike = () => {
-        /*if(dislikeColorChange === "secondary") setDislikeColorChange("primary");
-        if(dislikeColorChange === "primary") setDislikeColorChange("secondary");*/
         if(isAuthenticated) {
             if(likeColorChange === "primary") setLikeColorChange("secondary");
             
@@ -86,15 +86,17 @@ function LoginModal({openModal, classes, handleModalClose}) {
                 setDislikeColorChange("secondary");
                 setDislikedUser('');
                 setDislikeCount(dislikeCount - 1);
-                //setLikeCount(likeCount - 1);
+                dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
             }
             if(dislikedUser != currentUserId) {
                 setDislikeColorChange("primary");
                 setDislikedUser(currentUserId);
                 setDislikeCount(dislikeCount + 1);
+                dispatch(postAnswerVote(answerId, 'DISLIKE', currentUserId));
                 if(likedUser == currentUserId) {
                     setLikedUser('');
                     setLikeCount(likeCount - 1);
+                    dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
                 }
             }
         }else {
