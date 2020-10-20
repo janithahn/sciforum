@@ -8,7 +8,7 @@ import { useStyles, themeVote } from './styles/voteStyles';
 import { useDispatch } from 'react-redux';
 import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/ActionCreators';
 
- export default function VoteButtons({answerId, isAuthenticated, currentUserId, currentUserVoteType}) {
+ export default function VoteButtons({answerId, isAuthenticated, currentUserId, currentUserVote}) {
 
     const classes = useStyles();
 
@@ -27,22 +27,22 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
 
     React.useEffect(() => {
         if(isAuthenticated) {
-            if(currentUserVoteType.answer === answerId) {
-                if(currentUserVoteType.type === 'LIKE') {
+            if(currentUserVote.answer === answerId) {
+                if(currentUserVote.type === 'LIKE') {
                     setLikeColorChange("primary");
                     setLikedUser(currentUserId);
                 }
-                if(currentUserVoteType.type === 'DISLIKE') {
+                if(currentUserVote.type === 'DISLIKE') {
                     setDislikeColorChange("primary");
                     setDislikedUser(currentUserId);
                 }
-                if(currentUserVoteType.type === 'EMPTY') {
+                if(currentUserVote.type === 'EMPTY') {
                     setDislikeColorChange("secondary");
                     //setDislikedUser(currentUserId);
                 }
             }
         }
-    }, [currentUserVoteType, isAuthenticated]);
+    }, [currentUserVote, isAuthenticated]);
 
     const handleModalOpen = () => {
         setOpenModal(true);
