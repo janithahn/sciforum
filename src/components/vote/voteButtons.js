@@ -70,7 +70,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                 if(dislikedUser == currentUserId) {
                     setDislikedUser('');
                     setDislikeCount(dislikeCount - 1);
-                    dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
+                    dispatch(updateAnswerVote(answerId, 'LIKE', currentUserId));
                 }
             }
         }else {
@@ -96,7 +96,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                 if(likedUser == currentUserId) {
                     setLikedUser('');
                     setLikeCount(likeCount - 1);
-                    dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
+                    dispatch(updateAnswerVote(answerId, 'DISLIKE', currentUserId));
                 }
             }
         }else {

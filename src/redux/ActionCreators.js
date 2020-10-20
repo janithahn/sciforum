@@ -557,7 +557,7 @@ export const postAnswerVote = (answer, voteType, owner) => (dispatch) => {
     })
     .catch(error => {
         console.log(error);
-        dispatch(updateAnswerVote(answer, voteType, owner));
+        //dispatch(updateAnswerVote(answer, voteType, owner));
     });
 }
 
