@@ -9,10 +9,11 @@ import NotFound from '../alert/NotFoundComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPostDetail } from '../../redux/ActionCreators';
+import { fetchPostDetail, fetchPostVotesByLoggedInUser } from '../../redux/ActionCreators';
 import { Preview } from './MarkdownPreview';
 import TimeAgo from 'react-timeago';
 import AnswerModalCard from '../answer/answerModalCard';
+import VoteButtons from '../vote/postVoteButtons';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
     return(
@@ -69,7 +70,6 @@ function RenderCard({title, body, viewCount, created_at, updated_at, owner, hand
                             </Grid>
                             <Grid item>
                                 <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {/*"Created on " + created_at*/}
                                     {"Created "}<TimeAgo live={false} date={created_at} />
                                 </Typography>
                             </Grid>
@@ -127,6 +127,25 @@ export default function PostDetail() {
     const viewCount = post.post ? post.post.viewCount: null;
     const created_at = post.post ? post.post.created_at: null;
     const updated_at = post.post ? post.post.updated_at: null;
+    
+    const postVotes = useSelector(state => state.postVotes);
+
+    console.log(postVotes);
+
+    const [currentUserVote, setCurrentUserVote] = React.useState({
+        type: '',
+        post: null,
+    });
+
+    React.useEffect(() => {
+        if(auth.isAuthenticated) {
+            if(id) dispatch(fetchPostVotesByLoggedInUser(auth.currentUserId, id));
+        }
+    }, [dispatch, auth]);
+
+    React.useEffect(() => {
+        if(postVotes.votes.length !== 0) setCurrentUserVote({type: postVotes.votes[0].voteType, post: postVotes.votes[0].post});
+    }, [postVotes.votes]);
 
     React.useEffect(() => {
         if(post.status === 'idle') {
@@ -197,35 +216,49 @@ export default function PostDetail() {
                             handleModalClose={handleModalClose}
                             postId={postId}
                         />
-                        {auth.isAuthenticated && auth.currentUser == owner ?
-                            <React.Fragment>
-                                <Grid container justify="flex-end" alignItems="center" spacing={0}>
-                                    <Grid item>
-                                        <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
-                                            <Button
-                                                className={classes.submit}
-                                                color="primary"
-                                                size="small"
-                                            >
-                                            Edit
-                                            </Button>
-                                        </Link>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button
-                                            className={classes.submit}
-                                            color="secondary"
-                                            onClick={handleClickOpen}
-                                            size="small"
-                                        >
-                                            Delete
-                                        </Button>
+                        <React.Fragment>
+                            <Grid container justify="space-between" alignItems="center" spacing={0}>
+                                <Grid item>
+                                    <Grid container justify="center" alignItems="center" spacing={0}>
+                                        <VoteButtons 
+                                            postId={id} 
+                                            isAuthenticated={auth.isAuthenticated} 
+                                            currentUserId={auth.currentUserId}
+                                            currentUserVote={currentUserVote}
+                                        />
                                     </Grid>
                                 </Grid>
-                                <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
-                            </React.Fragment>
-                            : undefined
-                        }
+                                {auth.isAuthenticated && auth.currentUser == owner ?
+                                    <Grid item>
+                                        <Grid container justify="center" alignItems="center" spacing={0}>
+                                            <Grid item>
+                                                <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
+                                                    <Button
+                                                        className={classes.submit}
+                                                        color="primary"
+                                                        size="small"
+                                                    >
+                                                    Edit
+                                                    </Button>
+                                                </Link>
+                                            </Grid>
+                                            <Grid item>
+                                                <Button
+                                                    className={classes.submit}
+                                                    color="secondary"
+                                                    onClick={handleClickOpen}
+                                                    size="small"
+                                                >
+                                                    Delete
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    : undefined
+                                }
+                            </Grid>
+                            <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
+                        </React.Fragment>
                     </ThemeProvider>
                 </div>
             );

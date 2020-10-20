@@ -2,13 +2,13 @@ import React from 'react';
 import ThumbDownRoundedIcon from '@material-ui/icons/ThumbDownRounded';
 import ThumbUpRoundedIcon from '@material-ui/icons/ThumbUpRounded';
 import { IconButton, Grid, ThemeProvider } from '@material-ui/core';
-import { LikeVotes, DislikeVotes } from '../vote/vote';
+import { LikeVotes, DislikeVotes } from './vote';
 import LoginModal from '../sign/LoginModal';
 import { useStyles, themeVote } from './styles/voteStyles';
-import { useDispatch } from 'react-redux';
-import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/ActionCreators';
+import { useDispatch, useSelector } from 'react-redux';
+import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
 
- export default function VoteButtons({answerId, isAuthenticated, currentUserId, currentUserVote}) {
+ export default function VoteButtons({postId, isAuthenticated, currentUserId, currentUserVote}) {
 
     const classes = useStyles();
 
@@ -27,7 +27,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
 
     React.useEffect(() => {
         if(isAuthenticated) {
-            if(currentUserVote.answer === answerId) {
+            if(currentUserVote.post === postId) {
                 if(currentUserVote.type === 'LIKE') {
                     setLikeColorChange("primary");
                     setLikedUser(currentUserId);
@@ -42,7 +42,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                 }
             }
         }
-    }, [currentUserVote, isAuthenticated]);
+    }, []);
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -60,17 +60,17 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                 setLikeColorChange("secondary");
                 setLikedUser('');
                 setLikeCount(likeCount - 1);
-                dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
+                dispatch(updatePostVote(postId, 'EMPTY', currentUserId));
             }
             if(likedUser != currentUserId) {
                 setLikeColorChange("primary");
                 setLikedUser(currentUserId);
                 setLikeCount(likeCount + 1);
-                dispatch(postAnswerVote(answerId, 'LIKE', currentUserId));
+                dispatch(postPostVote(postId, 'LIKE', currentUserId));
                 if(dislikedUser == currentUserId) {
                     setDislikedUser('');
                     setDislikeCount(dislikeCount - 1);
-                    dispatch(updateAnswerVote(answerId, 'LIKE', currentUserId));
+                    dispatch(updatePostVote(postId, 'LIKE', currentUserId));
                 }
             }
         }else {
@@ -86,17 +86,17 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                 setDislikeColorChange("secondary");
                 setDislikedUser('');
                 setDislikeCount(dislikeCount - 1);
-                dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
+                dispatch(updatePostVote(postId, 'EMPTY', currentUserId));
             }
             if(dislikedUser != currentUserId) {
                 setDislikeColorChange("primary");
                 setDislikedUser(currentUserId);
                 setDislikeCount(dislikeCount + 1);
-                dispatch(postAnswerVote(answerId, 'DISLIKE', currentUserId));
+                dispatch(postPostVote(postId, 'DISLIKE', currentUserId));
                 if(likedUser == currentUserId) {
                     setLikedUser('');
                     setLikeCount(likeCount - 1);
-                    dispatch(updateAnswerVote(answerId, 'DISLIKE', currentUserId));
+                    dispatch(updatePostVote(postId, 'DISLIKE', currentUserId));
                 }
             }
         }else {
@@ -115,7 +115,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <LikeVotes answerId={answerId} likeCount={likeCount} setLikeCount={setLikeCount}/>
+                            <LikeVotes postId={postId} likeCount={likeCount} setLikeCount={setLikeCount}/>
                         </Grid>
                     </Grid>    
                 </Grid>
@@ -127,7 +127,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <DislikeVotes answerId={answerId} dislikeCount={dislikeCount} setDislikeCount={setDislikeCount}/>
+                            <DislikeVotes postId={postId} dislikeCount={dislikeCount} setDislikeCount={setDislikeCount}/>
                         </Grid>
                     </Grid>
                 </Grid>

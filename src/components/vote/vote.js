@@ -1,10 +1,12 @@
 import React from 'react';
 import { CircularProgress, Typography } from '@material-ui/core';
-import { fetchAnswerVotes, fetchAnswerVotesDirect } from '../../redux/ActionCreators';
+import { fetchAnswerVotes, fetchAnswerVotesDirect, fetchPostVotesDirect } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles } from './styles/voteStyles';
 
-export function LikeVotes({answerId, likeCount, setLikeCount}) {
+export function LikeVotes({answerId, postId, likeCount, setLikeCount}) {
+
+    //console.log(answerId, postId, likeCount, setLikeCount);
 
     const classes = useStyles();
 
@@ -13,8 +15,9 @@ export function LikeVotes({answerId, likeCount, setLikeCount}) {
 
     React.useEffect(() => {
         //dispatch(fetchAnswerVotes(answerId, 'LIKE'));
-        dispatch(fetchAnswerVotesDirect(answerId, "LIKE", setLikeCount));
-    }, []);
+        if(answerId) (dispatch(fetchAnswerVotesDirect(answerId, "LIKE", setLikeCount)));
+        if(postId) (dispatch(fetchPostVotesDirect(postId, "LIKE", setLikeCount)));
+    }, [dispatch]);
 
     if(answerVotes.state === 'idle' || answerVotes.state === 'loading') {
         return(<CircularProgress/>);
@@ -27,7 +30,7 @@ export function LikeVotes({answerId, likeCount, setLikeCount}) {
     }
 }
 
-export function DislikeVotes({answerId, dislikeCount, setDislikeCount}) {
+export function DislikeVotes({answerId, postId, dislikeCount, setDislikeCount}) {
 
     const classes = useStyles();
 
@@ -36,7 +39,8 @@ export function DislikeVotes({answerId, dislikeCount, setDislikeCount}) {
 
     React.useEffect(() => {
         //dispatch(fetchAnswerVotes(answerId, 'DISLIKE'));
-        dispatch(fetchAnswerVotesDirect(answerId, "DISLIKE", setDislikeCount));
+        if(answerId) (dispatch(fetchAnswerVotesDirect(answerId, "DISLIKE", setDislikeCount)));
+        if(postId) (dispatch(fetchPostVotesDirect(postId, "DISLIKE", setDislikeCount)));
     }, [dispatch]);
 
     if(answerVotes.state === 'idle' || answerVotes.state === 'loading') {

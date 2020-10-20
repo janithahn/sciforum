@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
-import VoteButtons from '../vote/voteButtons';
+import VoteButtons from '../vote/answerVoteButtons';
 
 export default function AnswerViewCard({answer, key, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId}) {
 

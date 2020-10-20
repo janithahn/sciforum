@@ -582,3 +582,106 @@ export const deleteAnswerVote = (answer, voteType, owner) => (dispatch) => {
         console.log(error);
     });
 }
+
+//POST VOTES
+export const fetchPostVotes = (postId, voteType) => async (dispatch) => {
+    dispatch(postVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/postvote/?post=${postId}&voteType=${voteType}`)
+    .then(response => {
+        console.log(response);
+        return response;
+    })
+    .then(votes => dispatch(addPostVotes(votes.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(postVotesFailed(error));
+    });
+}
+
+export const fetchPostVotesDirect = (postId, voteType, setCount) => (dispatch) => {
+
+    //dispatch(postVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/postvote/?post=${postId}&voteType=${voteType}`)
+    .then(response => {
+        //console.log(response.data);
+        //dispatch(addPostVotes(response.data));
+        setCount(response.data.length);
+        return response;
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(postVotesFailed());
+    });
+}
+
+export const fetchPostVotesByLoggedInUser = (owner, post) => (dispatch) => {
+    dispatch(postVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/postvote/?owner=${owner}&post=${post}`)
+    .then(response => {
+        console.log(response.data);
+        dispatch(addPostVotes(response.data));
+        return response;
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(postVotesFailed());
+    });
+}
+
+export const postVotesLoading = () => ({
+    type: ActionTypes.POST_VOTE_LIST_LOADING
+});
+
+export const postVotesFailed = (errmess) => ({
+    type: ActionTypes.POST_VOTE_LIST_FAILED,
+    payload: errmess
+});
+
+export const resetPostVotes = () => ({
+    type: ActionTypes.RESET_POST_VOTE_LIST
+});
+
+export const addPostVotes = (votes) => ({
+    type: ActionTypes.ADD_POST_VOTE_LIST,
+    payload: votes
+});
+
+export const postPostVote = (post, voteType, owner) => (dispatch) => {
+    axios.post(baseUrl + `/vote_api/postvote/vote/create/`, {
+        post,
+        voteType,
+        owner
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(updatePostVote(post, voteType, owner));
+    });
+}
+
+export const updatePostVote = (post, newVoteType, owner) => (dispatch) => {
+    axios.patch(baseUrl + `/vote_api/postvote/vote/post=${post}&owner=${owner}/update/`, {
+        voteType: newVoteType,
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export const deletePostVote = (post, voteType, owner) => (dispatch) => {
+    axios.delete(baseUrl + `/vote_api/postvote/vote/post=${post}&voteType=${voteType}&owner=${owner}/delete/`, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
