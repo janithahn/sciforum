@@ -37,7 +37,7 @@ export default function ProfileDetails(props) {
     if(user.status === 'idle') {
       dispatch(fetchUser(null, usernameFromTheUrl));
     }
-  }, [user, dispatch]);
+  }, [user, usernameFromTheUrl, dispatch]);
 
   React.useEffect(() => {
     if(user.user) {

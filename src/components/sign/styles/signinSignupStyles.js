@@ -1,5 +1,5 @@
 import { createMuiTheme, makeStyles, withStyles, TextField, OutlinedInput } from '@material-ui/core';
-import { deepPurple } from '@material-ui/core/colors';
+import { deepPurple, red } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
     typography: {
@@ -8,6 +8,11 @@ export const theme = createMuiTheme({
     },
     palette: {
       primary: deepPurple,
+      secondary: {
+        //main: "#616161",
+        main: "#757575",
+        light: "#9e9e9e",
+      },
     },
   });
 

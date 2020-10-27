@@ -205,6 +205,8 @@ export const logout = () => (dispatch) => {
     localStorage.removeItem('currentUserId');
     localStorage.removeItem('currentUserEmail');
     localStorage.removeItem('token');
+    dispatch(resetPostVotes());
+    dispatch(resetAnswersVotes());
     dispatch(logoutSuccess());
 }
 
@@ -498,18 +500,14 @@ export const fetchAnswerVotes = (answerId, voteType) => async (dispatch) => {
 
 export const fetchAnswerVotesDirect = (answerId, voteType, setCount) => (dispatch) => {
 
-    //dispatch(answerVotesLoading());
-
     axios.get(baseUrl + `/vote_api/answervote/?answer=${answerId}&voteType=${voteType}`)
     .then(response => {
         //console.log(response.data);
-        //dispatch(addAnswerVotes(response.data));
         setCount(response.data.length);
         return response;
     })
     .catch(error => {
         console.log(error);
-        //dispatch(answerVotesFailed());
     });
 }
 
@@ -601,18 +599,14 @@ export const fetchPostVotes = (postId, voteType) => async (dispatch) => {
 
 export const fetchPostVotesDirect = (postId, voteType, setCount) => (dispatch) => {
 
-    //dispatch(postVotesLoading());
-
     axios.get(baseUrl + `/vote_api/postvote/?post=${postId}&voteType=${voteType}`)
     .then(response => {
         //console.log(response.data);
-        //dispatch(addPostVotes(response.data));
         setCount(response.data.length);
         return response;
     })
     .catch(error => {
         console.log(error);
-        //dispatch(postVotesFailed());
     });
 }
 

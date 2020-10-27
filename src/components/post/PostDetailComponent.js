@@ -1,7 +1,6 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
-import { Button, Typography, ThemeProvider, Divider, Grid, Modal, Backdrop, Fade } from '@material-ui/core';
+import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
@@ -10,10 +9,9 @@ import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchPostDetail, fetchPostVotesByLoggedInUser } from '../../redux/ActionCreators';
-import { Preview } from './MarkdownPreview';
-import TimeAgo from 'react-timeago';
 import AnswerModalCard from '../answer/answerModalCard';
 import VoteButtons from '../vote/postVoteButtons';
+import RenderCard from './RenderCard';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
     return(
@@ -40,67 +38,6 @@ function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClo
             </Fade>
         </Modal>
     );
-}
-
-function RenderCard({title, body, viewCount, created_at, updated_at, owner, handleModalOpen, classes}) {
-
-    /*function getTime(date) {
-        return new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date)
-    }*/
-
-    return(
-       <Grid container direction="column" spacing={1}>
-           <Grid item>
-                <Typography variant="h5" gutterBottom>
-                    {title}
-                </Typography>
-                <Grid container direction="row" justify="space-between" alignItems="center">
-                    <Grid item>
-                        <Grid container direction="row" alignItems="flex-start" justify="flex-start" spacing={3}>
-                            <Grid item>
-                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {"Posted by  "}
-                                    <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${owner}/`}>{owner}</Link>
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {viewCount == 1 ? viewCount + " View": viewCount + " Views"}
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {"Created "}<TimeAgo live={false} date={created_at} />
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {"Updated "}<TimeAgo live={false} date={updated_at} />
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        <Button className={classes.answerButton} onClick={handleModalOpen}>
-                            <Typography className={classes.iconWrap} variant="body2">
-                                <QuestionAnswerRoundedIcon/>{" Answer"}
-                            </Typography>
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid item>
-                <Divider/>
-            </Grid>
-            <Grid item>
-                <Preview source={body}/>
-            </Grid>
-            <Grid item>
-                <Divider/>
-            </Grid>
-       </Grid>
-    );
-    
 }
 
 export default function PostDetail() {
@@ -139,9 +76,10 @@ export default function PostDetail() {
 
     React.useEffect(() => {
         if(auth.isAuthenticated) {
+            console.log(auth);
             if(id) dispatch(fetchPostVotesByLoggedInUser(auth.currentUserId, id));
         }
-    }, [dispatch, auth]);
+    }, [dispatch, auth, id]);
 
     React.useEffect(() => {
         if(postVotes.votes.length !== 0) setCurrentUserVote({type: postVotes.votes[0].voteType, post: postVotes.votes[0].post});

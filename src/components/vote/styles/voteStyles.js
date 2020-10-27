@@ -6,7 +6,9 @@ export const themeVote = createMuiTheme({
     },
     palette: {
       secondary: {
-        main: "#9e9e9e",
+        //main: "#616161",
+        main: "#757575",
+        light: "#9e9e9e",
       },
     },
   });

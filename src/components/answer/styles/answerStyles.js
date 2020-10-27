@@ -1,5 +1,5 @@
 import { createMuiTheme, makeStyles } from '@material-ui/core';
-import { blue, blueGrey } from '@material-ui/core/colors';
+import { blue } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
     typography: {

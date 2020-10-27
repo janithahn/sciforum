@@ -42,7 +42,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                 }
             }
         }
-    }, [currentUserVote, isAuthenticated]);
+    }, [currentUserVote, isAuthenticated, answerId]);
 
     const handleModalOpen = () => {
         setOpenModal(true);

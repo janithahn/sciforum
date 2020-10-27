@@ -35,8 +35,8 @@ const DropDown = ({username, anchorEl, setAnchorEl, handleLogOut, handleClick}) 
 
     return(
         <div>
-            <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                <Typography variant="body2">
+            <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{textTransform: 'none'}}>
+                <Typography variant="body1">
                     {username}
                 </Typography>
             </Button>
@@ -124,8 +124,8 @@ const Header = (props) => {
                         />
                     </div>
                     {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? 
-                        <Button variant="text" color="inherit" onClick={() => handleModalOpen()}>
-                            <Typography variant="body2">
+                        <Button variant="text" color="inherit" onClick={() => handleModalOpen()} style={{textTransform: 'none'}}>
+                            <Typography variant="body1">
                                 Login
                             </Typography>
                         </Button>: 

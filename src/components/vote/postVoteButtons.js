@@ -5,7 +5,7 @@ import { IconButton, Grid, ThemeProvider } from '@material-ui/core';
 import { LikeVotes, DislikeVotes } from './vote';
 import LoginModal from '../sign/LoginModal';
 import { useStyles, themeVote } from './styles/voteStyles';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
 
  export default function VoteButtons({postId, isAuthenticated, currentUserId, currentUserVote}) {
@@ -38,11 +38,10 @@ import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
                 }
                 if(currentUserVote.type === 'EMPTY') {
                     setDislikeColorChange("secondary");
-                    //setDislikedUser(currentUserId);
                 }
             }
         }
-    }, []);
+    }, [currentUserVote, isAuthenticated, postId]);
 
     const handleModalOpen = () => {
         setOpenModal(true);

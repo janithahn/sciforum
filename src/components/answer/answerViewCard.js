@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
 
-export default function AnswerViewCard({answer, key, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId}) {
+export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId}) {
 
     const classes = useStyles();
 
@@ -24,7 +24,7 @@ export default function AnswerViewCard({answer, key, handleModalOpen, handleDele
         if(isAuthenticated) {
             dispatch(fetchAnswerVotesByLoggedInUser(currentUserId, answer.id));
         }
-    }, []);
+    }, [dispatch]);
 
     React.useEffect(() => {
         if(answerVotes.votes.length !== 0) setCurrentUserVote({type: answerVotes.votes[0].voteType, answer: answerVotes.votes[0].answer});
@@ -58,7 +58,7 @@ export default function AnswerViewCard({answer, key, handleModalOpen, handleDele
                                 </Grid>
                             </Grid>
                             <Grid item>
-                                <Preview key={key} source={answer.answerContent}/>
+                                <Preview source={answer.answerContent}/>
                             </Grid>
                             <Grid item>
                                 <Grid container justify="space-between" alignItems="center" spacing={2}>

@@ -31,6 +31,7 @@ export default function AnswerModalCard({answerContent, setAnswerContent, postId
     }else {
         setAnswerSubmitError("Your answer cannot be blank!");
     }
+    setAnswerContent('');
 }
 
   return (

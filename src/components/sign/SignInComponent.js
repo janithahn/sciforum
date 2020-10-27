@@ -24,7 +24,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginUser, loginUserWithGoogle } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
-import { GoogleLogin, useGoogleLogin } from 'react-google-login';
+import { useGoogleLogin } from 'react-google-login';
 import { clientId } from '../../shared/googleApiClientId';
 
 function Copyright() {
@@ -136,22 +136,6 @@ export default function SignIn(props) {
               onChange={formik.handleChange}
               //onBlur={formik.handleBlur}
             />
-            {/*<TextField
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={formik.values.password}
-              aria-describedby="password-errors"
-              error={formik.errors.password && formik.touched.password}
-              helperText={(formik.errors.password && formik.touched.password) && formik.errors.password}
-              onChange={formik.handleChange}
-              //onBlur={formik.handleBlur}
-            />*/}
             <FormControl fullWidth variant="outlined">
               <InputLabel error={formik.errors.password && formik.touched.password} htmlFor="outlined-adornment-password">Password</InputLabel>
               <OutlinedInput
@@ -198,7 +182,7 @@ export default function SignIn(props) {
               variant="contained"
               className={classes.googleButton}
             >
-            <img src={btn_google_light_normal_ios}/>
+            <img alt="google_button" src={btn_google_light_normal_ios}/>
             Sign in with Google
             </Button>
             <Grid container>

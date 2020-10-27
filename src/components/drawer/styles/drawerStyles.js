@@ -1,4 +1,4 @@
-import { createMuiTheme, makeStyles, useTheme } from '@material-ui/core';
+import { createMuiTheme, makeStyles } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({

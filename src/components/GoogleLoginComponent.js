@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { GoogleLogin, useGoogleLogin } from 'react-google-login';
 import { Button } from '@material-ui/core';
 import { clientId } from '../shared/googleApiClientId';
@@ -19,7 +19,7 @@ export default function GoogleSocialAuth() {
       <div className="App">
         <h1>LOGIN WITH GOOGLE</h1>
 
-        <Button onClick={signIn}><img src="https://img.icons8.com/color/16/000000/google-logo.png"/>LOGIN WITH GOOGLE</Button>
+        <Button onClick={signIn}><img alt="google_icon" src="https://img.icons8.com/color/16/000000/google-logo.png"/>LOGIN WITH GOOGLE</Button>
       
         <GoogleLogin
             style={{width: '100%'}}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Button,
@@ -18,7 +18,7 @@ import { updateUser } from '../../redux/ActionCreators';
 export default function UpdateName(props) {
   const classes = useStyles();
   const auth = useSelector(state => state.Auth);
-  const user = useSelector(state => state.User);
+  //const user = useSelector(state => state.User);
   const dispatch = useDispatch();
 
   //console.log(user.user.data.first_name);
