@@ -67,8 +67,6 @@ export default function PostDetail() {
     
     const postVotes = useSelector(state => state.postVotes);
 
-    console.log(postVotes);
-
     const [currentUserVote, setCurrentUserVote] = React.useState({
         type: '',
         post: null,
@@ -76,7 +74,6 @@ export default function PostDetail() {
 
     React.useEffect(() => {
         if(auth.isAuthenticated) {
-            console.log(auth);
             if(id) dispatch(fetchPostVotesByLoggedInUser(auth.currentUserId, id));
         }
     }, [dispatch, auth, id]);
@@ -108,8 +105,6 @@ export default function PostDetail() {
         created_at = created_at;
         updated_at = updated_at;
     }
-
-    //console.log(answerContent);
 
     const handleClickOpen = () => {
         setOpen(true);
