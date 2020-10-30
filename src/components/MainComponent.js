@@ -18,6 +18,7 @@ import NotFound from './alert/NotFoundComponent';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
+import Notifications from './notifications/index';
 import { Loading } from './loading/LoadingComponent';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
@@ -99,6 +100,14 @@ function Main(props) {
         )} />
     );
 
+    const PrivateRouteNotifications = ({ component: Component, ...rest}) => (
+        <Route {...rest} render={() => (
+            auth.isAuthenticated
+            ? <Component/>
+            : <Redirect to="/signin"/>
+        )} />
+    );
+
     return (
         <div>
             <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open}/>
@@ -114,6 +123,7 @@ function Main(props) {
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
                     <Route path="/profile/:username" component={AccountView}/>
+                    <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
                     <Route component={NotFound}/>
                     <Redirect to="/"/>

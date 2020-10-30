@@ -143,13 +143,14 @@ export const requestLogin = (creds) => {
     });
 }
 
-export const loginSuccess = (token, currentUser, currentUserId, currentUserEmail) => {
+export const loginSuccess = (token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg) => {
     return({
         type: ActionTypes.LOGIN_SUCCESS,
         token,
         currentUser,
         currentUserId,
         currentUserEmail,
+        currentUserProfileImg,
     });
 }
 
@@ -174,11 +175,13 @@ export const loginUser = (creds) => async (dispatch) => {
         const currentUser = res.data.user.username;
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
+        const currentUserProfileImg = res.data.user.profile.profileImg;
         localStorage.setItem('token', token);
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
+        localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })
@@ -206,6 +209,7 @@ export const logout = () => (dispatch) => {
     localStorage.removeItem('currentUserId');
     localStorage.removeItem('currentUserEmail');
     localStorage.removeItem('token');
+    localStorage.removeItem('currentUserProfileImg');
     dispatch(resetPostVotes());
     dispatch(resetAnswersVotes());
     dispatch(logoutSuccess());
@@ -258,12 +262,14 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
         const currentUser = res.data.user.username;
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
+        const currentUserProfileImg = creds.profileObj.imageUrl;
         localStorage.setItem('googleToken', googleToken);
         localStorage.setItem('token', token);
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
+        localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })
@@ -682,3 +688,37 @@ export const deletePostVote = (post, voteType, owner) => (dispatch) => {
         console.log(error);
     });
 }
+
+// USER NOTIFICATIONS
+
+export const fetchNotifications = (recipient) => async (dispatch) => {
+    dispatch(notificationsLoading());
+
+    axios.get(baseUrl + `/answer_api/notifications/list/?recipient=${recipient}`)
+    .then(response => {
+        console.log(response);
+        return response;
+    })
+    .then(votes => dispatch(addNotifications(votes.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(notificationsFailed(error));
+    });
+}
+export const notificationsLoading = () => ({
+    type: ActionTypes.NOTIFICATIONS_LIST_LOADING
+});
+
+export const notificationsFailed = (errmess) => ({
+    type: ActionTypes.NOTIFICATIONS_LIST_FAILED,
+    payload: errmess
+});
+
+export const resetNotifications = () => ({
+    type: ActionTypes.RESET_NOTIFICATIONS_LIST
+});
+
+export const addNotifications = (notifications) => ({
+    type: ActionTypes.ADD_NOTIFICATIONS_LIST,
+    payload: notifications
+});

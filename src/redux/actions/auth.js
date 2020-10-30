@@ -7,6 +7,7 @@ export const Auth = (state = {
         currentUser: localStorage.getItem('currentUser'),
         currentUserId: localStorage.getItem('currentUserId'),
         currentUserEmail: localStorage.getItem('currentUserEmail'),
+        currentUserProfileImg: localStorage.getItem('currentUserProfileImg'),
         errMess: null,
     }, action) => {
     switch (action.type) {
@@ -26,6 +27,7 @@ export const Auth = (state = {
                 currentUser: action.currentUser,
                 currentUserId: action.currentUserId,
                 currentUserEmail: action.currentUserEmail,
+                currentUserProfileImg: action.currentUserProfileImg,
             };
 
         case ActionTypes.LOGIN_FAILURE:

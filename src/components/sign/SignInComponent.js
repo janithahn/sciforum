@@ -182,8 +182,8 @@ export default function SignIn(props) {
               variant="contained"
               className={classes.googleButton}
             >
-            <img alt="google_button" src={btn_google_light_normal_ios}/>
-            Sign in with Google
+              <img alt="google_button" src={btn_google_light_normal_ios}/>
+              Sign in with Google
             </Button>
             <Grid container>
               <Grid item xs>

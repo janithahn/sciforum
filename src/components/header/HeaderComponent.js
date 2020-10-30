@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, InputBase,  IconButton, Typography, Button, 
-    CssBaseline, Modal, Backdrop, Fade, Link, Menu, MenuItem } from '@material-ui/core';
+    CssBaseline, Modal, Backdrop, Fade, Link, Menu, MenuItem, Avatar } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
@@ -31,15 +31,13 @@ function LoginModal({openModal, classes, handleModalClose}) {
     );
 }
 
-const DropDown = ({username, anchorEl, setAnchorEl, handleLogOut, handleClick}) => {
+const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, handleClick}) => {
 
     return(
         <div>
-            <Button color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{textTransform: 'none'}}>
-                <Typography variant="body1">
-                    {username}
-                </Typography>
-            </Button>
+            <IconButton size="small" color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{textTransform: 'none'}}>
+                <Avatar src={profileImage}/>
+            </IconButton>
             <Menu
                 elevation={2}
                 getContentAnchorEl={null}
@@ -58,6 +56,9 @@ const DropDown = ({username, anchorEl, setAnchorEl, handleLogOut, handleClick}) 
             >
                 <Link style={{textDecoration: 'none', color: 'inherit'}} href={`/profile/${username}/`}>
                     <MenuItem>Profile</MenuItem>
+                </Link>
+                <Link style={{textDecoration: 'none', color: 'inherit'}} href={`/notifications`}>
+                    <MenuItem>Notifications</MenuItem>
                 </Link>
                 <MenuItem onClick={handleLogOut}>Logout</MenuItem>
             </Menu>
@@ -129,7 +130,7 @@ const Header = (props) => {
                                 Login
                             </Typography>
                         </Button>: 
-                        <DropDown username={auth.currentUser} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
+                        <DropDown username={auth.currentUser} profileImage={auth.currentUserProfileImg} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
                     }
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>

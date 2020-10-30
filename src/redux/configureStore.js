@@ -7,6 +7,7 @@ import { User } from './actions/user';
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
 import { answerVotes, postVotes } from './actions/votes';
+import { Notifications } from './actions/notifications';
 
 export const ConfigureStore = () => {
     const store = createStore(
@@ -18,6 +19,7 @@ export const ConfigureStore = () => {
             Answers,
             answerVotes,
             postVotes,
+            Notifications,
         }),
         applyMiddleware(thunk, logger)
     );
