@@ -23,6 +23,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useStyles, useToolbarStyles } from './styles/notificationsStyles';
 import TimeAgo from 'react-timeago';
+import AlertSnackbar from '../alert/snackbar';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -175,6 +176,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable({ rows }) {
   const classes = useStyles();
+
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('date');
   const [selected, setSelected] = React.useState([]);
@@ -183,6 +185,10 @@ export default function EnhancedTable({ rows }) {
   const [rowsData, setRowsData] = React.useState(rows);
   const [unreadState, setUnreadState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [snackOpen, setSnackOpen] = React.useState(false);
+  const [snackMessage, setSnackMessage] = React.useState('');
+
+  let unreadCount = 0;
 
   const handleMoreClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -257,6 +263,7 @@ export default function EnhancedTable({ rows }) {
     selected.map(id => {
         let items = rowsData;
         const index = getItemIndexById(items, id);
+        if(items[index].state) unreadCount += 1;
         let item = {
             ...items[index],
             state: false,
@@ -264,20 +271,27 @@ export default function EnhancedTable({ rows }) {
         items[index] = item;
         setRowsData(items);
     });
+    console.log("unreadCount:", unreadCount);
     setSelected([]);
+    setSnackMessage(unreadCount + ' notifications marked as read');
+    setSnackOpen(true);
   };
 
   const handleMarkAllAsRead = () => {
     let newRowsData = [];
     rowsData.map(item => {
+        if(item.state) unreadCount += 1;
         let newItem = {
             ...item,
             state: false,
         }
         newRowsData.push(newItem);
     });
+    console.log("unreadCount:", unreadCount);
     setRowsData(newRowsData);
     handleClose();
+    setSnackMessage(unreadCount + ' notifications marked as read');
+    setSnackOpen(true);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -363,6 +377,7 @@ export default function EnhancedTable({ rows }) {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
+      <AlertSnackbar open={snackOpen} setOpen={setSnackOpen} message={snackMessage}/>
     </div>
   );
 }
