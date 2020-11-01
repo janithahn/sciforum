@@ -16,9 +16,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem'
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import CheckIcon from '@material-ui/icons/Check';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useStyles, useToolbarStyles } from './styles/notificationsStyles';
 import TimeAgo from 'react-timeago';
 
@@ -95,11 +97,32 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
+const DropDown = ({anchorEl, handleClick, open, handleClose, id, handleMarkAllAsRead}) => {
+    return(
+        <div>
+            <IconButton
+                aria-label="more"
+                aria-describedby={id}
+                onClick={handleClick}
+            > 
+                <MoreVertIcon />
+            </IconButton>
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={open}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={handleMarkAllAsRead}>Mark all as read</MenuItem>
+            </Menu>
+      </div>
+    );
+}
+
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected, handleReadState, unreadState } = props;
-
-  //console.log(unreadState);
+  const { numSelected, handleReadState, unreadState, handleMarkAllAsRead, handleClick, handleClose, open, id, anchorEl } = props;
 
   return (
     <Toolbar
@@ -131,10 +154,15 @@ const EnhancedTableToolbar = (props) => {
             </Tooltip>
         </Grid>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
+        <Tooltip title="More">
+            <DropDown 
+                anchorEl={anchorEl} 
+                handleClick={handleClick} 
+                open={open} 
+                handleClose={handleClose}
+                id={id}
+                handleMarkAllAsRead={handleMarkAllAsRead}
+            />
         </Tooltip>
       )}
     </Toolbar>
@@ -154,6 +182,18 @@ export default function EnhancedTable({ rows }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rowsData, setRowsData] = React.useState(rows);
   const [unreadState, setUnreadState] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleMoreClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'more-popover' : undefined;
 
   React.useEffect(() => {
     handleUnreadState();
@@ -212,6 +252,7 @@ export default function EnhancedTable({ rows }) {
     setPage(0);
   };
 
+  // changing the read state of rowsData
   const handleReadState = () => {
     selected.map(id => {
         let items = rowsData;
@@ -226,6 +267,19 @@ export default function EnhancedTable({ rows }) {
     setSelected([]);
   };
 
+  const handleMarkAllAsRead = () => {
+    let newRowsData = [];
+    rowsData.map(item => {
+        let newItem = {
+            ...item,
+            state: false,
+        }
+        newRowsData.push(newItem);
+    });
+    setRowsData(newRowsData);
+    handleClose();
+  };
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -233,7 +287,17 @@ export default function EnhancedTable({ rows }) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} handleReadState={handleReadState} unreadState={unreadState}/>
+        <EnhancedTableToolbar 
+            numSelected={selected.length} 
+            handleReadState={handleReadState} 
+            handleMarkAllAsRead={handleMarkAllAsRead} 
+            unreadState={unreadState}
+            handleClick={handleMoreClick}
+            handleClose={handleClose}
+            open={open}
+            id={id}
+            anchorEl={anchorEl}
+        />
         <TableContainer>
           <Table
             className={classes.table}
@@ -252,8 +316,6 @@ export default function EnhancedTable({ rows }) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
-                  //console.log(row);
 
                   return (
                     <TableRow
