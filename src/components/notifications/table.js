@@ -53,12 +53,6 @@ function getItemIndexById(items, id) {
     return index;
 }
 
-function getReadStateById(items, id) {
-    items.map(item => {
-        if(item.id === id) return item.state;
-    });
-}
-
 const headCells = [
   { id: 'notification', numeric: false, disablePadding: true, label: 'Notification' },
   { id: 'question', numeric: true, disablePadding: false, label: '' },
@@ -103,7 +97,9 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected, handleReadState } = props;
+  const { numSelected, handleReadState, unreadState } = props;
+
+  //console.log(unreadState);
 
   return (
     <Toolbar
@@ -123,11 +119,11 @@ const EnhancedTableToolbar = (props) => {
 
       {numSelected > 0 ? (
         <Grid container direction="row" justify="flex-end">
-            <Tooltip title="Mark as read">
+            {unreadState ? <Tooltip title="Mark as read">
                 <IconButton aria-label="mark-as-read" onClick={() => handleReadState()}>
                     <CheckIcon/>
                 </IconButton>
-            </Tooltip>
+            </Tooltip>: undefined}
             <Tooltip title="Delete">
             <IconButton aria-label="delete" >
                 <DeleteIcon />
@@ -157,6 +153,26 @@ export default function EnhancedTable({ rows }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rowsData, setRowsData] = React.useState(rows);
+  const [unreadState, setUnreadState] = React.useState(false);
+
+  React.useEffect(() => {
+    handleUnreadState();
+  }, [rowsData, selected]);
+
+  const handleUnreadState = () => {
+    for(let item of rowsData) {
+        for(let s of selected) {
+            if(item.id === s) {
+                if(item.state) {
+                    setUnreadState(true);
+                    break;
+                } else {
+                    setUnreadState(false);
+                }
+            }
+        }
+    }
+  };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -217,7 +233,7 @@ export default function EnhancedTable({ rows }) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} handleReadState={handleReadState}/>
+        <EnhancedTableToolbar numSelected={selected.length} handleReadState={handleReadState} unreadState={unreadState}/>
         <TableContainer>
           <Table
             className={classes.table}
