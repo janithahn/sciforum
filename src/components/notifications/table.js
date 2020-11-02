@@ -25,7 +25,7 @@ import { useStyles, useToolbarStyles } from './styles/notificationsStyles';
 import TimeAgo from 'react-timeago';
 import AlertSnackbar from '../alert/snackbar';
 import { useDispatch } from 'react-redux';
-import { patchNotifications } from '../../redux/ActionCreators';
+import { patchNotifications, deleteNotifications } from '../../redux/ActionCreators';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -56,6 +56,11 @@ function stableSort(array, comparator) {
 function getItemIndexById(items, id) {
     const index = items.findIndex(x => x.id === id);
     return index;
+}
+
+function getMessageKeyword(notificationsCount) {
+    if(notificationsCount === 1) return 'notification';
+    return 'notifications';
 }
 
 const headCells = [
@@ -100,7 +105,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const DropDown = ({anchorEl, handleClick, open, handleClose, id, handleMarkAllAsRead}) => {
+const DropDown = ({anchorEl, handleClick, open, handleClose, id, handleMarkAllAsRead, handleDeleteAllRowsData}) => {
     return(
         <div>
             <IconButton
@@ -118,6 +123,7 @@ const DropDown = ({anchorEl, handleClick, open, handleClose, id, handleMarkAllAs
                 onClose={handleClose}
             >
                 <MenuItem onClick={handleMarkAllAsRead}>Mark all as read</MenuItem>
+                <MenuItem onClick={handleDeleteAllRowsData}>Delete All</MenuItem>
             </Menu>
       </div>
     );
@@ -125,7 +131,7 @@ const DropDown = ({anchorEl, handleClick, open, handleClose, id, handleMarkAllAs
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected, handleReadState, unreadState, handleMarkAllAsRead, handleClick, handleClose, open, id, anchorEl } = props;
+  const { numSelected, handleReadState, unreadState, handleMarkAllAsRead, handleClick, handleClose, open, id, anchorEl, handleDeleteRowsData, handleDeleteAllRowsData } = props;
 
   return (
     <Toolbar
@@ -151,7 +157,7 @@ const EnhancedTableToolbar = (props) => {
                 </IconButton>
             </Tooltip>: undefined}
             <Tooltip title="Delete">
-            <IconButton aria-label="delete" >
+            <IconButton aria-label="delete" onClick={() => handleDeleteRowsData()}>
                 <DeleteIcon />
             </IconButton>
             </Tooltip>
@@ -165,6 +171,7 @@ const EnhancedTableToolbar = (props) => {
                 handleClose={handleClose}
                 id={id}
                 handleMarkAllAsRead={handleMarkAllAsRead}
+                handleDeleteAllRowsData={handleDeleteAllRowsData}
             />
         </Tooltip>
       )}
@@ -191,7 +198,7 @@ export default function EnhancedTable({ rows }) {
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [snackMessage, setSnackMessage] = React.useState('');
 
-  let unreadCount = 0;
+  let notificationsCount = 0;
 
   const handleMoreClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -268,7 +275,7 @@ export default function EnhancedTable({ rows }) {
         let items = rowsData;
         const index = getItemIndexById(items, id);
         if(items[index].state) {
-            unreadCount += 1;
+            notificationsCount += 1;
             dispatch(patchNotifications(id, false));
         }
         let item = {
@@ -278,9 +285,8 @@ export default function EnhancedTable({ rows }) {
         items[index] = item;
         setRowsData(items);
     });
-    console.log("unreadCount:", unreadCount);
     setSelected([]);
-    setSnackMessage(unreadCount + ' notifications marked as read');
+    setSnackMessage(notificationsCount + ' ' + getMessageKeyword(notificationsCount) + ' marked as read');
     setSnackOpen(true);
   };
 
@@ -288,7 +294,7 @@ export default function EnhancedTable({ rows }) {
     let newRowsData = [];
     rowsData.map(item => {
         if(item.state) {
-            unreadCount += 1;
+            notificationsCount += 1;
             dispatch(patchNotifications(item.id, false));
         }
         let newItem = {
@@ -297,10 +303,36 @@ export default function EnhancedTable({ rows }) {
         }
         newRowsData.push(newItem);
     });
-    console.log("unreadCount:", unreadCount);
     setRowsData(newRowsData);
     handleClose();
-    setSnackMessage(unreadCount + ' notifications marked as read');
+    setSnackMessage(notificationsCount + ' ' + getMessageKeyword(notificationsCount) + ' marked as read');
+    setSnackOpen(true);
+  };
+
+  const handleDeleteRowsData = () => {
+    selected.map(id => {
+        let items = rowsData;
+        const index = getItemIndexById(items, id);
+        if(index > -1) {
+            items.splice(index, 1);
+        }
+        dispatch(deleteNotifications(id));
+        setRowsData(items);
+    });
+    notificationsCount = selected.length;
+    setSelected([]);
+    setSnackMessage(notificationsCount + ' ' + getMessageKeyword(notificationsCount) + ' deleted');
+    setSnackOpen(true);
+  };
+
+  const handleDeleteAllRowsData = () => {
+    rowsData.map(item => {
+        notificationsCount += 1;
+        dispatch(deleteNotifications(item.id));
+    });
+    setRowsData([]);
+    setSelected([]);
+    setSnackMessage(notificationsCount + ' ' + getMessageKeyword(notificationsCount) + ' deleted');
     setSnackOpen(true);
   };
 
@@ -323,6 +355,8 @@ export default function EnhancedTable({ rows }) {
             open={open}
             id={id}
             anchorEl={anchorEl}
+            handleDeleteRowsData={handleDeleteRowsData}
+            handleDeleteAllRowsData={handleDeleteRowsData}
         />
         <TableContainer>
           <Table

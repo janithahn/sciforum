@@ -706,6 +706,16 @@ export const fetchNotifications = (recipient) => async (dispatch) => {
     });
 }
 
+export const deleteNotifications = (id) => (dispatch) => {
+    axios.delete(baseUrl + `/answer_api/notifications/list/${id}/`, headerWithToken)
+    .then(res => {
+        console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
 export const patchNotifications = (id, unread) => (dispatch) => {
     axios.patch(baseUrl + `/answer_api/notifications/list/${id}/`, {
         unread
