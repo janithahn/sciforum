@@ -213,23 +213,25 @@ export default function EnhancedTable({ rows }) {
 
   React.useEffect(() => {
     handleUnreadState();
-  }, [rowsData, selected]);
+  }, [selected, rowsData]);
 
   // handle unread state for marking them as read
   const handleUnreadState = () => {
+    const checkArr = [];
+
     for(let item of rowsData) {
         for(let s of selected) {
             if(item.id === s) {
-                if(item.state) {
-                    setUnreadState(true);
-                    break;
-                } else {
-                    setUnreadState(false);
-                }
+                checkArr.push(item.state);
             }
         }
     }
+
+    if(checkArr.includes(true)) setUnreadState(true);
+    else setUnreadState(false);
   };
+
+  //console.log(unreadState);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -356,7 +358,7 @@ export default function EnhancedTable({ rows }) {
             id={id}
             anchorEl={anchorEl}
             handleDeleteRowsData={handleDeleteRowsData}
-            handleDeleteAllRowsData={handleDeleteRowsData}
+            handleDeleteAllRowsData={handleDeleteAllRowsData}
         />
         <TableContainer>
           <Table
