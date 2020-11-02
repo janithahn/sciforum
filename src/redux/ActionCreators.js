@@ -694,7 +694,7 @@ export const deletePostVote = (post, voteType, owner) => (dispatch) => {
 export const fetchNotifications = (recipient) => async (dispatch) => {
     dispatch(notificationsLoading());
 
-    axios.get(baseUrl + `/answer_api/notifications/list/?recipient=${recipient}`)
+    axios.get(baseUrl + `/answer_api/notifications/list/?recipient=${recipient}`, headerWithToken)
     .then(response => {
         console.log(response);
         return response;
@@ -705,6 +705,19 @@ export const fetchNotifications = (recipient) => async (dispatch) => {
         dispatch(notificationsFailed(error));
     });
 }
+
+export const patchNotifications = (id, unread) => (dispatch) => {
+    axios.patch(baseUrl + `/answer_api/notifications/list/${id}/`, {
+        unread
+    }, headerWithToken)
+    .then(res => {
+        console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
 export const notificationsLoading = () => ({
     type: ActionTypes.NOTIFICATIONS_LIST_LOADING
 });

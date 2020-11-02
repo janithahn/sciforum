@@ -24,6 +24,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useStyles, useToolbarStyles } from './styles/notificationsStyles';
 import TimeAgo from 'react-timeago';
 import AlertSnackbar from '../alert/snackbar';
+import { useDispatch } from 'react-redux';
+import { patchNotifications } from '../../redux/ActionCreators';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -176,6 +178,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable({ rows }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('date');
@@ -205,6 +208,7 @@ export default function EnhancedTable({ rows }) {
     handleUnreadState();
   }, [rowsData, selected]);
 
+  // handle unread state for marking them as read
   const handleUnreadState = () => {
     for(let item of rowsData) {
         for(let s of selected) {
@@ -263,7 +267,10 @@ export default function EnhancedTable({ rows }) {
     selected.map(id => {
         let items = rowsData;
         const index = getItemIndexById(items, id);
-        if(items[index].state) unreadCount += 1;
+        if(items[index].state) {
+            unreadCount += 1;
+            dispatch(patchNotifications(id, false));
+        }
         let item = {
             ...items[index],
             state: false,
@@ -280,7 +287,10 @@ export default function EnhancedTable({ rows }) {
   const handleMarkAllAsRead = () => {
     let newRowsData = [];
     rowsData.map(item => {
-        if(item.state) unreadCount += 1;
+        if(item.state) {
+            unreadCount += 1;
+            dispatch(patchNotifications(item.id, false));
+        }
         let newItem = {
             ...item,
             state: false,
@@ -297,6 +307,8 @@ export default function EnhancedTable({ rows }) {
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+
+  //console.log(rows);
 
   return (
     <div className={classes.root}>
