@@ -4,8 +4,8 @@ import { fetchNotifications } from '../../redux/ActionCreators';
 import EnhancedTable from './table';
 import { CircularProgress } from '@material-ui/core';
 
-function createData(id, notification, question, date, state) {
-    return { id, notification, question, date, state };
+function createData(id, notification, question, date, state, actor) {
+    return { id, notification, question, date, state, actor };
 }
 
 export default function Notifications({currentUserId}) {
@@ -13,6 +13,7 @@ export default function Notifications({currentUserId}) {
     const dispatch = useDispatch();
 
     const notifications = useSelector(state => state.Notifications)
+    const auth = useSelector(state => state.Auth);
 
     React.useEffect(() => {
         dispatch(fetchNotifications(currentUserId));
@@ -31,9 +32,10 @@ export default function Notifications({currentUserId}) {
             notification.verb, 
             notification.action_object.title, 
             notification.timestamp, 
-            notification.unread
+            notification.unread,
+            notification.actor
         )));
 
-        return(<EnhancedTable rows={rows}/>);
+        return(<EnhancedTable rows={rows} currentUser={auth.currentUser}/>);
     }
 }

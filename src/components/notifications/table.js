@@ -183,7 +183,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows }) {
+export default function EnhancedTable({ rows, currentUser }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -379,33 +379,37 @@ export default function EnhancedTable({ rows }) {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        <Box fontWeight={row.state ? "fontWeightBold": ""} fontSize={14}>{row.notification}</Box>
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.question}
-                      </TableCell>
-                      <TableCell align="right">
-                        <TimeAgo live={false} date={row.date}/>
-                      </TableCell>
-                    </TableRow>
-                  );
+                  if(row.actor.username === currentUser) {
+                    return <div></div>
+                  }else {
+                    return (
+                        <TableRow
+                            hover
+                            onClick={(event) => handleClick(event, row.id)}
+                            role="checkbox"
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={index}
+                            selected={isItemSelected}
+                        >
+                            <TableCell padding="checkbox">
+                                <Checkbox
+                                    checked={isItemSelected}
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                />
+                            </TableCell>
+                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                                <Box fontWeight={row.state ? "fontWeightBold": ""} fontSize={14}>{row.notification}</Box>
+                            </TableCell>
+                            <TableCell align="right">
+                                {row.question}
+                            </TableCell>
+                            <TableCell align="right">
+                                <TimeAgo live={false} date={row.date}/>
+                            </TableCell>
+                        </TableRow>
+                    );
+                  }
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
