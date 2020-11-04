@@ -689,12 +689,13 @@ export const deletePostVote = (post, voteType, owner) => (dispatch) => {
     });
 }
 
+
 // USER NOTIFICATIONS
 
 export const fetchNotifications = (recipient) => async (dispatch) => {
     dispatch(notificationsLoading());
 
-    axios.get(baseUrl + `/answer_api/notifications/list/?recipient=${recipient}`, headerWithToken)
+    axios.get(baseUrl + `/inbox/notifications/?recipient=${recipient}`, headerWithToken)
     .then(response => {
         console.log(response);
         return response;
@@ -707,7 +708,7 @@ export const fetchNotifications = (recipient) => async (dispatch) => {
 }
 
 export const deleteNotifications = (id) => (dispatch) => {
-    axios.delete(baseUrl + `/answer_api/notifications/list/${id}/`, headerWithToken)
+    axios.delete(baseUrl + `/inbox/notifications/${id}/`, headerWithToken)
     .then(res => {
         console.log(res);
     })
@@ -717,7 +718,7 @@ export const deleteNotifications = (id) => (dispatch) => {
 }
 
 export const patchNotifications = (id, unread) => (dispatch) => {
-    axios.patch(baseUrl + `/answer_api/notifications/list/${id}/`, {
+    axios.patch(baseUrl + `/inbox/notifications/${id}/`, {
         unread
     }, headerWithToken)
     .then(res => {
