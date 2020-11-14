@@ -84,14 +84,17 @@ export default function Answer(props) {
 
     const scrollTo = (id) =>
     refs[id].current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
+        //behavior: 'smooth',
+        block: 'center',
     });
 
-    const didMountRef = React.useRef(false)
+    const didMountRef = React.useRef(false);
     React.useEffect(() => {
         if(didMountRef.current) {
-            if(refs && refs[Number(hash)]) scrollTo(Number(hash));  
+            if(refs && refs[Number(hash)]) {
+                scrollTo(Number(hash)); 
+                refs[Number(hash)].current.style.animation = 'answer-background-fade 5s';
+            } 
         }else didMountRef.current = true
     });
 
@@ -108,16 +111,17 @@ export default function Answer(props) {
 
         refs = tempRefs;
 
-        const AnswersList = answers.answers.map((answer, key) => 
-            <AnswerViewCard 
-                answer={answer} 
-                key={key} 
-                handleModalOpen={handleModalOpen}
-                handleDeleteModalOpen={handleDeleteModalOpen}
-                isAuthenticated={auth.isAuthenticated}
-                currentUserId={auth.currentUserId}
-                refs={refs}
-            />
+        const AnswersList = answers.answers.map((answer, key) =>
+            <Grid item innerRef={refs[answer.id]} key={key}> 
+                <AnswerViewCard 
+                    answer={answer} 
+                    handleModalOpen={handleModalOpen}
+                    handleDeleteModalOpen={handleDeleteModalOpen}
+                    isAuthenticated={auth.isAuthenticated}
+                    currentUserId={auth.currentUserId}
+                    refs={refs}
+                />
+            </Grid>
         );
 
         return(

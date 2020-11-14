@@ -24,6 +24,23 @@ code {
   font-size: 15px;
 }
 
+/* SELECTED ANSWER BACKGROUND STYLES */
+@-webkit-keyframes answer-background-fade {
+  25% {
+      background-color:#dcedc8;
+  }
+}
+@-moz-keyframes answer-background-fade {
+  25% {
+      background-color:#dcedc8;
+  }
+}
+@keyframes answer-background-fade {
+  25% {
+      background-color:#dcedc8;
+  }
+}
+
 /*body {
   font-family: sans-serif;
   line-height: 1.15;

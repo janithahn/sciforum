@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, Divider, Avatar, Button } from '@material-ui/core';
+import { Grid, Typography, Divider, Avatar, Button, Box } from '@material-ui/core';
 import { Preview } from './answerPreview';
 import { fetchAnswerVotesByLoggedInUser } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +32,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
 
     return(
         <React.Fragment>
-            <Grid item innerRef={refs[answer.id]}>
+            <Box>
                 <Grid container direction="column" spacing={0}>
                     <Grid item>
                         <Grid container direction="column" spacing={2}>
@@ -113,7 +113,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                         <Divider/>
                     </Grid>
                 </Grid>
-            </Grid>
+            </Box>
         </React.Fragment>
     );
 }
