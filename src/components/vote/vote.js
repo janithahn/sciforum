@@ -17,7 +17,7 @@ export function LikeVotes({answerId, postId, likeCount, setLikeCount}) {
     }, [dispatch, answerId, postId, setLikeCount]);
 
     return(
-        <Typography className={classes.iconWrap} color="secondary">
+        <Typography component={'div'} className={classes.iconWrap} color="secondary">
             <Box fontWeight="fontWeightBold" fontSize={13}>
                 {likeCount}
             </Box>
@@ -38,7 +38,7 @@ export function DislikeVotes({answerId, postId, dislikeCount, setDislikeCount}) 
     }, [dispatch, answerId, postId, setDislikeCount]);
 
     return(
-        <Typography className={classes.iconWrap} color="secondary">
+        <Typography component={'div'} className={classes.iconWrap} color="secondary">
             <Box fontWeight="fontWeightBold" fontSize={13}>
                 {dislikeCount}
             </Box>

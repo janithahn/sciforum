@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
 
-export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId}) {
+export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId, refs}) {
 
     const classes = useStyles();
 
@@ -32,7 +32,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
 
     return(
         <React.Fragment>
-            <Grid item>
+            <Grid item innerRef={refs[answer.id]}>
                 <Grid container direction="column" spacing={0}>
                     <Grid item>
                         <Grid container direction="column" spacing={2}>

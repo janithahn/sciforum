@@ -1,11 +1,12 @@
 import React from 'react';
-import { ThemeProvider, CircularProgress, Grid, Typography, Divider, Modal, Backdrop, Fade } from '@material-ui/core';
+import { ThemeProvider, CircularProgress, Grid, Typography, Divider, Modal, Backdrop, Fade, Button } from '@material-ui/core';
 import { fetchAnswers } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
 import AnswerViewCard from './answerViewCard';
+import { useLocation } from 'react-router';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(
@@ -39,6 +40,7 @@ export default function Answer(props) {
 
     const answers = useSelector(state => state.Answers)
     const auth = useSelector(state => state.Auth);
+    const location = useLocation();
 
     const classes = useStyles();
 
@@ -48,6 +50,9 @@ export default function Answer(props) {
     const [selectedAnswerContent, setSelectedAnswerContent] = React.useState('');
     const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
+    
+    const hash = location.hash.substring(1);
+    let refs = null;
 
     const dispatch = useDispatch();
 
@@ -77,11 +82,31 @@ export default function Answer(props) {
         setOpenDeleteModal(false);
     };
 
+    const scrollTo = (id) =>
+    refs[id].current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+    });
+
+    const didMountRef = React.useRef(false)
+    React.useEffect(() => {
+        if(didMountRef.current) {
+            if(refs && refs[Number(hash)]) scrollTo(Number(hash));  
+        }else didMountRef.current = true
+    });
+
     if(answers.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
     }else if(answers.status === 'failed') {
         return(<h4>Error loading...!</h4>);
     }else {
+
+        const tempRefs = answers.answers.reduce((acc, value) => {
+            acc[value.id] = React.createRef();
+            return acc;
+        }, {});
+
+        refs = tempRefs;
 
         const AnswersList = answers.answers.map((answer, key) => 
             <AnswerViewCard 
@@ -91,6 +116,7 @@ export default function Answer(props) {
                 handleDeleteModalOpen={handleDeleteModalOpen}
                 isAuthenticated={auth.isAuthenticated}
                 currentUserId={auth.currentUserId}
+                refs={refs}
             />
         );
 

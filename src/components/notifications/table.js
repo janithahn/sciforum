@@ -18,6 +18,7 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem'
+import Link from '@material-ui/core/Link';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CheckIcon from '@material-ui/icons/Check';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -26,6 +27,7 @@ import TimeAgo from 'react-timeago';
 import AlertSnackbar from '../alert/snackbar';
 import { useDispatch } from 'react-redux';
 import { patchNotifications, deleteNotifications } from '../../redux/ActionCreators';
+//import { Link } from 'react-router-dom';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -399,10 +401,16 @@ export default function EnhancedTable({ rows, currentUser }) {
                                 />
                             </TableCell>
                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                <Box fontWeight={row.state ? "fontWeightBold": ""} fontSize={14}>{row.notification}</Box>
+                                <Box fontWeight={row.state ? "fontWeightBold": ""} fontSize={14}>
+                                  {row.action_object.answerContent ? 
+                                    <Link color="inherit" underline="none" href={`/questions/${row.action_object.postBelong}/#${row.action_object.id}`}>
+                                      {row.notification}
+                                    </Link>: row.notification
+                                  }
+                                </Box>
                             </TableCell>
                             <TableCell align="right">
-                                {row.question}
+                                {row.action_object.title ? row.action_object.title: ''}
                             </TableCell>
                             <TableCell align="right">
                                 <TimeAgo live={false} date={row.date}/>

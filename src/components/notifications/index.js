@@ -4,8 +4,8 @@ import { fetchNotifications } from '../../redux/ActionCreators';
 import EnhancedTable from './table';
 import { CircularProgress } from '@material-ui/core';
 
-function createData(id, notification, question, date, state, actor) {
-    return { id, notification, question, date, state, actor };
+function createData(id, notification, action_object, date, state, actor) {
+    return { id, notification, action_object, date, state, actor };
 }
 
 export default function Notifications({currentUserId}) {
@@ -21,6 +21,8 @@ export default function Notifications({currentUserId}) {
 
     const rows = [];
 
+    console.log(notifications);
+
     if(notifications.status === 'loading' || notifications.status === 'idle') {
         return(<CircularProgress color="secondary" size={15}/>);
     }else if(notifications.errMess) {
@@ -30,7 +32,7 @@ export default function Notifications({currentUserId}) {
         notifications.notifications.map(notification => rows.push(createData(
             notification.id,
             notification.verb, 
-            notification.action_object.title, 
+            notification.action_object, 
             notification.timestamp, 
             notification.unread,
             notification.actor
