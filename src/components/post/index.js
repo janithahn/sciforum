@@ -1,13 +1,54 @@
 import React from 'react';
 import PostDetail from './PostDetailComponent';
 import Answer from '../answer/answer';
-import { Grid } from '@material-ui/core';
-import { useParams } from 'react-router-dom';
+import { Grid, CircularProgress } from '@material-ui/core';
+import { useParams, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function PostView() {
 
-    const { postId } = useParams();
+    const answers = useSelector(state => state.Answers)
 
+    const { postId } = useParams();
+    const location = useLocation();
+
+    const hash = location.hash.substring(1);
+
+    let refs = null;
+
+    if(answers.status === 'succeeded') {
+        refs = answers.answers.reduce((acc, value) => {
+            acc[value.id] = React.createRef();
+            return acc;
+        }, {});
+    }
+
+    const scrollTo = (id) =>
+    refs[id].current.scrollIntoView({
+        //behavior: 'smooth',
+        block: 'center',
+    });
+
+    /*const didMountRef = React.useRef(false);
+    React.useEffect(() => {
+        if(didMountRef.current) {
+            if(refs && refs[Number(hash)]) {
+                scrollTo(Number(hash)); 
+                refs[Number(hash)].current.style.animation = 'answer-background-fade 10s';
+                console.log('REF FROM INDEX:', refs[Number(hash)]);
+            } 
+        }else didMountRef.current = true
+    });*/
+
+    React.useEffect(() => {
+        if(refs && refs[Number(hash)]) {
+            scrollTo(Number(hash)); 
+            refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
+            //console.log('REF FROM INDEX:', refs[Number(hash)]);
+        } 
+    }, []); 
+
+    
     return(
         <React.Fragment>
             <Grid container direction="column" justify="flex-end" spacing={4}>
@@ -15,7 +56,7 @@ export default function PostView() {
                     <PostDetail/>
                 </Grid>
                 <Grid item lg={8} sm xs={12}>
-                    <Answer postId={postId}/>
+                    <Answer postId={postId} refs={refs}/>
                 </Grid>
             </Grid>
         </React.Fragment>

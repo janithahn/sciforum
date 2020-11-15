@@ -16,8 +16,10 @@ export default function Notifications({currentUserId}) {
     const auth = useSelector(state => state.Auth);
 
     React.useEffect(() => {
-        dispatch(fetchNotifications(currentUserId));
-    }, [dispatch]);
+        if(notifications.status === 'idle') {
+            dispatch(fetchNotifications(currentUserId));
+        }
+    }, [dispatch, notifications, currentUserId]);
 
     const rows = [];
 

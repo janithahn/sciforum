@@ -122,7 +122,7 @@ export default function PostDetail() {
       setOpenModal(false);
     };
 
-    if(post.status === 'loading' || post.status === 'idle') {
+    if(post.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
     }else if(post.errMess) {
         return(<h4>Error loading...!</h4>);

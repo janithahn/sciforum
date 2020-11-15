@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
 
-export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId, refs}) {
+export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId}) {
 
     const classes = useStyles();
 
@@ -24,7 +24,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
         if(isAuthenticated) {
             dispatch(fetchAnswerVotesByLoggedInUser(currentUserId, answer.id));
         }
-    }, [dispatch]);
+    }, [dispatch, isAuthenticated, currentUserId, answer]);
 
     React.useEffect(() => {
         if(answerVotes.votes.length !== 0) setCurrentUserVote({type: answerVotes.votes[0].voteType, answer: answerVotes.votes[0].answer});

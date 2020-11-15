@@ -36,7 +36,7 @@ function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModa
     );
 }
 
-export default function Answer(props) {
+export default function Answer({postId, refs}) {
 
     const answers = useSelector(state => state.Answers)
     const auth = useSelector(state => state.Auth);
@@ -52,13 +52,14 @@ export default function Answer(props) {
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
     
     const hash = location.hash.substring(1);
-    let refs = null;
 
     const dispatch = useDispatch();
 
     React.useEffect(() => {
-        dispatch(fetchAnswers(props.postId));
-    }, [dispatch]);
+        if(answers.status === 'idle') {
+            dispatch(fetchAnswers(postId));
+        }
+    }, [answers, dispatch]);
 
     const handleModalOpen = (answer) => {
         setSelectedAnswerContent(answer.answerContent);
@@ -82,34 +83,11 @@ export default function Answer(props) {
         setOpenDeleteModal(false);
     };
 
-    const scrollTo = (id) =>
-    refs[id].current.scrollIntoView({
-        //behavior: 'smooth',
-        block: 'center',
-    });
-
-    const didMountRef = React.useRef(false);
-    React.useEffect(() => {
-        if(didMountRef.current) {
-            if(refs && refs[Number(hash)]) {
-                scrollTo(Number(hash)); 
-                refs[Number(hash)].current.style.animation = 'answer-background-fade 5s';
-            } 
-        }else didMountRef.current = true
-    });
-
     if(answers.status === 'loading') {
         return(<CircularProgress color="secondary" size={15}/>);
     }else if(answers.status === 'failed') {
         return(<h4>Error loading...!</h4>);
     }else {
-
-        const tempRefs = answers.answers.reduce((acc, value) => {
-            acc[value.id] = React.createRef();
-            return acc;
-        }, {});
-
-        refs = tempRefs;
 
         const AnswersList = answers.answers.map((answer, key) =>
             <Grid item innerRef={refs[answer.id]} key={key}> 
@@ -119,7 +97,6 @@ export default function Answer(props) {
                     handleDeleteModalOpen={handleDeleteModalOpen}
                     isAuthenticated={auth.isAuthenticated}
                     currentUserId={auth.currentUserId}
-                    refs={refs}
                 />
             </Grid>
         );
