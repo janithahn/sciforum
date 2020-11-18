@@ -9,6 +9,7 @@ import SignIn from '../sign/SignInComponent';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../redux/ActionCreators';
+import { useStyles } from './styles/headerStyle';
 
 function LoginModal({openModal, classes, handleModalClose}) {
     return(
@@ -67,6 +68,8 @@ const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, 
 }
 
 const Header = (props) => {
+
+    const classes = useStyles();
 
     const auth = useSelector(state => state.Auth);
     const user = useSelector(state => state.User);
@@ -134,7 +137,7 @@ const Header = (props) => {
                     }
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>
-                {props.showProgressBar ? <LinearProgress color="secondary"/>: undefined}
+                {props.showProgressBar ? <LinearProgress className={classes.progressBar}/>: undefined}
             </AppBar>
         </div>
     );
