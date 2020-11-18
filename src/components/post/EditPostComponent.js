@@ -65,7 +65,8 @@ export default function EditPost(props) {
   }
 
   if(post.status === 'loading' || post.status === 'idle') {
-    return(<CircularProgress color="secondary" size={15}/>);
+    //return(<CircularProgress color="secondary" size={15}/>);
+        return(<div></div>);
   }else if(post.errMess) {
       return(<h4>Error loading!</h4>);
   } else {

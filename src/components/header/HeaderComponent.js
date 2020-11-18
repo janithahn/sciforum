@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, InputBase,  IconButton, Typography, Button, 
-    CssBaseline, Modal, Backdrop, Fade, Link, Menu, MenuItem, Avatar } from '@material-ui/core';
+    CssBaseline, Modal, Backdrop, Fade, Link, Menu, MenuItem, Avatar, LinearProgress } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
@@ -134,6 +134,7 @@ const Header = (props) => {
                     }
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>
+                {props.showProgressBar ? <LinearProgress color="secondary"/>: undefined}
             </AppBar>
         </div>
     );

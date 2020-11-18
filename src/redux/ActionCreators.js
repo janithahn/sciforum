@@ -521,7 +521,7 @@ export const fetchAnswerVotesDirect = (answerId, voteType, setCount) => (dispatc
 }
 
 export const fetchAnswerVotesByLoggedInUser = (owner, answer) => (dispatch) => {
-    dispatch(answerVotesLoading);
+    dispatch(answerVotesLoading());
 
     axios.get(baseUrl + `/vote_api/answervote/?owner=${owner}&answer=${answer}`)
     .then(response => {

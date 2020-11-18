@@ -4,7 +4,7 @@ import Home from './home/HomeComponent';
 import Sample from './SampleComponent';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, useStore } from 'react-redux';
 import { fetchPosts, postPost, editPost, logout, getNewToken } from '../redux/ActionCreators';
 import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
@@ -22,12 +22,29 @@ import Notifications from './notifications/index';
 import { Loading } from './loading/LoadingComponent';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
+import { isLoading } from '../shared/AdditionalFunctions';
 
 function Main(props) {
     const post = useSelector(state => state.Post);
     const auth = useSelector(state => state.Auth);
     const location = useLocation();
     const dispatch = useDispatch();
+
+    //loading states of all actions
+    const authLoading = useSelector(state => state.Auth.status);
+    const answersLoading = useSelector(state => state.Answers.status);
+    const notificationsLoading = useSelector(state => state.Notifications.status);
+    const postLoading = useSelector(state => state.Post.status);
+    const postsLoading = useSelector(state => state.Posts.status);
+    const userLoading = useSelector(state => state.User.status);
+    const answerVotesLoading = useSelector(state => state.answerVotes.status);
+    const postVotesLoading = useSelector(state => state.postVotes.status);
+
+    const [showProgressBar, setShowProgressBar] = React.useState(false);
+
+    useEffect(() => {
+        setShowProgressBar(isLoading(authLoading, answersLoading, notificationsLoading, postLoading, postsLoading, userLoading, answerVotesLoading, postVotesLoading));
+    });
 
     useEffect(() => {
         //dispatch(fetchPosts());
@@ -110,7 +127,7 @@ function Main(props) {
 
     return (
         <div>
-            <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open}/>
+            <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open} showProgressBar={showProgressBar}/>
             {location.pathname !== '/signup' && location.pathname !== '/signin' && <MainDrawer open={open} classes={classes} handleDrawerClose={handleDrawerClose}/>}
             <main className={(location.pathname !== '/signup' && location.pathname !== '/signin') ? classes.content: undefined}>
                 <Switch>

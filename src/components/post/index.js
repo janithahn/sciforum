@@ -3,11 +3,14 @@ import PostDetail from './PostDetailComponent';
 import Answer from '../answer/answer';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { useParams, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useStore } from 'react-redux';
 
 export default function PostView() {
 
     const answers = useSelector(state => state.Answers)
+    const store = useStore();
+
+    //console.log(store.getState());
 
     const { postId } = useParams();
     const location = useLocation();

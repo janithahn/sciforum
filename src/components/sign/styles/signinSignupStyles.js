@@ -1,5 +1,5 @@
 import { createMuiTheme, makeStyles, withStyles, TextField, OutlinedInput } from '@material-ui/core';
-import { deepPurple, red } from '@material-ui/core/colors';
+import { deepPurple } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
     typography: {
@@ -16,7 +16,7 @@ export const theme = createMuiTheme({
     },
   });
 
-export  const useStylesSignUp = makeStyles((theme) => ({
+export  const useStylesSignUp = makeStyles(() => ({
     paper: {
       marginTop: theme.spacing(3),
       display: 'flex',
@@ -25,7 +25,7 @@ export  const useStylesSignUp = makeStyles((theme) => ({
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.secondary.main,
     },
     form: {
       width: '100%', // Fix IE 11 issue.
@@ -52,7 +52,7 @@ export  const useStylesSignUp = makeStyles((theme) => ({
   
 
 
-export const useStylesSignin = makeStyles((theme) => ({
+export const useStylesSignin = makeStyles(() => ({
     paper: {
       marginTop: theme.spacing(3),
       display: 'flex',
@@ -63,7 +63,7 @@ export const useStylesSignin = makeStyles((theme) => ({
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.secondary.main,
     },
     form: {
       width: '100%', // Fix IE 11 issue.

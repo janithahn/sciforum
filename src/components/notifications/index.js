@@ -26,7 +26,8 @@ export default function Notifications({currentUserId}) {
     console.log(notifications);
 
     if(notifications.status === 'loading' || notifications.status === 'idle') {
-        return(<CircularProgress color="secondary" size={15}/>);
+        //return(<CircularProgress color="secondary" size={15}/>);
+        return(<div></div>);
     }else if(notifications.errMess) {
         return(<p>Error loading...</p>);
     }else {

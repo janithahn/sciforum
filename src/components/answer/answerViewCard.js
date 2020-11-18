@@ -21,7 +21,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
     });
 
     React.useEffect(() => {
-        if(isAuthenticated) {
+        if(isAuthenticated && answerVotes.status === 'idle') {
             dispatch(fetchAnswerVotesByLoggedInUser(currentUserId, answer.id));
         }
     }, [dispatch, isAuthenticated, currentUserId, answer]);

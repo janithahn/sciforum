@@ -73,7 +73,7 @@ export default function PostDetail() {
     });
 
     React.useEffect(() => {
-        if(auth.isAuthenticated) {
+        if(auth.isAuthenticated && postVotes.status === 'idle') {
             if(id) dispatch(fetchPostVotesByLoggedInUser(auth.currentUserId, id));
         }
     }, [dispatch, auth, id]);
@@ -123,7 +123,8 @@ export default function PostDetail() {
     };
 
     if(post.status === 'loading') {
-        return(<CircularProgress color="secondary" size={15}/>);
+        //return(<CircularProgress color="secondary" size={15}/>);
+        return(<div></div>);
     }else if(post.errMess) {
         return(<h4>Error loading...!</h4>);
     } else {

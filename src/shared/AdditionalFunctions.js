@@ -1,4 +1,5 @@
 import jwt_decode from 'jwt-decode';
+import { useSelector } from 'react-redux';
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -35,4 +36,12 @@ export function isJWTExpired(token) {
     }
 
     return true;
+}
+
+export function isLoading(auth, answers, notifications, post, posts, user, answerVotes, postVotes) {
+
+    if(auth === 'loading' || answers === 'loading' || notifications === 'loading' || post === 'loading' || posts === 'loading' || user === 'loading' || answerVotes === 'loading' || postVotes === 'loading') {
+        return true;
+    }
+    return false;
 }

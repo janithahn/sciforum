@@ -72,7 +72,8 @@ export default function ProfileDetails(props) {
   //console.log(values.location);
 
   if(user.status === 'loading' || user.status === 'idle') {
-    return <CircularProgress color="secondary" size={15}/>
+    //return <CircularProgress color="secondary" size={15}/>
+    return(<div></div>);
   }else if(user.status === 'failed') {
     return <h2>Error loading!</h2>
   }else {
