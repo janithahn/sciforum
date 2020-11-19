@@ -106,7 +106,7 @@ export default function SignIn(props) {
     onSuccess: googleResponse,
     onFailure: googleResponseOnFailure,
     clientId: clientId,
-  })
+  });
 
   return (
     <ThemeProvider theme={theme}>

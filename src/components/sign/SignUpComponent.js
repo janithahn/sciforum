@@ -19,8 +19,11 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import PasswordStrengthBar from 'react-password-strength-bar';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
-import { signupUser } from '../../redux/ActionCreators';
+import { signupUser, loginUserWithGoogle } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
+import { useGoogleLogin } from 'react-google-login';
+import { clientId } from '../../shared/googleApiClientId';
+import btn_google_light_normal_ios from './styles/btn_google_light_normal_ios.svg';
 
 /*function handleSubmit(values) {
   alert("Current State is: " + JSON.stringify(values));
@@ -102,6 +105,21 @@ export default function SignUp() {
       setCredentialError('');
     }
   }, [setCredentialError, auth]);
+
+  const googleResponse = (response) => {
+    console.log(response);
+    dispatch(loginUserWithGoogle(response));
+  }
+
+  const googleResponseOnFailure = (response) => {
+    console.log(response);
+  }
+
+  const { signIn, loaded } = useGoogleLogin({
+    onSuccess: googleResponse,
+    onFailure: googleResponseOnFailure,
+    clientId: clientId,
+  });
 
   return (
     <Container component="main" maxWidth="xs" className={classes.content}>
@@ -254,6 +272,16 @@ export default function SignUp() {
                   className={classes.submit}
                 >
                   Sign Up
+                </Button>
+                <Button
+                  type="button"
+                  onClick={signIn}
+                  fullWidth
+                  variant="contained"
+                  className={classes.googleButton}
+                >
+                  <img alt="google_button" src={btn_google_light_normal_ios}/>
+                  Sign up with Google
                 </Button>
                 <Grid container justify="flex-end">
                   <Grid item>

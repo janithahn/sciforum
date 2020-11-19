@@ -46,7 +46,12 @@ export  const useStylesSignUp = makeStyles(() => ({
           paddingLeft: theme.spacing(3),
           paddingTop: theme.spacing(10),
       },
-    }
+    },
+    googleButton: {
+      backgroundColor: '#FFFFFF',
+      padding: 0,
+      margin: theme.spacing(0, 0, 2),
+    },
   }));
 
   
