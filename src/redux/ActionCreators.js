@@ -247,14 +247,14 @@ export const signupUser = (creds) => (dispatch) => {
     });
 }
 
-const findObjectByLabel = (obj, label, results=[]) => {
+const getTokenByKey = (obj, label, results=[]) => {
     const r = results;
     Object.keys(obj).forEach(key => {
         const value = obj[key];
         if(key === label && typeof value !== 'object') {
             r.push(value);
         }else if(typeof value === 'object') {
-            findObjectByLabel(value, label, r);
+            getTokenByKey(value, label, r);
         }
     });
     return r[0];
@@ -264,7 +264,7 @@ const findObjectByLabel = (obj, label, results=[]) => {
 export const loginUserWithGoogle = (creds) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
-    const access_token = findObjectByLabel(creds, 'access_token');
+    const access_token = getTokenByKey(creds, 'access_token');
 
     return await axios.post(baseUrl + '/rest-auth/google/', {
         access_token: creds.accessToken ? creds.accessToken: access_token,
