@@ -15,6 +15,7 @@ import PostView from './post/index';
 import CreatePost from  './post/CreatePostComponent';
 import EditPost from './post/EditPostComponent';
 import NotFound from './alert/NotFoundComponent';
+import Search from './home/SearchResults';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
@@ -133,8 +134,9 @@ function Main(props) {
                 <Switch>
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
+                    <Route path="/search" component={() => <Search/>}/>
                     <Route path="/questions/:postId" component={() => <PostView/>}/>
-                    <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost/>}/>
+                    <PrivateRoutPostEdit path="/posts/:postId/edit" component={EditPost}/>
                     <Route exact path="/sample" component={Sample}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>

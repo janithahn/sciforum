@@ -4,6 +4,7 @@ import { ThemeProvider, CircularProgress, Typography, Grid, Divider } from '@mat
 import Button from '@material-ui/core/Button';
 import NotFound from '../alert/NotFoundComponent';
 import { useHistory, Redirect, useParams } from 'react-router-dom';
+import { createHistory } from '@reach/router';
 import Editor from './EditorComponent';
 //import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from './styles/postsStyles';
@@ -66,7 +67,7 @@ export default function EditPost(props) {
 
   if(post.status === 'loading' || post.status === 'idle') {
     //return(<CircularProgress color="secondary" size={15}/>);
-        return(<div></div>);
+    return(<div></div>);
   }else if(post.errMess) {
       return(<h4>Error loading!</h4>);
   } else {
@@ -101,7 +102,7 @@ export default function EditPost(props) {
                     {/*<Editor setQuestion={(values) => setQuestion(values)} data={body}/>*/}
                     <MDEditor setText={setQuestion} data={body}/>
                   </Grid>
-                  <Grid container justify="flex-end" alignItems="center" spacing={2}  lg={8} sm xs={12}>
+                  <Grid container justify="flex-end" alignItems="center" spacing={3} lg={8} sm xs={12}>
                     <Grid item>
                       <Button
                           type="submit"

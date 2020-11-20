@@ -1,17 +1,23 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Grid, Link } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 
-export default function Home() {
+export default function Search() {
     const posts = useSelector(state => state.Posts);
     const dispatch = useDispatch();
+
+    function useQuery() {
+        return new URLSearchParams(useLocation().search);
+    }
+    let query = useQuery().get('q');
+    //console.log(query.get("q"));
 
     const [postData, setPostData] = React.useState([]);
     const [hasMoreItems, setHasMoreItems] = React.useState(true);
@@ -46,7 +52,7 @@ export default function Home() {
 
         //dispatch(postsLoading());
 
-        var url = baseUrl + `/api/?page=${pageNum}`;
+        var url = baseUrl + `/api/?page=${pageNum}&search=${query}`;
         if(nextHref) {
             url = nextHref;
         }
@@ -90,7 +96,7 @@ export default function Home() {
         return(
             <React.Fragment>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
-                    <Link href="/ask" style={{textDecoration: 'none'}}>
+                    <Link to="/ask" style={{textDecoration: 'none'}}>
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
                     </Link>
                 </Grid>

@@ -3,9 +3,9 @@ import './App.css';
 import Main from './components/MainComponent';
 import { ThemeProvider } from '@material-ui/core';
 import theme from './theme/theme';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ConfigureStore } from './redux/configureStore';
+import { ConfigureStore, history } from './redux/configureStore';
 
 const store = ConfigureStore();
 
@@ -13,7 +13,7 @@ function App() {
   return (
     <div>
       <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter /*history={history}*/>
           <ThemeProvider theme={theme}>
             <Main/>
           </ThemeProvider>

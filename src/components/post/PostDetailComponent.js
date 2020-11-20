@@ -1,13 +1,13 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Link } from '@material-ui/core';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as ReachLink } from '@reach/router';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
 //import PostViewer from './PostViewerComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { fetchPostDetail, fetchPostVotesByLoggedInUser } from '../../redux/ActionCreators';
 import AnswerModalCard from '../answer/answerModalCard';
 import VoteButtons from '../vote/postVoteButtons';
@@ -166,7 +166,7 @@ export default function PostDetail() {
                                     <Grid item>
                                         <Grid container justify="center" alignItems="center" spacing={0}>
                                             <Grid item>
-                                                <Link to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
+                                                <RouterLink to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
                                                     <Button
                                                         className={classes.submit}
                                                         color="primary"
@@ -174,7 +174,7 @@ export default function PostDetail() {
                                                     >
                                                     Edit
                                                     </Button>
-                                                </Link>
+                                                </RouterLink>
                                             </Grid>
                                             <Grid item>
                                                 <Button

@@ -6,7 +6,7 @@ import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
 import AnswerViewCard from './answerViewCard';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(

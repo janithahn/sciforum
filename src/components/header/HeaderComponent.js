@@ -6,7 +6,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 //import LoginModal from '../sign/SignInComponent';
 import SignIn from '../sign/SignInComponent';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link as RouterLink, useHistory } from 'react-router-dom';
+import { navigate } from '@reach/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../redux/ActionCreators';
 import { useStyles } from './styles/headerStyle';
@@ -78,11 +79,20 @@ const Header = (props) => {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    //console.log(auth);
+    const history = useHistory();
+
+    const [searchParams, setSearchParams] = React.useState('');
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            //navigate(`/search?q=${searchParams}`);
+            history.push(`/search?q=${searchParams}`);
+        }
+    };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
-    }
+    };
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -119,12 +129,16 @@ const Header = (props) => {
                             <Search />
                         </div>
                         <InputBase
-                        placeholder="Search…"
-                        classes={{
-                            root: props.classes.inputRoot,
-                            input: props.classes.inputInput,
-                        }}
-                        inputProps={{ 'aria-label': 'search' }}
+                            placeholder="Search…"
+                            classes={{
+                                root: props.classes.inputRoot,
+                                input: props.classes.inputInput,
+                            }}
+                            inputProps={{ 'aria-label': 'search' }}
+                            onChange={(event) => {
+                                setSearchParams(event.target.value)
+                            }}
+                            onKeyDown={(event) => handleKeyDown(event)}
                         />
                     </div>
                     {location.pathname !== '/signup' && location.pathname !== '/signin' && (!auth.isAuthenticated ? 
