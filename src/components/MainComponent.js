@@ -106,7 +106,7 @@ function Main(props) {
                 : <Redirect to='/' />
             )} />)
         } else {
-            return (<Loading/>)
+            return (<NotFound/>)
         }
     };
 

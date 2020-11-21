@@ -75,9 +75,9 @@ export default function EditPost(props) {
       return (
         <div className={classes.root}>
             <ThemeProvider theme={theme}>
-              <Grid container direction="column" justify="center">
+              <Grid container lg={8} sm xs={12} direction="column" justify="center">
                 <form onSubmit={handleSubmit}>
-                  <Grid item lg={8} sm xs={12}>
+                  <Grid item>
                     <Typography variant="h6" gutterBottom>
                       Title
                     </Typography>
@@ -95,20 +95,21 @@ export default function EditPost(props) {
                       variant="outlined"
                     />
                   </Grid>
-                  <Grid item lg={8} sm xs={12}>
+                  <Grid item>
                     <Typography className={classes.typo} variant="h6" gutterBottom>
                       Question
                     </Typography>
                     {/*<Editor setQuestion={(values) => setQuestion(values)} data={body}/>*/}
                     <MDEditor setText={setQuestion} data={body}/>
                   </Grid>
-                  <Grid container justify="flex-end" alignItems="center" spacing={3} lg={8} sm xs={12}>
+                  <Grid container justify="flex-end" alignItems="center" spacing={2}>
                     <Grid item>
                       <Button
                           type="submit"
                           color="primary"
                           className={classes.submit}
                           size="small"
+                          variant="outlined"
                       >
                         Submit
                       </Button>
@@ -116,9 +117,10 @@ export default function EditPost(props) {
                     <Grid item>
                       <Button
                           onClick={handleCancel}
-                          color="primary"
+                          color="secondary"
                           className={classes.submit}
                           size="small"
+                          variant="outlined"
                       >
                         Cancel
                       </Button>

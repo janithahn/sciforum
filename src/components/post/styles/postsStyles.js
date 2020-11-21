@@ -64,4 +64,7 @@ export const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(10),
     },
   },
+  tags: {
+    width: '100%',
+  },
 }));
