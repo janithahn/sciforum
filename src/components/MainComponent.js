@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Header from './header/HeaderComponent';
 import Home from './home/HomeComponent';
-import Sample from './SampleComponent';
+import MyPosts from './myposts/MyPosts';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
 import { useSelector, useDispatch, useStore } from 'react-redux';
@@ -37,6 +37,7 @@ function Main(props) {
     const notificationsLoading = useSelector(state => state.Notifications.status);
     const postLoading = useSelector(state => state.Post.status);
     const postsLoading = useSelector(state => state.Posts.status);
+    const mypostsLoading = useSelector(state => state.MyPosts.status)
     const userLoading = useSelector(state => state.User.status);
     const answerVotesLoading = useSelector(state => state.answerVotes.status);
     const postVotesLoading = useSelector(state => state.postVotes.status);
@@ -44,7 +45,7 @@ function Main(props) {
     const [showProgressBar, setShowProgressBar] = React.useState(false);
 
     useEffect(() => {
-        setShowProgressBar(isLoading(authLoading, answersLoading, notificationsLoading, postLoading, postsLoading, userLoading, answerVotesLoading, postVotesLoading));
+        setShowProgressBar(isLoading(authLoading, answersLoading, notificationsLoading, postLoading, postsLoading, userLoading, answerVotesLoading, postVotesLoading, mypostsLoading));
     });
 
     useEffect(() => {
@@ -126,6 +127,14 @@ function Main(props) {
         )} />
     );
 
+    const PrivateRouteMyPosts = ({ component: Component, ...rest}) => (
+        <Route {...rest} render={() => (
+            auth.isAuthenticated
+            ? <Component/>
+            : <Redirect to="/signin"/>
+        )} />
+    );
+
     return (
         <div>
             <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open} showProgressBar={showProgressBar}/>
@@ -137,7 +146,7 @@ function Main(props) {
                     <Route path="/search" component={() => <Search/>}/>
                     <Route path="/questions/:postId" component={() => <PostView/>}/>
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={EditPost}/>
-                    <Route exact path="/sample" component={Sample}/>
+                    <PrivateRouteMyPosts exact path="/myposts" component={MyPosts}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>

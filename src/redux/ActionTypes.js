@@ -2,6 +2,10 @@ export const ADD_POST = 'ADD_POST';
 export const POST_LOADING = 'POST_LOADING';
 export const POST_FAILED = 'POST_FAILED';
 
+export const ADD_MYPOSTS = 'ADD_MYPOSTS';
+export const MYPOSTS_LOADING = 'MYPOSTS_LOADING';
+export const MYPOSTS_FAILED = 'MYPOSTS_FAILED';
+
 export const ADD_POST_LIST = 'ADD_POST_LIST';
 export const POST_LIST_LOADING = 'POST_LIST_LOADING';
 export const POST_LIST_FAILED = 'POST_LIST_FAILED';

@@ -38,10 +38,15 @@ export function isJWTExpired(token) {
     return true;
 }
 
-export function isLoading(auth, answers, notifications, post, posts, user, answerVotes, postVotes) {
+export function isLoading(auth, answers, notifications, post, posts, user, answerVotes, postVotes, myposts) {
 
-    if(auth === 'loading' || answers === 'loading' || notifications === 'loading' || post === 'loading' || posts === 'loading' || user === 'loading' || answerVotes === 'loading' || postVotes === 'loading') {
+    if(auth === 'loading' || answers === 'loading' || notifications === 'loading' || post === 'loading' || posts === 'loading' || user === 'loading' || answerVotes === 'loading' || postVotes === 'loading' || myposts === 'loading') {
         return true;
     }
     return false;
+}
+
+export function isSucceeded(answers, post, answerVotes, postVotes) {
+    console.log(![answers, post, answerVotes, postVotes].includes('idle' || 'loading'));
+    return ![answers, post, answerVotes, postVotes].includes('idle' || 'loading');
 }

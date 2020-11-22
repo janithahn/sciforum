@@ -8,6 +8,7 @@ import { Post } from './actions/post';
 import { Answers } from './actions/answers';
 import { answerVotes, postVotes } from './actions/votes';
 import { Notifications } from './actions/notifications';
+import { MyPosts } from './actions/myposts';
 import { createReduxHistoryContext, reachify } from "redux-first-history";
 import { createBrowserHistory } from 'history';
 import { globalHistory } from "@reach/router";
@@ -30,6 +31,7 @@ export const ConfigureStore = () => {
             answerVotes,
             postVotes,
             Notifications,
+            MyPosts,
         }),
         applyMiddleware(thunk, logger, routerMiddleware)
     );

@@ -113,6 +113,36 @@ export const addPost = (post) => ({
     payload: post
 });
 
+//MY POSTS
+export const fetchMyPosts = (ownerId) => async (dispatch) => {
+    dispatch(myPostsLoading());
+
+    axios.get(baseUrl + `/api/?ordering=-created_at&owner=${ownerId}`)
+    .then(response => {
+        //console.log(response);
+        return response;
+    })
+    .then(myposts => dispatch(addMyPosts(myposts.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(myPostsFailed(error));
+    });
+}
+
+export const myPostsLoading = () => ({
+    type: ActionTypes.MYPOSTS_LOADING
+});
+
+export const myPostsFailed = (errmess) => ({
+    type: ActionTypes.MYPOSTS_FAILED,
+    payload: errmess
+});
+
+export const addMyPosts = (posts) => ({
+    type: ActionTypes.ADD_MYPOSTS,
+    payload: posts
+});
+
 //REFRESH TOKEN
 export const getNewToken = (currentToken) => (dispatch) => {
 

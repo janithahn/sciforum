@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider, CircularProgress, LinearProgress, Grid, Typography, Divider, Modal, Backdrop, Fade, Button } from '@material-ui/core';
+import { ThemeProvider, Grid, Typography, Divider, Modal, Backdrop, Fade } from '@material-ui/core';
 import { fetchAnswers } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useStyles, theme } from './styles/answerStyles';
@@ -83,8 +83,7 @@ export default function Answer({postId, refs}) {
         setOpenDeleteModal(false);
     };
 
-    if(answers.status === 'loading') {
-        //return(<CircularProgress color="secondary" size={15}/>);
+    if(answers.status === 'loading' || answers.status === 'idle') {
         return(<div></div>);
     }else if(answers.status === 'failed') {
         return(<h4>Error loading...!</h4>);

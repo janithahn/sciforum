@@ -24,7 +24,7 @@ function RenderDrawer({ handleDrawerClose, classes, open, variant, handleSelecte
             <Divider />
             <div className={classes.drawerContainer}>
                 <List>
-                    {[{text: 'Home', url: '/', icon: <Home/>}, {text: 'Sample', url: '/sample', icon: <Inbox/>}].map((item, index) => (
+                    {[{text: 'Home', url: '/', icon: <Home/>}, {text: 'My Posts', url: '/myposts', icon: <Inbox/>}].map((item, index) => (
                         <Link to={item.url} component={NavLink} underline='none' color='inherit' key={index}>
                             <MenuItem button key={index} onClick={() => handleSelectedItem(item.url)} selected={selected === item.url}>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
