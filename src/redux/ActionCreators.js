@@ -42,14 +42,10 @@ export const addPosts = (posts) => ({
 });
 
 export const postPost = (post) => (dispatch, getState) => {
-    console.log(post.title);
-    console.log(post.body);
     console.log(getState());
-    axios.post(baseUrl + '/api/post/create/', {
-        title: post.title,
-        body: post.body,
-        owner: post.owner,
-    },{
+    axios.post(baseUrl + '/api/post/create/', 
+    post,
+    {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {

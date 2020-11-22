@@ -15,10 +15,7 @@ import axios from 'axios'
 
 const tagUrl = 'http://localhost:8000/tag_api/tags/';
 
-function Tags({classes, tags}) {
-
-  const [tagList, setTagList] = React.useState(tags);
-  const [value, setValue] = React.useState([]);
+function Tags({classes, value, setValue, tagList, setTagList}) {
 
   const handleKeyDown = (event) => {
     console.log(value);
@@ -28,7 +25,6 @@ function Tags({classes, tags}) {
       case " ": {
         event.preventDefault();
         event.stopPropagation();
-        const tempList = tagList;
         if(event.target.value.length > 0) {
           if(!value.includes(event.target.value)) setValue([...value, event.target.value]); else setValue([...value]);
           if(!tagList.includes(event.target.value)) setTagList([...tagList, event.target.value]);
@@ -66,13 +62,14 @@ function Tags({classes, tags}) {
   );
 }
 
-function fetchTags(tagList) {
+function fetchTags(tagList, setTagList) {
   axios.get(tagUrl)
   .then(tags => {
-    console.log(tags);
+    const tempTags = [];
     tags.data.map(item => {
-      tagList.push(item.name);
+      tempTags.push(item.name);
     });
+    setTagList(tempTags);
   })
   .catch(error => {
     console.log(error);
@@ -84,7 +81,9 @@ export default function CreatePost(props) {
 
   const [title, setTitle] = React.useState('');
   const [body, setQuestion] = React.useState('');
-  const tagList = [];
+
+  const [tagList, setTagList] = React.useState([]);
+  const [tagValue, setTagValue] = React.useState([]);
   
   const [answerSubmitError, setAnswerSubmitError] = React.useState('');
 
@@ -108,7 +107,7 @@ export default function CreatePost(props) {
         setAnswerSubmitError("Question cannot be blank!");
       }else {
         setAnswerSubmitError("");
-        dispatch(postPost({title: values.title, body, owner: auth.currentUserId}));
+        dispatch(postPost({owner: auth.currentUserId, title: values.title, body, tags: tagValue}));
         history.push('/questions');
       }
     },
@@ -120,7 +119,7 @@ export default function CreatePost(props) {
   }
 
   React.useEffect(() => {
-    fetchTags(tagList);
+    fetchTags(tagList, setTagList);
   }, []);
 
   return (
@@ -159,7 +158,13 @@ export default function CreatePost(props) {
                 <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
               </Grid>
               <Grid item lg={8} sm xs={12}>
-                <Tags classes={classes} tags={tagList}/>
+                <Tags 
+                  classes={classes} 
+                  value={tagValue} 
+                  setValue={setTagValue} 
+                  tagList={tagList} 
+                  setTagList={setTagList}
+                />
               </Grid>
               <Grid item lg={8} sm xs={12}>
                 <Grid container direction="row" justify="flex-end" spacing={2}>
