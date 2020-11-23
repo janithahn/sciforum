@@ -1,6 +1,6 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Link } from '@material-ui/core';
+import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Chip, Link } from '@material-ui/core';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Link as ReachLink } from '@reach/router';
 import AlertDialogSlide from './AlertComponent';
@@ -64,6 +64,7 @@ export default function PostDetail() {
     const viewCount = post.post ? post.post.viewCount: null;
     const created_at = post.post ? post.post.created_at: null;
     const updated_at = post.post ? post.post.updated_at: null;
+    const postTags = post.post ? post.post.tags: null;
     
     const postVotes = useSelector(state => state.postVotes);
 
@@ -90,11 +91,11 @@ export default function PostDetail() {
     
     React.useEffect(() => {
         if(post.post) {
-            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount, post.post.created_at, post.post.updated_at);
+            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount, post.post.created_at, post.post.updated_at, post.post.tags);
         }
     }, [post]);
 
-    const handlePostInfo = (id, owner, title, body, viewCount, created_at, updated_at) => {
+    const handlePostInfo = (id, owner, title, body, viewCount, created_at, updated_at, postTags) => {
         setPostInfo({
             title,
             body,
@@ -104,6 +105,7 @@ export default function PostDetail() {
         viewCount = viewCount;
         created_at = created_at;
         updated_at = updated_at;
+        postTags = postTags;
     }
 
     const handleClickOpen = () => {
@@ -129,6 +131,12 @@ export default function PostDetail() {
         return(<h4>Error loading...!</h4>);
     } else {
         if(post !== undefined) {
+
+            const RenderPostTags = postTags ? postTags.map((tag, key) => 
+                <Grid item>
+                    <Chip className={classes.chip} color="primary" size="small" variant="outlined" label={tag} key={key} component="a" href={`/questions/tagged/${tag}`} clickable/>
+                </Grid>): [];
+
             return(
                 <div className={classes.root}>
                     <ThemeProvider theme={theme}>
@@ -150,6 +158,9 @@ export default function PostDetail() {
                             handleModalClose={handleModalClose}
                             postId={postId}
                         />
+                        <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
+                            {RenderPostTags}
+                        </Grid>
                         <React.Fragment>
                             <Grid container justify="space-between" alignItems="center" spacing={0}>
                                 <Grid item>

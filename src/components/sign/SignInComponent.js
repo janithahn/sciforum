@@ -126,7 +126,7 @@ export default function SignIn(props) {
               margin="normal"
               fullWidth
               id="username"
-              label="Username"
+              label="Username or Email"
               name="username"
               autoComplete="username"
               autoFocus

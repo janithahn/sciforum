@@ -1,6 +1,6 @@
 import React from 'react';
 import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
-import { Button, Typography, Divider, Grid } from '@material-ui/core';
+import { Button, Typography, Divider, Grid, Hidden } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { Preview } from './MarkdownPreview';
 import TimeAgo from 'react-timeago';
@@ -53,16 +53,18 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
                                     {viewCount == 1 ? viewCount + " View": viewCount + " Views"}
                                 </Typography>
                             </Grid>
-                            <Grid item>
-                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {"Created "}<TimeAgo live={false} date={created_at} />
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {"Updated "}<TimeAgo live={false} date={updated_at} />
-                                </Typography>
-                            </Grid>
+                            <Hidden smDown>
+                                <Grid item>
+                                    <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                        {"Created "}<TimeAgo live={false} date={created_at} />
+                                    </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                        {"Updated "}<TimeAgo live={false} date={updated_at} />
+                                    </Typography>
+                                </Grid>
+                            </Hidden>
                         </Grid>
                     </Grid>
                     <Grid item>

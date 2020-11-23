@@ -16,6 +16,7 @@ import CreatePost from  './post/CreatePostComponent';
 import EditPost from './post/EditPostComponent';
 import NotFound from './alert/NotFoundComponent';
 import Search from './home/SearchResults';
+import SearchByTag from './home/SearchByTagResults';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
@@ -24,6 +25,7 @@ import { Loading } from './loading/LoadingComponent';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
 import { isLoading } from '../shared/AdditionalFunctions';
+import { Router } from '@material-ui/icons';
 
 function Main(props) {
     const post = useSelector(state => state.Post);
@@ -144,7 +146,8 @@ function Main(props) {
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
                     <Route path="/search" component={() => <Search/>}/>
-                    <Route path="/questions/:postId" component={() => <PostView/>}/>
+                    <Route exact path="/questions/:postId" component={() => <PostView/>}/>
+                    <Route exact path="/questions/tagged/:tagname" component={() => <SearchByTag/>}/>
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={EditPost}/>
                     <PrivateRouteMyPosts exact path="/myposts" component={MyPosts}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />

@@ -67,4 +67,7 @@ export const useStyles = makeStyles((theme) => ({
   tags: {
     width: '100%',
   },
+  chip: {
+    marginTop: theme.spacing(1),
+  }
 }));
