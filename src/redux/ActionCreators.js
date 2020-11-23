@@ -114,10 +114,10 @@ export const addPost = (post) => ({
 });
 
 //MY POSTS
-export const fetchMyPosts = (ownerId) => async (dispatch) => {
+export const fetchMyPosts = (ownerId, page) => async (dispatch) => {
     dispatch(myPostsLoading());
 
-    axios.get(baseUrl + `/api/?ordering=-created_at&owner=${ownerId}`)
+    axios.get(baseUrl + `/api/?ordering=-created_at&owner=${ownerId}&page=${page}`)
     .then(response => {
         //console.log(response);
         return response;
