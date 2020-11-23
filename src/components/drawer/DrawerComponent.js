@@ -50,9 +50,13 @@ export default function MainDrawer(props) {
     const handleSelectedItem = (val) => {
         setLocation(val);
         if(selected === '/') {
-            dispatch(fetchPosts('From the Drawer'));
+            dispatch(fetchPosts());
         }
     }
+
+    React.useEffect(() => {
+        setLocation(location.pathname);
+    });
 
     return(
         <React.Fragment>

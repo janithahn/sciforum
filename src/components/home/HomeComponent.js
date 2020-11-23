@@ -90,9 +90,9 @@ export default function Home() {
         return(
             <React.Fragment>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
-                    <Link href="/ask" style={{textDecoration: 'none'}}>
+                    <RouterLink to="/ask" style={{textDecoration: 'none'}}>
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
-                    </Link>
+                    </RouterLink>
                 </Grid>
                 <InfiniteScroll
                     pageStart={0}

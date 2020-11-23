@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { useStyles } from './styles/cardStyles';
 import { Link } from '@material-ui/core';
-//import { Link } from 'react-router-dom';
+//import { Link as RouterLink } from 'react-router-dom';
 
 export default function QuestionViewCard(props) {
     const classes = useStyles();

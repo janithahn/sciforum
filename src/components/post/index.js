@@ -25,7 +25,9 @@ const useDidMountEffect = (func, deps) => {
 
 export default function PostView() {
 
-    const answers = useSelector(state => state.Answers)
+    const answers = useSelector(state => state.Answers);
+    const auth = useSelector(state => state.Auth)
+    const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
 
     const { postId } = useParams();
     const location = useLocation();
@@ -63,10 +65,18 @@ export default function PostView() {
     }); 
 
     React.useEffect(() => {
-        if(refs && refs[Number(hash)]) {
-            scrollTo(Number(hash)); 
-            refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
-            //console.log('REF FROM INDEX:', refs[Number(hash)]);
+        if(auth.isAuthenticated) {
+            if(votesStatus) {   
+                if(refs && refs[Number(hash)]) {
+                    scrollTo(Number(hash)); 
+                    refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
+                }
+            }
+        }else {
+            if(refs && refs[Number(hash)]) {
+                scrollTo(Number(hash)); 
+                refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
+            }
         }
     }, []);
 

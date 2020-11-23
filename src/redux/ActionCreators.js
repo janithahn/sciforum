@@ -50,6 +50,7 @@ export const postPost = (post) => (dispatch, getState) => {
     })
     .then(res => {
         dispatch(fetchPosts());
+        dispatch(fetchMyPosts(localStorage.getItem('currentUserId'), 1));
         console.log(res);
         console.log("Question submitted successfully!");
     })

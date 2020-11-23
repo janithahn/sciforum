@@ -8,7 +8,7 @@ import { theme, useStyles } from './styles/postsStyles';
 //import Editor from './EditorComponent';
 import MDEditor from './MDE';
 import { useSelector, useDispatch } from 'react-redux';
-import { postPost } from '../../redux/ActionCreators';
+import { postPost, fetchMyPosts } from '../../redux/ActionCreators';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios'
@@ -108,14 +108,16 @@ export default function CreatePost(props) {
       }else {
         setAnswerSubmitError("");
         dispatch(postPost({owner: auth.currentUserId, title: values.title, body, tags: tagValue}));
-        history.push('/questions');
+        history.push('/myposts');
+        //history.goBack();
       }
     },
     validationSchema: profileSchema,
   });
 
   function handleCancel() {
-    history.push("/questions");
+    //history.push("/questions");
+    history.goBack();
   }
 
   React.useEffect(() => {

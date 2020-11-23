@@ -1,13 +1,13 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Grid, Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import { fetchMyPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent'
 import Pagination from '@material-ui/lab/Pagination';
 import { useStyles } from './styles/mypostsStyles';
 
-export default function Home() {
+export default function MyPosts() {
 
     const classes = useStyles();
 
@@ -15,9 +15,11 @@ export default function Home() {
     const auth = useSelector(state => state.Auth)
     const dispatch = useDispatch();
 
+    const router = useSelector(state => state.router);
+
     React.useEffect(() => {
         if(myposts.status === 'idle' && auth.isAuthenticated) {
-            dispatch(fetchMyPosts(auth.currentUserId, 1))
+            dispatch(fetchMyPosts(auth.currentUserId, 1));
         }
     }, [myposts, dispatch, auth]);
 
@@ -26,8 +28,6 @@ export default function Home() {
         console.log(page);
         event.dispatchConfig = dispatch(fetchMyPosts(auth.currentUserId, page))
     };
-
-    console.log(myposts);
 
     if(myposts.status === 'loading' || myposts.status === 'idle') {
         return(<div></div>);
@@ -42,14 +42,14 @@ export default function Home() {
         return(
             <React.Fragment>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
-                    <Link href="/ask" style={{textDecoration: 'none'}}>
+                    <RouterLink to="/ask" style={{textDecoration: 'none'}}>
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
-                    </Link>
+                    </RouterLink>
                 </Grid>
                 {PostsList}
-                <Grid container direction="column" justify="center" alignItems="flex-end">
+                {myposts.myposts.results.length !== 0 ? <Grid container direction="column" justify="center" alignItems="flex-end">
                     <Pagination className={classes.pagination} page={current_page} count={total_pages} shape="rounded" onChange={(event, page) => handlePages(event, page)}/>
-                </Grid>
+                </Grid>: undefined}
             </React.Fragment>
         );
     }
