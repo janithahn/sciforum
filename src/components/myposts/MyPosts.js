@@ -6,6 +6,7 @@ import { fetchMyPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent'
 import Pagination from '@material-ui/lab/Pagination';
 import { useStyles } from './styles/mypostsStyles';
+import { Link } from '@material-ui/core';
 
 export default function MyPosts() {
 
@@ -37,6 +38,7 @@ export default function MyPosts() {
         return(
             <React.Fragment>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
+                    <Link href="/public/NotFound/">Click Here</Link>
                     <RouterLink to="/ask" style={{textDecoration: 'none'}}>
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
                     </RouterLink>

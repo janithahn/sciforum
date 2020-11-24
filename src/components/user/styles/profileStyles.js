@@ -3,7 +3,6 @@ import { blue } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
     typography: {
-        fontFamily: 'Open Sans',
         fontSize: 14
     },
     palette: {
@@ -14,7 +13,6 @@ export const theme = createMuiTheme({
 
 export const profileDetailTheme = createMuiTheme({
   typography: {
-      fontFamily: 'Open Sans',
       fontSize: 12
   },
   palette: {

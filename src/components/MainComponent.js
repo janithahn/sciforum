@@ -15,6 +15,7 @@ import PostView from './post/index';
 import CreatePost from  './post/CreatePostComponent';
 import EditPost from './post/EditPostComponent';
 import NotFound from './alert/NotFoundComponent';
+import PageNotFound from './alert/PageNotFound/PageNotFound';
 import Search from './home/SearchResults';
 import SearchByTag from './home/SearchByTagResults';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
@@ -162,7 +163,7 @@ function Main(props) {
                     <Route path="/profile/:username" component={AccountView}/>
                     <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
-                    <Route component={NotFound}/>
+                    <Route component={PageNotFound}/>
                     <Redirect to="/"/>
                 </Switch>
             </main>

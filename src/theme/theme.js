@@ -2,7 +2,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 const theme = createMuiTheme({
     typography: {
-        fontFamily: 'Open Sans'
+        fontFamily: 'Nunito Sans'
     },
     palette: {
         primary: {
