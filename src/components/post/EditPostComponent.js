@@ -10,6 +10,7 @@ import { theme, useStyles } from './styles/postsStyles';
 import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import MDEditor from './MDE';
+import Tags, {fetchTags} from './tags';
 
 export default function EditPost({setSnackMessage, setSnackOpen}) {
   const classes = useStyles();
@@ -24,6 +25,9 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
   const id = post.post ? post.post.id: null;
   const owner = post.post ? post.post.owner: null;
   const viewCount = post.post ? post.post.viewCount: null;
+
+  const [tagList, setTagList] = React.useState([]);
+  const [tagValue, setTagValue] = React.useState(post.post ? post.post.tags: []);
 
   const {postId} = useParams();
 
@@ -55,6 +59,7 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
       owner,
       title,
       body,
+      tags: tagValue,
     }, setSnackMessage, setSnackOpen));
     //dispatch(fetchPosts());
     history.push(`/questions/${id}/`);
@@ -100,6 +105,15 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
                     </Typography>
                     {/*<Editor setQuestion={(values) => setQuestion(values)} data={body}/>*/}
                     <MDEditor setText={setQuestion} data={body}/>
+                  </Grid>
+                  <Grid item lg={8} sm xs={12}>
+                    <Tags 
+                      classes={classes} 
+                      value={tagValue} 
+                      setValue={setTagValue} 
+                      tagList={tagList} 
+                      setTagList={setTagList}
+                    />
                   </Grid>
                   <Grid item lg={8} sm xs={12}>
                     <Grid container justify="flex-end" alignItems="center" spacing={2}>

@@ -67,6 +67,7 @@ export const editPost = (post, setSnackMessage, setSnackOpen) => (dispatch, getS
     axios.patch(baseUrl + `/api/post/${post.id}/update/`, {
         title: post.title,
         body: post.body,
+        tags: post.tags,
     },{
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
