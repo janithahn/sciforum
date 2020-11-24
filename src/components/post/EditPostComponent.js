@@ -45,6 +45,10 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
     }
   }, [post]);
 
+  React.useEffect(() => {
+    fetchTags(tagList, setTagList);
+  }, []);
+
   const handlePostInfo = (id, owner, title, body, viewCount) => {
     setTitle(title);
     setQuestion(body);
