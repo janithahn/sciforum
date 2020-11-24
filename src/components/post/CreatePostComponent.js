@@ -8,7 +8,7 @@ import { theme, useStyles } from './styles/postsStyles';
 //import Editor from './EditorComponent';
 import MDEditor from './MDE';
 import { useSelector, useDispatch } from 'react-redux';
-import { postPost, fetchMyPosts } from '../../redux/ActionCreators';
+import { postPost } from '../../redux/ActionCreators';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios'
@@ -76,7 +76,7 @@ function fetchTags(tagList, setTagList) {
   });
 }
 
-export default function CreatePost(props) {
+export default function CreatePost({setSnackMessage, setSnackOpen}) {
   const classes = useStyles();
 
   const [title, setTitle] = React.useState('');
@@ -107,7 +107,7 @@ export default function CreatePost(props) {
         setAnswerSubmitError("Question cannot be blank!");
       }else {
         setAnswerSubmitError("");
-        dispatch(postPost({owner: auth.currentUserId, title: values.title, body, tags: tagValue}));
+        dispatch(postPost({owner: auth.currentUserId, title: values.title, body, tags: tagValue}, setSnackMessage, setSnackOpen));
         history.push('/myposts');
         //history.goBack();
       }

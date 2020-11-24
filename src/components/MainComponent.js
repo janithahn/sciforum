@@ -34,7 +34,7 @@ function Main(props) {
     const dispatch = useDispatch();
 
     //loading states of all actions
-    const authLoading = useSelector(state => state.Auth.status);
+    /*const authLoading = useSelector(state => state.Auth.status);
     const answersLoading = useSelector(state => state.Answers.status);
     const notificationsLoading = useSelector(state => state.Notifications.status);
     const postLoading = useSelector(state => state.Post.status);
@@ -42,12 +42,18 @@ function Main(props) {
     const mypostsLoading = useSelector(state => state.MyPosts.status)
     const userLoading = useSelector(state => state.User.status);
     const answerVotesLoading = useSelector(state => state.answerVotes.status);
-    const postVotesLoading = useSelector(state => state.postVotes.status);
+    const postVotesLoading = useSelector(state => state.postVotes.status);*/
+
+    const isLoading = useSelector(state => [state.Auth.status, state.Answers.status, state.Notifications.status, state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, state.answerVotes.status, state.postVotes.status].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
 
+    const [snackOpen, setSnackOpen] = React.useState(false);
+    const [snackMessage, setSnackMessage] = React.useState('');
+
     useEffect(() => {
-        setShowProgressBar(isLoading(authLoading, answersLoading, notificationsLoading, postLoading, postsLoading, userLoading, answerVotesLoading, postVotesLoading, mypostsLoading));
+        setShowProgressBar(isLoading);
+        //setShowProgressBar(isLoading(authLoading, answersLoading, notificationsLoading, postLoading, postsLoading, userLoading, answerVotesLoading, postVotesLoading, mypostsLoading));
     });
 
     useEffect(() => {
@@ -139,7 +145,7 @@ function Main(props) {
 
     return (
         <div>
-            <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open} showProgressBar={showProgressBar}/>
+            <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open} showProgressBar={showProgressBar} snackOpen={snackOpen} setSnackOpen={setSnackOpen} snackMessage={snackMessage}/>
             {location.pathname !== '/signup' && location.pathname !== '/signin' && <MainDrawer open={open} classes={classes} handleDrawerClose={handleDrawerClose}/>}
             <main className={(location.pathname !== '/signup' && location.pathname !== '/signin') ? classes.content: undefined}>
                 <Switch>
@@ -148,11 +154,11 @@ function Main(props) {
                     <Route path="/search" component={() => <Search/>}/>
                     <Route exact path="/questions/:postId" component={() => <PostView/>}/>
                     <Route exact path="/questions/tagged/:tagname" component={() => <SearchByTag/>}/>
-                    <PrivateRoutPostEdit path="/posts/:postId/edit" component={EditPost}/>
-                    <PrivateRouteMyPosts exact path="/myposts" component={MyPosts}/>
+                    <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen}/>}/>
+                    <PrivateRouteMyPosts exact path="/myposts" component={() => <MyPosts/>}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
-                    <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost postPost={(post) => dispatch(postPost(post))}/>}/>
+                    <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen} postPost={(post) => dispatch(postPost(post))}/>}/>
                     <Route path="/profile/:username" component={AccountView}/>
                     <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>

@@ -41,7 +41,7 @@ export const addPosts = (posts) => ({
     payload: posts
 });
 
-export const postPost = (post) => (dispatch, getState) => {
+export const postPost = (post, setSnackMessage, setSnackOpen) => (dispatch, getState) => {
     console.log(getState());
     axios.post(baseUrl + '/api/post/create/', 
     post,
@@ -51,13 +51,18 @@ export const postPost = (post) => (dispatch, getState) => {
     .then(res => {
         dispatch(fetchPosts());
         dispatch(fetchMyPosts(localStorage.getItem('currentUserId'), 1));
-        console.log(res);
         console.log("Question submitted successfully!");
+        setSnackMessage("Question submitted successfully");
+        setSnackOpen(true);
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+        console.log(error);
+        setSnackMessage("Error submitting question");
+        setSnackOpen(true);
+    });
 };
 
-export const editPost = (post) => (dispatch, getState) => {
+export const editPost = (post, setSnackMessage, setSnackOpen) => (dispatch, getState) => {
     console.log(post);
     axios.patch(baseUrl + `/api/post/${post.id}/update/`, {
         title: post.title,
@@ -68,9 +73,15 @@ export const editPost = (post) => (dispatch, getState) => {
     .then(res => {
         console.log(res);
         console.log("Question updated successfully!");
+        setSnackMessage("Question updated successfully");
+        setSnackOpen(true);
         dispatch(fetchPostDetail(post.id));
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+        console.log(error);
+        setSnackMessage("Error updating the quesition!");
+        setSnackOpen(true);
+    });
 };
 
 export const deletePost = (postId, history) => (dispatch, getState) => {

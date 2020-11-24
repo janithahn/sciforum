@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications } from '../../redux/ActionCreators';
 import EnhancedTable from './table';
-import { CircularProgress } from '@material-ui/core';
 
 function createData(id, notification, action_object, date, state, actor) {
     return { id, notification, action_object, date, state, actor };
@@ -26,7 +25,6 @@ export default function Notifications({currentUserId}) {
     console.log(notifications);
 
     if(notifications.status === 'loading' || notifications.status === 'idle') {
-        //return(<CircularProgress color="secondary" size={15}/>);
         return(<div></div>);
     }else if(notifications.errMess) {
         return(<p>Error loading...</p>);

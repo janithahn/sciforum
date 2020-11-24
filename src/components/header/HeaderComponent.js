@@ -6,8 +6,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 //import LoginModal from '../sign/SignInComponent';
 import SignIn from '../sign/SignInComponent';
+import AlertSnackbar from '../alert/snackbar';
 import { useLocation, Link as RouterLink, useHistory } from 'react-router-dom';
-import { navigate } from '@reach/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../redux/ActionCreators';
 import { useStyles } from './styles/headerStyle';
@@ -153,6 +153,7 @@ const Header = (props) => {
                 </Toolbar>
                 {props.showProgressBar ? <LinearProgress className={classes.progressBar}/>: undefined}
             </AppBar>
+            <AlertSnackbar open={props.snackOpen} setOpen={props.setSnackOpen} message={props.snackMessage}/>
         </div>
     );
 }

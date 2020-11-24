@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Grid, Link } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { fetchMyPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent'
@@ -15,8 +15,6 @@ export default function MyPosts() {
     const auth = useSelector(state => state.Auth)
     const dispatch = useDispatch();
 
-    const router = useSelector(state => state.router);
-
     React.useEffect(() => {
         if(myposts.status === 'idle' && auth.isAuthenticated) {
             dispatch(fetchMyPosts(auth.currentUserId, 1));
@@ -24,8 +22,6 @@ export default function MyPosts() {
     }, [myposts, dispatch, auth]);
 
     const handlePages = (event, page) => {
-        console.log(event);
-        console.log(page);
         event.dispatchConfig = dispatch(fetchMyPosts(auth.currentUserId, page))
     };
 
@@ -38,7 +34,6 @@ export default function MyPosts() {
         const total_pages = myposts.myposts.total_pages;
         const current_page = myposts.myposts.current_page;
 
-        
         return(
             <React.Fragment>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
@@ -49,7 +44,7 @@ export default function MyPosts() {
                 {PostsList}
                 {myposts.myposts.results.length !== 0 ? <Grid container direction="column" justify="center" alignItems="flex-end">
                     <Pagination className={classes.pagination} page={current_page} count={total_pages} shape="rounded" onChange={(event, page) => handlePages(event, page)}/>
-                </Grid>: undefined}
+                </Grid>: undefined} 
             </React.Fragment>
         );
     }

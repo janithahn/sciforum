@@ -1,10 +1,9 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, CircularProgress, Typography, Grid, Divider } from '@material-ui/core';
+import { ThemeProvider, Typography, Grid, Divider } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import NotFound from '../alert/NotFoundComponent';
-import { useHistory, Redirect, useParams } from 'react-router-dom';
-import { createHistory } from '@reach/router';
+import { useHistory, useParams } from 'react-router-dom';
 import Editor from './EditorComponent';
 //import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from './styles/postsStyles';
@@ -12,7 +11,7 @@ import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import MDEditor from './MDE';
 
-export default function EditPost(props) {
+export default function EditPost({setSnackMessage, setSnackOpen}) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -56,7 +55,7 @@ export default function EditPost(props) {
       owner,
       title,
       body,
-    }));
+    }, setSnackMessage, setSnackOpen));
     //dispatch(fetchPosts());
     history.push(`/questions/${id}/`);
   }
