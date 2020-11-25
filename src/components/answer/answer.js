@@ -6,7 +6,8 @@ import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
 import AnswerViewCard from './answerViewCard';
-import { useLocation } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import AnswerSkel from './skeletons/answer';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(
@@ -40,7 +41,7 @@ export default function Answer({postId, refs}) {
 
     const answers = useSelector(state => state.Answers)
     const auth = useSelector(state => state.Auth);
-    const location = useLocation();
+    const answerVotesLoading = useSelector(state => state.answerVotes.status)
 
     const classes = useStyles();
 
@@ -50,8 +51,6 @@ export default function Answer({postId, refs}) {
     const [selectedAnswerContent, setSelectedAnswerContent] = React.useState('');
     const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
-    
-    const hash = location.hash.substring(1);
 
     const dispatch = useDispatch();
 
@@ -83,8 +82,13 @@ export default function Answer({postId, refs}) {
         setOpenDeleteModal(false);
     };
 
-    if(answers.status === 'loading' || answers.status === 'idle') {
-        return(<div></div>);
+    if(answers.status === 'loading' || answers.status === 'idle' || answerVotesLoading === 'loading') {
+        return(
+            <div>
+                <AnswerSkel/>
+                <AnswerSkel/>
+            </div>
+        );
     }else if(answers.status === 'failed') {
         return(<h4>Error loading...!</h4>);
     }else {

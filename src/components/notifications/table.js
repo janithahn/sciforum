@@ -193,7 +193,7 @@ export default function EnhancedTable({ rows, currentUser }) {
   const [orderBy, setOrderBy] = React.useState('date');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rowsData, setRowsData] = React.useState(rows);
   const [unreadState, setUnreadState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);

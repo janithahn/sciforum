@@ -1,9 +1,9 @@
 import React from 'react';
 import PostDetail from './PostDetailComponent';
 import Answer from '../answer/answer';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { useParams, useLocation } from 'react-router-dom';
-import { useSelector, useStore } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const useIsMounted = () => {
     const isMounted = React.useRef(false);

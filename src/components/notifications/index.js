@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications } from '../../redux/ActionCreators';
 import EnhancedTable from './table';
+import TableLoader from './skeletons/tableSkel';
 
 function createData(id, notification, action_object, date, state, actor) {
     return { id, notification, action_object, date, state, actor };
@@ -25,7 +26,7 @@ export default function Notifications({currentUserId}) {
     console.log(notifications);
 
     if(notifications.status === 'loading' || notifications.status === 'idle') {
-        return(<div></div>);
+        return(<TableLoader/>);
     }else if(notifications.errMess) {
         return(<p>Error loading...</p>);
     }else {
@@ -40,5 +41,6 @@ export default function Notifications({currentUserId}) {
         )));
 
         return(<EnhancedTable rows={rows} currentUser={auth.currentUser}/>);
+        //return(<TableLoader/>);
     }
 }

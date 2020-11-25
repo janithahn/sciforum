@@ -2,7 +2,6 @@ import { createMuiTheme, makeStyles } from '@material-ui/core';
 
 export const themeVote = createMuiTheme({
     typography: {
-        fontFamily: 'Open Sans',
     },
     palette: {
       secondary: {

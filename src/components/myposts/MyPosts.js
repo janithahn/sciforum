@@ -38,7 +38,6 @@ export default function MyPosts() {
         return(
             <React.Fragment>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
-                    <Link href="/public/NotFound/">Click Here</Link>
                     <RouterLink to="/ask" style={{textDecoration: 'none'}}>
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
                     </RouterLink>

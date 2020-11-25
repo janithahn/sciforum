@@ -1,5 +1,4 @@
 import React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Chip, Link } from '@material-ui/core';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Link as ReachLink } from '@reach/router';
@@ -12,6 +11,8 @@ import { fetchPostDetail, fetchPostVotesByLoggedInUser } from '../../redux/Actio
 import AnswerModalCard from '../answer/answerModalCard';
 import VoteButtons from '../vote/postVoteButtons';
 import RenderCard from './RenderCard';
+import Skeleton from 'react-loading-skeleton';
+import Article from './skeletons/post';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
     return(
@@ -48,7 +49,7 @@ export default function PostDetail() {
 
     const dispatch = useDispatch();
 
-    const {postId} = useParams(); //another way of approaching for getting the postId from the url other than match.params
+    const { postId } = useParams(); //another way of approaching for getting the postId from the url other than match.params
 
     const [open, setOpen] = React.useState(false);
 
@@ -124,9 +125,8 @@ export default function PostDetail() {
       setOpenModal(false);
     };
 
-    if(post.status === 'loading') {
-        //return(<CircularProgress color="secondary" size={15}/>);
-        return(<div></div>);
+    if(post.status === 'loading' || post.status === 'idle' || postVotes.status === 'loading') {
+        return(<div><Article/></div>);
     }else if(post.errMess) {
         return(<h4>Error loading...!</h4>);
     } else {
