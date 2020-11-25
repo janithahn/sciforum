@@ -93,7 +93,7 @@ export default function Answer({postId, refs}) {
     }else {
 
         const AnswersList = answers.answers.map((answer, key) =>
-            <Grid item innerRef={refs[answer.id]} key={key}> 
+            <Grid item innerRef={refs[answer.id]} key={answer.id}> 
                 <AnswerViewCard 
                     answer={answer} 
                     handleModalOpen={handleModalOpen}

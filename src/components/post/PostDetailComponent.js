@@ -135,7 +135,7 @@ export default function PostDetail() {
         if(post !== undefined) {
 
             const RenderPostTags = postTags ? postTags.map((tag, key) => 
-                <Grid item>
+                <Grid item key={key}>
                     <Chip className={classes.chip} color="primary" size="small" variant="outlined" label={tag} key={key} component="a" href={`/questions/tagged/${tag}`} clickable/>
                 </Grid>): [];
 

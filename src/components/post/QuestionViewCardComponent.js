@@ -10,18 +10,20 @@ import { Link } from '@material-ui/core';
 export default function QuestionViewCard(props) {
     const classes = useStyles();
 
+    const { item } = props;
+
     return (
         <Card className={classes.root} variant="outlined">
             <CardContent>
                 <CardActions>
-                    <Link href={`/questions/${props.item.id}/`} style={{textDecoration: 'none', color: 'inherit'}}>
+                    <Link href={`/questions/${item.id}/`} style={{textDecoration: 'none', color: 'inherit'}}>
                         <Typography variant="h5" component="h2">
-                            {props.item.title}
+                            {item.title}
                         </Typography>
                     </Link>
                 </CardActions>
                 <Typography variant="body2" component="p">
-                    {props.item.body}
+                    {item.body}
                 </Typography>
             </CardContent>
         </Card>
