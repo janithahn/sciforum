@@ -1,20 +1,10 @@
 import React from 'react';
 import { Typography, Box } from '@material-ui/core';
-import { fetchAnswerVotesDirect, fetchPostVotesDirect } from '../../redux/ActionCreators';
-import { useDispatch } from 'react-redux';
 import { useStyles } from './styles/voteStyles';
 
-export function LikeVotes({answerId, postId, likeCount, setLikeCount}) {
+export function LikeVotes({ likeCount }) {
 
     const classes = useStyles();
-
-    const dispatch = useDispatch();
-
-    React.useEffect(() => {
-        //dispatch(fetchAnswerVotes(answerId, 'LIKE'));
-        if(answerId) (dispatch(fetchAnswerVotesDirect(answerId, "LIKE", setLikeCount)));
-        if(postId) (dispatch(fetchPostVotesDirect(postId, "LIKE", setLikeCount)));
-    }, [dispatch, answerId, postId, setLikeCount]);
 
     return(
         <Typography component={'div'} className={classes.iconWrap} color="secondary">
@@ -25,17 +15,9 @@ export function LikeVotes({answerId, postId, likeCount, setLikeCount}) {
     );
 }
 
-export function DislikeVotes({answerId, postId, dislikeCount, setDislikeCount}) {
+export function DislikeVotes({ dislikeCount }) {
 
     const classes = useStyles();
-
-    const dispatch = useDispatch();
-
-    React.useEffect(() => {
-        //dispatch(fetchAnswerVotes(answerId, 'DISLIKE'));
-        if(answerId) (dispatch(fetchAnswerVotesDirect(answerId, "DISLIKE", setDislikeCount)));
-        if(postId) (dispatch(fetchPostVotesDirect(postId, "DISLIKE", setDislikeCount)));
-    }, [dispatch, answerId, postId, setDislikeCount]);
 
     return(
         <Typography component={'div'} className={classes.iconWrap} color="secondary">

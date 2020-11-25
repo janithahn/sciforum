@@ -8,7 +8,7 @@ import { useStyles, themeVote } from './styles/voteStyles';
 import { useDispatch } from 'react-redux';
 import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/ActionCreators';
 
- export default function VoteButtons({answerId, isAuthenticated, currentUserId, currentUserVote}) {
+ export default function VoteButtons({answerId, isAuthenticated, currentUserId, currentUserVote, likes, dislikes}) {
 
     const classes = useStyles();
 
@@ -16,8 +16,8 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
 
     const [openModal, setOpenModal] = React.useState(false);
 
-    const [likeCount, setLikeCount] = React.useState(0);
-    const [dislikeCount, setDislikeCount] = React.useState(0);
+    const [likeCount, setLikeCount] = React.useState(likes);
+    const [dislikeCount, setDislikeCount] = React.useState(dislikes);
 
     const [likedUser, setLikedUser] = React.useState('');
     const [dislikedUser, setDislikedUser] = React.useState('');
@@ -115,7 +115,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <LikeVotes answerId={answerId} likeCount={likeCount} setLikeCount={setLikeCount}/>
+                            <LikeVotes likeCount={likeCount}/>
                         </Grid>
                     </Grid>    
                 </Grid>
@@ -127,7 +127,7 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <DislikeVotes answerId={answerId} dislikeCount={dislikeCount} setDislikeCount={setDislikeCount}/>
+                            <DislikeVotes dislikeCount={dislikeCount}/>
                         </Grid>
                     </Grid>
                 </Grid>

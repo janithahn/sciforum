@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Chip, Link } from '@material-ui/core';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Link as ReachLink } from '@reach/router';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
 //import PostViewer from './PostViewerComponent';
@@ -11,7 +10,6 @@ import { fetchPostDetail, fetchPostVotesByLoggedInUser } from '../../redux/Actio
 import AnswerModalCard from '../answer/answerModalCard';
 import VoteButtons from '../vote/postVoteButtons';
 import RenderCard from './RenderCard';
-import Skeleton from 'react-loading-skeleton';
 import Article from './skeletons/post';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
@@ -66,6 +64,8 @@ export default function PostDetail() {
     const created_at = post.post ? post.post.created_at: null;
     const updated_at = post.post ? post.post.updated_at: null;
     const postTags = post.post ? post.post.tags: null;
+    const likes = post.post ? post.post.likes: 0;
+    const dislikes = post.post ? post.post.dislikes: 0;
     
     const postVotes = useSelector(state => state.postVotes);
 
@@ -92,11 +92,11 @@ export default function PostDetail() {
     
     React.useEffect(() => {
         if(post.post) {
-            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount, post.post.created_at, post.post.updated_at, post.post.tags);
+            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount, post.post.created_at, post.post.updated_at, post.post.tags, post.post.likes, post.post.dislikes);
         }
     }, [post]);
 
-    const handlePostInfo = (id, owner, title, body, viewCount, created_at, updated_at, postTags) => {
+    const handlePostInfo = (id, owner, title, body, viewCount, created_at, updated_at, postTags, likes, dislikes) => {
         setPostInfo({
             title,
             body,
@@ -107,6 +107,8 @@ export default function PostDetail() {
         created_at = created_at;
         updated_at = updated_at;
         postTags = postTags;
+        likes = likes;
+        dislikes = dislikes;
     }
 
     const handleClickOpen = () => {
@@ -170,6 +172,8 @@ export default function PostDetail() {
                                             isAuthenticated={auth.isAuthenticated} 
                                             currentUserId={auth.currentUserId}
                                             currentUserVote={currentUserVote}
+                                            likes={likes}
+                                            dislikes={dislikes}
                                         />
                                     </Grid>
                                 </Grid>

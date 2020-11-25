@@ -561,19 +561,6 @@ export const fetchAnswerVotes = (answerId, voteType) => async (dispatch) => {
     });
 }
 
-export const fetchAnswerVotesDirect = (answerId, voteType, setCount) => (dispatch) => {
-
-    axios.get(baseUrl + `/vote_api/answervote/?answer=${answerId}&voteType=${voteType}`)
-    .then(response => {
-        //console.log(response.data);
-        setCount(response.data.length);
-        return response;
-    })
-    .catch(error => {
-        console.log(error);
-    });
-}
-
 export const fetchAnswerVotesByLoggedInUser = (owner, answer) => (dispatch) => {
     dispatch(answerVotesLoading());
 
@@ -657,19 +644,6 @@ export const fetchPostVotes = (postId, voteType) => async (dispatch) => {
     .catch(error => {
         console.log(error);
         dispatch(postVotesFailed(error));
-    });
-}
-
-export const fetchPostVotesDirect = (postId, voteType, setCount) => (dispatch) => {
-
-    axios.get(baseUrl + `/vote_api/postvote/?post=${postId}&voteType=${voteType}`)
-    .then(response => {
-        //console.log(response.data);
-        setCount(response.data.length);
-        return response;
-    })
-    .catch(error => {
-        console.log(error);
     });
 }
 

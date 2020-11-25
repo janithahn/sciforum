@@ -65,6 +65,8 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                                     <Grid item>
                                         <VoteButtons 
                                             answerId={answer.id} 
+                                            likes={answer.likes}
+                                            dislikes={answer.dislikes}
                                             isAuthenticated={isAuthenticated} 
                                             currentUserId={currentUserId}
                                             currentUserVote={currentUserVote}

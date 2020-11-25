@@ -8,7 +8,7 @@ import { useStyles, themeVote } from './styles/voteStyles';
 import { useDispatch } from 'react-redux';
 import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
 
- export default function VoteButtons({postId, isAuthenticated, currentUserId, currentUserVote}) {
+ export default function VoteButtons({postId, isAuthenticated, currentUserId, currentUserVote, likes, dislikes}) {
 
     const classes = useStyles();
 
@@ -16,8 +16,8 @@ import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
 
     const [openModal, setOpenModal] = React.useState(false);
 
-    const [likeCount, setLikeCount] = React.useState(0);
-    const [dislikeCount, setDislikeCount] = React.useState(0);
+    const [likeCount, setLikeCount] = React.useState(likes);
+    const [dislikeCount, setDislikeCount] = React.useState(dislikes);
 
     const [likedUser, setLikedUser] = React.useState('');
     const [dislikedUser, setDislikedUser] = React.useState('');
