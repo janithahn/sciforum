@@ -6,7 +6,7 @@ import { fetchMyPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent'
 import Pagination from '@material-ui/lab/Pagination';
 import { useStyles } from './styles/mypostsStyles';
-import { Link } from '@material-ui/core';
+import MyPostsLoader from './skeletons/mypostsSkels';
 
 export default function MyPosts() {
 
@@ -27,7 +27,7 @@ export default function MyPosts() {
     };
 
     if(myposts.status === 'loading' || myposts.status === 'idle') {
-        return(<div></div>);
+        return(<MyPostsLoader/>);
     }else if(myposts.status === 'failed') {
         return(<h4>Error loading...!</h4>);
     } else {

@@ -12,14 +12,14 @@ import {
   Typography,
   CircularProgress,
 } from '@material-ui/core';
-import { LocationOn, AvTimerOutlined } from '@material-ui/icons';
+import { QuestionAnswer, Visibility, Inbox } from '@material-ui/icons';
 import { profileDetailTheme, useStyles } from './styles/profileStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUser, fetchUser } from '../../redux/ActionCreators';
 
-export default function ProfileDetails(props) {
+export default function Highlights(props) {
 
   const classes = useStyles();
   const auth = useSelector(state => state.Auth);
@@ -29,7 +29,8 @@ export default function ProfileDetails(props) {
   const usernameFromTheUrl = props.match.params.username;
 
   const [values, setValues] = useState({
-    location: user.user ? user.user.data.profile.location: null,
+    posts: user.user ? user.user.data.profile.location: null,
+    answers: user.user ? user.user.data.answers: null,
     postViews: user.user ? user.user.data.profile.postViews: null,
   });
 
@@ -41,13 +42,14 @@ export default function ProfileDetails(props) {
 
   React.useEffect(() => {
     if(user.user) {
-      handleUserInfo(user.user.data.profile.location, user.user.data.profile.postViews);
+      handleUserInfo(user.user.data.posts, user.user.data.answers, user.user.data.profile.postViews);
     }
   }, [user]);
 
-  const handleUserInfo = (location, postViews) => {
+  const handleUserInfo = (posts, answers, postViews) => {
     setValues({
-      location,
+      posts,
+      answers,
       postViews,
     });
   }
@@ -80,19 +82,26 @@ export default function ProfileDetails(props) {
     return (
       <ThemeProvider theme={profileDetailTheme}>
         <Card className={classes.root} elevation={1}>
-          <Grid container direction="column" justify="flex-start" alignItems="flex-start">
+          <Grid container direction="column" justify="flex-start" alignItems="flex-start" spacing={1}>
             <Grid item>
-              <CardHeader className={classes.cardHeader} title="Profile"/>
+              <CardHeader className={classes.cardHeader} title="Highlights"/>
             </Grid>
             <Divider className={classes.divider}/>
-            <CardContent className={classes.cardContent}>
-              <Grid item>
-                <Typography className={classes.iconWrap}><LocationOn style={{marginRight: 3}}/>Lives in {values.location}</Typography>
-              </Grid>
-              <Grid item>
-                <Typography className={classes.iconWrap}><AvTimerOutlined style={{marginRight: 3}}/>{values.postViews == null ? 0 + " Total post views": values.postViews + " Total post views"}</Typography>
-              </Grid>
-            </CardContent>
+            <Grid item>
+              <CardContent className={classes.cardContent}>
+                <Grid container direction="column" justify="center" alignItems="flex-start" spacing={1}>
+                  <Grid item>
+                    <Typography className={classes.iconWrap}><Inbox style={{marginRight: 8, fill: "gray"}}/>{values.posts}{values.posts === 1 ? " Question": " Questions"}</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography className={classes.iconWrap}><QuestionAnswer style={{marginRight: 8, fill: "gray"}}/>{values.answers}{values.answers === 1 ? " Answer": " Answers"}</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography className={classes.iconWrap}><Visibility style={{marginRight: 8, fill: "gray"}}/>{values.postViews == null ? 0 + " Total Question Views": values.postViews + " Total Question Views"}</Typography>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Grid>
           </Grid>
         </Card>
         {/*<form className={classes.root} onSubmit={formik.handleSubmit}>

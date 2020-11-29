@@ -1,11 +1,11 @@
 import React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Grid, Link } from '@material-ui/core';
 import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
+import HomeLoader from './skeletons/homeSkels';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 
@@ -16,8 +16,6 @@ export default function Home() {
     const [postData, setPostData] = React.useState([]);
     const [hasMoreItems, setHasMoreItems] = React.useState(true);
     const [nextHref, setNextHref] = React.useState(null);
-
-    //const [postList, setPostList] = React.useState(posts.posts.map((post) => <RenderCard key={post.id} item={post}/>));
 
     /*React.useEffect(() => {
         if(postsStatus === 'idle') {
@@ -44,8 +42,6 @@ export default function Home() {
 
     const fetchPostInfinite = (pageNum) => {
 
-        //dispatch(postsLoading());
-
         var url = baseUrl + `/api/?page=${pageNum}`;
         if(nextHref) {
             url = nextHref;
@@ -63,28 +59,23 @@ export default function Home() {
 
                 if(posts.data.next) {
                     setPostData(tempData);
-                    //dispatch(addPosts(tempData));
                     setNextHref(posts.data.next);
                 } else {
-                    //dispatch(resetPosts());
                     setHasMoreItems(false);
                 }
             }
         })
         .catch(error => {
             console.log(error);
-            //dispatch(postsFailed(error));
         });
     }
 
-    //const PostsList = posts.posts.map((post, key) => <QuestionViewCard key={key} item={post}/>);
     const PostsList = postData.map((post, key) => <QuestionViewCard key={key} item={post}/>);
 
 
     if(posts.status === 'loading') {
-        return(<CircularProgress color="secondary" size={15}/>);
+        return(<HomeLoader/>);
     }else if(posts.status === 'failed') {
-        //console.log(posts.errMess);
         return(<h4>Error loading...!</h4>);
     } else {
         return(
@@ -98,7 +89,8 @@ export default function Home() {
                     pageStart={0}
                     loadMore={fetchPostInfinite}
                     hasMore={hasMoreItems}
-                    loader={<CircularProgress color="secondary" size={15}/>}
+                    loader={<HomeLoader/>}
+                    threshold={900}
                 >
                     {PostsList}
                 </InfiniteScroll>

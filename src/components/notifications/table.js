@@ -120,9 +120,18 @@ const DropDown = ({anchorEl, handleClick, open, handleClose, id, handleMarkAllAs
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
+                getContentAnchorEl={null}
                 keepMounted
                 open={open}
                 onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
             >
                 <MenuItem onClick={handleMarkAllAsRead}>Mark all as read</MenuItem>
                 <MenuItem onClick={handleDeleteAllRowsData}>Delete All</MenuItem>

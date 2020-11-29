@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import moment from 'moment';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -17,7 +17,6 @@ import {
   Modal,
   Backdrop,
   Fade,
-  CircularProgress,
   Grid,
 } from '@material-ui/core';
 import { theme, useStyles, CustomTooltip } from './styles/profileStyles';
@@ -26,7 +25,7 @@ import { fetchUser } from '../../redux/ActionCreators';
 import UpdateName from './UpdateName';
 import UpdateAboutMe from './UpdateAboutMe';
 import UpdateProfileImage from './UpdateProfileImage';
-import { isEmpty } from '../../shared/AdditionalFunctions';
+import VerticalTabs from './ProfileVerticleTabs';
 
 /*function EditModal({openModal, className, handleModalClose, name, setName}) {
   return(
@@ -76,7 +75,12 @@ const Profile = ({ className, ...rest }) => {
 
   React.useEffect(() => {
     if(user.user) {
-      handleUserInfo(user.user.data.first_name, user.user.data.last_name, user.user.data.profile.aboutMe, user.user.data.profile.profileImg);
+      handleUserInfo(
+        user.user.data.first_name, 
+        user.user.data.last_name, 
+        user.user.data.profile.aboutMe, 
+        user.user.data.profile.profileImg
+      );
     }
   }, [user]);
 
@@ -125,7 +129,7 @@ const Profile = ({ className, ...rest }) => {
     />
   );
 
-  const handleUserInfo = (firstname, lastname, aboutMe, profileImage) => {
+  const handleUserInfo = (firstname, lastname, aboutMe, profileImage, answers, posts) => {
     setName({
       firstname,
       lastname,
@@ -146,72 +150,67 @@ const Profile = ({ className, ...rest }) => {
     //console.log(profileImage);
 
     return (
-      <ThemeProvider theme={theme}>
-        <Card className={clsx(classes.root, className)} {...rest} elevation={0}>
-          <CardContent>
+      <React.Fragment>
+        <ThemeProvider theme={theme}>
+          <Card className={clsx(classes.root, className)} {...rest} elevation={0}>
+            <CardContent>
 
-            <Grid container spacing={2}>
+              <Grid container direction="row" alignItems="center" spacing={3}>
 
-              <Grid item>
-                <EditTooltip selectionType={"profileImage"} handleModalOpen={handleModalOpen}>
-                  <Avatar className={classes.avatar} src={profileImage}/>
-                </EditTooltip>
-              </Grid>
-
-              <Grid item xs={12} sm container>
-                <Grid item justify="center" container direction="column" spacing={2}>
-                  <EditTooltip selectionType={"name"} handleModalOpen={handleModalOpen}>
-                    <Typography color="textPrimary" gutterBottom variant="h5">
-                      {name.firstname === '' && name.lastname === '' && auth.isAuthenticated && usernameFromTheUrl === auth.currentUser ? 
-                        <Link style={{color: 'gray'}}>Name</Link>
-                        : `${name.firstname} ${name.lastname}`
-                      }
-                    </Typography>
-                  </EditTooltip>
-
-                  <EditTooltip selectionType={"aboutMe"} handleModalOpen={handleModalOpen}>
-                    <Typography color="textPrimary" variant="body1">
-                      {aboutMe === '' && auth.isAuthenticated && usernameFromTheUrl === auth.currentUser ? 
-                        <Link style={{color: 'gray'}}>Title</Link>
-                        : aboutMe
-                      }
-                    </Typography>
+                <Grid item>
+                  <EditTooltip selectionType={"profileImage"} handleModalOpen={handleModalOpen}>
+                    <Avatar className={classes.avatar} src={profileImage}/>
                   </EditTooltip>
                 </Grid>
+
+                <Grid item xs={12} sm>
+                  <Grid container justify="center" alignItems="flex-start" direction="column" spacing={0}>
+                    <Grid item>
+                      <EditTooltip selectionType={"name"} handleModalOpen={handleModalOpen}>
+                        <Typography color="textPrimary" gutterBottom variant="h5">
+                          {name.firstname === '' && name.lastname === '' && auth.isAuthenticated && usernameFromTheUrl === auth.currentUser ? 
+                            <Link style={{color: 'gray'}}>Name</Link>
+                            : `${name.firstname} ${name.lastname}`
+                          }
+                        </Typography>
+                      </EditTooltip>
+                    </Grid>
+
+                    <Grid item>
+                      <EditTooltip selectionType={"aboutMe"} handleModalOpen={handleModalOpen}>
+                        <Typography color="textPrimary" variant="body1">
+                          {aboutMe === '' && auth.isAuthenticated && usernameFromTheUrl === auth.currentUser ? 
+                            <Link style={{color: 'gray'}}>Title</Link>
+                            : aboutMe
+                          }
+                        </Typography>
+                      </EditTooltip>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <EditModal>
+                  <Fade in={openModal}>
+                    {
+                      modalSelection === 'name' ? 
+                        <UpdateName name={name} setName={setName} handleModalClose={handleModalClose}/>: 
+                      modalSelection === 'aboutMe' ?
+                        <UpdateAboutMe aboutMe={aboutMe} setAboutMe={setAboutMe} handleModalClose={handleModalClose}/>:
+                      modalSelection === 'profileImage' ?
+                        <UpdateProfileImage usernameFromTheUrl={usernameFromTheUrl} profileImage={profileImage} setProfileImage={setProfileImage} handleModalClose={handleModalClose}/>:
+                      undefined
+                    }
+                  </Fade>
+                </EditModal>
+
               </Grid>
 
-              <Grid container direction="row" justify="flex-end" spacing={3}>
-                <Grid item>
-                  <Typography variant="body1" color="textSecondary">Ask Question</Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body1" color="textSecondary">Ask question</Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant="body1" color="textSecondary">Ask question</Typography>
-                </Grid>
-              </Grid>
-
-              <EditModal>
-                <Fade in={openModal}>
-                  {
-                    modalSelection === 'name' ? 
-                      <UpdateName name={name} setName={setName} handleModalClose={handleModalClose}/>: 
-                    modalSelection === 'aboutMe' ?
-                      <UpdateAboutMe aboutMe={aboutMe} setAboutMe={setAboutMe} handleModalClose={handleModalClose}/>:
-                    modalSelection === 'profileImage' ?
-                      <UpdateProfileImage usernameFromTheUrl={usernameFromTheUrl} profileImage={profileImage} setProfileImage={setProfileImage} handleModalClose={handleModalClose}/>:
-                    undefined
-                  }
-                </Fade>
-              </EditModal>
-
-            </Grid>
-
-          </CardContent>
-        </Card>
-        <Divider className={classes.divider}/>
-      </ThemeProvider>
+            </CardContent>
+          </Card>
+          <Divider className={classes.divider}/>
+          <VerticalTabs/>
+        </ThemeProvider>
+      </React.Fragment>
     );
   }
 };

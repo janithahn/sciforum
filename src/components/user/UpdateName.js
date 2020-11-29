@@ -58,7 +58,7 @@ export default function UpdateName(props) {
       <form className={classes.root} onSubmit={formik.handleSubmit}>
         <Card>
           <CardHeader
-            title="Update name"
+            title="Update Name"
           />
           <Divider />
           <CardContent>

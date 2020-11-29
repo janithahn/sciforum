@@ -220,8 +220,8 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         window.location.reload();
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {
@@ -275,8 +275,8 @@ export const signupUser = (creds) => (dispatch) => {
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
         window.location.reload();
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
         //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
@@ -323,8 +323,8 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         window.location.reload();
+        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {
@@ -373,7 +373,7 @@ export const updateUser = (auth, firstname, lastname, aboutMe) => (dispatch) => 
         last_name: lastname,
         profile: {
             aboutMe: aboutMe,
-        },
+        }
     },
     {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
@@ -416,6 +416,36 @@ export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) =
     .then(res => {
         console.log(res);
         dispatch(fetchUser(null, usernameFromTheUrl));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const updateUserContact = (auth, contact) => (dispatch) => {
+    axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
+        contact
+    },
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const updateUserEmployment = (auth, employment) => (dispatch) => {
+    axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
+        employment
+    },
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
     })
     .catch(error => {
         console.log(error);

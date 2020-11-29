@@ -17,5 +17,6 @@ export const useStyles = makeStyles({
       marginBottom: 12,
     },
     chip: {
+      height: 20
     },
   });

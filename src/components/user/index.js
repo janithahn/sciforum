@@ -5,7 +5,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import Profile from './Profile';
-import ProfileDetails from './ProfileDetails';
+import Highlights from './Highlights';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +39,7 @@ const Account = (props) => {
           md={6}
           xs={12}
         >
-          <ProfileDetails match={props.match}/>
+          <Highlights match={props.match}/>
         </Grid>
       </Grid>
     </Container>

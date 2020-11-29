@@ -55,11 +55,19 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0, 1),
   },
   divider: {
-    backgroundColor: 'gray'
+    background: 'gray'
   },
   iconWrap: {
     verticalAlign: 'middle',
     display: 'inline-flex'
+  },
+  formControl: {
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(3),
   },
 }));
 
