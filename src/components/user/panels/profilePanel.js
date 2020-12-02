@@ -1,29 +1,45 @@
 import React from 'react';
-import { Grid, Typography, Link, Divider, IconButton, Modal, Fade, Backdrop } from '@material-ui/core';
-import { Facebook, LinkedIn, GitHub, Edit } from '@material-ui/icons';
+import { Grid, Typography, Link, Divider, IconButton, Modal, Fade, Backdrop, Box } from '@material-ui/core';
+import { Facebook, LinkedIn, GitHub, Edit, AddCircleOutline, School, Work, Language, Build } from '@material-ui/icons';
 import EditContact from './editors/editContact';
 import EditCredentials from './editors/editCredentials';
-import EditEmployment from './editors/credentials//editEmployment';
+import CreateEmployment from './editors/credentials/createEmployment';
 import { useStyles } from '../styles/profileStyles';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { fetchUserEmployment } from '../../../redux/ActionCreators';
 
 export default function ProfilePanel() {
 
     const classes = useStyles();
 
+    const dispatch = useDispatch();
+
     const { username } = useParams();
 
     const user = useSelector(state => state.User);
     const auth = useSelector(state => state.Auth);
+    const userEmployment = useSelector(state => state.UserEmployment);
+
+    React.useEffect(() => {
+        if(userEmployment.status === 'idle') dispatch(fetchUserEmployment(username));
+    }, [dispatch]);
+
+    React.useEffect(() => {
+        if(userEmployment.userEmployment) handleUserEmployment(userEmployment.userEmployment);
+    }, [userEmployment]);
 
     const [contact, setContact] = React.useState(user.user ? user.user.data.contact: null);
-    const [employment, setEmployment] = React.useState(user.user ? user.user.data.employment: null);
-    const [education, setEducation] = React.useState(user.user ? user.user.data.education: null);
-    const [languages, setLanguages] = React.useState(user.user ? user.user.data.languages: null);
-    const [skills, setSkills] = React.useState(user.user ? user.user.data.skills: null);
+    const [employment, setEmployment] = React.useState(userEmployment.userEmployment ? userEmployment.userEmployment: []);
+    const [education, setEducation] = React.useState(user.user ? user.user.data.education: []);
+    const [languages, setLanguages] = React.useState(user.user ? user.user.data.languages: []);
+    const [skills, setSkills] = React.useState(user.user ? user.user.data.skills: []);
 
-    console.log(employment);
+    const handleUserEmployment = (employment) => {
+        setEmployment(employment);
+    };
+
+    const [selectedEmploymentItem, setSelectedEmploymentItem] = React.useState();
 
     const [openModal, setOpenModal] = React.useState(false);
     const [modalSelection, setModalSelection] = React.useState(null);
@@ -58,10 +74,10 @@ export default function ProfilePanel() {
             <Link underline="none" href={link}>
                 <Grid container direction="row" alignItems="center" justify="flex-start" spacing={0}>
                     <Grid item>
-                        <GitHub/>
+                        <GitHub fontSize="small"/>
                     </Grid>
                     <Grid item>
-                        <Typography className={classes.iconWrap}>{"Github"}</Typography>
+                        <Typography variant="subtitle2" >{"Github"}</Typography>
                     </Grid>
                 </Grid>
             </Link>
@@ -73,10 +89,10 @@ export default function ProfilePanel() {
             <Link underline="none" href={link}>
                 <Grid container direction="row" alignItems="center" justify="flex-start" spacing={0}>
                     <Grid item>
-                        <LinkedIn/>
+                        <LinkedIn fontSize="small"/>
                     </Grid>
                     <Grid item>
-                        <Typography className={classes.iconWrap}>{"LinkedIn"}</Typography>
+                        <Typography variant="subtitle2" >{"LinkedIn"}</Typography>
                     </Grid>
                 </Grid>
             </Link>
@@ -88,15 +104,28 @@ export default function ProfilePanel() {
             <Link underline="none" href={link}>
                 <Grid container direction="row" alignItems="center" justify="flex-start" spacing={0}>
                     <Grid item>
-                        <Facebook/>
+                        <Facebook fontSize="small"/>
                     </Grid>
                     <Grid item>
-                        <Typography className={classes.iconWrap}>{"Facebook"}</Typography>
+                        <Typography variant="subtitle2">{"Facebook"}</Typography>
                     </Grid>
                 </Grid>
             </Link>
         );
     }
+
+    const EmploymentTypo = employment ? employment.map(item => 
+        <Grid item key={item.id}>
+            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                <Grid item>
+                    <Work fontSize="small" style={{fill: "gray"}}/>
+                </Grid>
+                <Grid item>
+                    <Typography variant="subtitle2">{item.position + " at " + item.company}</Typography>
+                </Grid>
+            </Grid>
+        </Grid>
+    ): undefined;
 
     return(
         <React.Fragment>
@@ -117,22 +146,16 @@ export default function ProfilePanel() {
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Grid container direction="row" alignItems="center" justify="flex-start" spacing={2}>
-                                <Grid item>
-                                    {contact ? contact.github !== "" ? <GithubLink link={contact.github}/>: undefined: undefined}
+                            <Box m={0}>
+                                <Grid container direction="column" alignItems="baseline" justify="center" spacing={1}>
+                                    {EmploymentTypo}
                                 </Grid>
-                                <Grid item>
-                                    {contact ? contact.linkedIn !== "" ? <LinkedInLink link={contact.linkedIn}/>: undefined: undefined}
-                                </Grid>
-                                <Grid item>
-                                    {contact ? contact.facebook !== "" ? <FacebookLink link={contact.facebook}/>: undefined: undefined}
-                                </Grid>
-                            </Grid>
+                            </Box>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid item>
-                    <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={1}>
+                    <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={2}>
                         <Grid item>
                             <Grid container direction="row" alignItems="center" justify="flex-start" spacing={1}>
                                 <Grid item>
@@ -181,12 +204,21 @@ export default function ProfilePanel() {
                             handleModalClose={handleModalClose}
                             setModalSelection={setModalSelection}
                             setOpenModal={setOpenModal}
-                        />:
-                    modalSelection === 'employment' ?
-                        <EditEmployment
                             employment={employment}
-                            setEmployment={setEmployment}
+                            setSelectedEmploymentItem={setSelectedEmploymentItem}
+                        />:
+                    modalSelection === 'employmentCreate' ?
+                        <CreateEmployment
+                            employment={employment}
                             handleModalClose={handleModalClose}
+                            varient="create"
+                        />:
+                    modalSelection === 'employmentUpdate' ?
+                        <CreateEmployment
+                            employment={employment}
+                            handleModalClose={handleModalClose}
+                            selectedEmploymentItem={selectedEmploymentItem}
+                            varient="update"
                         />:
                     undefined
                 }

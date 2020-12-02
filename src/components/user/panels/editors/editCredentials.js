@@ -9,17 +9,14 @@ import {
   Typography,
   ThemeProvider,
   Grid,
-  Modal,
-  Fade,
   Menu,
   MenuItem,
-  Backdrop,
 } from '@material-ui/core';
 import { AddCircleOutline, School, Work, Language, Build } from '@material-ui/icons';
 import { theme, useStyles } from '../../styles/profileStyles';
 import { useSelector } from 'react-redux';
 
-export default function EditCredentials(props) {
+export default function EditCredentials({ handleModalClose, setModalSelection, setOpenModal, employment, setSelectedEmploymentItem }) {
   const classes = useStyles();
 
   const auth = useSelector(state => state.Auth);
@@ -37,11 +34,10 @@ export default function EditCredentials(props) {
   const open = Boolean(anchorEl);
   const popoverId = open ? 'popover' : undefined;
 
-  const { handleModalClose, setModalSelection, setOpenModal } = props;
-
-  const handleEmploymentModalOpen = () => {
+  const handleEmploymentModalOpen = (modal, selectedItemId) => {
+    employment.forEach(item => item.id === selectedItemId ? setSelectedEmploymentItem(item): null)
     setOpenModal(true);
-    setModalSelection("employment");
+    setModalSelection(modal);
   };
 
   function DropDown() {
@@ -62,13 +58,29 @@ export default function EditCredentials(props) {
                 horizontal: 'left',
             }}
         >
-            <MenuItem onClick={() => handleEmploymentModalOpen()}><Work fontSize="small" style={{marginRight: 6}}/>Employment</MenuItem>
-            <MenuItem><School fontSize="small" style={{marginRight: 6}}/>Education</MenuItem>
-            <MenuItem><Language fontSize="small" style={{marginRight: 6}}/>Language</MenuItem>
-            <MenuItem><Build fontSize="small" style={{marginRight: 6}}/>Skills</MenuItem>
+            <MenuItem onClick={() => handleEmploymentModalOpen("employmentCreate")}><Work fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Employment</MenuItem>
+            <MenuItem><School fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Education</MenuItem>
+            <MenuItem><Language fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Language</MenuItem>
+            <MenuItem><Build fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Skills</MenuItem>
         </Menu>
       );
   }
+
+  const EmploymentTypo = employment ? employment.map(item => 
+    <Grid item key={item.id}>
+        <MenuItem onClick={() => handleEmploymentModalOpen("employmentUpdate", item.id)}>
+            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                <Grid item>
+                    <Work fontSize="small" style={{fill: "gray"}}/>
+                </Grid>
+                <Grid item>
+                    <Typography variant="subtitle2">{item.position + " at " + item.company}</Typography>
+                </Grid>
+            </Grid>
+        </MenuItem>
+        <Divider/>
+    </Grid>
+): undefined;
 
   return (
     <ThemeProvider theme={theme}>
@@ -79,7 +91,7 @@ export default function EditCredentials(props) {
                 />
                 <Divider />
                 <CardContent>
-                    <Grid container direction="column" alignItems="flex-start" justify="center" spacing={2}>
+                    <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
                         <Grid item>
                             <Box display="flex" justifyContent="flex-end" alignItems="center">
                                 <Button size="small" style={{textTransform: 'none'}} onClick={handleClickAddCredentials}>
@@ -87,8 +99,13 @@ export default function EditCredentials(props) {
                                     <Typography variant="subtitle1">Add a Credential</Typography>
                                 </Button>
                             </Box>
-                        </Grid>
+                        </Grid>  
                         <Grid item>
+                            <Box display="flex" justifyContent="flex-end" alignItems="center" marginLeft={1}>
+                                <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
+                                    {EmploymentTypo}
+                                </Grid>
+                            </Box>
                         </Grid>
                     </Grid>
                 </CardContent>

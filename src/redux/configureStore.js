@@ -4,6 +4,7 @@ import logger from 'redux-logger';
 import { Posts } from './actions/posts';
 import { Auth } from './actions/auth';
 import { User } from './actions/user';
+import { UserEmployment } from './actions/credentials/employment';
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
 import { answerVotes, postVotes } from './actions/votes';
@@ -26,6 +27,7 @@ export const ConfigureStore = () => {
             Posts,
             Auth,
             User,
+            UserEmployment,
             Post,
             Answers,
             answerVotes,

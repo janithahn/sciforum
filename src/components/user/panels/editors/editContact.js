@@ -55,7 +55,7 @@ export default function EditContact(props) {
   });
 
   return (
-    <Box width="75%">
+    <Box>
         <ThemeProvider theme={theme}>
             <form className={classes.root} onSubmit={formik.handleSubmit}>
                 <Card>

@@ -72,7 +72,7 @@ export default function VerticalTabs() {
         onChange={handleChange}
         aria-label="Vertical tabs profile"
         className={classes.tabs}
-        scrollButtons
+        variant="scrollable"
       >
         <TabEnhanced label="Profile" {...a11yProps(0)} />
         <TabEnhanced label="Recent" {...a11yProps(1)} />

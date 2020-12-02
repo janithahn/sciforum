@@ -334,6 +334,7 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
 
 //RETREIVING USER INFORMATION
 export const fetchUser = (token, currentUser) => (dispatch) => {
+    
     dispatch(userLoading());
 
     //dispatch(getNewToken(localStorage.getItem('token')));
@@ -437,15 +438,77 @@ export const updateUserContact = (auth, contact) => (dispatch) => {
     })
 }
 
-export const updateUserEmployment = (auth, employment) => (dispatch) => {
-    axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
-        employment
-    },
+//USER_EMPLOYMENT
+export const fetchUserEmployment = (requestUsername) => (dispatch) => {
+    dispatch(userEmploymentLoading());
+
+    axios.get(baseUrl + `/profile_api/user_employment/viewset/?username=${requestUsername}`,
     {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);
+        dispatch(addUserEmployment(res.data));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(userEmploymentFailed(error));
+    })
+} 
+
+export const userEmploymentLoading = () => ({
+    type: ActionTypes.USER_EMPLOYMENT_LOADING
+});
+
+export const userEmploymentFailed = (errmess) => ({
+    type: ActionTypes.USER_EMPLOYMENT_FAILED,
+    payload: errmess
+});
+
+export const addUserEmployment = (userEmployment) => ({
+    type: ActionTypes.ADD_USER_EMPLOYMENT,
+    payload: userEmployment
+});
+
+export const updateUserEmployment = (employment, id) => (dispatch) => {
+    
+    axios.patch(baseUrl + `/users/employment/${id}/update/`, employment,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserEmployment(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const createUserEmployment = (employment) => (dispatch) => {
+    
+    axios.post(baseUrl + `/users/employment/create/`, employment,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserEmployment(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const deleteUserEmployment = (employmentId) => (dispatch) => {
+    
+    axios.delete(baseUrl + `/users/employment/${employmentId}/delete/`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserEmployment(localStorage.getItem('currentUser')));
     })
     .catch(error => {
         console.log(error);

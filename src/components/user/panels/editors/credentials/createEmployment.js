@@ -19,17 +19,17 @@ import { theme, useStyles } from '../../../styles/profileStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUserEmployment } from '../../../../../redux/ActionCreators';
+import { updateUserEmployment, createUserEmployment } from '../../../../../redux/ActionCreators';
+import AlertDialogSlide from '../alert/alert';
 
-export default function EditEmployment(props) {
+export default function CreateEmployment({ employment, handleModalClose, varient, selectedEmploymentItem }) {
+
   const classes = useStyles();
   
   const auth = useSelector(state => state.Auth);
   const dispatch = useDispatch();
 
-  const { employment, setEmployment, handleModalClose } = props;
-
-  const range = (min, max) => [...Array(max - min + 1).keys()].map(i => <MenuItem value={i + min}>{i + min}</MenuItem>);
+  const range = (min, max) => [...Array(max - min + 1).keys()].map(i => <MenuItem key={i} value={i + min}>{i + min}</MenuItem>);
 
   const profileSchema = Yup.object().shape({
     position: Yup.string()
@@ -44,33 +44,40 @@ export default function EditEmployment(props) {
 
   const formik = useFormik({
     initialValues: {
-      position: employment.position, 
-      company: employment.company,
-      start_year: employment.start_year,
-      end_year: employment.end_year,
-      currently_work_here: employment.currently_work_here,
+      position: varient === "create" ? "": selectedEmploymentItem.position, 
+      company: varient === "create" ? "": selectedEmploymentItem.company,
+      start_year: varient === "create" || selectedEmploymentItem.start_year === null ? "": selectedEmploymentItem.start_year,
+      end_year: varient === "create" || selectedEmploymentItem.end_year === null ? "": selectedEmploymentItem.end_year,
+      currently_work: varient === "create" ? false: selectedEmploymentItem.currently_work,
     },
     onSubmit: (values) => {
-        /*dispatch(updateUserEmployment(auth, {
+        const submitVal = {
+            user: auth.currentUserId,
             position: values.position, 
             company: values.company,
-            start_year: values.start_year,
-            end_year: values.end_year,
-            currently_work_here: values.currently_work_here,
-        }));*/
-        setEmployment({
-            position: values.position, 
-            company: values.company,
-            start_year: values.start_year,
-            end_year: values.currently_work_here ? "": values.end_year,
-            currently_work_here: values.currently_work_here,
-        });
+            start_year: values.start_year === "" ? null: values.start_year,
+            end_year: values.currently_work ? null: values.end_year,
+            currently_work: values.currently_work,
+        }
+        if(employment.includes(selectedEmploymentItem)) {
+            dispatch(updateUserEmployment(submitVal, selectedEmploymentItem.id));
+        }else {
+            dispatch(createUserEmployment(submitVal));
+        }
         handleModalClose();
     },
     validationSchema: profileSchema,
   });
 
-  console.log(employment);
+  const [alertModalOpen, setAlertModalOpen] = React.useState(false);
+
+  const handleAlertModalOpen = () => {
+    setAlertModalOpen(true);
+  };
+
+  const handleAlertModalClose = () => {
+    setAlertModalOpen(false);
+  };
 
   return (
         <ThemeProvider theme={theme}>
@@ -124,7 +131,7 @@ export default function EditEmployment(props) {
                             <FormControl variant="outlined" className={classes.formControl}>
                                 <InputLabel id="end_year">End Year</InputLabel>
                                 <Select
-                                    disabled={formik.values.currently_work_here}
+                                    disabled={formik.values.currently_work}
                                     labelId="end_year"
                                     id="end_year"
                                     name="end_year"
@@ -140,7 +147,7 @@ export default function EditEmployment(props) {
                             </FormControl>
                             <FormControlLabel
                                 style={{margin: 3}}
-                                control={<Checkbox checked={formik.values.currently_work_here} value="currently_work" color="primary" onChange={(event) => formik.setFieldValue('currently_work_here', event.target.checked)}/>}
+                                control={<Checkbox checked={formik.values.currently_work} value="currently_work" color="primary" onChange={(event) => formik.setFieldValue('currently_work', event.target.checked)}/>}
                                 label="Currently work here"
                             />
                         </CardContent>
@@ -168,7 +175,22 @@ export default function EditEmployment(props) {
                             >
                                 Save
                             </Button>
+                            {varient === "update" ? <Button
+                                size="small"
+                                color="secondary"
+                                variant="contained"
+                                onClick={handleAlertModalOpen}
+                                className={classes.submit}
+                            >
+                                Delete
+                            </Button>: undefined}
                         </Box>
+                        <AlertDialogSlide 
+                            open={alertModalOpen} 
+                            credentialId={varient === "update" ? selectedEmploymentItem.id: undefined} 
+                            handleClose={handleAlertModalClose}
+                            handleEmploymentModalClose={handleModalClose}
+                        />
                     </Card>
                 </form>
         </ThemeProvider>
