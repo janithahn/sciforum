@@ -17,7 +17,7 @@ import { theme, useStyles } from '../../styles/profileStyles';
 import { useSelector } from 'react-redux';
 
 export default function EditCredentials({ 
-    handleModalClose, setModalSelection, setOpenModal, employment, setSelectedEmploymentItem, education, setSelectedEducationItem
+    handleModalClose, setModalSelection, setOpenModal, employment, setSelectedCredentialItem, education, skills
 }) {
   const classes = useStyles();
 
@@ -37,13 +37,19 @@ export default function EditCredentials({
   const popoverId = open ? 'popover' : undefined;
 
   const handleEmploymentModalOpen = (modal, selectedItemId) => {
-    employment.forEach(item => item.id === selectedItemId ? setSelectedEmploymentItem(item): null)
+    employment.forEach(item => item.id === selectedItemId ? setSelectedCredentialItem(item): null)
     setOpenModal(true);
     setModalSelection(modal);
   };
 
   const handleEducationModalOpen = (modal, selectedItemId) => {
-    education.forEach(item => item.id === selectedItemId ? setSelectedEducationItem(item): null)
+    education.forEach(item => item.id === selectedItemId ? setSelectedCredentialItem(item): null)
+    setOpenModal(true);
+    setModalSelection(modal);
+  };
+
+  const handleSkillModalOpen = (modal, selectedItemId) => {
+    skills.forEach(item => item.id === selectedItemId ? setSelectedCredentialItem(item): null)
     setOpenModal(true);
     setModalSelection(modal);
   };
@@ -68,8 +74,8 @@ export default function EditCredentials({
         >
             <MenuItem onClick={() => handleEmploymentModalOpen("employmentCreate")}><Work fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Employment</MenuItem>
             <MenuItem onClick={() => handleEducationModalOpen("educationCreate")}><School fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Education</MenuItem>
-            <MenuItem><Language fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Language</MenuItem>
-            <MenuItem><Build fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Skills</MenuItem>
+            <MenuItem onClick={() => handleSkillModalOpen("skillCreate")}><Language fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Skill</MenuItem>
+            <MenuItem><Build fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Language</MenuItem>
         </Menu>
       );
   }
@@ -106,6 +112,22 @@ export default function EditCredentials({
     </Grid>
   ): undefined;
 
+  const SkillsTypo = skills ? skills.map(item => 
+    <Grid item key={item.id}>
+        <MenuItem onClick={() => handleSkillModalOpen("skillUpdate", item.id)}>
+            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                <Grid item>
+                    <Build fontSize="small" style={{fill: "gray"}}/>
+                </Grid>
+                <Grid item>
+                    <Typography variant="subtitle2">{item.skill}</Typography>
+                </Grid>
+            </Grid>
+        </MenuItem>
+        <Divider/>
+    </Grid>
+  ): undefined;
+
   return (
     <ThemeProvider theme={theme}>
         <Box width={600}>
@@ -129,6 +151,7 @@ export default function EditCredentials({
                                 <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
                                     {EmploymentTypo}
                                     {EducationTypo}
+                                    {SkillsTypo}
                                 </Grid>
                             </Box>
                         </Grid>

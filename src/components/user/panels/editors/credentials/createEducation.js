@@ -63,7 +63,6 @@ export default function CreateEducation({ education, handleModalClose, varient, 
             dispatch(createUserEducation(submitVal));
         }
         handleModalClose();
-        console.log(submitVal);
     },
     validationSchema: profileSchema,
   });
