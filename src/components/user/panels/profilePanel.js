@@ -6,10 +6,11 @@ import EditCredentials from './editors/editCredentials';
 import CreateEmployment from './editors/credentials/createEmployment';
 import CreateEducation from './editors/credentials/createEducation';
 import CreateSkills from './editors/credentials/createSkills';
+import CreateLanguages from './editors/credentials/createLanguages';
 import { useStyles } from '../styles/profileStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchUserEmployment, fetchUserEducation, fetchUserSkills } from '../../../redux/ActionCreators';
+import { fetchUserEmployment, fetchUserEducation, fetchUserSkills, fetchUserLanguages } from '../../../redux/ActionCreators';
 
 export default function ProfilePanel() {
 
@@ -24,6 +25,7 @@ export default function ProfilePanel() {
     const userEmployment = useSelector(state => state.UserEmployment);
     const userEducation = useSelector(state => state.UserEducation);
     const userSkills = useSelector(state => state.UserSkills);
+    const userLanguages = useSelector(state => state.UserLanguages);
 
     //fetching user credentials
     React.useEffect(() => {
@@ -36,6 +38,10 @@ export default function ProfilePanel() {
 
     React.useEffect(() => {
         if(userSkills.status === 'idle') dispatch(fetchUserSkills(username));
+    }, [dispatch]);
+
+    React.useEffect(() => {
+        if(userLanguages.status === 'idle') dispatch(fetchUserLanguages(username));
     }, [dispatch]);
 
     //adding user credentials to relevant states
@@ -51,12 +57,16 @@ export default function ProfilePanel() {
         if(userSkills.userSkills) handleUserSkills(userSkills.userSkills);
     }, [userSkills]);
 
+    React.useEffect(() => {
+        if(userLanguages.userLanguages) handleUserLanguages(userLanguages.userLanguages);
+    }, [userLanguages]);
+
     //relevant credential states
     const [contact, setContact] = React.useState(user.user ? user.user.data.contact: null);
     const [employment, setEmployment] = React.useState(userEmployment.userEmployment ? userEmployment.userEmployment: []);
     const [education, setEducation] = React.useState(userEducation.userEducation ? userEducation.userEducation: []);
     const [skills, setSkills] = React.useState(userSkills.userSkills ? userSkills.userSkills: []);
-    const [languages, setLanguages] = React.useState(user.user ? user.user.data.languages: []);
+    const [languages, setLanguages] = React.useState(userLanguages.userLanguages ? userLanguages.userLanguages: []);
 
     //methods which handle adding user credentials into relevant state
     const handleUserEmployment = (employment) => {
@@ -69,6 +79,10 @@ export default function ProfilePanel() {
 
     const handleUserSkills = (skills) => {
         setSkills(skills);
+    };
+
+    const handleUserLanguages = (languages) => {
+        setLanguages(languages);
     };
 
     const [selectedCredentialItem, setSelectedCredentialItem] = React.useState();
@@ -180,6 +194,16 @@ export default function ProfilePanel() {
         </Grid>
     ): undefined;
 
+    const LanguagesTypo = languages && languages !== [] ? languages.map(item => 
+        <Grid item key={item.id}>
+            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                <Grid item>
+                    <Typography variant="subtitle2">{item.language}</Typography>
+                </Grid>
+            </Grid>
+        </Grid>
+    ): undefined;
+
     return(
         <React.Fragment>
             <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={2}>
@@ -201,24 +225,55 @@ export default function ProfilePanel() {
                         <Grid item>
                             <Box m={0}>
                                 <Grid container direction="column" alignItems="baseline" justify="center" spacing={1}>
+                                    
                                     {EmploymentTypo}
-                                    {EducationTypo}
                                     <Grid item>
-                                    <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
-                                        <Grid item>
-                                            <Build fontSize="small" style={{fill: "gray"}}/>
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography variant="subtitle2">Skills</Typography>
-                                            <Divider/>
-                                        </Grid>
+                                        <Divider className={classes.divider}/>
                                     </Grid>
+
+                                    {EducationTypo}
+                                    <Divider/>
+
+                                    {languages.length !== 0 ? <Grid item>
+                                        <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                                            <Grid item>
+                                                <Language fontSize="small" style={{fill: "gray"}}/>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography variant="subtitle2">Languages</Typography>
+                                                <Divider/>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>: undefined}
+                                    <Box marginLeft={4}>
+                                        <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
+                                            {LanguagesTypo}
+                                        </Grid>
+                                    </Box>
+                                    <Grid item>
+                                        <Divider className={classes.divider}/>
                                     </Grid>
+
+                                    {skills.length !== 0 ? <Grid item>
+                                        <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                                            <Grid item>
+                                                <Build fontSize="small" style={{fill: "gray"}}/>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography variant="subtitle2">Skills</Typography>
+                                                <Divider/>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>: undefined}
                                     <Box marginLeft={4}>
                                         <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
                                             {SkillsTypo}
                                         </Grid>
                                     </Box>
+                                    <Grid item>
+                                        <Divider className={classes.divider}/>
+                                    </Grid>
+
                                 </Grid>
                             </Box>
                         </Grid>
@@ -268,6 +323,7 @@ export default function ProfilePanel() {
                             employment={employment}
                             education={education}
                             skills={skills}
+                            languages={languages}
                             setSelectedCredentialItem={setSelectedCredentialItem}
                         />:
                     modalSelection === 'employmentCreate' ?
@@ -307,6 +363,19 @@ export default function ProfilePanel() {
                             skills={skills}
                             handleModalClose={handleModalClose}
                             selectedSkillItem={selectedCredentialItem}
+                            varient="update"
+                        />:
+                    modalSelection === 'languageCreate' ?
+                        <CreateLanguages
+                            languages={languages}
+                            handleModalClose={handleModalClose}
+                            varient="create"
+                        />:
+                    modalSelection === 'languageUpdate' ?
+                        <CreateLanguages
+                            languages={languages}
+                            handleModalClose={handleModalClose}
+                            selectedLanguageItem={selectedCredentialItem}
                             varient="update"
                         />:
                     undefined

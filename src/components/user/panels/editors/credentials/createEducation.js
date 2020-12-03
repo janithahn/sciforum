@@ -32,9 +32,11 @@ export default function CreateEducation({ education, handleModalClose, varient, 
   const profileSchema = Yup.object().shape({
     school: Yup.string()
         .required()
-        .min(1, 'Too Short!'),
+        .min(1, 'Too Short!')
+        .max(120, 'Not more than 120 characters'),
     degree: Yup.string()
         .required()
+        .max(120, 'Not more than 120 characters')
         .min(1, 'Too Short!'),
   });
 

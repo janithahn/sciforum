@@ -765,16 +765,16 @@ export const fetchUserLanguages = (requestUsername) => (dispatch) => {
 } 
 
 export const userLanguagesLoading = () => ({
-    type: ActionTypes.USER_EDUCATION_LOADING
+    type: ActionTypes.USER_LANGUAGES_LOADING
 });
 
 export const userLanguagesFailed = (errmess) => ({
-    type: ActionTypes.USER_EDUCATION_FAILED,
+    type: ActionTypes.USER_LANGUAGES_FAILED,
     payload: errmess
 });
 
 export const addUserLanguages = (userLanguages) => ({
-    type: ActionTypes.ADD_USER_EDUCATION,
+    type: ActionTypes.ADD_USER_LANGUAGES,
     payload: userLanguages
 });
 

@@ -14,10 +14,9 @@ import {
 } from '@material-ui/core';
 import { AddCircleOutline, School, Work, Language, Build } from '@material-ui/icons';
 import { theme, useStyles } from '../../styles/profileStyles';
-import { useSelector } from 'react-redux';
 
 export default function EditCredentials({ 
-    handleModalClose, setModalSelection, setOpenModal, employment, setSelectedCredentialItem, education, skills
+    handleModalClose, setModalSelection, setOpenModal, employment, setSelectedCredentialItem, education, skills, languages
 }) {
   const classes = useStyles();
 
@@ -52,6 +51,12 @@ export default function EditCredentials({
     setModalSelection(modal);
   };
 
+  const handleLanguageModalOpen = (modal, selectedItemId) => {
+    languages.forEach(item => item.id === selectedItemId ? setSelectedCredentialItem(item): null)
+    setOpenModal(true);
+    setModalSelection(modal);
+  };
+
   function DropDown() {
       return(
         <Menu 
@@ -72,8 +77,8 @@ export default function EditCredentials({
         >
             <MenuItem onClick={() => handleEmploymentModalOpen("employmentCreate")}><Work fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Employment</MenuItem>
             <MenuItem onClick={() => handleEducationModalOpen("educationCreate")}><School fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Education</MenuItem>
-            <MenuItem onClick={() => handleSkillModalOpen("skillCreate")}><Language fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Skill</MenuItem>
-            <MenuItem><Build fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Language</MenuItem>
+            <MenuItem onClick={() => handleLanguageModalOpen("languageCreate")}><Language fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Language</MenuItem>
+            <MenuItem onClick={() => handleSkillModalOpen("skillCreate")}><Build fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Skill</MenuItem>
         </Menu>
       );
   }
@@ -110,7 +115,7 @@ export default function EditCredentials({
 
   const SkillsTypo = skills ? skills.map(item => 
     <Grid item key={item.id}>
-        <MenuItem onClick={() => handleSkillModalOpen("skillUpdate", item.id)}>
+        <MenuItem style={{paddingTop: 2, paddingBottom: 2}} onClick={() => handleSkillModalOpen("skillUpdate", item.id)}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
                     <Typography variant="subtitle2">{item.skill}</Typography>
@@ -120,6 +125,18 @@ export default function EditCredentials({
     </Grid>
   ): undefined;
 
+  const LanguagesTypo = languages ? languages.map(item => 
+    <Grid item key={item.id}>
+        <MenuItem style={{paddingTop: 2, paddingBottom: 2}} onClick={() => handleLanguageModalOpen("languageUpdate", item.id)}>
+            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                <Grid item>
+                    <Typography variant="subtitle2">{item.language}</Typography>
+                </Grid>
+            </Grid>
+        </MenuItem>
+    </Grid>
+  ): undefined;
+ 
   return (
     <ThemeProvider theme={theme}>
         <Box width={600}>
@@ -143,7 +160,25 @@ export default function EditCredentials({
                                 <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
                                     {EmploymentTypo}
                                     {EducationTypo}
-                                    <Grid item>
+                                    {languages.length !== 0 ? <Grid item>
+                                        <Box marginLeft={2} marginBottom={0.8} marginTop={0.8}>
+                                            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                                                <Grid item>
+                                                    <Language fontSize="small" style={{fill: "gray"}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography variant="subtitle2">Languages</Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                        <Divider/>
+                                    </Grid>: undefined}
+                                    <Box marginLeft={4}>
+                                        <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
+                                            {LanguagesTypo}
+                                        </Grid>
+                                    </Box>
+                                    {skills.length !== 0 ? <Grid item>
                                         <Box marginLeft={2} marginBottom={0.8} marginTop={0.8}>
                                             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                                                 <Grid item>
@@ -155,7 +190,7 @@ export default function EditCredentials({
                                             </Grid>
                                         </Box>
                                         <Divider/>
-                                    </Grid>
+                                    </Grid>: undefined}
                                     <Box marginLeft={4}>
                                         <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
                                             {SkillsTypo}
