@@ -8,8 +8,6 @@ import {
   Divider,
   TextField,
   ThemeProvider,
-  FormControlLabel,
-  Checkbox,
   InputLabel,
   Select,
   MenuItem,
@@ -19,10 +17,10 @@ import { theme, useStyles } from '../../../styles/profileStyles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUserEmployment, createUserEmployment } from '../../../../../redux/ActionCreators';
+import { updateUserEducation, createUserEducation } from '../../../../../redux/ActionCreators';
 import AlertDialogSlide from '../alert/alert';
 
-export default function CreateEmployment({ employment, handleModalClose, varient, selectedEmploymentItem }) {
+export default function CreateEducation({ education, handleModalClose, varient, selectedEducationItem }) {
 
   const classes = useStyles();
   
@@ -32,39 +30,40 @@ export default function CreateEmployment({ employment, handleModalClose, varient
   const range = (min, max) => [...Array(max - min + 1).keys()].map(i => <MenuItem key={i} value={i + min}>{i + min}</MenuItem>);
 
   const profileSchema = Yup.object().shape({
-    position: Yup.string()
+    school: Yup.string()
         .required()
         .min(1, 'Too Short!'),
-    company: Yup.string()
+    degree: Yup.string()
         .required()
         .min(1, 'Too Short!'),
-    start_year: Yup.date(),
-    end_year: Yup.date(),
   });
 
   const formik = useFormik({
     initialValues: {
-      position: varient === "create" ? "": selectedEmploymentItem.position, 
-      company: varient === "create" ? "": selectedEmploymentItem.company,
-      start_year: varient === "create" || selectedEmploymentItem.start_year === null ? "": selectedEmploymentItem.start_year,
-      end_year: varient === "create" || selectedEmploymentItem.end_year === null ? "": selectedEmploymentItem.end_year,
-      currently_work: varient === "create" ? false: selectedEmploymentItem.currently_work,
+      school: varient === "create" ? "": selectedEducationItem.school, 
+      degree: varient === "create" ? "": selectedEducationItem.degree,
+      field_of_study: varient === "create" ? "": selectedEducationItem.field_of_study,
+      description: varient === "create" ? "": selectedEducationItem.description,
+      start_year: varient === "create" || selectedEducationItem.start_year === null ? "": selectedEducationItem.start_year,
+      end_year: varient === "create" || selectedEducationItem.end_year === null ? "": selectedEducationItem.end_year,
     },
     onSubmit: (values) => {
         const submitVal = {
             user: auth.currentUserId,
-            position: values.position, 
-            company: values.company,
+            school: values.school, 
+            degree: values.degree,
+            field_of_study: values.field_of_study,
+            description: values.description,
             start_year: values.start_year === "" ? null: values.start_year,
             end_year: values.currently_work || values.end_year === "" ? null: values.end_year,
-            currently_work: values.currently_work,
         }
-        if(employment.includes(selectedEmploymentItem)) {
-            dispatch(updateUserEmployment(submitVal, selectedEmploymentItem.id));
+        if(education.includes(selectedEducationItem)) {
+            dispatch(updateUserEducation(submitVal, selectedEducationItem.id));
         }else {
-            dispatch(createUserEmployment(submitVal));
+            dispatch(createUserEducation(submitVal));
         }
         handleModalClose();
+        console.log(submitVal);
     },
     validationSchema: profileSchema,
   });
@@ -84,32 +83,56 @@ export default function CreateEmployment({ employment, handleModalClose, varient
                 <form className={classes.root} onSubmit={formik.handleSubmit}>
                     <Card>
                         <CardHeader
-                            title="Edit Employment"
+                            title="Edit Education"
                         />
                         <Divider />
                         <CardContent>
                             <TextField
                                 fullWidth
                                 className={classes.modalTextField}
-                                error={formik.touched.position && formik.errors.position}
-                                helperText={(formik.errors.position && formik.touched.position) && formik.errors.position}
-                                label="Position"
-                                id="position"
-                                name="position"
+                                error={formik.touched.school && formik.errors.school}
+                                helperText={(formik.errors.school && formik.touched.school) && formik.errors.school}
+                                label="School"
+                                id="school"
+                                name="school"
                                 onChange={formik.handleChange}
-                                value={formik.values.position}
+                                value={formik.values.school}
                                 variant="outlined"
                             />
                             <TextField
                                 fullWidth
                                 className={classes.modalTextField}
-                                error={formik.touched.company && formik.errors.company}
-                                helperText={(formik.errors.company && formik.touched.company) && formik.errors.company}
-                                id="company"
-                                label="Company"
-                                name="company"
+                                error={formik.touched.degree && formik.errors.degree}
+                                helperText={(formik.errors.degree && formik.touched.degree) && formik.errors.degree}
+                                id="degree"
+                                label="Degree"
+                                name="degree"
                                 onChange={formik.handleChange}
-                                value={formik.values.company}
+                                value={formik.values.degree}
+                                variant="outlined"
+                            />
+                            <TextField
+                                fullWidth
+                                className={classes.modalTextField}
+                                error={formik.touched.field_of_study && formik.errors.field_of_study}
+                                helperText={(formik.errors.field_of_study && formik.touched.field_of_study) && formik.errors.field_of_study}
+                                id="field_of_study"
+                                label="Field of Study"
+                                name="field_of_study"
+                                onChange={formik.handleChange}
+                                value={formik.values.field_of_study}
+                                variant="outlined"
+                            />
+                            <TextField
+                                fullWidth
+                                className={classes.modalTextField}
+                                error={formik.touched.description && formik.errors.description}
+                                helperText={(formik.errors.description && formik.touched.description) && formik.errors.description}
+                                id="description"
+                                label="Description"
+                                name="description"
+                                onChange={formik.handleChange}
+                                value={formik.values.description}
                                 variant="outlined"
                             />
                             <FormControl variant="outlined" className={classes.formControl}>
@@ -145,11 +168,6 @@ export default function CreateEmployment({ employment, handleModalClose, varient
                                 {range(1970, 2050)}
                                 </Select>
                             </FormControl>
-                            <FormControlLabel
-                                style={{margin: 3}}
-                                control={<Checkbox checked={formik.values.currently_work} value="currently_work" color="primary" onChange={(event) => formik.setFieldValue('currently_work', event.target.checked)}/>}
-                                label="Currently work here"
-                            />
                         </CardContent>
                         <Divider />
                         <Box
@@ -187,10 +205,10 @@ export default function CreateEmployment({ employment, handleModalClose, varient
                         </Box>
                         <AlertDialogSlide 
                             open={alertModalOpen} 
-                            id={varient === "update" ? selectedEmploymentItem.id: undefined} 
+                            id={varient === "update" ? selectedEducationItem.id: undefined} 
                             handleClose={handleAlertModalClose}
                             handleCredentialModalClose={handleModalClose}
-                            type="employment"
+                            type="education"
                         />
                     </Card>
                 </form>

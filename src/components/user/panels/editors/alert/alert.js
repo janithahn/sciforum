@@ -7,19 +7,40 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { deleteUserEmployment } from '../../../../../redux/ActionCreators';
+import { deleteUserEmployment, deleteUserEducation, deleteUserSkills, deleteUserLanguages } from '../../../../../redux/ActionCreators';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide({ open, handleClose, credentialId, handleEmploymentModalClose }) {
+export default function AlertDialogSlide({ open, handleClose, id, handleCredentialModalClose, type }) {
     const dispatch = useDispatch();
 
-    function handleDeletePost() {
-        dispatch(deleteUserEmployment(credentialId));
-        handleEmploymentModalClose();
+    function handleDelete() {
+        switch(type) {
+            case "employment":
+                dispatch(deleteUserEmployment(id));
+                handleCredentialModalClose();
+                break;
+
+            case "education":
+                dispatch(deleteUserEducation(id));
+                handleCredentialModalClose();
+                break;
+
+            case "skills":
+                dispatch(deleteUserSkills(id));
+                handleCredentialModalClose();
+                break;
+
+            case "languages":
+                dispatch(deleteUserLanguages(id));
+                handleCredentialModalClose();
+                break;
+
+            default:
+                handleCredentialModalClose();
+        }
         handleClose();
     }
 
@@ -43,7 +64,7 @@ export default function AlertDialogSlide({ open, handleClose, credentialId, hand
             <Button  onClick={handleClose} color="primary">
                 Cancel
             </Button>
-            <Button onClick={handleDeletePost} color="secondary">
+            <Button onClick={handleDelete} color="secondary">
                 Delete
             </Button>
             </DialogActions>

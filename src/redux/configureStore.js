@@ -5,6 +5,10 @@ import { Posts } from './actions/posts';
 import { Auth } from './actions/auth';
 import { User } from './actions/user';
 import { UserEmployment } from './actions/credentials/employment';
+import { UserEducation } from './actions/credentials/education';
+import { UserLanguages } from './actions/credentials/languages';
+import { UserSkills } from './actions/credentials/skills';
+import { UserContact } from './actions/credentials/contact';
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
 import { answerVotes, postVotes } from './actions/votes';
@@ -34,6 +38,10 @@ export const ConfigureStore = () => {
             postVotes,
             Notifications,
             MyPosts,
+            UserEducation,
+            UserLanguages,
+            UserSkills,
+            UserContact,
         }),
         applyMiddleware(thunk, logger, routerMiddleware)
     );

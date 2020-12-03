@@ -472,7 +472,7 @@ export const addUserEmployment = (userEmployment) => ({
 
 export const updateUserEmployment = (employment, id) => (dispatch) => {
     
-    axios.patch(baseUrl + `/users/employment/${id}/update/`, employment,
+    axios.patch(baseUrl + `/profile_api/user_employment_edit/viewset/${id}/`, employment,
     {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
@@ -487,7 +487,7 @@ export const updateUserEmployment = (employment, id) => (dispatch) => {
 
 export const createUserEmployment = (employment) => (dispatch) => {
     
-    axios.post(baseUrl + `/users/employment/create/`, employment,
+    axios.post(baseUrl + `/profile_api/user_employment_edit/viewset/`, employment,
     {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
@@ -502,13 +502,321 @@ export const createUserEmployment = (employment) => (dispatch) => {
 
 export const deleteUserEmployment = (employmentId) => (dispatch) => {
     
-    axios.delete(baseUrl + `/users/employment/${employmentId}/delete/`,
+    axios.delete(baseUrl + `/profile_api/user_employment_edit/viewset/${employmentId}/`,
     {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
         console.log(res);
         dispatch(fetchUserEmployment(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+//USER_EDUCATION
+export const fetchUserEducation = (requestUsername) => (dispatch) => {
+    dispatch(userEducationLoading());
+
+    axios.get(baseUrl + `/profile_api/user_education/viewset/?username=${requestUsername}`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addUserEducation(res.data));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(userEducationFailed(error));
+    })
+} 
+
+export const userEducationLoading = () => ({
+    type: ActionTypes.USER_EDUCATION_LOADING
+});
+
+export const userEducationFailed = (errmess) => ({
+    type: ActionTypes.USER_EDUCATION_FAILED,
+    payload: errmess
+});
+
+export const addUserEducation = (userEducation) => ({
+    type: ActionTypes.ADD_USER_EDUCATION,
+    payload: userEducation
+});
+
+export const updateUserEducation = (education, id) => (dispatch) => {
+    
+    axios.patch(baseUrl + `/profile_api/user_education_edit/viewset/${id}/`, education,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserEducation(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const createUserEducation = (education) => (dispatch) => {
+    
+    axios.post(baseUrl + `/profile_api/user_education_edit/viewset/`, education,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserEducation(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const deleteUserEducation = (educationId) => (dispatch) => {
+    
+    axios.delete(baseUrl + `/profile_api/user_education_edit/viewset/${educationId}/`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserEducation(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+//USER_SKILLS
+export const fetchUserSkills = (requestUsername) => (dispatch) => {
+    dispatch(userSkillsLoading());
+
+    axios.get(baseUrl + `/profile_api/user_skills/viewset/?username=${requestUsername}`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addUserSkills(res.data));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(userSkillsFailed(error));
+    })
+} 
+
+export const userSkillsLoading = () => ({
+    type: ActionTypes.USER_SKILLS_LOADING
+});
+
+export const userSkillsFailed = (errmess) => ({
+    type: ActionTypes.USER_SKILLS_FAILED,
+    payload: errmess
+});
+
+export const addUserSkills = (userSkills) => ({
+    type: ActionTypes.ADD_USER_SKILLS,
+    payload: userSkills
+});
+
+export const updateUserSkills = (skills, id) => (dispatch) => {
+    
+    axios.patch(baseUrl + `/profile_api/user_skills_edit/viewset/${id}/`, skills,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserSkills(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const createUserSkills = (skills) => (dispatch) => {
+    
+    axios.post(baseUrl + `/profile_api/user_skills_edit/viewset/`, skills,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserSkills(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const deleteUserSkills = (skillId) => (dispatch) => {
+    
+    axios.delete(baseUrl + `/profile_api/user_skills_edit/viewset/${skillId}/`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserSkills(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+//USER_CONTACT
+/*export const fetchUserContact = (requestUsername) => (dispatch) => {
+    dispatch(userContactLoading());
+
+    axios.get(baseUrl + `/profile_api/user_contact/viewset/?username=${requestUsername}`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addUserContact(res.data));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(userContactFailed(error));
+    })
+} 
+
+export const userContactLoading = () => ({
+    type: ActionTypes.USER_EDUCATION_LOADING
+});
+
+export const userContactFailed = (errmess) => ({
+    type: ActionTypes.USER_EDUCATION_FAILED,
+    payload: errmess
+});
+
+export const addUserContact = (userContact) => ({
+    type: ActionTypes.ADD_USER_EDUCATION,
+    payload: userContact
+});
+
+export const updateUserContact = (contact, id) => (dispatch) => {
+    
+    axios.patch(baseUrl + `/profile_api/user_contact_edit/viewset/${id}/`, contact,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserContact(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const createUserContact = (contact) => (dispatch) => {
+    
+    axios.post(baseUrl + `/profile_api/user_contact_edit/viewset/`, contact,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserContact(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const deleteUserContact = (contactId) => (dispatch) => {
+    
+    axios.delete(baseUrl + `/profile_api/user_contact_edit/viewset/${contactId}/`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserContact(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}*/
+
+//USER_LANGUAGES
+export const fetchUserLanguages = (requestUsername) => (dispatch) => {
+    dispatch(userLanguagesLoading());
+
+    axios.get(baseUrl + `/profile_api/user_languages/viewset/?username=${requestUsername}`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addUserLanguages(res.data));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(userLanguagesFailed(error));
+    })
+} 
+
+export const userLanguagesLoading = () => ({
+    type: ActionTypes.USER_EDUCATION_LOADING
+});
+
+export const userLanguagesFailed = (errmess) => ({
+    type: ActionTypes.USER_EDUCATION_FAILED,
+    payload: errmess
+});
+
+export const addUserLanguages = (userLanguages) => ({
+    type: ActionTypes.ADD_USER_EDUCATION,
+    payload: userLanguages
+});
+
+export const updateUserLanguages = (languages, id) => (dispatch) => {
+    
+    axios.patch(baseUrl + `/profile_api/user_languages_edit/viewset/${id}/`, languages,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserLanguages(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const createUserLanguages = (languages) => (dispatch) => {
+    
+    axios.post(baseUrl + `/profile_api/user_languages_edit/viewset/`, languages,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserLanguages(localStorage.getItem('currentUser')));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const deleteUserLanguages = (languageId) => (dispatch) => {
+    
+    axios.delete(baseUrl + `/profile_api/user_languages_edit/viewset/${languageId}/`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchUserLanguages(localStorage.getItem('currentUser')));
     })
     .catch(error => {
         console.log(error);

@@ -4,10 +4,11 @@ import { Facebook, LinkedIn, GitHub, Edit, AddCircleOutline, School, Work, Langu
 import EditContact from './editors/editContact';
 import EditCredentials from './editors/editCredentials';
 import CreateEmployment from './editors/credentials/createEmployment';
+import CreateEducation from './editors/credentials/createEducation';
 import { useStyles } from '../styles/profileStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchUserEmployment } from '../../../redux/ActionCreators';
+import { fetchUserEmployment, fetchUserEducation } from '../../../redux/ActionCreators';
 
 export default function ProfilePanel() {
 
@@ -20,18 +21,27 @@ export default function ProfilePanel() {
     const user = useSelector(state => state.User);
     const auth = useSelector(state => state.Auth);
     const userEmployment = useSelector(state => state.UserEmployment);
+    const userEducation = useSelector(state => state.UserEducation);
 
     React.useEffect(() => {
         if(userEmployment.status === 'idle') dispatch(fetchUserEmployment(username));
     }, [dispatch]);
 
     React.useEffect(() => {
+        if(userEducation.status === 'idle') dispatch(fetchUserEducation(username));
+    }, [dispatch]);
+
+    React.useEffect(() => {
         if(userEmployment.userEmployment) handleUserEmployment(userEmployment.userEmployment);
     }, [userEmployment]);
 
+    React.useEffect(() => {
+        if(userEducation.userEducation) handleUserEducation(userEducation.userEducation);
+    }, [userEducation]);
+
     const [contact, setContact] = React.useState(user.user ? user.user.data.contact: null);
     const [employment, setEmployment] = React.useState(userEmployment.userEmployment ? userEmployment.userEmployment: []);
-    const [education, setEducation] = React.useState(user.user ? user.user.data.education: []);
+    const [education, setEducation] = React.useState(userEducation.userEducation ? userEducation.userEducation: []);
     const [languages, setLanguages] = React.useState(user.user ? user.user.data.languages: []);
     const [skills, setSkills] = React.useState(user.user ? user.user.data.skills: []);
 
@@ -39,7 +49,12 @@ export default function ProfilePanel() {
         setEmployment(employment);
     };
 
+    const handleUserEducation = (education) => {
+        setEducation(education);
+    };
+
     const [selectedEmploymentItem, setSelectedEmploymentItem] = React.useState();
+    const [selectedEducationItem, setSelectedEducationItem] = React.useState();
 
     const [openModal, setOpenModal] = React.useState(false);
     const [modalSelection, setModalSelection] = React.useState(null);
@@ -114,7 +129,7 @@ export default function ProfilePanel() {
         );
     }
 
-    const EmploymentTypo = employment ? employment.map(item => 
+    const EmploymentTypo = employment && employment !== [] ? employment.map(item => 
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
@@ -126,6 +141,21 @@ export default function ProfilePanel() {
             </Grid>
         </Grid>
     ): undefined;
+
+    const EducationTypo = education && education !== [] ? education.map(item => 
+        <Grid item key={item.id}>
+            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                <Grid item>
+                    <School fontSize="small" style={{fill: "gray"}}/>
+                </Grid>
+                <Grid item>
+                    <Typography variant="subtitle2">{item.degree + " at " + item.school}</Typography>
+                </Grid>
+            </Grid>
+        </Grid>
+    ): undefined;
+
+    console.log(userEducation);
 
     return(
         <React.Fragment>
@@ -149,6 +179,7 @@ export default function ProfilePanel() {
                             <Box m={0}>
                                 <Grid container direction="column" alignItems="baseline" justify="center" spacing={1}>
                                     {EmploymentTypo}
+                                    {EducationTypo}
                                 </Grid>
                             </Box>
                         </Grid>
@@ -187,15 +218,6 @@ export default function ProfilePanel() {
             </Grid>
             <EditModal>
                 <Fade in={openModal}>
-                {/*
-                    modalSelection === 'contact' ? 
-                        <EditContact contact={contact} setContact={setContact} handleModalClose={handleModalClose}/>: 
-                    modalSelection === 'aboutMe' ?
-                        <UpdateAboutMe aboutMe={aboutMe} setAboutMe={setAboutMe} handleModalClose={handleModalClose}/>:
-                    modalSelection === 'profileImage' ?
-                        <UpdateProfileImage usernameFromTheUrl={usernameFromTheUrl} profileImage={profileImage} setProfileImage={setProfileImage} handleModalClose={handleModalClose}/>:
-                    undefined
-                */}
                 {
                     modalSelection === 'contact' ? 
                         <EditContact contact={contact} setContact={setContact} handleModalClose={handleModalClose}/>: 
@@ -206,6 +228,8 @@ export default function ProfilePanel() {
                             setOpenModal={setOpenModal}
                             employment={employment}
                             setSelectedEmploymentItem={setSelectedEmploymentItem}
+                            education={education}
+                            setSelectedEducationItem={setSelectedEducationItem}
                         />:
                     modalSelection === 'employmentCreate' ?
                         <CreateEmployment
@@ -218,6 +242,19 @@ export default function ProfilePanel() {
                             employment={employment}
                             handleModalClose={handleModalClose}
                             selectedEmploymentItem={selectedEmploymentItem}
+                            varient="update"
+                        />:
+                    modalSelection === 'educationCreate' ?
+                        <CreateEducation
+                            education={education}
+                            handleModalClose={handleModalClose}
+                            varient="create"
+                        />:
+                    modalSelection === 'educationUpdate' ?
+                        <CreateEducation
+                            education={education}
+                            handleModalClose={handleModalClose}
+                            selectedEducationItem={selectedEducationItem}
                             varient="update"
                         />:
                     undefined

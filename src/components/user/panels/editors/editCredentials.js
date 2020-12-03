@@ -16,7 +16,9 @@ import { AddCircleOutline, School, Work, Language, Build } from '@material-ui/ic
 import { theme, useStyles } from '../../styles/profileStyles';
 import { useSelector } from 'react-redux';
 
-export default function EditCredentials({ handleModalClose, setModalSelection, setOpenModal, employment, setSelectedEmploymentItem }) {
+export default function EditCredentials({ 
+    handleModalClose, setModalSelection, setOpenModal, employment, setSelectedEmploymentItem, education, setSelectedEducationItem
+}) {
   const classes = useStyles();
 
   const auth = useSelector(state => state.Auth);
@@ -40,6 +42,12 @@ export default function EditCredentials({ handleModalClose, setModalSelection, s
     setModalSelection(modal);
   };
 
+  const handleEducationModalOpen = (modal, selectedItemId) => {
+    education.forEach(item => item.id === selectedItemId ? setSelectedEducationItem(item): null)
+    setOpenModal(true);
+    setModalSelection(modal);
+  };
+
   function DropDown() {
       return(
         <Menu 
@@ -59,7 +67,7 @@ export default function EditCredentials({ handleModalClose, setModalSelection, s
             }}
         >
             <MenuItem onClick={() => handleEmploymentModalOpen("employmentCreate")}><Work fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Employment</MenuItem>
-            <MenuItem><School fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Education</MenuItem>
+            <MenuItem onClick={() => handleEducationModalOpen("educationCreate")}><School fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Education</MenuItem>
             <MenuItem><Language fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Language</MenuItem>
             <MenuItem><Build fontSize="small" style={{marginRight: 6, fill: "gray"}}/>Skills</MenuItem>
         </Menu>
@@ -80,7 +88,23 @@ export default function EditCredentials({ handleModalClose, setModalSelection, s
         </MenuItem>
         <Divider/>
     </Grid>
-): undefined;
+  ): undefined;
+
+  const EducationTypo = education ? education.map(item => 
+    <Grid item key={item.id}>
+        <MenuItem onClick={() => handleEducationModalOpen("educationUpdate", item.id)}>
+            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                <Grid item>
+                    <School fontSize="small" style={{fill: "gray"}}/>
+                </Grid>
+                <Grid item>
+                    <Typography variant="subtitle2">{item.degree + " at " + item.school}</Typography>
+                </Grid>
+            </Grid>
+        </MenuItem>
+        <Divider/>
+    </Grid>
+  ): undefined;
 
   return (
     <ThemeProvider theme={theme}>
@@ -104,6 +128,7 @@ export default function EditCredentials({ handleModalClose, setModalSelection, s
                             <Box display="flex" justifyContent="flex-end" alignItems="center" marginLeft={1}>
                                 <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
                                     {EmploymentTypo}
+                                    {EducationTypo}
                                 </Grid>
                             </Box>
                         </Grid>
