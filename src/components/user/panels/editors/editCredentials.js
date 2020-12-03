@@ -21,8 +21,6 @@ export default function EditCredentials({
 }) {
   const classes = useStyles();
 
-  const auth = useSelector(state => state.Auth);
-
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClickAddCredentials = (event) => {
@@ -85,10 +83,9 @@ export default function EditCredentials({
         <MenuItem onClick={() => handleEmploymentModalOpen("employmentUpdate", item.id)}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
-                    <Work fontSize="small" style={{fill: "gray"}}/>
-                </Grid>
-                <Grid item>
-                    <Typography variant="subtitle2">{item.position + " at " + item.company}</Typography>
+                    <Typography variant="subtitle2" className={classes.iconWrap}>
+                        <Work fontSize="small" style={{fill: "gray", marginRight: 8}}/>{item.position + " at " + item.company}
+                    </Typography>
                 </Grid>
             </Grid>
         </MenuItem>
@@ -101,10 +98,9 @@ export default function EditCredentials({
         <MenuItem onClick={() => handleEducationModalOpen("educationUpdate", item.id)}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
-                    <School fontSize="small" style={{fill: "gray"}}/>
-                </Grid>
-                <Grid item>
-                    <Typography variant="subtitle2">{item.degree + " at " + item.school}</Typography>
+                    <Typography variant="subtitle2" className={classes.iconWrap}>
+                        <School fontSize="small" style={{fill: "gray", marginRight: 8}}/>{item.degree + " at " + item.school}
+                    </Typography>
                 </Grid>
             </Grid>
         </MenuItem>
@@ -117,14 +113,10 @@ export default function EditCredentials({
         <MenuItem onClick={() => handleSkillModalOpen("skillUpdate", item.id)}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
-                    <Build fontSize="small" style={{fill: "gray"}}/>
-                </Grid>
-                <Grid item>
                     <Typography variant="subtitle2">{item.skill}</Typography>
                 </Grid>
             </Grid>
         </MenuItem>
-        <Divider/>
     </Grid>
   ): undefined;
 
@@ -151,7 +143,24 @@ export default function EditCredentials({
                                 <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
                                     {EmploymentTypo}
                                     {EducationTypo}
-                                    {SkillsTypo}
+                                    <Grid item>
+                                        <Box marginLeft={2} marginBottom={0.8} marginTop={0.8}>
+                                            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                                                <Grid item>
+                                                    <Build fontSize="small" style={{fill: "gray"}}/>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Typography variant="subtitle2">Skills</Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                        <Divider/>
+                                    </Grid>
+                                    <Box marginLeft={4}>
+                                        <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
+                                            {SkillsTypo}
+                                        </Grid>
+                                    </Box>
                                 </Grid>
                             </Box>
                         </Grid>

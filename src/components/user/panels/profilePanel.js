@@ -150,10 +150,9 @@ export default function ProfilePanel() {
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
-                    <Work fontSize="small" style={{fill: "gray"}}/>
-                </Grid>
-                <Grid item>
-                    <Typography variant="subtitle2">{item.position + " at " + item.company}</Typography>
+                    <Typography variant="subtitle2" className={classes.iconWrap}>
+                        <Work fontSize="small" style={{fill: "gray", marginRight: 8}}/>{item.position + " at " + item.company}
+                    </Typography>
                 </Grid>
             </Grid>
         </Grid>
@@ -163,10 +162,9 @@ export default function ProfilePanel() {
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
-                    <School fontSize="small" style={{fill: "gray"}}/>
-                </Grid>
-                <Grid item>
-                    <Typography variant="subtitle2">{item.degree + " at " + item.school}</Typography>
+                    <Typography variant="subtitle2" className={classes.iconWrap}>
+                        <School fontSize="small" style={{fill: "gray", marginRight: 8}}/>{item.degree + " at " + item.school}
+                    </Typography>
                 </Grid>
             </Grid>
         </Grid>
@@ -175,9 +173,6 @@ export default function ProfilePanel() {
     const SkillsTypo = skills && skills !== [] ? skills.map(item => 
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
-                <Grid item>
-                    <Build fontSize="small" style={{fill: "gray"}}/>
-                </Grid>
                 <Grid item>
                     <Typography variant="subtitle2">{item.skill}</Typography>
                 </Grid>
@@ -208,7 +203,22 @@ export default function ProfilePanel() {
                                 <Grid container direction="column" alignItems="baseline" justify="center" spacing={1}>
                                     {EmploymentTypo}
                                     {EducationTypo}
-                                    {SkillsTypo}
+                                    <Grid item>
+                                    <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                                        <Grid item>
+                                            <Build fontSize="small" style={{fill: "gray"}}/>
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography variant="subtitle2">Skills</Typography>
+                                            <Divider/>
+                                        </Grid>
+                                    </Grid>
+                                    </Grid>
+                                    <Box marginLeft={4}>
+                                        <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
+                                            {SkillsTypo}
+                                        </Grid>
+                                    </Box>
                                 </Grid>
                             </Box>
                         </Grid>
