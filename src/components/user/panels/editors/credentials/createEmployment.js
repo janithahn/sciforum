@@ -82,9 +82,9 @@ export default function CreateEmployment({ employment, handleModalClose, varient
   return (
         <ThemeProvider theme={theme}>
                 <form className={classes.root} onSubmit={formik.handleSubmit}>
-                    <Card>
+                    <Card className={classes.cardRoot}>
                         <CardHeader
-                            title="Edit Employment"
+                            subheader="Edit Employment"
                         />
                         <Divider />
                         <CardContent>
@@ -99,6 +99,7 @@ export default function CreateEmployment({ employment, handleModalClose, varient
                                 onChange={formik.handleChange}
                                 value={formik.values.position}
                                 variant="outlined"
+                                size="small"
                             />
                             <TextField
                                 fullWidth
@@ -111,8 +112,9 @@ export default function CreateEmployment({ employment, handleModalClose, varient
                                 onChange={formik.handleChange}
                                 value={formik.values.company}
                                 variant="outlined"
+                                size="small"
                             />
-                            <FormControl variant="outlined" className={classes.formControl}>
+                            <FormControl variant="outlined" className={classes.formControl} size="small">
                                 <InputLabel id="start_year">Start Year</InputLabel>
                                 <Select
                                     labelId="start_year"
@@ -128,7 +130,7 @@ export default function CreateEmployment({ employment, handleModalClose, varient
                                 {range(1970, 2050)}
                                 </Select>
                             </FormControl>
-                            <FormControl variant="outlined" className={classes.formControl}>
+                            <FormControl variant="outlined" className={classes.formControl} size="small">
                                 <InputLabel id="end_year">End Year</InputLabel>
                                 <Select
                                     disabled={formik.values.currently_work}

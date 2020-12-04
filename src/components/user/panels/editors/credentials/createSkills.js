@@ -62,9 +62,9 @@ export default function CreateSkills({ skills, handleModalClose, varient, select
   return (
         <ThemeProvider theme={theme}>
                 <form className={classes.root} onSubmit={formik.handleSubmit}>
-                    <Card>
+                    <Card className={classes.cardRoot}>
                         <CardHeader
-                            title="Edit Skills"
+                            subheader="Edit Skills"
                         />
                         <Divider />
                         <CardContent>
@@ -79,6 +79,7 @@ export default function CreateSkills({ skills, handleModalClose, varient, select
                                 onChange={formik.handleChange}
                                 value={formik.values.skill}
                                 variant="outlined"
+                                size="small"
                             />
                         </CardContent>
                         <Divider />

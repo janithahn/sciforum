@@ -63,9 +63,9 @@ export default function CreateLanguages({ languages, handleModalClose, varient, 
   return (
         <ThemeProvider theme={theme}>
                 <form className={classes.root} onSubmit={formik.handleSubmit}>
-                    <Card>
+                    <Card className={classes.cardRoot}>
                         <CardHeader
-                            title="Edit Languages"
+                            subheader="Edit Languages"
                         />
                         <Divider />
                         <CardContent>
@@ -80,6 +80,7 @@ export default function CreateLanguages({ languages, handleModalClose, varient, 
                                 onChange={formik.handleChange}
                                 value={formik.values.language}
                                 variant="outlined"
+                                size="small"
                             />
                         </CardContent>
                         <Divider />

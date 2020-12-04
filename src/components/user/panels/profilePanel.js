@@ -177,7 +177,7 @@ export default function ProfilePanel() {
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
                     <Typography variant="subtitle2" className={classes.iconWrap}>
-                        <School fontSize="small" style={{fill: "gray", marginRight: 8}}/>{item.degree + " at " + item.school}
+                        <School fontSize="small" style={{fill: "gray", marginRight: 8}}/>{item.degree + " in "}{item.field_of_study !== "" ? item.field_of_study: ""}{", " + item.school}
                     </Typography>
                 </Grid>
             </Grid>

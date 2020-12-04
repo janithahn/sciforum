@@ -58,9 +58,9 @@ export default function EditContact(props) {
     <Box>
         <ThemeProvider theme={theme}>
             <form className={classes.root} onSubmit={formik.handleSubmit}>
-                <Card>
+                <Card className={classes.cardRoot}>
                     <CardHeader
-                        title="Edit Contact"
+                        subheader="Edit Contact"
                     />
                     <Divider />
                     <CardContent>
@@ -76,6 +76,7 @@ export default function EditContact(props) {
                             onBlur={formik.handleBlur}
                             value={formik.values.github}
                             variant="outlined"
+                            size="small"
                         />
                         <TextField
                             className={classes.modalTextField}
@@ -89,6 +90,7 @@ export default function EditContact(props) {
                             onBlur={formik.handleBlur}
                             value={formik.values.linkedIn}
                             variant="outlined"
+                            size="small"
                         />
                         <TextField
                             className={classes.modalTextField}
@@ -102,6 +104,7 @@ export default function EditContact(props) {
                             onBlur={formik.handleBlur}
                             value={formik.values.facebook}
                             variant="outlined"
+                            size="small"
                         />
                     </CardContent>
                     <Divider />

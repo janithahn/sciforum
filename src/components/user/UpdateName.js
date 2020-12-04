@@ -56,9 +56,9 @@ export default function UpdateName(props) {
   return (
     <ThemeProvider theme={theme}>
       <form className={classes.root} onSubmit={formik.handleSubmit}>
-        <Card>
+        <Card className={classes.cardRoot}>
           <CardHeader
-            title="Update Name"
+            subheader="Update Name"
           />
           <Divider />
           <CardContent>
@@ -74,6 +74,7 @@ export default function UpdateName(props) {
                 onBlur={formik.handleBlur}
                 value={formik.values.firstname}
                 variant="outlined"
+                size="small"
             />
             <TextField
                 className={classes.modalTextField}
@@ -87,6 +88,7 @@ export default function UpdateName(props) {
                 onBlur={formik.handleBlur}
                 value={formik.values.lastname}
                 variant="outlined"
+                size="small"
             />
           </CardContent>
           <Divider />

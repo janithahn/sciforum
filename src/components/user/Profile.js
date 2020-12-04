@@ -18,14 +18,16 @@ import {
   Backdrop,
   Fade,
   Grid,
+  Hidden,
 } from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
 import { theme, useStyles, CustomTooltip } from './styles/profileStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser } from '../../redux/ActionCreators';
 import UpdateName from './UpdateName';
 import UpdateAboutMe from './UpdateAboutMe';
 import UpdateProfileImage from './UpdateProfileImage';
-import VerticalTabs from './ProfileVerticleTabs';
+import ProfileTabs from './ProfileVerticleTabs';
 
 /*function EditModal({openModal, className, handleModalClose, name, setName}) {
   return(
@@ -52,6 +54,8 @@ const Profile = ({ className, ...rest }) => {
   const classes = useStyles();
   const user = useSelector(state => state.User);
   const auth = useSelector(state => state.Auth);
+
+  const credentialsLoadingState = useSelector(state => [state.UserEducation.status, state.UserLanguages.status, state.UserSkills.status].includes('loading'))
 
   const dispatch = useDispatch();
 
@@ -155,7 +159,7 @@ const Profile = ({ className, ...rest }) => {
           <Card className={clsx(classes.root, className)} {...rest} elevation={0}>
             <CardContent>
 
-              <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid container direction="row" alignItems="center" justify="center" spacing={3}>
 
                 <Grid item>
                   <EditTooltip selectionType={"profileImage"} handleModalOpen={handleModalOpen}>
@@ -163,8 +167,8 @@ const Profile = ({ className, ...rest }) => {
                   </EditTooltip>
                 </Grid>
 
-                <Grid item xs={12} sm>
-                  <Grid container justify="center" alignItems="flex-start" direction="column" spacing={0}>
+                <Grid item >
+                  <Grid container justify="center" alignItems="center" direction="column" spacing={0}>
                     <Grid item>
                       <EditTooltip selectionType={"name"} handleModalOpen={handleModalOpen}>
                         <Typography color="textPrimary" gutterBottom variant="h5">
@@ -186,6 +190,14 @@ const Profile = ({ className, ...rest }) => {
                         </Typography>
                       </EditTooltip>
                     </Grid>
+
+                    {/*auth.isAuthenticated && auth.currentUser === usernameFromTheUrl ? <Grid item>
+                      <Hidden smUp>
+                        <Box marginTop={3}>
+                          <Button style={{textTransform: 'none', padding: (0, 2, 0)}} color="primary" variant="outlined" size="small">Edit Profile</Button>
+                        </Box>
+                      </Hidden>
+                    </Grid>: undefined*/}
                   </Grid>
                 </Grid>
 
@@ -208,7 +220,7 @@ const Profile = ({ className, ...rest }) => {
             </CardContent>
           </Card>
           <Divider className={classes.divider}/>
-          <VerticalTabs/>
+          <ProfileTabs credentialsLoadingState={credentialsLoadingState}/>
         </ThemeProvider>
       </React.Fragment>
     );

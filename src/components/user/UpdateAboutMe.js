@@ -6,7 +6,6 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  TextareaAutosize,
   ThemeProvider,
   TextField,
 } from '@material-ui/core';
@@ -40,9 +39,9 @@ export default function UpdateAboutMe(props) {
   return (
     <ThemeProvider theme={theme}>
       <form className={classes.root} onSubmit={formik.handleSubmit}>
-        <Card>
+        <Card className={classes.cardRoot}>
           <CardHeader
-            title="Describe Yourself"
+            subheader="Describe Yourself"
           />
           <Divider />
           <CardContent>
@@ -50,12 +49,14 @@ export default function UpdateAboutMe(props) {
               id="aboutMe"
               label="About Me"
               multiline
+              fullWidth
               rows={4}
               defaultValue="About Me"
               variant="outlined"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.aboutMe}
+              size="small"
             />
           </CardContent>
           <Divider />

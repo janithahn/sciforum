@@ -11,6 +11,9 @@ import {
   Grid,
   Menu,
   MenuItem,
+  List,
+  ListItem,
+  makeStyles,
 } from '@material-ui/core';
 import { AddCircleOutline, School, Work, Language, Build } from '@material-ui/icons';
 import { theme, useStyles } from '../../styles/profileStyles';
@@ -103,7 +106,7 @@ export default function EditCredentials({
         <MenuItem onClick={() => handleEducationModalOpen("educationUpdate", item.id)}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
-                    <Typography variant="subtitle2" className={classes.iconWrap}>
+                    <Typography style={{maxWidth: 200}} variant="subtitle2" className={classes.iconWrap}>
                         <School fontSize="small" style={{fill: "gray", marginRight: 8}}/>{item.degree + " at " + item.school}
                     </Typography>
                 </Grid>
@@ -113,16 +116,40 @@ export default function EditCredentials({
     </Grid>
   ): undefined;
 
-  const SkillsTypo = skills ? skills.map(item => 
+  /*const SkillsTypo = skills ? skills.map(item => 
     <Grid item key={item.id}>
         <MenuItem style={{paddingTop: 2, paddingBottom: 2}} onClick={() => handleSkillModalOpen("skillUpdate", item.id)}>
-            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
-                <Grid item>
-                    <Typography variant="subtitle2">{item.skill}</Typography>
-                </Grid>
-            </Grid>
+                <Typography variant="subtitle2">{item.skill}</Typography>
         </MenuItem>
     </Grid>
+  ): undefined;*/
+
+  const useSkillsStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      maxWidth: 360,
+      backgroundColor: theme.palette.background.paper,
+      position: 'relative',
+      overflow: 'auto',
+      maxHeight: 100,
+    },
+    listItem: {
+        paddingTop: 1,
+        paddingBottom: 1,
+    },
+    menuItem: {
+        padding: (1, 1, 1)
+    },
+  }));
+
+  const classesSkills = useSkillsStyles();
+
+  const SkillsTypo = skills ? skills.map(item => 
+    <ListItem className={classesSkills.listItem} /*onClick={() => handleSkillModalOpen("skillUpdate", item.id)}*/>
+            <MenuItem className={classesSkills.menuItem} onClick={() => handleSkillModalOpen("skillUpdate", item.id)}>
+                <Typography variant="subtitle2">{item.skill}</Typography>
+            </MenuItem>
+    </ListItem>
   ): undefined;
 
   const LanguagesTypo = languages ? languages.map(item => 
@@ -139,86 +166,89 @@ export default function EditCredentials({
  
   return (
     <ThemeProvider theme={theme}>
-        <Box width={600}>
-            <Card>
-                <CardHeader
-                    title="Edit Credentials"
-                />
-                <Divider />
-                <CardContent>
-                    <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
-                        <Grid item>
-                            <Box display="flex" justifyContent="flex-end" alignItems="center">
-                                <Button size="small" style={{textTransform: 'none'}} onClick={handleClickAddCredentials}>
-                                    <AddCircleOutline color="primary" style={{marginRight: 6}}/>
-                                    <Typography variant="subtitle1">Add a Credential</Typography>
-                                </Button>
-                            </Box>
-                        </Grid>  
-                        <Grid item>
-                            <Box display="flex" justifyContent="flex-end" alignItems="center" marginLeft={1}>
-                                <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
-                                    {EmploymentTypo}
-                                    {EducationTypo}
-                                    {languages.length !== 0 ? <Grid item>
-                                        <Box marginLeft={2} marginBottom={0.8} marginTop={0.8}>
-                                            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
-                                                <Grid item>
-                                                    <Language fontSize="small" style={{fill: "gray"}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant="subtitle2">Languages</Typography>
-                                                </Grid>
+        <Card className={classes.cardRoot}>
+            <CardHeader
+                subheader="Edit Credentials"
+            />
+            <Divider />
+            <CardContent>
+                <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
+                    <Grid item>
+                        <Box display="flex" justifyContent="flex-end" alignItems="center">
+                            <Button size="small" style={{textTransform: 'none'}} onClick={handleClickAddCredentials}>
+                                <AddCircleOutline color="primary" style={{marginRight: 6}}/>
+                                <Typography variant="subtitle1">Add a Credential</Typography>
+                            </Button>
+                        </Box>
+                    </Grid>  
+                    <Grid item>
+                        <Box display="flex" justifyContent="flex-end" alignItems="center" marginLeft={1}>
+                            <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
+                                {EmploymentTypo}
+                                {EducationTypo}
+                                {languages.length !== 0 ? <Grid item>
+                                    <Box marginLeft={2} marginBottom={0.8} marginTop={0.8}>
+                                        <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                                            <Grid item>
+                                                <Language fontSize="small" style={{fill: "gray"}}/>
                                             </Grid>
-                                        </Box>
-                                        <Divider/>
-                                    </Grid>: undefined}
-                                    <Box marginLeft={4}>
-                                        <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
-                                            {LanguagesTypo}
+                                            <Grid item>
+                                                <Typography variant="subtitle2">Languages</Typography>
+                                            </Grid>
                                         </Grid>
                                     </Box>
-                                    {skills.length !== 0 ? <Grid item>
-                                        <Box marginLeft={2} marginBottom={0.8} marginTop={0.8}>
-                                            <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
-                                                <Grid item>
-                                                    <Build fontSize="small" style={{fill: "gray"}}/>
-                                                </Grid>
-                                                <Grid item>
-                                                    <Typography variant="subtitle2">Skills</Typography>
-                                                </Grid>
+                                    <Divider/>
+                                </Grid>: undefined}
+                                <Box marginLeft={4}>
+                                    <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
+                                        {LanguagesTypo}
+                                    </Grid>
+                                </Box>
+                                {skills.length !== 0 ? <Grid item>
+                                    <Box marginLeft={2} marginBottom={0.8} marginTop={0.8}>
+                                        <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
+                                            <Grid item>
+                                                <Build fontSize="small" style={{fill: "gray"}}/>
                                             </Grid>
-                                        </Box>
-                                        <Divider/>
-                                    </Grid>: undefined}
-                                    <Box marginLeft={4}>
-                                        <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
-                                            {SkillsTypo}
+                                            <Grid item>
+                                                <Typography variant="subtitle2">Skills</Typography>
+                                            </Grid>
                                         </Grid>
                                     </Box>
-                                </Grid>
-                            </Box>
-                        </Grid>
+                                    <Divider/>
+                                </Grid>: undefined}
+                                {/*<Box marginLeft={4}>
+                                    <Grid container direction="column" alignItems="baseline" justify="center" spacing={0}>
+                                        {SkillsTypo}
+                                    </Grid>
+                                </Box>*/}
+                                <Box marginLeft={4}>
+                                    <List className={classesSkills.root}>
+                                        {SkillsTypo}
+                                    </List>
+                                </Box>
+                            </Grid>
+                        </Box>
                     </Grid>
-                </CardContent>
-                <Divider />
-                <Box
-                    display="flex"
-                    justifyContent="flex-end"
-                    p={0}
+                </Grid>
+            </CardContent>
+            <Divider />
+            <Box
+                display="flex"
+                justifyContent="flex-end"
+                p={0}
+            >
+                <Button
+                    onClick={() => handleModalClose()}
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    className={classes.submit}
                 >
-                    <Button
-                        onClick={() => handleModalClose()}
-                        color="primary"
-                        variant="contained"
-                        size="small"
-                        className={classes.submit}
-                    >
-                        Cancel
-                    </Button>
-                </Box>
-            </Card>
-        </Box>
+                    Cancel
+                </Button>
+            </Box>
+        </Card>
         <DropDown/>
     </ThemeProvider>
   );

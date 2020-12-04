@@ -27,6 +27,15 @@ export const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     backgroundColor: 'inherit',
   },
+  cardRoot: {
+    width: 450,
+    [theme.breakpoints.down("sm")] : {
+      width: 350,
+    },
+    [theme.breakpoints.down("xs")] : {
+      width: 300,
+    },
+  },
   cardContent: {
     paddingTop: 0
   },
@@ -37,7 +46,9 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   submit: {
-    margin: theme.spacing(3, 2, 2),
+    padding: theme.spacing(0, 1, 0),
+    margin: theme.spacing(1, 1, 1),
+    textTransform: 'none'
   },
   typo: {
     marginTop: '20px',
@@ -62,7 +73,7 @@ export const useStyles = makeStyles((theme) => ({
     display: 'inline-flex'
   },
   formControl: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
     marginRight: theme.spacing(1),
     minWidth: 120,
   },

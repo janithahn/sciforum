@@ -56,12 +56,12 @@ const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, 
                 anchorEl={anchorEl}
                 onClose={() => setAnchorEl(null)}   
             >
-                <Link style={{textDecoration: 'none', color: 'inherit'}} href={`/profile/${username}/`}>
+                <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/profile/${username}/`}>
                     <MenuItem>Profile</MenuItem>
-                </Link>
-                <Link style={{textDecoration: 'none', color: 'inherit'}} href={`/notifications`}>
+                </RouterLink>
+                <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/notifications`}>
                     <MenuItem>Notifications</MenuItem>
-                </Link>
+                </RouterLink>
                 <MenuItem onClick={handleLogOut}>Logout</MenuItem>
             </Menu>
         </div>

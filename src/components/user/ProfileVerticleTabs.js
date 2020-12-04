@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import ProfilePanel from './panels/profilePanel';
 
 function TabPanel(props) {
@@ -14,8 +15,8 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -33,30 +34,67 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-function TabEnhanced({...props}) {
+/*function TabEnhanced({...props}) {
     return <Tab style={{textTransform: 'none'}} {...props}/>
-}
+}*/
+
+const TabEnhanced = withStyles((theme) => ({
+  root: {
+    textTransform: 'none',
+    minWidth: 72,
+    fontWeight: theme.typography.fontWeightRegular,
+    marginRight: theme.spacing(4),
+    '&:hover': {
+      color: '#353535',
+      opacity: 1,
+    },
+    '&$selected': {
+      color: '#353535',
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+    '&:focus': {
+      color: '#353535',
+    },
+  },
+  selected: {},
+}))((props) => <Tab disableRipple {...props} />);
 
 function a11yProps(index) {
   return {
-    id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
+    id: `scrollable-auto-tab-${index}`,
+    'aria-controls': `scrollable-auto-tabpanel-${index}`,
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+/*const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
-    height: '100%',
+    //height: '100%',
+    width: '100%',
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
   },
+}));*/
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+  progressBar: {
+      width: '100%',
+          '& > * + *': {
+          marginTop: theme.spacing(0),
+      },
+      background: '#00a3c1',
+  },
 }));
 
-export default function VerticalTabs() {
+export default function ProfileTabs({ credentialsLoadingState }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -66,20 +104,26 @@ export default function VerticalTabs() {
 
   return (
     <div className={classes.root}>
-      <Tabs
-        orientation="vertical"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs profile"
-        className={classes.tabs}
-        variant="scrollable"
-      >
-        <TabEnhanced label="Profile" {...a11yProps(0)} />
-        <TabEnhanced label="Recent" {...a11yProps(1)} />
-        <TabEnhanced label="Questions" {...a11yProps(2)} />
-        <TabEnhanced label="Answers" {...a11yProps(3)} />
-        <TabEnhanced label="Liked" {...a11yProps(4)} />
-      </Tabs>
+      <AppBar position="static" color="inherit" elevation={1}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="secondary"
+          textColor="inherit"
+          variant="scrollable"
+          scrollButtons="on"
+          aria-label="scrollable auto tabs"
+        >
+          <TabEnhanced label="Profile" {...a11yProps(0)} />
+          <TabEnhanced label="Recent" {...a11yProps(1)} />
+          <TabEnhanced label="Questions" {...a11yProps(2)} />
+          <TabEnhanced label="Answers" {...a11yProps(3)} />
+          <TabEnhanced label="Liked" {...a11yProps(4)} />
+        </Tabs>
+        {credentialsLoadingState ? 
+          <LinearProgress color="secondary" style={{height: 1}} /*className={classes.progressBar}*//>: 
+        undefined}
+      </AppBar>
       <TabPanel value={value} index={0}>
         <ProfilePanel/>
       </TabPanel>

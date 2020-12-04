@@ -67,7 +67,7 @@ export default function UpdateProfileImage(props) {
         <form className={classes.root} onSubmit={formik.handleSubmit}>
             <Card>
             <CardHeader
-                title="Change your profile image"
+                subheader="Change your profile image"
             />
             <Divider />
             <CardContent>

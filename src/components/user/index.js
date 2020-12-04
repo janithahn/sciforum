@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Container,
   Grid,
-  makeStyles
+  makeStyles,
+  Hidden
 } from '@material-ui/core';
 import Profile from './Profile';
 import Highlights from './Highlights';
@@ -21,10 +22,7 @@ const Account = (props) => {
 
   return (
     <Container className={classes.root} maxWidth="lg">
-      <Grid
-        container
-        spacing={3}
-      >
+      <Grid container spacing={3}>
         <Grid
           item
           lg={8}
@@ -39,7 +37,9 @@ const Account = (props) => {
           md={6}
           xs={12}
         >
-          <Highlights match={props.match}/>
+          <Hidden smDown>
+            <Highlights match={props.match}/>
+          </Hidden>
         </Grid>
       </Grid>
     </Container>
