@@ -1,16 +1,17 @@
 import React from 'react';
-import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Chip, Link } from '@material-ui/core';
+import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Chip, Avatar, Divider, Typography } from '@material-ui/core';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
 import NotFound from '../alert/NotFoundComponent';
 //import PostViewer from './PostViewerComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPostDetail, fetchPostVotesByLoggedInUser } from '../../redux/ActionCreators';
+import { fetchPostDetail, fetchPostVotesByLoggedInUser, fetchPostComments } from '../../redux/ActionCreators';
 import AnswerModalCard from '../answer/answerModalCard';
 import VoteButtons from '../vote/postVoteButtons';
 import RenderCard from './RenderCard';
 import Article from './skeletons/post';
+import { PostCommentInput, PostCommentRender } from './comment/comment';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
     return(
@@ -44,12 +45,16 @@ export default function PostDetail() {
     const classes = useStyles();
     const auth = useSelector(state => state.Auth);
     const post = useSelector(state => state.Post);
+    const postComments = useSelector(state => state.PostComments);
 
     const dispatch = useDispatch();
 
     const { postId } = useParams(); //another way of approaching for getting the postId from the url other than match.params
 
     const [open, setOpen] = React.useState(false);
+
+    const [openCommentBox, setOpenCommentBox] = React.useState(false);
+    const [showAddComment, setShowAddComment] = React.useState(true);
 
     const [openModal, setOpenModal] = React.useState(false);
     const [answerContent, setAnswerContent] = React.useState('');
@@ -89,6 +94,14 @@ export default function PostDetail() {
             dispatch(fetchPostDetail(postId));
         }
     }, [post, dispatch]);
+
+    React.useEffect(() => {
+        if(post.status === 'succeeded' && postComments.status === 'idle') {
+            dispatch(fetchPostComments(postId));
+        }
+    }, [post, postComments]);
+
+    console.log(postComments);
     
     React.useEffect(() => {
         if(post.post) {
@@ -125,6 +138,15 @@ export default function PostDetail() {
   
     const handleModalClose = () => {
       setOpenModal(false);
+    };
+    
+    const handleCommentBoxOpen = () => {
+        setOpenCommentBox(true);
+        handleShowAddComment();
+    };
+
+    const handleShowAddComment = () => {
+        setShowAddComment(false);
     };
 
     if(post.status === 'loading' || post.status === 'idle' || postVotes.status === 'loading') {
@@ -206,6 +228,24 @@ export default function PostDetail() {
                                     : undefined
                                 }
                             </Grid>
+                            <Divider/>
+                            {
+                                auth.isAuthenticated && showAddComment ? 
+                                    <Button variant="text" size="small" style={{textTransform: "none"}} color="inherit" onClick={handleCommentBoxOpen}>
+                                        <Typography variant="subtitle2" color="primary">Add comment</Typography>
+                                    </Button>: 
+                                undefined
+                            }
+                            {
+                                auth.isAuthenticated && openCommentBox ? 
+                                    <PostCommentInput currentUserProfileImg={auth.currentUserProfileImg}/>: 
+                                undefined
+                            }
+                            {
+                                postComments.status === 'succeeded' && postComments.postComments !== [] ?
+                                    <PostCommentRender/>:
+                                undefined
+                            }
                             <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
                         </React.Fragment>
                     </ThemeProvider>

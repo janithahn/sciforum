@@ -823,6 +823,38 @@ export const deleteUserLanguages = (languageId) => (dispatch) => {
     })
 }
 
+//POST COMMENTS
+export const fetchPostComments = (postId) => (dispatch) => {
+
+    dispatch(postCommentsLoading());
+
+    axios.get(baseUrl + `/comment_api/post_comment/?post=${postId}`, {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addPostComments(res.data));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(postCommentsFailed(error));
+    });
+}
+
+export const postCommentsLoading = () => ({
+    type: ActionTypes.POST_COMMENTS_LOADING
+});
+
+export const postCommentsFailed = (errmess) => ({
+    type: ActionTypes.POST_COMMENTS_FAILED,
+    payload: errmess
+});
+
+export const addPostComments = (postComments) => ({
+    type: ActionTypes.ADD_POST_COMMENTS,
+    payload: postComments
+});
+
 //RETREIVING USER PROFILE
 export const fetchUserProfile = (token, currentUserId) => (dispatch) => {
     dispatch(userProfileLoading());

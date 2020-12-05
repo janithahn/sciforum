@@ -14,6 +14,7 @@ import { Answers } from './actions/answers';
 import { answerVotes, postVotes } from './actions/votes';
 import { Notifications } from './actions/notifications';
 import { MyPosts } from './actions/myposts';
+import { PostComments, AnswerComments } from './actions/comments';
 import { createReduxHistoryContext, reachify } from "redux-first-history";
 import { createBrowserHistory } from 'history';
 import { globalHistory } from "@reach/router";
@@ -42,6 +43,8 @@ export const ConfigureStore = () => {
             UserLanguages,
             UserSkills,
             UserContact,
+            PostComments,
+            AnswerComments,
         }),
         applyMiddleware(thunk, logger, routerMiddleware)
     );
