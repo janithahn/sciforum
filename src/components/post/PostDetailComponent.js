@@ -45,7 +45,7 @@ export default function PostDetail() {
     const classes = useStyles();
     const auth = useSelector(state => state.Auth);
     const post = useSelector(state => state.Post);
-    const postComments = useSelector(state => state.PostComments);
+    //const postComments = useSelector(state => state.PostComments);
 
     const dispatch = useDispatch();
 
@@ -95,13 +95,13 @@ export default function PostDetail() {
         }
     }, [post, dispatch]);
 
-    React.useEffect(() => {
+    /*React.useEffect(() => {
         if(post.status === 'succeeded' && postComments.status === 'idle') {
             dispatch(fetchPostComments(postId));
         }
-    }, [post, postComments]);
+    }, [post, postComments]);*/
 
-    console.log(postComments);
+    //console.log(postComments);
     
     React.useEffect(() => {
         if(post.post) {
@@ -238,14 +238,15 @@ export default function PostDetail() {
                             }
                             {
                                 auth.isAuthenticated && openCommentBox ? 
-                                    <PostCommentInput currentUserProfileImg={auth.currentUserProfileImg}/>: 
+                                    <PostCommentInput currentUserProfileImg={auth.currentUserProfileImg} postId={postId}/>: 
                                 undefined
                             }
-                            {
+                            {/*
                                 postComments.status === 'succeeded' && postComments.postComments !== [] ?
                                     <PostCommentRender/>:
                                 undefined
-                            }
+                            */}
+                            <PostCommentRender/>
                             <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
                         </React.Fragment>
                     </ThemeProvider>

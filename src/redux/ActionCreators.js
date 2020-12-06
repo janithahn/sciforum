@@ -855,6 +855,52 @@ export const addPostComments = (postComments) => ({
     payload: postComments
 });
 
+export const updatePostComments = (comment, commetId, postId) => (dispatch) => {
+    
+    axios.patch(baseUrl + `/comment_api/post_comment_create/${commetId}/`, comment,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchPostComments(postId));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const createPostComments = (comment, postId) => (dispatch) => {
+    
+    axios.post(baseUrl + `/comment_api/post_comment_create/`, comment,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchPostComments(postId));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const deletePostComments = (commentId, postId) => (dispatch) => {
+    
+    axios.delete(baseUrl + `/comment_api/post_comment_create/${commentId}/`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchPostComments(postId));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+
 //RETREIVING USER PROFILE
 export const fetchUserProfile = (token, currentUserId) => (dispatch) => {
     dispatch(userProfileLoading());
