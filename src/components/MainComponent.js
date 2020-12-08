@@ -4,7 +4,7 @@ import Home from './home/HomeComponent';
 import MyPosts from './myposts/MyPosts';
 import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
-import { useSelector, useDispatch, useStore } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchPosts, postPost, editPost, logout, getNewToken } from '../redux/ActionCreators';
 import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
@@ -22,11 +22,8 @@ import SearchByTag from './home/SearchByTagResults';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
 import Notifications from './notifications/index';
-import { Loading } from './loading/LoadingComponent';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
-import { isLoading } from '../shared/AdditionalFunctions';
-import { Router } from '@material-ui/icons';
 
 function Main(props) {
     const post = useSelector(state => state.Post);
@@ -34,18 +31,7 @@ function Main(props) {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    //loading states of all actions
-    /*const authLoading = useSelector(state => state.Auth.status);
-    const answersLoading = useSelector(state => state.Answers.status);
-    const notificationsLoading = useSelector(state => state.Notifications.status);
-    const postLoading = useSelector(state => state.Post.status);
-    const postsLoading = useSelector(state => state.Posts.status);
-    const mypostsLoading = useSelector(state => state.MyPosts.status)
-    const userLoading = useSelector(state => state.User.status);
-    const answerVotesLoading = useSelector(state => state.answerVotes.status);
-    const postVotesLoading = useSelector(state => state.postVotes.status);*/
-
-    const isLoading = useSelector(state => [state.Auth.status, state.Answers.status, state.Notifications.status, state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, state.answerVotes.status, state.postVotes.status].includes('loading'));
+    const isLoading = useSelector(state => [state.Auth.status, /*state.Answers.status,*/ state.Notifications.status, state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, state.answerVotes.status, state.postVotes.status/*, state.PostComments.status*/].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
 
@@ -54,7 +40,6 @@ function Main(props) {
 
     useEffect(() => {
         setShowProgressBar(isLoading);
-        //setShowProgressBar(isLoading(authLoading, answersLoading, notificationsLoading, postLoading, postsLoading, userLoading, answerVotesLoading, postVotesLoading, mypostsLoading));
     });
 
     useEffect(() => {

@@ -2,6 +2,7 @@ import React from 'react';
 import { ThemeProvider, Grid, Typography, Divider, Modal, Backdrop, Fade } from '@material-ui/core';
 import { fetchAnswers } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
@@ -36,13 +37,30 @@ function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModa
     );
 }
 
-export default function Answer({postId, refs}) {
+export default function Answer() {
 
     const answers = useSelector(state => state.Answers)
     const auth = useSelector(state => state.Auth);
     const answerVotesLoading = useSelector(state => state.answerVotes.status)
 
+    const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
+
+    const [answersCompList, setAnswersCompList] = React.useState(answers.answers ? answers.answers: []);
+
+    const handleAnswersCompList = (answers) => {
+        setAnswersCompList(answers);
+    };
+
+    React.useEffect(() => {
+        if(answers.answers) handleAnswersCompList(answers.answers);
+    }, [answers]);
+
     const classes = useStyles();
+    const location = useLocation();
+
+    const { postId } = useParams();
+
+    const hash = location.hash.substring(1);
 
     const [openModal, setOpenModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
@@ -53,11 +71,40 @@ export default function Answer({postId, refs}) {
 
     const dispatch = useDispatch();
 
+    let refs = null;
+
+    if(answers.status === 'succeeded') {
+        refs = answers.answers.reduce((acc, value) => {
+            acc[value.id] = React.createRef();
+            return acc;
+        }, {});
+    }
+
+    const scrollTo = (id) =>
+    refs[id].current.scrollIntoView({
+        //behavior: 'smooth',
+        block: 'center',
+    });
+
     React.useEffect(() => {
-        if(answers.status === 'idle') {
-            dispatch(fetchAnswers(postId));
+        if(answers.status === 'idle') dispatch(fetchAnswers(postId));
+    }, [dispatch]);
+
+    React.useEffect(() => {
+        if(auth.isAuthenticated) {
+            if(votesStatus) {   
+                if(refs && refs[Number(hash)]) {
+                    scrollTo(Number(hash)); 
+                    refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
+                }
+            }
+        }else {
+            if(refs && refs[Number(hash)]) {
+                scrollTo(Number(hash)); 
+                refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
+            }
         }
-    }, [answers, dispatch]);
+    }, []);
 
     const handleModalOpen = (answer) => {
         setSelectedAnswerContent(answer.answerContent);
@@ -81,7 +128,19 @@ export default function Answer({postId, refs}) {
         setOpenDeleteModal(false);
     };
 
-    if(answers.status === 'loading' || answers.status === 'idle' || answerVotesLoading === 'loading') {
+    const AnswersList = answersCompList && answersCompList !== [] ? answersCompList.map((answer) =>
+        <Grid item innerRef={refs[answer.id]} key={answer.id}> 
+            <AnswerViewCard 
+                answer={answer} 
+                handleModalOpen={handleModalOpen}
+                handleDeleteModalOpen={handleDeleteModalOpen}
+                isAuthenticated={auth.isAuthenticated}
+                currentUserId={auth.currentUserId}
+            />
+        </Grid>
+    ): undefined;
+
+    if(answers.status === 'loading' || answerVotesLoading === 'loading') {
         return(
             <div>
                 <AnswerSkel/>
@@ -92,23 +151,11 @@ export default function Answer({postId, refs}) {
         return(<h4>Error loading...!</h4>);
     }else {
 
-        const AnswersList = answers.answers.map((answer, key) =>
-            <Grid item innerRef={refs[answer.id]} key={answer.id}> 
-                <AnswerViewCard 
-                    answer={answer} 
-                    handleModalOpen={handleModalOpen}
-                    handleDeleteModalOpen={handleDeleteModalOpen}
-                    isAuthenticated={auth.isAuthenticated}
-                    currentUserId={auth.currentUserId}
-                />
-            </Grid>
-        );
-
         return(
             <div className={classes.root}>
                 <ThemeProvider theme={theme}>
                     <Grid container direction="column" spacing={3}>
-                        {answers.answers.length !== 0 ? 
+                        {answersCompList.length !== 0 ? 
                             <Grid item>
                                 <Grid item>
                                     <Typography variant="h6">Answers</Typography>

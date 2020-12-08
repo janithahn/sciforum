@@ -1,10 +1,11 @@
 import React from 'react';
-import { Grid, Divider, TextField, Avatar, makeStyles, Paper, InputBase, IconButton, FormHelperText } from '@material-ui/core';
-import { Publish } from '@material-ui/icons';
+import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { createPostComments, fetchPostComments } from '../../../redux/ActionCreators';
+import TimeAgo from 'react-timeago';
+import VoteButtons from '../../vote/postCommentVoteButtons';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     input: {
         marginLeft: theme.spacing(1),
         flex: 1,
-        fontSize: 14,
+        fontSize: 10,
     },
     inputContainer: {
         marginBottom: 4,
@@ -71,7 +72,7 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
                 <Divider/>
             </Grid>
             <Grid item> 
-                <Grid container directin="row" justify="space-evenly" alignItems="center" spacing={1}>
+                <Grid container directin="row" justify="space-between" alignItems="center" spacing={0}>
                     <Grid item lg={11} sm={11} md={11} xs={11}> 
                         <Paper component="form" className={classes.root} elevation={0} variant="outlined" onClick={focusEditor}>
                             <Avatar style={{height: 25, width: 25}} src={currentUserProfileImg} />
@@ -81,7 +82,7 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
                         </Paper>
                     </Grid>
                     <Grid item lg={1} sm={1} md={1} xs={1}>
-                        <IconButton size="small" onClick={handleCommentSubmit}><Publish/></IconButton>
+                        <Button size="small" style={{textTransform: 'none'}} onClick={handleCommentSubmit} color="primary">Add</Button>
                     </Grid>
                 </Grid>
             </Grid>
@@ -117,12 +118,31 @@ export function PostCommentRender() {
 
         return(
             <Grid item key={item.id}> 
-                <Paper component="form" className={classes.root} elevation={0} variant="outlined">
-                    <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
-                    <div className={classes.input}>
-                        <Editor readOnly editorState={displayContent}/>
-                    </div>
-                </Paper>
+                <Grid container direction="column">
+                    <Grid item>
+                        <Paper component="form" className={classes.root} elevation={0} variant="outlined">
+                            <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                            <div className={classes.input}>
+                                <Editor readOnly editorState={displayContent}/>
+                            </div>
+                        </Paper>
+                    </Grid>
+                    <Grid item>
+                        <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
+                            <Grid item>
+                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                    <TimeAgo live={false} date={item.updated_at}/>
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                {/*<Button variant="text" size="small" style={{textTransform: "none", padding: 0, margin: 0}} color="inherit">
+                                    <Typography variant="subtitle2" color="primary">Like</Typography>
+                                </Button>*/}
+                                <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
         );
     }): undefined;

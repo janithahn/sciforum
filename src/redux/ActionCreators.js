@@ -1110,6 +1110,92 @@ export const deleteAnswerVote = (answer, voteType, owner) => (dispatch) => {
     });
 }
 
+//ANSWER COMMENT VOTES
+export const fetchAnswerCommentVotes = (commentId, voteType) => async (dispatch) => {
+    dispatch(answerCommentVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/answercommentvote/?comment=${commentId}&voteType=${voteType}`)
+    .then(response => {
+        console.log(response);
+        return response;
+    })
+    .then(votes => dispatch(addAnswerCommentVotes(votes.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(answerCommentVotesFailed(error));
+    });
+}
+
+export const fetchAnswerCommentVotesByLoggedInUser = (owner, comment) => (dispatch) => {
+    dispatch(answerVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/answercommentvote/?owner=${owner}&comment=${comment}`)
+    .then(response => {
+        console.log(response.data);
+        dispatch(addAnswerCommentVotes(response.data));
+        return response;
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(answerCommentVotesFailed());
+    });
+}
+
+export const answerCommentVotesLoading = () => ({
+    type: ActionTypes.ANSWER_COMMENT_VOTE_LIST_LOADING
+});
+
+export const answerCommentVotesFailed = (errmess) => ({
+    type: ActionTypes.ANSWER_COMMENT_VOTE_LIST_FAILED,
+    payload: errmess
+});
+
+export const resetAnswersCommentVotes = () => ({
+    type: ActionTypes.RESET_ANSWER_COMMENT_VOTE_LIST
+});
+
+export const addAnswerCommentVotes = (votes) => ({
+    type: ActionTypes.ADD_ANSWER_COMMENT_VOTE_LIST,
+    payload: votes
+});
+
+export const postAnswerCommentVote = (comment, voteType, owner) => (dispatch) => {
+    axios.post(baseUrl + `/vote_api/answercommentvote/vote/create/`, {
+        comment,
+        voteType,
+        owner
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(updateAnswerVote(answer, voteType, owner));
+    });
+}
+
+export const updateAnswerCommentVote = (comment, newVoteType, owner) => (dispatch) => {
+    axios.patch(baseUrl + `/vote_api/answercommentvote/vote/comment=${comment}&owner=${owner}/update/`, {
+        voteType: newVoteType,
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export const deleteAnswerCommentVote = (comment, voteType, owner) => (dispatch) => {
+    axios.delete(baseUrl + `/vote_api/answercommentvote/vote/answer=${comment}&voteType=${voteType}&owner=${owner}/delete/`, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
 //POST VOTES
 export const fetchPostVotes = (postId, voteType) => async (dispatch) => {
     dispatch(postVotesLoading());
@@ -1196,9 +1282,94 @@ export const deletePostVote = (post, voteType, owner) => (dispatch) => {
     });
 }
 
+//POST COMMENT VOTES
+export const fetchPostCommentVotes = (commentId, voteType) => async (dispatch) => {
+    dispatch(postCommentVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/postcommentvote/?comment=${commentId}&voteType=${voteType}`)
+    .then(response => {
+        console.log(response);
+        return response;
+    })
+    .then(votes => dispatch(addPostCommentVotes(votes.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(postCommentVotesFailed(error));
+    });
+}
+
+export const fetchPostCommentVotesByLoggedInUser = (owner, comment) => (dispatch) => {
+    dispatch(postCommentVotesLoading());
+
+    axios.get(baseUrl + `/vote_api/postcommentvote/?owner=${owner}&comment=${comment}`)
+    .then(response => {
+        console.log(response.data);
+        dispatch(addPostCommentVotes(response.data));
+        return response;
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(postCommentVotesFailed());
+    });
+}
+
+export const postCommentVotesLoading = () => ({
+    type: ActionTypes.POST_COMMENT_VOTE_LIST_LOADING
+});
+
+export const postCommentVotesFailed = (errmess) => ({
+    type: ActionTypes.POST_COMMENT_VOTE_LIST_FAILED,
+    payload: errmess
+});
+
+export const resetPostCommentVotes = () => ({
+    type: ActionTypes.RESET_POST_COMMENT_VOTE_LIST
+});
+
+export const addPostCommentVotes = (votes) => ({
+    type: ActionTypes.ADD_POST_COMMENT_VOTE_LIST,
+    payload: votes
+});
+
+export const postPostCommentVote = (comment, voteType, owner) => (dispatch) => {
+    axios.post(baseUrl + `/vote_api/postcommentvote/vote/create/`, {
+        comment,
+        voteType,
+        owner
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+        //dispatch(updatePostVote(post, voteType, owner));
+    });
+}
+
+export const updatePostCommentVote = (comment, newVoteType, owner) => (dispatch) => {
+    axios.patch(baseUrl + `/vote_api/postcommentvote/vote/comment=${comment}&owner=${owner}/update/`, {
+        voteType: newVoteType,
+    }, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export const deletePostCommentVote = (comment, voteType, owner) => (dispatch) => {
+    axios.delete(baseUrl + `/vote_api/postcommentvote/vote/comment=${comment}&voteType=${voteType}&owner=${owner}/delete/`, headerWithToken)
+    .then(response => {
+        console.log(response);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
 
 // USER NOTIFICATIONS
-
 export const fetchNotifications = (recipient) => async (dispatch) => {
     dispatch(notificationsLoading());
 

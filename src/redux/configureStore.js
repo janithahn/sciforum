@@ -12,6 +12,7 @@ import { UserContact } from './actions/credentials/contact';
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
 import { answerVotes, postVotes } from './actions/votes';
+import { answerCommentVotes, postCommentVotes } from './actions/commentVotes';
 import { Notifications } from './actions/notifications';
 import { MyPosts } from './actions/myposts';
 import { PostComments, AnswerComments } from './actions/comments';
@@ -37,6 +38,8 @@ export const ConfigureStore = () => {
             Answers,
             answerVotes,
             postVotes,
+            answerCommentVotes,
+            postCommentVotes,
             Notifications,
             MyPosts,
             UserEducation,
