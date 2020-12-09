@@ -5,14 +5,25 @@ import { IconButton, Grid, ThemeProvider } from '@material-ui/core';
 import { LikeVotes, DislikeVotes } from './vote';
 import LoginModal from '../sign/LoginModal';
 import { useStyles, themeVote } from './styles/voteStyles';
-import { useDispatch } from 'react-redux';
-import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/ActionCreators';
+import { useDispatch, useSelector } from 'react-redux';
+import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from '../../redux/ActionCreators';
 
- export default function VoteButtons({answerId, isAuthenticated, currentUserId, currentUserVote, likes, dislikes}) {
+ export default function VoteButtons({answerId, likes, dislikes}) {
 
     const classes = useStyles();
 
     const dispatch = useDispatch();
+
+    const auth = useSelector(state => state.Auth);
+    const answerVotes = useSelector(state => state.answerVotes);
+
+    const isAuthenticated = auth.isAuthenticated;
+    const currentUserId = auth.currentUserId;
+
+    const [currentUserVote, setCurrentUserVote] = React.useState({
+        type: '',
+        answer: null,
+    });
 
     const [openModal, setOpenModal] = React.useState(false);
 
@@ -24,6 +35,20 @@ import { postAnswerVote, updateAnswerVote, deleteAnswerVote } from '../../redux/
 
     const [likeColorChange, setLikeColorChange] = React.useState("secondary");
     const [dislikeColorChange, setDislikeColorChange] = React.useState("secondary");
+
+    React.useEffect(() => {
+        if(isAuthenticated && answerVotes.status === 'idle') {
+            dispatch(fetchAnswerVotesByLoggedInUser(currentUserId, answerId));
+        }
+    }, [dispatch, isAuthenticated, currentUserId, answerId]);
+    
+    React.useEffect(() => {
+        if(answerVotes && answerVotes.votes.length !== 0) handleCurrentUserVote({type: answerVotes.votes[0].voteType, answer: answerVotes.votes[0].answer});
+    }, [answerVotes.votes]);
+
+    const handleCurrentUserVote = (vote) => {
+        setCurrentUserVote(vote);
+    };
 
     React.useEffect(() => {
         if(isAuthenticated) {

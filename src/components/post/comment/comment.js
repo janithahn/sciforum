@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { createPostComments, fetchPostComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/postCommentVoteButtons';
+import AlertDialogSlide from './alertComment';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
     },
     inputContainer: {
         marginBottom: 4,
+    },
+    deleteButton: {
+        textTransform: 'none',
+        padding: 0,
+        margin: 0,
     },
 }));
 
@@ -96,6 +102,7 @@ export function PostCommentRender() {
 
     const { postId } = useParams();
 
+    const auth = useSelector(state => state.Auth);
     const postComments = useSelector(state => state.PostComments);
 
     const [comments, setComments] = React.useState(postComments.postComments ? postComments.postComments: []);
@@ -111,10 +118,26 @@ export function PostCommentRender() {
     const handleComments = (comments) => {
         setComments(comments);
     };
+    
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+
+    const [selectedCommentId, setSelectedCommentId] = React.useState(null);
+    const [selectedCommentPostBelong, setSelectedCommentPostBelong] = React.useState(null);
+
+    const handleDeleteModalOpen = (comment) => {
+        setSelectedCommentId(comment.id);
+        setSelectedCommentPostBelong(comment.post);
+        setOpenDeleteModal(true);
+    };
+    
+    const handleDeleteModalClose = () => {
+        setOpenDeleteModal(false);
+    };
 
     const CommentsList = comments && comments !== [] ? comments.map(item => {
 
         const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
+        console.log("comment id", item.id);
 
         return(
             <Grid item key={item.id}> 
@@ -135,11 +158,15 @@ export function PostCommentRender() {
                                 </Typography>
                             </Grid>
                             <Grid item>
-                                {/*<Button variant="text" size="small" style={{textTransform: "none", padding: 0, margin: 0}} color="inherit">
-                                    <Typography variant="subtitle2" color="primary">Like</Typography>
-                                </Button>*/}
                                 <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
                             </Grid>
+                            {auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
+                                <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
+                                    <Typography variant="body2">
+                                        {"Delete"}
+                                    </Typography>
+                                </Button>
+                            </Grid>: undefined}
                         </Grid>
                     </Grid>
                 </Grid>
@@ -148,18 +175,26 @@ export function PostCommentRender() {
     }): undefined;
 
     return(
-        <Grid container direction="column" spacing={2}>
-            <Grid item>
-                <Divider/>
-            </Grid>
-            <Grid item> 
-                <Grid container direction="column" alignItems="flex-start" justify="center" spacing={2}>
-                    {CommentsList}
+        <React.Fragment>
+            <Grid container direction="column" spacing={2}>
+                <Grid item>
+                    <Divider/>
                 </Grid>
+                <Grid item> 
+                    <Grid container direction="column" alignItems="flex-start" justify="center" spacing={2}>
+                        {CommentsList}
+                    </Grid>
+                </Grid>
+                {comments.length !== 0 ? <Grid item>
+                    <Divider/>
+                </Grid>: undefined}
             </Grid>
-            <Grid item>
-                <Divider/>
-            </Grid>
-        </Grid>
+            <AlertDialogSlide
+                openDeleteModal={openDeleteModal} 
+                handleDeleteModalClose={handleDeleteModalClose} 
+                commentId={selectedCommentId} 
+                postBelong={selectedCommentPostBelong} 
+            />
+        </React.Fragment>
     );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import PostDetail from './PostDetailComponent';
 import Answer from '../answer/answer';
+//import {Answer, PostAnswerInput} from '../answer/answerTest';
 import { Grid } from '@material-ui/core';
 
 /*const useIsMounted = () => {
@@ -29,8 +30,9 @@ export default function PostView() {
                 <Grid item lg={8} sm xs={12}>
                     <PostDetail/>
                 </Grid>
+                {/*<Grid><PostAnswerInput/></Grid>*/}
                 <Grid item lg={8} sm xs={12}>
-                    <Answer /*postId={postId} refs={refs}*//>
+                    <Answer/>
                 </Grid>
             </Grid>
         </React.Fragment>

@@ -949,15 +949,15 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
 }
 
 //ANSWER
-export const fetchAnswers = (postId) => async (dispatch) => {
+export const fetchAnswers = (postId) => (dispatch) => {
     dispatch(answersLoading());
 
-    axios.get(baseUrl + `/answer_api/?postBelong=${postId}`)
-    .then(response => {
-        console.log(response);
-        return response;
+    axios.get(baseUrl + `/answer_api/?postBelong=${postId}`, {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
-    .then(answers => dispatch(addAnswers(answers.data)))
+    .then(answers => 
+        dispatch(addAnswers(answers.data))
+    )
     .catch(error => {
         console.log(error);
         dispatch(answersFailed(error));

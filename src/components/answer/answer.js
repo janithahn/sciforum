@@ -6,7 +6,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
-import AnswerViewCard from './answerViewCard';
+import AnswerViewCardMemo from './answerViewCard';
 import AnswerSkel from './skeletons/answer';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
@@ -39,28 +39,33 @@ function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModa
 
 export default function Answer() {
 
+    const classes = useStyles();
+
     const answers = useSelector(state => state.Answers)
     const auth = useSelector(state => state.Auth);
     const answerVotesLoading = useSelector(state => state.answerVotes.status)
-
     const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
 
-    const [answersCompList, setAnswersCompList] = React.useState(answers.answers ? answers.answers: []);
+    const dispatch = useDispatch();
 
-    const handleAnswersCompList = (answers) => {
-        setAnswersCompList(answers);
-    };
-
-    React.useEffect(() => {
-        if(answers.answers) handleAnswersCompList(answers.answers);
-    }, [answers]);
-
-    const classes = useStyles();
     const location = useLocation();
+    const hash = location.hash.substring(1);
 
     const { postId } = useParams();
 
-    const hash = location.hash.substring(1);
+    const [answersList, setAnswersList] = React.useState(answers.answers ? answers.answers: []);
+
+    React.useEffect(() => {
+        if(answers.status === 'idle') dispatch(fetchAnswers(postId));
+    }, [dispatch]);
+
+    React.useEffect(() => {
+        if(answers.answers) handleAnswersList(answers.answers);
+    }, [answers]);
+
+    const handleAnswersList = (answers) => {
+        setAnswersList(answers);
+    };
 
     const [openModal, setOpenModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
@@ -68,8 +73,6 @@ export default function Answer() {
     const [selectedAnswerContent, setSelectedAnswerContent] = React.useState('');
     const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
-
-    const dispatch = useDispatch();
 
     let refs = null;
 
@@ -85,10 +88,6 @@ export default function Answer() {
         //behavior: 'smooth',
         block: 'center',
     });
-
-    React.useEffect(() => {
-        if(answers.status === 'idle') dispatch(fetchAnswers(postId));
-    }, [dispatch]);
 
     React.useEffect(() => {
         if(auth.isAuthenticated) {
@@ -128,19 +127,18 @@ export default function Answer() {
         setOpenDeleteModal(false);
     };
 
-    const AnswersList = answersCompList && answersCompList !== [] ? answersCompList.map((answer) =>
-        <Grid item innerRef={refs[answer.id]} key={answer.id}> 
-            <AnswerViewCard 
+    const AnswersList =  answersList.map((answer) => (
+        <Grid item /*innerRef={refs[answer.id]}*/ key={answer.id}> 
+            <AnswerViewCardMemo 
+                key={answer.id}
                 answer={answer} 
                 handleModalOpen={handleModalOpen}
                 handleDeleteModalOpen={handleDeleteModalOpen}
-                isAuthenticated={auth.isAuthenticated}
-                currentUserId={auth.currentUserId}
             />
         </Grid>
-    ): undefined;
+    ));
 
-    if(answers.status === 'loading' || answerVotesLoading === 'loading') {
+    /*if(answers.status === 'loading' || answerVotesLoading === 'loading') {
         return(
             <div>
                 <AnswerSkel/>
@@ -149,13 +147,13 @@ export default function Answer() {
         );
     }else if(answers.status === 'failed') {
         return(<h4>Error loading...!</h4>);
-    }else {
+    }else {*/
 
         return(
             <div className={classes.root}>
                 <ThemeProvider theme={theme}>
                     <Grid container direction="column" spacing={3}>
-                        {answersCompList.length !== 0 ? 
+                        {answersList.length !== 0 ? 
                             <Grid item>
                                 <Grid item>
                                     <Typography variant="h6">Answers</Typography>
@@ -187,5 +185,5 @@ export default function Answer() {
                 </ThemeProvider>
             </div>
         );
-    }
+    
 }

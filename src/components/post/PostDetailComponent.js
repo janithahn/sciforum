@@ -6,7 +6,7 @@ import NotFound from '../alert/NotFoundComponent';
 //import PostViewer from './PostViewerComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPostDetail, fetchPostVotesByLoggedInUser, fetchPostComments } from '../../redux/ActionCreators';
+import { fetchPostDetail } from '../../redux/ActionCreators';
 import AnswerModalCard from '../answer/answerModalCard';
 import VoteButtons from '../vote/postVoteButtons';
 import RenderCard from './RenderCard';
@@ -71,37 +71,12 @@ export default function PostDetail() {
     const postTags = post.post ? post.post.tags: null;
     const likes = post.post ? post.post.likes: 0;
     const dislikes = post.post ? post.post.dislikes: 0;
-    
-    const postVotes = useSelector(state => state.postVotes);
-
-    const [currentUserVote, setCurrentUserVote] = React.useState({
-        type: '',
-        post: null,
-    });
-
-    React.useEffect(() => {
-        if(auth.isAuthenticated && postVotes.status === 'idle') {
-            if(id) dispatch(fetchPostVotesByLoggedInUser(auth.currentUserId, id));
-        }
-    }, [dispatch, auth, id]);
-
-    React.useEffect(() => {
-        if(postVotes.votes.length !== 0) setCurrentUserVote({type: postVotes.votes[0].voteType, post: postVotes.votes[0].post});
-    }, [postVotes.votes]);
 
     React.useEffect(() => {
         if(post.status === 'idle') {
             dispatch(fetchPostDetail(postId));
         }
     }, [post, dispatch]);
-
-    /*React.useEffect(() => {
-        if(post.status === 'succeeded' && postComments.status === 'idle') {
-            dispatch(fetchPostComments(postId));
-        }
-    }, [post, postComments]);*/
-
-    //console.log(postComments);
     
     React.useEffect(() => {
         if(post.post) {
@@ -149,7 +124,7 @@ export default function PostDetail() {
         setShowAddComment(false);
     };
 
-    if(post.status === 'loading' || post.status === 'idle' || postVotes.status === 'loading') {
+    if(post.status === 'loading') {
         return(<div><Article/></div>);
     }else if(post.errMess) {
         return(<h4>Error loading...!</h4>);
@@ -189,11 +164,7 @@ export default function PostDetail() {
                             <Grid container justify="space-between" alignItems="center" spacing={0}>
                                 <Grid item>
                                     <Grid container justify="center" alignItems="center" spacing={0}>
-                                        <VoteButtons 
-                                            postId={id} 
-                                            isAuthenticated={auth.isAuthenticated} 
-                                            currentUserId={auth.currentUserId}
-                                            currentUserVote={currentUserVote}
+                                        <VoteButtons
                                             likes={likes}
                                             dislikes={dislikes}
                                         />

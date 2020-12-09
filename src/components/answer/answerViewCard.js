@@ -1,34 +1,20 @@
 import React from 'react';
 import { Grid, Typography, Divider, Avatar, Button, Box } from '@material-ui/core';
 import { Preview } from './answerPreview';
-import { fetchAnswerVotesByLoggedInUser } from '../../redux/ActionCreators';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
 
-export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen, isAuthenticated, currentUserId}) {
+const AnswerViewCardMemo = React.memo(function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen}) {
 
     const classes = useStyles();
 
-    const dispatch = useDispatch();
-    const answerVotes = useSelector(state => state.answerVotes);
+    const auth = useSelector(state => state.Auth);
 
-    const [currentUserVote, setCurrentUserVote] = React.useState({
-        type: '',
-        answer: null,
-    });
-
-    React.useEffect(() => {
-        if(isAuthenticated && answerVotes.status === 'idle') {
-            dispatch(fetchAnswerVotesByLoggedInUser(currentUserId, answer.id));
-        }
-    }, [dispatch, isAuthenticated, currentUserId, answer]);
-
-    React.useEffect(() => {
-        if(answerVotes.votes.length !== 0) setCurrentUserVote({type: answerVotes.votes[0].voteType, answer: answerVotes.votes[0].answer});
-    }, [answerVotes.votes]);
+    const isAuthenticated = auth.isAuthenticated;
+    const currentUserId = auth.currentUserId;
 
     return(
         <React.Fragment>
@@ -67,9 +53,6 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                                             answerId={answer.id} 
                                             likes={answer.likes}
                                             dislikes={answer.dislikes}
-                                            isAuthenticated={isAuthenticated} 
-                                            currentUserId={currentUserId}
-                                            currentUserVote={currentUserVote}
                                         />
                                     </Grid>
                                     <Grid item>
@@ -118,4 +101,6 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
             </Box>
         </React.Fragment>
     );
-}
+});
+
+export default AnswerViewCardMemo;

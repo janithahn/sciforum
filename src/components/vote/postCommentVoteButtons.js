@@ -6,7 +6,7 @@ import { LikeVotes, DislikeVotes } from './vote';
 import LoginModal from '../sign/LoginModal';
 import { useStyles, themeVote } from './styles/voteStyles';
 import { useDispatch, useSelector } from 'react-redux';
-import { postPostCommentVote, updatePostCommentVote, fetchPostCommentVotesByLoggedInUser, fetchAnswerCommentVotesByLoggedInUser } from '../../redux/ActionCreators';
+import { postPostCommentVote, updatePostCommentVote, fetchPostCommentVotesByLoggedInUser } from '../../redux/ActionCreators';
 
  export default function VoteButtons({commentId, likes, dislikes}) {
 

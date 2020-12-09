@@ -5,12 +5,28 @@ import { IconButton, Grid, ThemeProvider } from '@material-ui/core';
 import { LikeVotes, DislikeVotes } from './vote';
 import LoginModal from '../sign/LoginModal';
 import { useStyles, themeVote } from './styles/voteStyles';
-import { useDispatch } from 'react-redux';
-import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { postPostVote, updatePostVote, fetchPostVotesByLoggedInUser } from '../../redux/ActionCreators';
 
- export default function VoteButtons({postId, isAuthenticated, currentUserId, currentUserVote, likes, dislikes}) {
+ export default function VoteButtons({ likes, dislikes }) {
 
     const classes = useStyles();
+
+    const auth = useSelector(state => state.Auth);
+    const postVotes = useSelector(state => state.postVotes);
+
+    const [currentUserVote, setCurrentUserVote] = React.useState({
+        type: '',
+        post: null,
+    });
+
+    //console.log(currentUserVote);
+
+    const isAuthenticated = auth.isAuthenticated;
+    const currentUserId = auth.currentUserId;
+
+    const { postId } = useParams();
 
     const dispatch = useDispatch();
 
@@ -24,6 +40,20 @@ import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
 
     const [likeColorChange, setLikeColorChange] = React.useState("secondary");
     const [dislikeColorChange, setDislikeColorChange] = React.useState("secondary");
+
+    React.useEffect(() => {
+        if(isAuthenticated && postVotes.status === 'idle') {
+            if(postId) dispatch(fetchPostVotesByLoggedInUser(currentUserId, postId));
+        }
+    }, [dispatch, isAuthenticated, currentUserId, postVotes, postId]);
+
+    React.useEffect(() => {
+        if(postVotes.votes && postVotes.votes.length !== 0) handleCurrentUserVote({type: postVotes.votes[0].voteType, post: postVotes.votes[0].post.toString()});
+    }, [postVotes]);
+
+    const handleCurrentUserVote = (vote) => {
+        setCurrentUserVote(vote);
+    };
 
     React.useEffect(() => {
         if(isAuthenticated) {
@@ -41,7 +71,7 @@ import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
                 }
             }
         }
-    }, [currentUserVote, isAuthenticated, postId]);
+    }, [currentUserVote, isAuthenticated, currentUserId, postId]);
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -114,7 +144,7 @@ import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <LikeVotes postId={postId} likeCount={likeCount} setLikeCount={setLikeCount}/>
+                            <LikeVotes likeCount={likeCount}/>
                         </Grid>
                     </Grid>    
                 </Grid>
@@ -126,7 +156,7 @@ import { postPostVote, updatePostVote } from '../../redux/ActionCreators';
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <DislikeVotes postId={postId} dislikeCount={dislikeCount} setDislikeCount={setDislikeCount}/>
+                            <DislikeVotes dislikeCount={dislikeCount}/>
                         </Grid>
                     </Grid>
                 </Grid>
