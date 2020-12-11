@@ -127,8 +127,8 @@ export default function Answer() {
         setOpenDeleteModal(false);
     };
 
-    const AnswersList =  answersList.map((answer) => (
-        <Grid item innerRef={refs[answer.id]} key={answer.id}> 
+    const AnswersList =  answers.answers.map((answer) => (
+        <Grid item /*innerRef={refs[answer.id]}*/ key={answer.id}> 
             <AnswerViewCard
                 answer={answer} 
                 handleModalOpen={handleModalOpen}
