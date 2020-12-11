@@ -1,9 +1,11 @@
 import React from 'react';
-import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
+import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography, TextField } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchAnswers, postAnswer } from '../../redux/ActionCreators';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+//import { createSelectItemById } from '../../redux/selectors/answerSelectors';
+import { createSelector } from 'reselect';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -94,6 +96,37 @@ export function PostAnswerInput({ currentUserProfileImg, postId }) {
     );
 }
 
+const Item = React.memo(function Item({ item }) {
+    const rendered = React.useRef(0);
+    rendered.current++;
+    return (
+      <li>
+        rendered:{rendered.current} times, item:{' '}
+        {JSON.stringify(item)}
+      </li>
+    );
+});
+
+/*const ItemContainer = ({ id }) => {
+    const selectItem = React.useMemo(
+      () => createSelectItemById(id),
+      [id]
+    );
+    const item = useSelector(selectItem);
+    return <Item item={item} />;
+};
+
+const ItemList = () => {
+    const items = useSelector(state => state.Answers);
+    return (
+      <ul>
+        {items.map(({ id }) => (
+          <ItemContainer key={id} id={id} />
+        ))}
+      </ul>
+    );
+  };*/
+
 export function Answer() {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -102,7 +135,7 @@ export function Answer() {
 
     const postAnswers = useSelector(state => state.Answers);
 
-    const [answers, setAnswers] = React.useState(postAnswers.answers);
+    const [answers, setAnswers] = React.useState(postAnswers.answers ? postAnswers.answers: []);
 
     React.useEffect(() => {
         if(postAnswers.status === 'idle') dispatch(fetchAnswers(postId));
@@ -115,6 +148,46 @@ export function Answer() {
     const handleAnswers = (answers) => {
         setAnswers(answers);
     };
+
+    const selectItems = (state) => state.Answers.answers;
+
+    const selectItemById = createSelector(
+        [selectItems, (_, id) => id],
+        (items, id) => items.find((item) => item.id === id)
+    );
+
+    const createSelectItemAsJSON = (id) =>
+    createSelector(
+        [(state) => selectItemById(state, id)],
+        //return the item as primitive (string)
+        (item) => JSON.stringify(item)
+    );
+
+    const createSelectItemById = (id) =>
+    createSelector(
+        [createSelectItemAsJSON(id)],
+        //return the json item as object
+        (item) => JSON.parse(item ? item: null)
+    );
+
+    const ItemContainer = ({ id }) => {
+        const selectItem = React.useMemo(
+          () => createSelectItemById(id),
+          [id]
+        );
+        const item = useSelector(selectItem);
+        return <Item item={item} />;
+    };
+
+    const AList = () => {
+        return (
+          <ul>
+            {answers.map(({ id }) => (
+              <ItemContainer key={id} id={id} />
+            ))}
+          </ul>
+        );
+      };
 
     const AnswersList = answers ? answers.map(item => {
 
@@ -142,7 +215,7 @@ export function Answer() {
             </Grid>
             <Grid item> 
                 <Grid container direction="column" alignItems="flex-start" justify="center" spacing={2}>
-                    {AnswersList}
+                    <AList/>
                 </Grid>
             </Grid>
             <Grid item>

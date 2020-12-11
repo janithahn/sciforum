@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { Posts } from './actions/posts';
@@ -27,6 +27,9 @@ const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHisto
 });
 
 export const ConfigureStore = () => {
+
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
     const store = createStore(
         combineReducers({
             router: routerReducer,
@@ -49,7 +52,7 @@ export const ConfigureStore = () => {
             PostComments,
             AnswerComments,
         }),
-        applyMiddleware(thunk, logger, routerMiddleware)
+        composeEnhancers(applyMiddleware(thunk, logger, routerMiddleware))
     );
 
     return store;

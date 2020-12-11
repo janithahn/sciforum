@@ -900,6 +900,96 @@ export const deletePostComments = (commentId, postId) => (dispatch) => {
     })
 }
 
+//ANSWER COMMENTS
+export const fetchAnswerComments = (answerId) => (dispatch) => {
+
+    dispatch(answerCommentsLoading());
+
+    axios.get(baseUrl + `/comment_api/answer_comment/?answer=${answerId}`, {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(addAnswerComments(res.data));
+    })
+    .catch(error => {
+        console.log(error);
+        dispatch(answerCommentsFailed(error));
+    });
+}
+
+export const fetchAnswerCommentsDirect = (answerId, handleComments) => (dispatch) => {
+
+    axios.get(baseUrl + `/comment_api/answer_comment/?answer=${answerId}`, {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        handleComments(res.data);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+
+export const answerCommentsLoading = () => ({
+    type: ActionTypes.ANSWER_COMMENTS_LOADING
+});
+
+export const answerCommentsFailed = (errmess) => ({
+    type: ActionTypes.ANSWER_COMMENTS_FAILED,
+    payload: errmess
+});
+
+export const addAnswerComments = (answerComments) => ({
+    type: ActionTypes.ADD_ANSWER_COMMENTS,
+    payload: answerComments
+});
+
+export const updateAnswerComments = (comment, commetId, answerId) => (dispatch) => {
+    
+    axios.patch(baseUrl + `/comment_api/answer_comment_create/${commetId}/`, comment,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchAnswerComments(answerId));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const createAnswerComments = (comment, answerId) => (dispatch) => {
+    
+    axios.post(baseUrl + `/comment_api/answer_comment_create/`, comment,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchAnswerComments(answerId));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
+export const deleteAnswerComments = (commentId, answerId) => (dispatch) => {
+    
+    axios.delete(baseUrl + `/comment_api/answer_comment_create/${commentId}/`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        console.log(res);
+        dispatch(fetchAnswerComments(answerId));
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
 
 //RETREIVING USER PROFILE
 export const fetchUserProfile = (token, currentUserId) => (dispatch) => {
@@ -1127,7 +1217,7 @@ export const fetchAnswerCommentVotes = (commentId, voteType) => async (dispatch)
 }
 
 export const fetchAnswerCommentVotesByLoggedInUser = (owner, comment) => (dispatch) => {
-    dispatch(answerVotesLoading());
+    dispatch(answerCommentVotesLoading());
 
     axios.get(baseUrl + `/vote_api/answercommentvote/?owner=${owner}&comment=${comment}`)
     .then(response => {

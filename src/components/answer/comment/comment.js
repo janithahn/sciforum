@@ -2,10 +2,9 @@ import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { createPostComments, fetchPostComments } from '../../../redux/ActionCreators';
+import { createAnswerComments, fetchAnswerComments, fetchAnswerCommentsDirect } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
-import VoteButtons from '../../vote/postCommentVoteButtons';
+import VoteButtons from '../../vote/answerCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function PostCommentInput({ currentUserProfileImg, postId }) {
+export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
 
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -42,7 +41,7 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
         content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
     );
     const submitVal = {
-        post: postId,
+        answer: answerId,
         owner: localStorage.getItem('currentUserId'),
         comment: content,
     };
@@ -67,7 +66,7 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
 
     const handleCommentSubmit = () => {
         if(text.length !== 0) {
-            dispatch(createPostComments(submitVal, postId));
+            dispatch(createAnswerComments(submitVal, answerId));
         }
         setEditorState(() => EditorState.createEmpty());
     };
@@ -96,24 +95,24 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
     );
 }
 
-export function PostCommentRender() {
+export function AnswerCommentRender({ answerId }) {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const { postId } = useParams();
-
     const auth = useSelector(state => state.Auth);
-    const postComments = useSelector(state => state.PostComments);
+    const answerComments = useSelector(state => state.AnswerComments);
 
-    const [comments, setComments] = React.useState(postComments.postComments ? postComments.postComments: []);
+    console.log(answerComments);
+
+    const [comments, setComments] = React.useState(answerComments.answerComments ? answerComments.answerComments: []);
 
     React.useEffect(() => {
-        if(postComments.status === 'idle') dispatch(fetchPostComments(postId));
+        if(answerComments.status === 'idle') dispatch(fetchAnswerComments(answerId));
     }, [dispatch]);
 
     React.useEffect(() => {
-        if(postComments.postComments) handleComments(postComments.postComments);
-    }, [postComments]);
+        if(answerComments.answerComments) handleComments(answerComments.answerComments);
+    }, [answerComments]);
 
     const handleComments = (comments) => {
         setComments(comments);
@@ -122,11 +121,11 @@ export function PostCommentRender() {
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
     const [selectedCommentId, setSelectedCommentId] = React.useState(null);
-    const [selectedCommentPostBelong, setSelectedCommentPostBelong] = React.useState(null);
+    const [selectedCommentAnswerBelong, setSelectedCommentAnswerBelong] = React.useState(null);
 
     const handleDeleteModalOpen = (comment) => {
         setSelectedCommentId(comment.id);
-        setSelectedCommentPostBelong(comment.post);
+        setSelectedCommentAnswerBelong(comment.answer);
         setOpenDeleteModal(true);
     };
     
@@ -134,7 +133,7 @@ export function PostCommentRender() {
         setOpenDeleteModal(false);
     };
 
-    const CommentsList = comments && comments !== [] ? comments.map(item => {
+    const CommentsList = comments && comments !== [] ? comments.map((arr, index) => arr.map(item => {
 
         const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
 
@@ -159,7 +158,7 @@ export function PostCommentRender() {
                             <Grid item>
                                 <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
                             </Grid>
-                            {auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
+                            {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
                                 <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
                                     <Typography variant="body2">
                                         {"Delete"}
@@ -171,7 +170,7 @@ export function PostCommentRender() {
                 </Grid>
             </Grid>
         );
-    }): undefined;
+    })): undefined;
 
     return(
         <React.Fragment>
@@ -192,7 +191,7 @@ export function PostCommentRender() {
                 openDeleteModal={openDeleteModal} 
                 handleDeleteModalClose={handleDeleteModalClose} 
                 commentId={selectedCommentId} 
-                postBelong={selectedCommentPostBelong} 
+                answerBelong={selectedCommentAnswerBelong} 
             />
         </React.Fragment>
     );

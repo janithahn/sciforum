@@ -6,24 +6,37 @@ import { LikeVotes, DislikeVotes } from './vote';
 import LoginModal from '../sign/LoginModal';
 import { useStyles, themeVote } from './styles/voteStyles';
 import { useDispatch, useSelector } from 'react-redux';
-import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from '../../redux/ActionCreators';
+import { postAnswerCommentVote, updateAnswerCommentVote, fetchAnswerCommentVotesByLoggedInUser } from '../../redux/ActionCreators';
 
- export default function VoteButtons({answerId, likes, dislikes}) {
+ export default function VoteButtons({commentId, likes, dislikes}) {
 
     const classes = useStyles();
 
     const dispatch = useDispatch();
 
     const auth = useSelector(state => state.Auth);
-    const answerVotes = useSelector(state => state.answerVotes);
+    const answerCommentVotes = useSelector(state => state.answerCommentVotes);
 
     const isAuthenticated = auth.isAuthenticated;
-    const currentUserId = auth.currentUserId;
 
     const [currentUserVote, setCurrentUserVote] = React.useState({
         type: '',
-        answer: null,
+        comment: null,
     });
+
+    React.useEffect(() => {
+        if(auth.isAuthenticated && answerCommentVotes.status === 'idle') {
+            if(commentId) dispatch(fetchAnswerCommentVotesByLoggedInUser(auth.currentUserId, commentId));
+        }
+    }, [dispatch, auth, commentId]);
+
+    React.useEffect(() => {
+        if(answerCommentVotes.votes && answerCommentVotes.votes.length !== 0) handleCurrentUserVote({type: answerCommentVotes.votes[0].voteType, comment: answerCommentVotes.votes[0].comment});
+    }, [answerCommentVotes]);
+
+    const handleCurrentUserVote = (vote) => {
+        setCurrentUserVote(vote);
+    };
 
     const [openModal, setOpenModal] = React.useState(false);
 
@@ -37,37 +50,22 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
     const [dislikeColorChange, setDislikeColorChange] = React.useState("secondary");
 
     React.useEffect(() => {
-        if(isAuthenticated && answerVotes.status === 'idle') {
-            dispatch(fetchAnswerVotesByLoggedInUser(currentUserId, answerId));
-        }
-    }, [dispatch, isAuthenticated, currentUserId, answerId, answerVotes]);
-    
-    React.useEffect(() => {
-        if(answerVotes && answerVotes.votes.length !== 0) handleCurrentUserVote({type: answerVotes.votes[0].voteType, answer: answerVotes.votes[0].answer});
-    }, [answerVotes.votes]);
-
-    const handleCurrentUserVote = (vote) => {
-        setCurrentUserVote(vote);
-    };
-
-    React.useEffect(() => {
         if(isAuthenticated) {
-            if(currentUserVote.answer === answerId) {
+            if(currentUserVote.comment === commentId) {
                 if(currentUserVote.type === 'LIKE') {
                     setLikeColorChange("primary");
-                    setLikedUser(currentUserId);
+                    setLikedUser(auth.currentUserId);
                 }
                 if(currentUserVote.type === 'DISLIKE') {
                     setDislikeColorChange("primary");
-                    setDislikedUser(currentUserId);
+                    setDislikedUser(auth.currentUserId);
                 }
                 if(currentUserVote.type === 'EMPTY') {
                     setDislikeColorChange("secondary");
-                    //setDislikedUser(currentUserId);
                 }
             }
         }
-    }, [currentUserVote, isAuthenticated, answerId]);
+    }, [currentUserVote, isAuthenticated, commentId]);
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -81,21 +79,21 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
         if(isAuthenticated) {
             if(dislikeColorChange === "primary") setDislikeColorChange("secondary");
 
-            if(likedUser == currentUserId) {
+            if(likedUser == auth.currentUserId) {
                 setLikeColorChange("secondary");
                 setLikedUser('');
                 setLikeCount(likeCount - 1);
-                dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
+                dispatch(updateAnswerCommentVote(commentId, 'EMPTY', auth.currentUserId));
             }
-            if(likedUser != currentUserId) {
+            if(likedUser != auth.currentUserId) {
                 setLikeColorChange("primary");
-                setLikedUser(currentUserId);
+                setLikedUser(auth.currentUserId);
                 setLikeCount(likeCount + 1);
-                dispatch(postAnswerVote(answerId, 'LIKE', currentUserId));
-                if(dislikedUser == currentUserId) {
+                dispatch(postAnswerCommentVote(commentId, 'LIKE', auth.currentUserId));
+                if(dislikedUser == auth.currentUserId) {
                     setDislikedUser('');
                     setDislikeCount(dislikeCount - 1);
-                    dispatch(updateAnswerVote(answerId, 'LIKE', currentUserId));
+                    dispatch(updateAnswerCommentVote(commentId, 'LIKE', auth.currentUserId));
                 }
             }
         }else {
@@ -107,21 +105,21 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
         if(isAuthenticated) {
             if(likeColorChange === "primary") setLikeColorChange("secondary");
             
-            if(dislikedUser == currentUserId) {
+            if(dislikedUser == auth.currentUserId) {
                 setDislikeColorChange("secondary");
                 setDislikedUser('');
                 setDislikeCount(dislikeCount - 1);
-                dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
+                dispatch(updateAnswerCommentVote(commentId, 'EMPTY', auth.currentUserId));
             }
-            if(dislikedUser != currentUserId) {
+            if(dislikedUser != auth.currentUserId) {
                 setDislikeColorChange("primary");
-                setDislikedUser(currentUserId);
+                setDislikedUser(auth.currentUserId);
                 setDislikeCount(dislikeCount + 1);
-                dispatch(postAnswerVote(answerId, 'DISLIKE', currentUserId));
-                if(likedUser == currentUserId) {
+                dispatch(postAnswerCommentVote(commentId, 'DISLIKE', auth.currentUserId));
+                if(likedUser == auth.currentUserId) {
                     setLikedUser('');
                     setLikeCount(likeCount - 1);
-                    dispatch(updateAnswerVote(answerId, 'DISLIKE', currentUserId));
+                    dispatch(updateAnswerCommentVote(commentId, 'DISLIKE', auth.currentUserId));
                 }
             }
         }else {
@@ -131,12 +129,12 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
 
     return(
         <ThemeProvider theme={themeVote}>
-            <Grid container justify="center" alignItems="center" spacing={3} style={{padding: 3}}>
+            <Grid container justify="center" alignItems="center" spacing={1} style={{padding: 3}}>
                 <Grid item>
                     <Grid container justify="center" alignItems="center" spacing={0}>
                         <Grid item>
                             <IconButton onClick={() => handleLike()} size="small">
-                                <ThumbUpRoundedIcon color={likeColorChange}/>
+                                <ThumbUpRoundedIcon fontSize="small" color={likeColorChange}/>
                             </IconButton>
                         </Grid>
                         <Grid item>
@@ -148,7 +146,7 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
                     <Grid container justify="center" alignItems="center" spacing={0}>
                         <Grid item>
                             <IconButton onClick={() => handleDislike()} size="small">
-                                <ThumbDownRoundedIcon color={dislikeColorChange}/>
+                                <ThumbDownRoundedIcon fontSize="small" color={dislikeColorChange}/>
                             </IconButton>
                         </Grid>
                         <Grid item>

@@ -24,20 +24,20 @@ export const PostComments = (state = {
 export const AnswerComments = (state = {
     status: 'idle',
     errMess: null,
-    answerComments: null
+    answerComments: []
 }, action) => {
-switch(action.type) {
+    switch(action.type) {
 
-    case ActionTypes.ADD_POST_COMMENTS:
-        return {...state, status: 'succeeded', errMess: null, answerComments: action.payload}
+        case ActionTypes.ADD_ANSWER_COMMENTS:
+            return {...state, status: 'succeeded', errMess: null, answerComments: [...state.answerComments, action.payload]}
 
-    case ActionTypes.POST_COMMENTS_LOADING:
-        return {...state, status: 'loading', errMess: null, answerComments: null}
-    
-    case ActionTypes.POST_COMMENTS_FAILED:
-        return {...state, status: 'failed', errMess: action.payload, answerComments: null}
+        case ActionTypes.ANSWER_COMMENTS_LOADING:
+            return {...state, status: 'loading', errMess: null, answerComments: []}
+        
+        case ActionTypes.ANSWER_COMMENTS_FAILED:
+            return {...state, status: 'failed', errMess: action.payload, answerComments: []}
 
-    default:
-        return state;
-}
+        default:
+            return state;
+    }
 }

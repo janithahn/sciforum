@@ -6,7 +6,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
-import AnswerViewCardMemo from './answerViewCard';
+import AnswerViewCard from './answerViewCard';
 import AnswerSkel from './skeletons/answer';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
@@ -128,9 +128,8 @@ export default function Answer() {
     };
 
     const AnswersList =  answersList.map((answer) => (
-        <Grid item /*innerRef={refs[answer.id]}*/ key={answer.id}> 
-            <AnswerViewCardMemo 
-                key={answer.id}
+        <Grid item innerRef={refs[answer.id]} key={answer.id}> 
+            <AnswerViewCard
                 answer={answer} 
                 handleModalOpen={handleModalOpen}
                 handleDeleteModalOpen={handleDeleteModalOpen}

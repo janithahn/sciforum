@@ -6,8 +6,9 @@ import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
+import { AnswerCommentInput, AnswerCommentRender } from './comment/comment';
 
-const AnswerViewCardMemo = React.memo(function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen}) {
+export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen}) {
 
     const classes = useStyles();
 
@@ -15,6 +16,18 @@ const AnswerViewCardMemo = React.memo(function AnswerViewCard({answer, handleMod
 
     const isAuthenticated = auth.isAuthenticated;
     const currentUserId = auth.currentUserId;
+
+    const [openCommentBox, setOpenCommentBox] = React.useState(false);
+    const [showAddComment, setShowAddComment] = React.useState(true);
+    
+    const handleCommentBoxOpen = () => {
+        setOpenCommentBox(true);
+        handleShowAddComment();
+    };
+
+    const handleShowAddComment = () => {
+        setShowAddComment(false);
+    };
 
     return(
         <React.Fragment>
@@ -95,12 +108,24 @@ const AnswerViewCardMemo = React.memo(function AnswerViewCard({answer, handleMod
                         </Grid>
                     </Grid>
                     <Grid item>
-                        <Divider/>
+                        {
+                            auth.isAuthenticated && showAddComment ? 
+                                <Button variant="text" size="small" style={{textTransform: "none"}} color="inherit" onClick={handleCommentBoxOpen}>
+                                    <Typography variant="body2" color="primary">Add comment</Typography>
+                                </Button>: 
+                            undefined
+                        }
+                        {
+                            auth.isAuthenticated && openCommentBox ? 
+                                <AnswerCommentInput currentUserProfileImg={auth.currentUserProfileImg} answerId={answer.id}/>: 
+                            undefined
+                        }
+                    </Grid>
+                    <Grid item>
+                        {/*<AnswerCommentRender answerId={answer.id}/>*/}
                     </Grid>
                 </Grid>
             </Box>
         </React.Fragment>
     );
-});
-
-export default AnswerViewCardMemo;
+};
