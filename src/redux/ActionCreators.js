@@ -901,11 +901,11 @@ export const deletePostComments = (commentId, postId) => (dispatch) => {
 }
 
 //ANSWER COMMENTS
-export const fetchAnswerComments = (answerId) => (dispatch) => {
+export const fetchAnswerComments = (id) => (dispatch) => {
 
     dispatch(answerCommentsLoading());
 
-    axios.get(baseUrl + `/comment_api/answer_comment/?answer=${answerId}`, {
+    axios.get(baseUrl + `/comment_api/answer_comment/?post=${id}`, {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
@@ -933,20 +933,21 @@ export const fetchAnswerCommentsDirect = (answerId, handleComments) => (dispatch
 }
 
 export const answerCommentsLoading = () => ({
-    type: ActionTypes.ANSWER_COMMENTS_LOADING
+    type: ActionTypes.ANSWER_COMMENTS_LOADING,
 });
 
-export const answerCommentsFailed = (errmess) => ({
+export const answerCommentsFailed = (errmess, answerId) => ({
     type: ActionTypes.ANSWER_COMMENTS_FAILED,
-    payload: errmess
+    payload: errmess,
+    answerId
 });
 
 export const addAnswerComments = (answerComments) => ({
     type: ActionTypes.ADD_ANSWER_COMMENTS,
-    payload: answerComments
+    payload: answerComments,
 });
 
-export const updateAnswerComments = (comment, commetId, answerId) => (dispatch) => {
+export const updateAnswerComments = (comment, commetId, id) => (dispatch) => {
     
     axios.patch(baseUrl + `/comment_api/answer_comment_create/${commetId}/`, comment,
     {
@@ -954,14 +955,14 @@ export const updateAnswerComments = (comment, commetId, answerId) => (dispatch) 
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchAnswerComments(answerId));
+        dispatch(fetchAnswerComments(id));
     })
     .catch(error => {
         console.log(error);
     })
 }
 
-export const createAnswerComments = (comment, answerId) => (dispatch) => {
+export const createAnswerComments = (comment, id) => (dispatch) => {
     
     axios.post(baseUrl + `/comment_api/answer_comment_create/`, comment,
     {
@@ -969,14 +970,14 @@ export const createAnswerComments = (comment, answerId) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchAnswerComments(answerId));
+        dispatch(fetchAnswerComments(id));
     })
     .catch(error => {
         console.log(error);
     })
 }
 
-export const deleteAnswerComments = (commentId, answerId) => (dispatch) => {
+export const deleteAnswerComments = (commentId, id) => (dispatch) => {
     
     axios.delete(baseUrl + `/comment_api/answer_comment_create/${commentId}/`,
     {
@@ -984,7 +985,7 @@ export const deleteAnswerComments = (commentId, answerId) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchAnswerComments(answerId));
+        dispatch(fetchAnswerComments(id));
     })
     .catch(error => {
         console.log(error);

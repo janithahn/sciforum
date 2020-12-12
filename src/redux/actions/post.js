@@ -3,7 +3,7 @@ import * as ActionTypes from '../ActionTypes';
 export const Post = (state = {
         status: 'idle',
         errMess: null,
-        post: null
+        post: {}
     }, action) => {
     switch(action.type) {
         case ActionTypes.ADD_POST:
@@ -13,10 +13,10 @@ export const Post = (state = {
             //hense state is not immutable here
 
         case ActionTypes.POST_LOADING:
-            return {...state, status: 'loading', errMess: null, post: null}
+            return {...state, status: 'loading', errMess: null, post: {...state.post}}
         
         case ActionTypes.POST_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, post: null}
+            return {...state, status: 'failed', errMess: action.payload, post: {...state.post}}
 
         default:
             return state;

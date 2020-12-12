@@ -2,10 +2,11 @@ import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
-import { createAnswerComments, fetchAnswerComments, fetchAnswerCommentsDirect } from '../../../redux/ActionCreators';
+import { createAnswerComments, fetchAnswerComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/answerCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,6 +36,8 @@ export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const { postId } = useParams();
+
     const [content, setContent] = React.useState();
     const [text, setText] = React.useState('');
     const [editorState, setEditorState] = React.useState(
@@ -42,6 +45,7 @@ export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
     );
     const submitVal = {
         answer: answerId,
+        post: postId,
         owner: localStorage.getItem('currentUserId'),
         comment: content,
     };
@@ -66,7 +70,7 @@ export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
 
     const handleCommentSubmit = () => {
         if(text.length !== 0) {
-            dispatch(createAnswerComments(submitVal, answerId));
+            dispatch(createAnswerComments(submitVal, postId));
         }
         setEditorState(() => EditorState.createEmpty());
     };
@@ -101,27 +105,13 @@ export function AnswerCommentRender({ answerId }) {
 
     const auth = useSelector(state => state.Auth);
     const answerComments = useSelector(state => state.AnswerComments);
-
-    console.log(answerComments);
-
-    const [comments, setComments] = React.useState(answerComments.answerComments ? answerComments.answerComments: []);
-
-    React.useEffect(() => {
-        if(answerComments.status === 'idle') dispatch(fetchAnswerComments(answerId));
-    }, [dispatch]);
-
-    React.useEffect(() => {
-        if(answerComments.answerComments) handleComments(answerComments.answerComments);
-    }, [answerComments]);
-
-    const handleComments = (comments) => {
-        setComments(comments);
-    };
     
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
     const [selectedCommentId, setSelectedCommentId] = React.useState(null);
     const [selectedCommentAnswerBelong, setSelectedCommentAnswerBelong] = React.useState(null);
+
+    const { postId } = useParams();
 
     const handleDeleteModalOpen = (comment) => {
         setSelectedCommentId(comment.id);
@@ -133,44 +123,48 @@ export function AnswerCommentRender({ answerId }) {
         setOpenDeleteModal(false);
     };
 
-    const CommentsList = comments && comments !== [] ? comments.map((arr, index) => arr.map(item => {
+    React.useEffect(() => {
+        if(answerComments.status === 'idle') dispatch(fetchAnswerComments(postId));
+    }, [dispatch, answerComments]);
 
-        const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
+    console.log(answerComments);
 
-        return(
-            <Grid item key={item.id}> 
-                <Grid container direction="column">
-                    <Grid item>
-                        <Paper component="form" className={classes.root} elevation={0} variant="outlined">
-                            <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
-                            <div className={classes.input}>
-                                <Editor readOnly editorState={displayContent}/>
-                            </div>
-                        </Paper>
-                    </Grid>
-                    <Grid item>
-                        <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
-                            <Grid item>
-                                <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    <TimeAgo live={false} date={item.updated_at}/>
-                                </Typography>
-                            </Grid>
-                            <Grid item>
-                                <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
-                            </Grid>
-                            {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
-                                <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
-                                    <Typography variant="body2">
-                                        {"Delete"}
-                                    </Typography>
-                                </Button>
-                            </Grid>: undefined}
+    //const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
+
+    const CommentsList = answerComments.answerComments.map(item => item.answer === answerId ?
+
+        <Grid item key={item.id}>
+            <Grid container direction="column">
+                <Grid item>
+                    <Paper component="form" className={classes.root} elevation={0} variant="outlined">
+                        <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                        <div className={classes.input}>
+                            <Editor readOnly editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)))}/>
+                        </div>
+                    </Paper>
+                </Grid>
+                <Grid item>
+                    <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
+                        <Grid item>
+                            <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                                <TimeAgo live={false} date={item.updated_at}/>
+                            </Typography>
                         </Grid>
+                        <Grid item>
+                            <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
+                        </Grid>
+                        {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
+                            <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
+                                <Typography variant="body2">
+                                    {"Delete"}
+                                </Typography>
+                            </Button>
+                        </Grid>: undefined}
                     </Grid>
                 </Grid>
             </Grid>
-        );
-    })): undefined;
+        </Grid>
+    : undefined);
 
     return(
         <React.Fragment>
@@ -183,7 +177,7 @@ export function AnswerCommentRender({ answerId }) {
                         {CommentsList}
                     </Grid>
                 </Grid>
-                {comments.length !== 0 ? <Grid item>
+                {answerComments.answerComments.length !== 0 ? <Grid item>
                     <Divider/>
                 </Grid>: undefined}
             </Grid>
@@ -192,6 +186,7 @@ export function AnswerCommentRender({ answerId }) {
                 handleDeleteModalClose={handleDeleteModalClose} 
                 commentId={selectedCommentId} 
                 answerBelong={selectedCommentAnswerBelong} 
+                postId={postId}
             />
         </React.Fragment>
     );

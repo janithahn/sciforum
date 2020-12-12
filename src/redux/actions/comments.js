@@ -21,21 +21,26 @@ export const PostComments = (state = {
     }
 }
 
+function removeDuplicates(data) {
+    return data.filter((value, index) => data.indexOf(value) === index);
+}
+
 export const AnswerComments = (state = {
     status: 'idle',
     errMess: null,
-    answerComments: []
+    answerComments: [],
 }, action) => {
     switch(action.type) {
-
         case ActionTypes.ADD_ANSWER_COMMENTS:
-            return {...state, status: 'succeeded', errMess: null, answerComments: [...state.answerComments, action.payload]}
-
+            /*let index = state.answerComments.findIndex(el => el.answerId === action.answerId);
+            if(index === -1)*/ //this is to avoid duplicates
+            return { ...state, status: 'succeeded', errMess: null, answerComments: action.payload }
+            
         case ActionTypes.ANSWER_COMMENTS_LOADING:
-            return {...state, status: 'loading', errMess: null, answerComments: [...state.answerComments]}
+            return { ...state, status: 'loading', errMess: null, answerComments: [...state.answerComments] }
         
         case ActionTypes.ANSWER_COMMENTS_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, answerComments: [...state.answerComments]}
+            return { ...state, status: 'failed', errMess: action.payload, answerComments: [...state.answerComments] }
 
         default:
             return state;

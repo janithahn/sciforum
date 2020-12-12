@@ -8,6 +8,8 @@ import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
 import AnswerViewCard from './answerViewCard';
 import AnswerSkel from './skeletons/answer';
+import { fetchAnswerComments } from '../../redux/ActionCreators';
+import { createSelector } from 'reselect';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(
@@ -45,27 +47,20 @@ export default function Answer() {
     const auth = useSelector(state => state.Auth);
     const answerVotesLoading = useSelector(state => state.answerVotes.status)
     const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
+    const answerComments = useSelector(state => state.AnswerComments);
 
     const dispatch = useDispatch();
+
+    //console.log(answers);
 
     const location = useLocation();
     const hash = location.hash.substring(1);
 
     const { postId } = useParams();
 
-    const [answersList, setAnswersList] = React.useState(answers.answers ? answers.answers: []);
-
     React.useEffect(() => {
         if(answers.status === 'idle') dispatch(fetchAnswers(postId));
     }, [dispatch]);
-
-    React.useEffect(() => {
-        if(answers.answers) handleAnswersList(answers.answers);
-    }, [answers]);
-
-    const handleAnswersList = (answers) => {
-        setAnswersList(answers);
-    };
 
     const [openModal, setOpenModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
@@ -152,7 +147,7 @@ export default function Answer() {
             <div className={classes.root}>
                 <ThemeProvider theme={theme}>
                     <Grid container direction="column" spacing={3}>
-                        {answersList.length !== 0 ? 
+                        {answers.answers.length !== 0 ? 
                             <Grid item>
                                 <Grid item>
                                     <Typography variant="h6">Answers</Typography>

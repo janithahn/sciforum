@@ -1,25 +1,56 @@
 import React from 'react';
 import { Grid, Typography, Divider, Avatar, Button, Box } from '@material-ui/core';
 import { Preview } from './answerPreview';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
 import { AnswerCommentInput, AnswerCommentRender } from './comment/comment';
+import { fetchAnswerComments } from '../../redux/ActionCreators';
+import { createSelector } from 'reselect';
 
 export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen}) {
 
     const classes = useStyles();
 
     const auth = useSelector(state => state.Auth);
+    //const answerComments = useSelector(state => state.AnswerComments);
+    
+    //const dispatch = useDispatch();
+
+    /*const answerSelector = (state) => state.Answers.answers;
+    const commentSelector = (state) => state.AnswerComments.answerComments;
+    const filtered = (answers, comments) => 
+        answers.map(answer => ({
+            ...answer,
+            comments: comments.filter(comment => comment.filter(comment => comment.answer === answer.id)) 
+        }));
+    /*const filtered = (answers, comments) => 
+        ({
+            answers,
+            comments,
+        });*/
+
+    /*const selectCommentsByAnswer = createSelector(
+        [answerSelector, commentSelector],
+        filtered
+    );
+
+    const sample = useSelector(state => selectCommentsByAnswer(state));
+
+    console.log(sample);*/
+
+    /*React.useEffect(() => {
+        dispatch(fetchAnswerComments(answer.id));
+    }, [dispatch]);*/
 
     const isAuthenticated = auth.isAuthenticated;
     const currentUserId = auth.currentUserId;
 
     const [openCommentBox, setOpenCommentBox] = React.useState(false);
     const [showAddComment, setShowAddComment] = React.useState(true);
-    
+
     const handleCommentBoxOpen = () => {
         setOpenCommentBox(true);
         handleShowAddComment();
@@ -122,7 +153,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                         }
                     </Grid>
                     <Grid item>
-                        {/*<AnswerCommentRender answerId={answer.id}/>*/}
+                        {<AnswerCommentRender answerId={answer.id}/>}
                     </Grid>
                 </Grid>
             </Box>

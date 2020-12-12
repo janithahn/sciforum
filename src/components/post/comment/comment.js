@@ -159,7 +159,7 @@ export function PostCommentRender() {
                             <Grid item>
                                 <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
                             </Grid>
-                            {auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
+                            {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
                                 <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
                                     <Typography variant="body2">
                                         {"Delete"}

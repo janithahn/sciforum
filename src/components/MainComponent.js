@@ -31,7 +31,12 @@ function Main(props) {
     const location = useLocation();
     const dispatch = useDispatch();
 
-    const isLoading = useSelector(state => [state.Auth.status, /*state.Answers.status,*/ state.Notifications.status, state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, state.answerVotes.status, state.postVotes.status/*, state.PostComments.status*/].includes('loading'));
+    const isLoading = useSelector(state => [
+        state.Auth.status, state.Answers.status, state.Notifications.status, 
+        state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, 
+        state.answerVotes.status, state.postVotes.status, state.PostComments.status,
+        state.AnswerComments.status
+    ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
 

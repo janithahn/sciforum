@@ -59,45 +59,28 @@ export default function PostDetail() {
     const [openModal, setOpenModal] = React.useState(false);
     const [answerContent, setAnswerContent] = React.useState('');
 
-    const [postInfo, setPostInfo] = React.useState({
-        title: post.post ? post.post.title: null,
-        body: post.post ? post.post.body: null,
-    });
-    const id = post.post ? post.post.id: null;
-    const owner = post.post ? post.post.owner: null;
-    const viewCount = post.post ? post.post.viewCount: null;
-    const created_at = post.post ? post.post.created_at: null;
-    const updated_at = post.post ? post.post.updated_at: null;
-    const postTags = post.post ? post.post.tags: null;
-    const likes = post.post ? post.post.likes: 0;
-    const dislikes = post.post ? post.post.dislikes: 0;
+    /*const [postInfo, setPostInfo] = React.useState({
+        title: post.post.title,
+        body: post.post.body,
+    });*/
+    const postInfo = {
+        title: post.post.title,
+        body: post.post.body,
+    };
+    const id = post.post.id;
+    const owner = post.post.owner;
+    const viewCount = post.post.viewCount;
+    const created_at = post.post.created_at;
+    const updated_at = post.post.updated_at;
+    const postTags = post.post.tags;
+    const likes = post.post.likes;
+    const dislikes = post.post.dislikes;
 
     React.useEffect(() => {
         if(post.status === 'idle') {
             dispatch(fetchPostDetail(postId));
         }
     }, [post, dispatch]);
-    
-    React.useEffect(() => {
-        if(post.post) {
-            handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount, post.post.created_at, post.post.updated_at, post.post.tags, post.post.likes, post.post.dislikes);
-        }
-    }, [post]);
-
-    const handlePostInfo = (id, owner, title, body, viewCount, created_at, updated_at, postTags, likes, dislikes) => {
-        setPostInfo({
-            title,
-            body,
-        });
-        id = id;
-        owner = owner;
-        viewCount = viewCount;
-        created_at = created_at;
-        updated_at = updated_at;
-        postTags = postTags;
-        likes = likes;
-        dislikes = dislikes;
-    }
 
     const handleClickOpen = () => {
         setOpen(true);
