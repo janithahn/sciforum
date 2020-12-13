@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Header from './header/HeaderComponent';
 import Home from './home/HomeComponent';
 import MyPosts from './myposts/MyPosts';
-import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter, useLocation, useHistory } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPosts, postPost, editPost, logout, getNewToken } from '../redux/ActionCreators';
@@ -133,6 +133,16 @@ function Main(props) {
             : <Redirect to="/signin"/>
         )} />
     );
+
+    function requireAuth(nextState, replace, next) {
+        if (!auth.isAuthenticated) {
+          replace({
+            pathname: "/signin",
+            state: {nextPathname: nextState.location.pathname}
+          });
+        }
+        next();
+    }
 
     return (
         <div>
