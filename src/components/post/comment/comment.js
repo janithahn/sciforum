@@ -41,11 +41,7 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
     const [editorState, setEditorState] = React.useState(
         content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
     );
-    const submitVal = {
-        post: postId,
-        owner: localStorage.getItem('currentUserId'),
-        comment: content,
-    };
+    const [submitVal, setSubmitVal] = React.useState({});
 
     const editor = React.useRef(null);
     function focusEditor() {
@@ -63,6 +59,11 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
         setText(text.trim());
         saveContent(contentState);
         setEditorState(editorState);
+        setSubmitVal({
+            post: postId,
+            owner: localStorage.getItem('currentUserId'),
+            comment: content,
+        });
     };
 
     const handleCommentSubmit = () => {
@@ -70,6 +71,7 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
             dispatch(createPostComments(submitVal, postId));
         }
         setEditorState(() => EditorState.createEmpty());
+        setSubmitVal({});
     };
 
     return(

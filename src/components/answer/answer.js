@@ -8,8 +8,6 @@ import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
 import AnswerViewCard from './answerViewCard';
 import AnswerSkel from './skeletons/answer';
-import { fetchAnswerComments } from '../../redux/ActionCreators';
-import { createSelector } from 'reselect';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(

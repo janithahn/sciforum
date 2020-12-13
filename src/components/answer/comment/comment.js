@@ -43,12 +43,7 @@ export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
     const [editorState, setEditorState] = React.useState(
         content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
     );
-    const submitVal = {
-        answer: answerId,
-        post: postId,
-        owner: localStorage.getItem('currentUserId'),
-        comment: content,
-    };
+    const [submitVal, setSubmitVal] = React.useState({});
 
     const editor = React.useRef(null);
     function focusEditor() {
@@ -66,12 +61,19 @@ export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
         setText(text.trim());
         saveContent(contentState);
         setEditorState(editorState);
+        setSubmitVal({
+            answer: answerId,
+            post: postId,
+            owner: localStorage.getItem('currentUserId'),
+            comment: content,
+        });
     };
 
     const handleCommentSubmit = () => {
         if(text.length !== 0) {
             dispatch(createAnswerComments(submitVal, postId));
         }
+        setSubmitVal({});
         setEditorState(() => EditorState.createEmpty());
     };
 
@@ -126,10 +128,6 @@ export function AnswerCommentRender({ answerId }) {
     React.useEffect(() => {
         if(answerComments.status === 'idle') dispatch(fetchAnswerComments(postId));
     }, [dispatch, answerComments]);
-
-    console.log(answerComments);
-
-    //const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
 
     const CommentsList = answerComments.answerComments.map(item => item.answer === answerId ?
 
