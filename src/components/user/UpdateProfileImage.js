@@ -21,7 +21,7 @@ export default function UpdateProfileImage(props) {
 
     const classes = useStyles();
     const auth = useSelector(state => state.Auth);
-    const user = useSelector(state => state.User);
+    //const user = useSelector(state => state.User);
     const dispatch = useDispatch();
 
     const [pictures, setPictures] = useState([]);

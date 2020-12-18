@@ -1,4 +1,3 @@
-import React from 'react';
 import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';

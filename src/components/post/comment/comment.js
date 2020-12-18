@@ -7,7 +7,7 @@ import { createPostComments, fetchPostComments } from '../../../redux/ActionCrea
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/postCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
-import { createSelector } from 'reselect';
+//import { createSelector } from 'reselect';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -137,7 +137,7 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
-    });
+    }, []);
 
     return(
         <Grid className={classes.inputContainer} container direction="column" spacing={1}>

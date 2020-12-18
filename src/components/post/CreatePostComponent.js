@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { postPost } from '../../redux/ActionCreators';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 
 export default function CreatePost({setSnackMessage, setSnackOpen}) {
   const classes = useStyles();
