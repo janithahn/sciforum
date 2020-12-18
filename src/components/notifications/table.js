@@ -413,7 +413,7 @@ export default function EnhancedTable({ rows, currentUser }) {
                             </TableCell>
                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                 <Box fontWeight={row.state ? "fontWeightBold": ""} fontSize={14}>
-                                  {row.action_object.answerContent ? 
+                                  {row.action_object && row.action_object.answerContent ? 
                                     <Link color="inherit" underline="none" href={`/questions/${row.action_object.postBelong}/#${row.action_object.id}`}>
                                       {row.notification}
                                     </Link>: row.notification
@@ -421,7 +421,7 @@ export default function EnhancedTable({ rows, currentUser }) {
                                 </Box>
                             </TableCell>
                             <TableCell align="right">
-                                {row.action_object.title ? row.action_object.title: ''}
+                                {row.action_object && row.action_object.title ? row.action_object.title: ''}
                             </TableCell>
                             <TableCell align="right">
                                 <TimeAgo live={false} date={row.date}/>

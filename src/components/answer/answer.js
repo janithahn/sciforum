@@ -82,7 +82,7 @@ export default function Answer() {
         block: 'center',
     });
 
-    React.useEffect(() => {
+    /*React.useEffect(() => {
         if(auth.isAuthenticated) {
             if(votesStatus) {   
                 if(refs && refs[Number(hash)]) {
@@ -95,6 +95,12 @@ export default function Answer() {
                 scrollTo(Number(hash)); 
                 refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
             }
+        }
+    }, []);*/
+    React.useEffect(() => {
+        if(refs && refs[Number(hash)]) {
+            scrollTo(Number(hash)); 
+            refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
         }
     }, []);
 
@@ -121,7 +127,7 @@ export default function Answer() {
     };
 
     const AnswersList =  answers.answers.map((answer) => (
-        <Grid item /*innerRef={refs[answer.id]}*/ key={answer.id}> 
+        <Grid item innerRef={refs[answer.id]} key={answer.id}> 
             <AnswerViewCard
                 answer={answer} 
                 handleModalOpen={handleModalOpen}

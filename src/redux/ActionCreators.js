@@ -1,3 +1,4 @@
+import React from 'react';
 import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
@@ -100,7 +101,7 @@ export const deletePost = (postId, history) => (dispatch, getState) => {
 export const fetchPostDetail = (postId) => async (dispatch) => {
     dispatch(postLoading());
 
-    axios.get(baseUrl + `/api/${postId}/`)
+    await axios.get(baseUrl + `/api/${postId}/`)
     .then(response => {
         //console.log(response);
         return response;
@@ -124,6 +125,10 @@ export const postFailed = (errmess) => ({
 export const addPost = (post) => ({
     type: ActionTypes.ADD_POST,
     payload: post
+});
+
+export const postReset = () => ({
+    type: ActionTypes.POST_RESET,
 });
 
 //MY POSTS

@@ -7,7 +7,7 @@ export const Posts = (state = {
     }, action) => {
     switch(action.type) {
         case ActionTypes.RESET_POST_LIST:
-            return { status: 'idle', errMess: null, posts: [...state.posts] }
+            return { status: 'idle', errMess: null, posts: state.posts }
 
         case ActionTypes.ADD_POST_LIST:
             return {...state, status: 'succeeded', errMess: null, posts: action.payload}
@@ -16,10 +16,10 @@ export const Posts = (state = {
             //hense state is not immutable here
 
         case ActionTypes.POST_LIST_LOADING:
-            return {...state, status: 'loading', errMess: null, posts: [...state.posts]}
+            return {...state, status: 'loading', errMess: null, posts: state.posts}
         
         case ActionTypes.POST_LIST_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, posts: [...state.posts]}
+            return {...state, status: 'failed', errMess: action.payload, posts: state.posts}
 
         default:
             return state;

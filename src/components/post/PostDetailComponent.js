@@ -80,7 +80,7 @@ export default function PostDetail() {
         if(post.status === 'idle') {
             dispatch(fetchPostDetail(postId));
         }
-    }, [post, dispatch]);
+    }, [post.status, dispatch, postId]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -91,11 +91,11 @@ export default function PostDetail() {
     };
 
     const handleModalOpen = () => {
-      setOpenModal(true);
+        setOpenModal(true);
     };
   
     const handleModalClose = () => {
-      setOpenModal(false);
+        setOpenModal(false);
     };
     
     const handleCommentBoxOpen = () => {

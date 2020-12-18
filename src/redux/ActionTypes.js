@@ -1,6 +1,7 @@
 export const ADD_POST = 'ADD_POST';
 export const POST_LOADING = 'POST_LOADING';
 export const POST_FAILED = 'POST_FAILED';
+export const POST_RESET = 'POST_RESET';
 
 export const ADD_MYPOSTS = 'ADD_MYPOSTS';
 export const MYPOSTS_LOADING = 'MYPOSTS_LOADING';

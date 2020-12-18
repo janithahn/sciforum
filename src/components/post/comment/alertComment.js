@@ -16,8 +16,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function AlertDialogSlide(props) {
     const dispatch = useDispatch();
 
+    const onClick = React.useCallback((commentId, postBelong) => 
+        dispatch(deletePostComments(commentId, postBelong))
+        ,[dispatch]
+    );
+
     function handleDeleteAnswer() {
-        dispatch(deletePostComments(props.commentId, props.postBelong));
+        onClick(props.commentId, props.postBelong);
         props.handleDeleteModalClose();
     }
 

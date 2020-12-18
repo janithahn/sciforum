@@ -56,7 +56,7 @@ export default function MainDrawer(props) {
 
     React.useEffect(() => {
         setLocation(location.pathname);
-    });
+    }, [location.pathname]);
 
     return(
         <React.Fragment>

@@ -31,7 +31,7 @@ export default function MyPosts() {
     }else if(myposts.status === 'failed') {
         return(<h4>Error loading...!</h4>);
     } else {
-        const PostsList = myposts.myposts.results.map((post, key) => <QuestionViewCard key={key} item={post}/>);
+        const PostsList = myposts.myposts.results.map((post) => <QuestionViewCard key={post.id} item={post}/>);
         const total_pages = myposts.myposts.total_pages;
         const current_page = myposts.myposts.current_page;
 
