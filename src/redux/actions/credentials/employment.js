@@ -3,7 +3,7 @@ import * as ActionTypes from '../../ActionTypes';
 export const UserEmployment = (state = {
         status: 'idle',
         errMess: null,
-        userEmployment: null
+        userEmployment: []
     }, action) => {
     switch(action.type) {
         case ActionTypes.ADD_USER_EMPLOYMENT:
@@ -13,10 +13,10 @@ export const UserEmployment = (state = {
             //hense state is not immutable here
 
         case ActionTypes.USER_EMPLOYMENT_LOADING:
-            return {...state, status: 'loading', errMess: null, userEmployment: null}
+            return {...state, status: 'loading', errMess: null, userEmployment: [...state.userEmployment]}
         
         case ActionTypes.USER_EMPLOYMENT_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, userEmployment: null}
+            return {...state, status: 'failed', errMess: action.payload, userEmployment: [...state.userEmployment]}
 
         default:
             return state;

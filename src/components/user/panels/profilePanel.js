@@ -27,6 +27,11 @@ export default function ProfilePanel() {
     const userSkills = useSelector(state => state.UserSkills);
     const userLanguages = useSelector(state => state.UserLanguages);
 
+    const employment = userEmployment.userEmployment;
+    const education = userEducation.userEducation;
+    const skills = userSkills.userSkills;
+    const languages = userLanguages.userLanguages;
+
     //fetching user credentials
     React.useEffect(() => {
         if(userEmployment.status === 'idle') dispatch(fetchUserEmployment(username));
@@ -44,46 +49,8 @@ export default function ProfilePanel() {
         if(userLanguages.status === 'idle') dispatch(fetchUserLanguages(username));
     }, [dispatch]);
 
-    //adding user credentials to relevant states
-    React.useEffect(() => {
-        if(userEmployment.userEmployment) handleUserEmployment(userEmployment.userEmployment);
-    }, [userEmployment]);
-
-    React.useEffect(() => {
-        if(userEducation.userEducation) handleUserEducation(userEducation.userEducation);
-    }, [userEducation]);
-
-    React.useEffect(() => {
-        if(userSkills.userSkills) handleUserSkills(userSkills.userSkills);
-    }, [userSkills]);
-
-    React.useEffect(() => {
-        if(userLanguages.userLanguages) handleUserLanguages(userLanguages.userLanguages);
-    }, [userLanguages]);
-
     //relevant credential states
-    const [contact, setContact] = React.useState(user.user ? user.user.data.contact: null);
-    const [employment, setEmployment] = React.useState(userEmployment.userEmployment ? userEmployment.userEmployment: []);
-    const [education, setEducation] = React.useState(userEducation.userEducation ? userEducation.userEducation: []);
-    const [skills, setSkills] = React.useState(userSkills.userSkills ? userSkills.userSkills: []);
-    const [languages, setLanguages] = React.useState(userLanguages.userLanguages ? userLanguages.userLanguages: []);
-
-    //methods which handle adding user credentials into relevant state
-    const handleUserEmployment = (employment) => {
-        setEmployment(employment);
-    };
-
-    const handleUserEducation = (education) => {
-        setEducation(education);
-    };
-
-    const handleUserSkills = (skills) => {
-        setSkills(skills);
-    };
-
-    const handleUserLanguages = (languages) => {
-        setLanguages(languages);
-    };
+    const [contact, setContact] = React.useState(user.user ? user.user.contact: null);
 
     const [selectedCredentialItem, setSelectedCredentialItem] = React.useState();
 
@@ -160,7 +127,7 @@ export default function ProfilePanel() {
         );
     }
 
-    const EmploymentTypo = employment && employment !== [] ? employment.map(item => 
+    const EmploymentTypo = employment.map(item => 
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
@@ -170,9 +137,9 @@ export default function ProfilePanel() {
                 </Grid>
             </Grid>
         </Grid>
-    ): undefined;
+    );
 
-    const EducationTypo = education && education !== [] ? education.map(item => 
+    const EducationTypo = education.map(item => 
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
@@ -182,9 +149,9 @@ export default function ProfilePanel() {
                 </Grid>
             </Grid>
         </Grid>
-    ): undefined;
+    );
 
-    const SkillsTypo = skills && skills !== [] ? skills.map(item => 
+    const SkillsTypo = skills.map(item => 
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
@@ -192,9 +159,9 @@ export default function ProfilePanel() {
                 </Grid>
             </Grid>
         </Grid>
-    ): undefined;
+    );
 
-    const LanguagesTypo = languages && languages !== [] ? languages.map(item => 
+    const LanguagesTypo = languages.map(item => 
         <Grid item key={item.id}>
             <Grid container direction="row" alignItems="center" justify="center" spacing={1}>
                 <Grid item>
@@ -202,7 +169,7 @@ export default function ProfilePanel() {
                 </Grid>
             </Grid>
         </Grid>
-    ): undefined;
+    );
 
     return(
         <React.Fragment>

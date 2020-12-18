@@ -344,17 +344,16 @@ export const fetchUser = (token, currentUser) => (dispatch) => {
 
     //dispatch(getNewToken(localStorage.getItem('token')));
 
-    console.log(localStorage.getItem('token'));
+    //console.log(localStorage.getItem('token'));
 
     return axios.get(baseUrl + `/users/${currentUser}/`, {
         "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
-        console.log(res);
-        dispatch(addUser(res));
+        console.log(res.data);
+        dispatch(addUser(res.data));
     })
     .catch(error => {
-        console.log(error);
         dispatch(userFailed(error));
     })
 }

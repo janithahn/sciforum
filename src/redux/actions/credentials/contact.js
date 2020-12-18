@@ -3,7 +3,7 @@ import * as ActionTypes from '../../ActionTypes';
 export const UserContact = (state = {
         status: 'idle',
         errMess: null,
-        userContact: null
+        userContact: []
     }, action) => {
     switch(action.type) {
         case ActionTypes.ADD_USER_CONTACT:
@@ -13,10 +13,10 @@ export const UserContact = (state = {
             //hense state is not immutable here
 
         case ActionTypes.USER_CONTACT_LOADING:
-            return {...state, status: 'loading', errMess: null, userContact: null}
+            return {...state, status: 'loading', errMess: null, userContact: [...state.userContact]}
         
         case ActionTypes.USER_CONTACT_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, userContact: null}
+            return {...state, status: 'failed', errMess: action.payload, userContact: [...state.userContact]}
 
         default:
             return state;

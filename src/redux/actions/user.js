@@ -3,7 +3,7 @@ import * as ActionTypes from '../ActionTypes';
 export const User = (state = {
         status: 'idle',
         errMess: null,
-        user: null
+        user: {}
     }, action) => {
     switch(action.type) {
         case ActionTypes.ADD_USER:
@@ -13,10 +13,10 @@ export const User = (state = {
             //hense state is not immutable here
 
         case ActionTypes.USER_LOADING:
-            return {...state, status: 'loading', errMess: null, user: null}
+            return {...state, status: 'loading', errMess: null, user: {...state.user}}
         
         case ActionTypes.USER_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, user: null}
+            return {...state, status: 'failed', errMess: action.payload, user: {...state.user}}
 
         default:
             return state;

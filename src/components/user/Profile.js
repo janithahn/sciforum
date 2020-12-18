@@ -51,7 +51,9 @@ import ProfileTabs from './ProfileVerticleTabs';
 }*/
 
 const Profile = ({ className, ...rest }) => {
+
   const classes = useStyles();
+
   const user = useSelector(state => state.User);
   const auth = useSelector(state => state.Auth);
 
@@ -65,25 +67,27 @@ const Profile = ({ className, ...rest }) => {
   const usernameFromTheUrl = rest.match.params.username;
 
   const [name, setName] = React.useState({
-    firstname: user.user ? user.user.data.first_name: null,
-    lastname: user.user ? user.user.data.last_name: null,
+    firstname: user.user ? user.user.first_name: null,
+    lastname: user.user ? user.user.last_name: null,
   });
-  const [aboutMe, setAboutMe] = React.useState( user.user ? user.user.data.profile.aboutMe: null);
-  const [profileImage, setProfileImage] = React.useState(user.user ? user.user.data.profile.profileImg: null);
+  const [aboutMe, setAboutMe] = React.useState( user.user && user.user.profile ? user.user.profile.aboutMe: null);
+  const [profileImage, setProfileImage] = React.useState(user.user && user.user.profile ? user.user.profile.profileImg: null);
+
+  console.log(user);
 
   React.useEffect(() => {
     if(user.status === 'idle') {
       dispatch(fetchUser(auth.token, usernameFromTheUrl));
     }
-  }, [user, dispatch]);
+  }, [user, dispatch, auth.token, usernameFromTheUrl]);
 
   React.useEffect(() => {
-    if(user.user) {
+    if(user.user && user.user.profile) {
       handleUserInfo(
-        user.user.data.first_name, 
-        user.user.data.last_name, 
-        user.user.data.profile.aboutMe, 
-        user.user.data.profile.profileImg
+        user.user.first_name, 
+        user.user.last_name, 
+        user.user.profile.aboutMe, 
+        user.user.profile.profileImg
       );
     }
   }, [user]);
@@ -133,7 +137,7 @@ const Profile = ({ className, ...rest }) => {
     />
   );
 
-  const handleUserInfo = (firstname, lastname, aboutMe, profileImage, answers, posts) => {
+  const handleUserInfo = (firstname, lastname, aboutMe, profileImage) => {
     setName({
       firstname,
       lastname,

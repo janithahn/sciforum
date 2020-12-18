@@ -3,7 +3,7 @@ import * as ActionTypes from '../../ActionTypes';
 export const UserEducation = (state = {
         status: 'idle',
         errMess: null,
-        userEducation: null
+        userEducation: []
     }, action) => {
     switch(action.type) {
         case ActionTypes.ADD_USER_EDUCATION:
@@ -13,10 +13,10 @@ export const UserEducation = (state = {
             //hense state is not immutable here
 
         case ActionTypes.USER_EDUCATION_LOADING:
-            return {...state, status: 'loading', errMess: null, userEducation: null}
+            return {...state, status: 'loading', errMess: null, userEducation: [...state.userEducation]}
         
         case ActionTypes.USER_EDUCATION_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, userEducation: null}
+            return {...state, status: 'failed', errMess: action.payload, userEducation: [...state.userEducation]}
 
         default:
             return state;

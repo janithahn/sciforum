@@ -29,9 +29,9 @@ export default function Highlights(props) {
   const usernameFromTheUrl = props.match.params.username;
 
   const [values, setValues] = useState({
-    posts: user.user ? user.user.data.profile.location: null,
-    answers: user.user ? user.user.data.answers: null,
-    postViews: user.user ? user.user.data.profile.postViews: null,
+    posts: user.user && user.user.profile ? user.user.profile.location: null,
+    answers: user.user ? user.user.answers: null,
+    postViews: user.user && user.user.profile ? user.user.profile.postViews: null,
   });
 
   React.useEffect(() => {
@@ -41,8 +41,8 @@ export default function Highlights(props) {
   }, [user, usernameFromTheUrl, dispatch]);
 
   React.useEffect(() => {
-    if(user.user) {
-      handleUserInfo(user.user.data.posts, user.user.data.answers, user.user.data.profile.postViews);
+    if(user.user && user.user.profile) {
+      handleUserInfo(user.user.posts, user.user.answers, user.user.profile.postViews);
     }
   }, [user]);
 
