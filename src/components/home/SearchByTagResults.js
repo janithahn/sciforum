@@ -1,9 +1,9 @@
 import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Button, Grid } from '@material-ui/core';
-import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
+//import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios';
@@ -11,7 +11,7 @@ import { baseUrl } from '../../shared/baseUrl'
 
 export default function SearchByTag() {
     const posts = useSelector(state => state.Posts);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     const { tagname } = useParams();
 

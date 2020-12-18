@@ -108,6 +108,8 @@ export default function SignIn(props) {
     clientId: clientId,
   });
 
+  console.log(loaded);
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs" className={classes.content}>

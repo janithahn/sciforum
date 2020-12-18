@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const selectItems = (state) => state.PostComments.postComments;
+/*const selectItems = (state) => state.PostComments.postComments;
 
 const selectItemById = createSelector(
   [selectItems, (_, id) => id],
@@ -83,7 +83,7 @@ const ItemList = () => {
         ))}
       </ul>
     );
-};
+};*/
 
 const PostCommentButton = React.memo(({ handleCommentSubmit }) => {
     console.log("rendering new comment");

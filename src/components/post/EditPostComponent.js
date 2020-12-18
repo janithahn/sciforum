@@ -1,10 +1,10 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, Typography, Grid, Divider } from '@material-ui/core';
+import { ThemeProvider, Typography, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import NotFound from '../alert/NotFoundComponent';
 import { useHistory, useParams } from 'react-router-dom';
-import Editor from './EditorComponent';
+//import Editor from './EditorComponent';
 //import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
@@ -24,7 +24,6 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
   const [body, setQuestion] = React.useState(post.post ? post.post.body: '');
   const id = post.post ? post.post.id: null;
   const owner = post.post ? post.post.owner: null;
-  const viewCount = post.post ? post.post.viewCount: null;
 
   const [tagList, setTagList] = React.useState([]);
   const [tagValue, setTagValue] = React.useState(post.post ? post.post.tags: []);
@@ -41,7 +40,7 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
 
   React.useEffect(() => {
     if(post.post) {
-      handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body, post.post.viewCount);
+      handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body);
     }
   }, [post]);
 
@@ -49,12 +48,11 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
     fetchTags(tagList, setTagList);
   }, []);
 
-  const handlePostInfo = (id, owner, title, body, viewCount) => {
+  const handlePostInfo = (postId, postOwner, title, body) => {
     setTitle(title);
     setQuestion(body);
-    id = id;
-    owner = owner;
-    viewCount = viewCount;
+    id = postId;
+    owner = postOwner;
   }
 
   function handleSubmit(event) {

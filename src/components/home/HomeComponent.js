@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Grid, Link } from '@material-ui/core';
-import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
+import { Button, Grid } from '@material-ui/core';
+//import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
 import HomeLoader from './skeletons/homeSkels';

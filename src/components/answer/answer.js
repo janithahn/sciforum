@@ -42,10 +42,10 @@ export default function Answer() {
     const classes = useStyles();
 
     const answers = useSelector(state => state.Answers)
-    const auth = useSelector(state => state.Auth);
+    /*const auth = useSelector(state => state.Auth);
     const answerVotesLoading = useSelector(state => state.answerVotes.status)
     const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
-    const answerComments = useSelector(state => state.AnswerComments);
+    const answerComments = useSelector(state => state.AnswerComments);*/
 
     const dispatch = useDispatch();
 
