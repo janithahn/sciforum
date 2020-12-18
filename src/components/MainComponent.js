@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import Header from './header/HeaderComponent';
 import Home from './home/HomeComponent';
 import MyPosts from './myposts/MyPosts';
-import { Switch, Route, Redirect, withRouter, useLocation, useHistory } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPosts, postPost, editPost, logout, getNewToken } from '../redux/ActionCreators';
+import { postPost, logout, getNewToken } from '../redux/ActionCreators';
 import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
 import SignIn from './sign/SignInComponent';
@@ -134,7 +134,7 @@ function Main(props) {
         )} />
     );
 
-    function requireAuth(nextState, replace, next) {
+    /*function requireAuth(nextState, replace, next) {
         if (!auth.isAuthenticated) {
           replace({
             pathname: "/signin",
@@ -142,7 +142,7 @@ function Main(props) {
           });
         }
         next();
-    }
+    }*/
 
     return (
         <div>

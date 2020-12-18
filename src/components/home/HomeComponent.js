@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Grid } from '@material-ui/core';
 //import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
@@ -11,7 +11,7 @@ import { baseUrl } from '../../shared/baseUrl'
 
 export default function Home() {
     const posts = useSelector(state => state.Posts);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     const [postData, setPostData] = React.useState([]);
     const [hasMoreItems, setHasMoreItems] = React.useState(true);

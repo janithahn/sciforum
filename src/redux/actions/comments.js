@@ -21,9 +21,9 @@ export const PostComments = (state = {
     }
 }
 
-function removeDuplicates(data) {
+/*function removeDuplicates(data) {
     return data.filter((value, index) => data.indexOf(value) === index);
-}
+}*/
 
 export const AnswerComments = (state = {
     status: 'idle',

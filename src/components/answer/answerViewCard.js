@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, Divider, Avatar, Button, Box } from '@material-ui/core';
+import { Grid, Typography, Avatar, Button, Box } from '@material-ui/core';
 import { Preview } from './answerPreview';
 import { useSelector } from 'react-redux';
 import TimeAgo from 'react-timeago';

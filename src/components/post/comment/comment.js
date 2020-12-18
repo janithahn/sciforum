@@ -131,13 +131,13 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
         [dispatch]
     );
 
-    const handleCommentSubmit = () => {
+    const handleCommentSubmit = React.useCallback(() => {
         if(text.length !== 0) {
             onClick(submitVal, postId);
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
-    };
+    });
 
     return(
         <Grid className={classes.inputContainer} container direction="column" spacing={1}>

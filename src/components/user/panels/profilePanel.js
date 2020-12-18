@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Typography, Link, Divider, IconButton, Modal, Fade, Backdrop, Box } from '@material-ui/core';
-import { Facebook, LinkedIn, GitHub, Edit, AddCircleOutline, School, Work, Language, Build } from '@material-ui/icons';
+import { Facebook, LinkedIn, GitHub, Edit, School, Work, Language, Build } from '@material-ui/icons';
 import EditContact from './editors/editContact';
 import EditCredentials from './editors/editCredentials';
 import CreateEmployment from './editors/credentials/createEmployment';

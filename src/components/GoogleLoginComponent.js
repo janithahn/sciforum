@@ -15,6 +15,8 @@ export default function GoogleSocialAuth() {
         clientId: clientId,
     })
 
+    console.log(loadedSignIn);
+
     return (
       <div className="App">
         <h1>LOGIN WITH GOOGLE</h1>

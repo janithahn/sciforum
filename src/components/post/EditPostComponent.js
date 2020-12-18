@@ -22,13 +22,13 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
 
   const [title, setTitle] = React.useState(post.post ? post.post.title: '');
   const [body, setQuestion] = React.useState(post.post ? post.post.body: '');
-  const id = post.post ? post.post.id: null;
-  const owner = post.post ? post.post.owner: null;
+  let id = post.post ? post.post.id: null;
+  let owner = post.post ? post.post.owner: null;
 
   const [tagList, setTagList] = React.useState([]);
   const [tagValue, setTagValue] = React.useState(post.post ? post.post.tags: []);
 
-  const {postId} = useParams();
+  const { postId } = useParams();
 
   console.log({title, body});
 

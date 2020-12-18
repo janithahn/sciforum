@@ -7,8 +7,7 @@ import {
   CardHeader,
   Divider,
   TextField,
-  ThemeProvider,
-  MenuItem,
+  ThemeProvider
 } from '@material-ui/core';
 import { theme, useStyles } from '../../../styles/profileStyles';
 import { useFormik } from 'formik';

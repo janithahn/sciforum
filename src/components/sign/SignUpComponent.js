@@ -121,6 +121,8 @@ export default function SignUp() {
     clientId: clientId,
   });
 
+  console.log(loaded);
+
   return (
     <Container component="main" maxWidth="xs" className={classes.content}>
       <CssBaseline />

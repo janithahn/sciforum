@@ -254,6 +254,7 @@ export default function EnhancedTable({ rows, currentUser }) {
   };
 
   const handleClick = (event, id) => {
+    console.log(event.target.value);
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
