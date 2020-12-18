@@ -390,13 +390,14 @@ export default function EnhancedTable({ rows, currentUser }) {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  console.log(row.action_object);
+                  //console.log(row.action_object);
 
                   if(row.actor.username === currentUser) {
-                    return <div></div>
+                    return <div key={row.id}></div>
                   }else {
                     return (
                         <TableRow
+                            key={row.id}
                             hover
                             onClick={(event) => handleClick(event, row.id)}
                             role="checkbox"

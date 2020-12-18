@@ -33,11 +33,11 @@ export const theme = createMuiTheme({
       paddingBottom: 5,
     },
     submit: {
-      margin: theme.spacing(3, 2, 2),
+      margin: theme.spacing(2, 2),
     },
     editButton: {
       textTransform: 'none',
-      padding: (0, 3, 0, 3),
+      padding: (0, 3),
     },
     iconWrap: {
       verticalAlign: 'middle',

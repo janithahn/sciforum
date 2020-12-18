@@ -112,102 +112,98 @@ export default function PostDetail() {
     }else if(post.errMess) {
         return(<h4>Error loading...!</h4>);
     } else {
-        if(post !== undefined) {
 
-            const RenderPostTags = postTags ? postTags.map((tag, key) => 
-                <Grid item key={key}>
-                    <Chip className={classes.chip} color="primary" size="small" variant="outlined" label={tag} key={key} component="a" href={`/questions/tagged/${tag}`} clickable/>
-                </Grid>): [];
+        const RenderPostTags = postTags ? postTags.map((tag, key) => 
+            <Grid item key={key}>
+                <Chip className={classes.chip} color="primary" size="small" variant="outlined" label={tag} key={key} component="a" href={`/questions/tagged/${tag}`} clickable/>
+            </Grid>): [];
 
-            return(
-                <div className={classes.root}>
-                    <ThemeProvider theme={theme}>
-                        <RenderCard 
-                            title={postInfo.title} 
-                            body={postInfo.body} 
-                            viewCount={viewCount}
-                            created_at={created_at}
-                            updated_at={updated_at}
-                            owner={owner}
-                            classes={classes}
-                            handleModalOpen={handleModalOpen}
-                        />
-                        <AnswerModal 
-                            classes={classes}
-                            openModal={openModal}
-                            answerContent={answerContent}
-                            setAnswerContent={setAnswerContent}
-                            handleModalClose={handleModalClose}
-                            postId={postId}
-                        />
-                        <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
-                            {RenderPostTags}
-                        </Grid>
-                        <React.Fragment>
-                            <Grid container justify="space-between" alignItems="center" spacing={0}>
+        return(
+            <div className={classes.root}>
+                <ThemeProvider theme={theme}>
+                    <RenderCard 
+                        title={postInfo.title} 
+                        body={postInfo.body} 
+                        viewCount={viewCount}
+                        created_at={created_at}
+                        updated_at={updated_at}
+                        owner={owner}
+                        classes={classes}
+                        handleModalOpen={handleModalOpen}
+                    />
+                    <AnswerModal 
+                        classes={classes}
+                        openModal={openModal}
+                        answerContent={answerContent}
+                        setAnswerContent={setAnswerContent}
+                        handleModalClose={handleModalClose}
+                        postId={postId}
+                    />
+                    <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
+                        {RenderPostTags}
+                    </Grid>
+                    <React.Fragment>
+                        <Grid container justify="space-between" alignItems="center" spacing={0}>
+                            <Grid item>
+                                <Grid container justify="center" alignItems="center" spacing={0}>
+                                    <VoteButtons
+                                        likes={likes}
+                                        dislikes={dislikes}
+                                    />
+                                </Grid>
+                            </Grid>
+                            {auth.isAuthenticated && auth.currentUser == owner ?
                                 <Grid item>
                                     <Grid container justify="center" alignItems="center" spacing={0}>
-                                        <VoteButtons
-                                            likes={likes}
-                                            dislikes={dislikes}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                {auth.isAuthenticated && auth.currentUser == owner ?
-                                    <Grid item>
-                                        <Grid container justify="center" alignItems="center" spacing={0}>
-                                            <Grid item>
-                                                <RouterLink to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
-                                                    <Button
-                                                        className={classes.submit}
-                                                        color="primary"
-                                                        size="small"
-                                                    >
-                                                    Edit
-                                                    </Button>
-                                                </RouterLink>
-                                            </Grid>
-                                            <Grid item>
+                                        <Grid item>
+                                            <RouterLink to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
                                                 <Button
                                                     className={classes.submit}
-                                                    color="secondary"
-                                                    onClick={handleClickOpen}
+                                                    color="primary"
                                                     size="small"
                                                 >
-                                                    Delete
+                                                Edit
                                                 </Button>
-                                            </Grid>
+                                            </RouterLink>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button
+                                                className={classes.submit}
+                                                color="secondary"
+                                                onClick={handleClickOpen}
+                                                size="small"
+                                            >
+                                                Delete
+                                            </Button>
                                         </Grid>
                                     </Grid>
-                                    : undefined
-                                }
-                            </Grid>
-                            <Divider/>
-                            {
-                                auth.isAuthenticated && showAddComment ? 
-                                    <Button variant="text" size="small" style={{textTransform: "none"}} color="inherit" onClick={handleCommentBoxOpen}>
-                                        <Typography variant="subtitle2" color="primary">Add comment</Typography>
-                                    </Button>: 
-                                undefined
+                                </Grid>
+                                : undefined
                             }
-                            {
-                                auth.isAuthenticated && openCommentBox ? 
-                                    <PostCommentInput currentUserProfileImg={auth.currentUserProfileImg} postId={postId}/>: 
-                                undefined
-                            }
-                            {/*
-                                postComments.status === 'succeeded' && postComments.postComments !== [] ?
-                                    <PostCommentRender/>:
-                                undefined
-                            */}
-                            <PostCommentRender/>
-                            <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
-                        </React.Fragment>
-                    </ThemeProvider>
-                </div>
-            );
-        }else {
-            return(<NotFound/>);
-        }
+                        </Grid>
+                        <Divider/>
+                        {
+                            auth.isAuthenticated && showAddComment ? 
+                                <Button variant="text" size="small" style={{textTransform: "none"}} color="inherit" onClick={handleCommentBoxOpen}>
+                                    <Typography variant="subtitle2" color="primary">Add comment</Typography>
+                                </Button>: 
+                            undefined
+                        }
+                        {
+                            auth.isAuthenticated && openCommentBox ? 
+                                <PostCommentInput currentUserProfileImg={auth.currentUserProfileImg} postId={postId}/>: 
+                            undefined
+                        }
+                        {/*
+                            postComments.status === 'succeeded' && postComments.postComments !== [] ?
+                                <PostCommentRender/>:
+                            undefined
+                        */}
+                        <PostCommentRender/>
+                        <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
+                    </React.Fragment>
+                </ThemeProvider>
+            </div>
+        );
     }
 }

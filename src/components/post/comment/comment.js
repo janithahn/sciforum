@@ -211,7 +211,7 @@ export function PostCommentRender() {
     const auth = useSelector(state => state.Auth);
     const postComments = useSelector(state => state.PostComments);
 
-    const [comments, setComments] = React.useState(postComments.postComments ? postComments.postComments: []);
+    const comments = postComments.postComments;
 
     const fetchData = React.useCallback(
         (postId) => dispatch(fetchPostComments(postId)),
@@ -221,14 +221,6 @@ export function PostCommentRender() {
     React.useEffect(() => {
         if(postComments.status === 'idle') fetchData(postId);
     }, [dispatch]);
-
-    React.useEffect(() => {
-        if(postComments.postComments) handleComments(postComments.postComments);
-    }, [postComments]);
-
-    const handleComments = (comments) => {
-        setComments(comments);
-    };
     
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
@@ -245,7 +237,7 @@ export function PostCommentRender() {
         setOpenDeleteModal(false);
     };
 
-    const CommentsList = comments && comments !== [] ? comments.map(item => {
+    const CommentsList = comments.map(item => {
 
         const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
 
@@ -259,7 +251,7 @@ export function PostCommentRender() {
                 handleDeleteModalOpen={handleDeleteModalOpen}
             />
         );
-    }): undefined;
+    });
 
     return(
         <React.Fragment>

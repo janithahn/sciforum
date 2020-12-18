@@ -28,12 +28,12 @@ export const useStyles = makeStyles((theme) => ({
   },
   answerButton: {
     textTransform: 'none',
-    padding: (1, 3, 1, 3),
+    padding: (1, 3),
 
   },
   alertButton: {
     textTransform: 'none',
-    padding: (1, 3, 1, 3),
+    padding: (1, 3),
   },
   modal: {
     display: 'flex',
@@ -41,7 +41,7 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   modalTextField: {
-    margin: theme.spacing(2, 0, 1),
+    margin: theme.spacing(0, 1),
   },
   paper: {
     marginTop: theme.spacing(3),

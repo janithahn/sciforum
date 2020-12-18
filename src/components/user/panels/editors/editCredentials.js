@@ -138,14 +138,14 @@ export default function EditCredentials({
         paddingBottom: 1,
     },
     menuItem: {
-        padding: (1, 1, 1)
+        padding: (1, 1)
     },
   }));
 
   const classesSkills = useSkillsStyles();
 
   const SkillsTypo = skills ? skills.map(item => 
-    <ListItem className={classesSkills.listItem} /*onClick={() => handleSkillModalOpen("skillUpdate", item.id)}*/>
+    <ListItem key={item.id} className={classesSkills.listItem} /*onClick={() => handleSkillModalOpen("skillUpdate", item.id)}*/>
             <MenuItem className={classesSkills.menuItem} onClick={() => handleSkillModalOpen("skillUpdate", item.id)}>
                 <Typography variant="subtitle2">{item.skill}</Typography>
             </MenuItem>

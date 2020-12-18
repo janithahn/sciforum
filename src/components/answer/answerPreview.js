@@ -3,6 +3,6 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export function Preview(props) {
   return (
-    <MarkdownPreview key={props.key} source={props.source} />
+    <MarkdownPreview source={props.source} />
   )
 }
