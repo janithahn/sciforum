@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
   Divider,
   Grid,
-  TextField,
   ThemeProvider,
   Typography,
-  CircularProgress,
 } from '@material-ui/core';
 import { QuestionAnswer, Visibility, Inbox } from '@material-ui/icons';
 import { profileDetailTheme, useStyles } from './styles/profileStyles';

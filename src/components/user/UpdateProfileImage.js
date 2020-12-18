@@ -12,12 +12,12 @@ import {
 import { theme, useStyles } from './styles/profileStyles';
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUserProfileImage, fetchUser } from '../../redux/ActionCreators';
+import { updateUserProfileImage } from '../../redux/ActionCreators';
 import ImageUploader from 'react-images-upload';
 
 export default function UpdateProfileImage(props) {
 
-    const { setProfileImage, profileImage, usernameFromTheUrl, handleModalClose } = props;
+    const { usernameFromTheUrl, handleModalClose } = props;
 
     const classes = useStyles();
     const auth = useSelector(state => state.Auth);

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Chip, Avatar, Divider, Typography } from '@material-ui/core';
+import { Button, ThemeProvider, Grid, Modal, Backdrop, Fade, Chip, Divider, Typography } from '@material-ui/core';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import AlertDialogSlide from './AlertComponent';
-import NotFound from '../alert/NotFoundComponent';
+//import NotFound from '../alert/NotFoundComponent';
 //import PostViewer from './PostViewerComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';

@@ -1,26 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Link as RouterLink } from 'react-router-dom';
+//import { Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
-  Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
   Divider,
   Typography,
   ThemeProvider,
-  Tooltip,
   Link,
   Modal,
   Backdrop,
   Fade,
   Grid,
-  Hidden,
 } from '@material-ui/core';
-import { Edit } from '@material-ui/icons';
 import { theme, useStyles, CustomTooltip } from './styles/profileStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUser } from '../../redux/ActionCreators';

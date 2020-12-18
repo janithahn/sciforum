@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Grid } from '@material-ui/core';
-import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
+//import { addPosts, postsFailed, postsLoading, resetPosts } from '../../redux/ActionCreators';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
 import axios from 'axios';
@@ -11,7 +11,7 @@ import { baseUrl } from '../../shared/baseUrl'
 
 export default function Search() {
     const posts = useSelector(state => state.Posts);
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
 
     function useQuery() {
         return new URLSearchParams(useLocation().search);

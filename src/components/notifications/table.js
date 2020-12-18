@@ -403,7 +403,6 @@ export default function EnhancedTable({ rows, currentUser }) {
                             role="checkbox"
                             aria-checked={isItemSelected}
                             tabIndex={-1}
-                            key={index}
                             selected={isItemSelected}
                         >
                             <TableCell padding="checkbox">

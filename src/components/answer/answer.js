@@ -7,7 +7,7 @@ import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
 import AnswerViewCard from './answerViewCard';
-import AnswerSkel from './skeletons/answer';
+//import AnswerSkel from './skeletons/answer';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(

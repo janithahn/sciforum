@@ -73,7 +73,6 @@ const Header = (props) => {
     const classes = useStyles();
 
     const auth = useSelector(state => state.Auth);
-    const user = useSelector(state => state.User);
     const [openModal, setOpenModal] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const location = useLocation();
