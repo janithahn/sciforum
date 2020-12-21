@@ -124,20 +124,24 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
             owner: localStorage.getItem('currentUserId'),
             comment: content,
         });
+        console.log(submitVal);
     };
 
-    const onClick = React.useCallback(
+    /*const onClick = React.useCallback(
         (submitVal, postId) => dispatch(createPostComments(submitVal, postId)),
         [dispatch]
-    );
+    );*/
 
     const handleCommentSubmit = React.useCallback(() => {
+        console.log(text);
+        console.log(submitVal);
+        console.log(content);
         if(text.length !== 0) {
-            onClick(submitVal, postId);
+            dispatch(createPostComments(submitVal, postId));
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
-    }, []);
+    }, [dispatch]);
 
     return(
         <Grid className={classes.inputContainer} container direction="column" spacing={1}>

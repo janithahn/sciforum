@@ -27,7 +27,7 @@ export default function PostView() {
     return(
         <React.Fragment>
             <Grid container direction="column" justify="flex-end" spacing={4}>
-                <Grid item lg={8} sm xs={12}>
+                <Grid item>
                     <PostDetail/>
                 </Grid>
                 {/*<Grid><PostAnswerInput/></Grid>*/}

@@ -67,20 +67,20 @@ export default function Answer() {
     const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
 
-    let refs = null;
+    //let refs = null;
 
-    if(answers.status === 'succeeded') {
+    /*if(answers.status === 'succeeded') {
         refs = answers.answers.reduce((acc, value) => {
             acc[value.id] = React.createRef();
             return acc;
         }, {});
-    }
+    }*/
 
-    const scrollTo = (id) =>
+    /*const scrollTo = (id) =>
     refs[id].current.scrollIntoView({
         //behavior: 'smooth',
         block: 'center',
-    });
+    });*/
 
     /*React.useEffect(() => {
         if(auth.isAuthenticated) {
@@ -97,12 +97,12 @@ export default function Answer() {
             }
         }
     }, []);*/
-    React.useEffect(() => {
+    /*React.useEffect(() => {
         if(refs && refs[Number(hash)]) {
             scrollTo(Number(hash)); 
             refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
         }
-    }, []);
+    }, []);*/
 
     const handleModalOpen = (answer) => {
         setSelectedAnswerContent(answer.answerContent);
@@ -127,7 +127,7 @@ export default function Answer() {
     };
 
     const AnswersList =  answers.answers.map((answer) => (
-        <Grid item innerRef={refs[answer.id]} key={answer.id}> 
+        <Grid item /*innerRef={refs[answer.id]}*/ key={answer.id}> 
             <AnswerViewCard
                 answer={answer} 
                 handleModalOpen={handleModalOpen}

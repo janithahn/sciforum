@@ -114,7 +114,7 @@ export default function PostDetail() {
     } else {
 
         const RenderPostTags = postTags ? postTags.map((tag, key) => 
-            <Grid item key={key}>
+            <Grid item key={key} >
                 <Chip className={classes.chip} color="primary" size="small" variant="outlined" label={tag} key={key} component="a" href={`/questions/tagged/${tag}`} clickable/>
             </Grid>): [];
 
@@ -142,7 +142,7 @@ export default function PostDetail() {
                     <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
                         {RenderPostTags}
                     </Grid>
-                    <React.Fragment>
+                    <Grid item lg={8} sm xs={12}>
                         <Grid container justify="space-between" alignItems="center" spacing={0}>
                             <Grid item>
                                 <Grid container justify="center" alignItems="center" spacing={0}>
@@ -201,7 +201,7 @@ export default function PostDetail() {
                         */}
                         <PostCommentRender/>
                         <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
-                    </React.Fragment>
+                    </Grid>
                 </ThemeProvider>
             </div>
         );

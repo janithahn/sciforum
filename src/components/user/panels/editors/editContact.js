@@ -34,9 +34,9 @@ export default function EditContact(props) {
 
   const formik = useFormik({
     initialValues: {
-      github: contact.github, 
-      linkedIn: contact.linkedIn,
-      facebook: contact.facebook,
+      github: contact.github ? contact.github: '', 
+      linkedIn: contact.linkedIn ? contact.linkedIn: '',
+      facebook: contact.facebook ? contact.facebook: '',
     },
     onSubmit: (values) => {
         dispatch(updateUserContact(auth, {
