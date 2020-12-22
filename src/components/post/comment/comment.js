@@ -3,7 +3,7 @@ import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@m
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { createPostComments, fetchPostComments } from '../../../redux/ActionCreators';
+import { fetchPostComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/postCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
@@ -85,16 +85,10 @@ const ItemList = () => {
     );
 };*/
 
-const PostCommentButton = React.memo(({ handleCommentSubmit }) => {
+export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, handleCommentSubmit }) => {
     console.log("rendering new comment");
-    return <Button size="small" style={{textTransform: 'none'}} onClick={handleCommentSubmit} color="primary">Add</Button>
-});
-
-export function PostCommentInput({ currentUserProfileImg, postId }) {
-    
 
     const classes = useStyles();
-    const dispatch = useDispatch();
 
     const [content, setContent] = React.useState();
     const [text, setText] = React.useState('');
@@ -124,24 +118,12 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
             owner: localStorage.getItem('currentUserId'),
             comment: content,
         });
-        console.log(submitVal);
     };
 
-    /*const onClick = React.useCallback(
-        (submitVal, postId) => dispatch(createPostComments(submitVal, postId)),
-        [dispatch]
-    );*/
-
-    const handleCommentSubmit = React.useCallback(() => {
-        console.log(text);
-        console.log(submitVal);
-        console.log(content);
-        if(text.length !== 0) {
-            dispatch(createPostComments(submitVal, postId));
-        }
-        setEditorState(() => EditorState.createEmpty());
-        setSubmitVal({});
-    }, [dispatch]);
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        handleCommentSubmit({ submitVal, setEditorState, setSubmitVal, text });
+    };
 
     return(
         <Grid className={classes.inputContainer} container direction="column" spacing={1}>
@@ -159,13 +141,13 @@ export function PostCommentInput({ currentUserProfileImg, postId }) {
                         </Paper>
                     </Grid>
                     <Grid item lg={1} sm={1} md={1} xs={1}>
-                        <PostCommentButton handleCommentSubmit={handleCommentSubmit}/>
+                        <Button size="small" style={{textTransform: 'none'}} onClick={handleSubmit} color="primary">Add</Button>
                     </Grid>
                 </Grid>
             </Grid>
         </Grid>
     );
-}
+});
 
 const Comment = React.memo(({item, classes, displayContent, auth, handleDeleteModalOpen}) => {
     

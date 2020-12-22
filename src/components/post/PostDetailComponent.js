@@ -6,12 +6,13 @@ import AlertDialogSlide from './AlertComponent';
 //import PostViewer from './PostViewerComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPostDetail } from '../../redux/ActionCreators';
+import { fetchPostDetail, createPostComments } from '../../redux/ActionCreators';
 import AnswerModalCard from '../answer/answerModalCard';
 import VoteButtons from '../vote/postVoteButtons';
 import RenderCard from './RenderCard';
 import Article from './skeletons/post';
 import { PostCommentInput, PostCommentRender } from './comment/comment';
+import { EditorState } from 'draft-js';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
     return(
@@ -107,6 +108,14 @@ export default function PostDetail() {
         setShowAddComment(false);
     };
 
+    const handleCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text }) => {
+        if(text.length !== 0) {
+            dispatch(createPostComments(submitVal, postId));
+        }
+        setEditorState(() => EditorState.createEmpty());
+        setSubmitVal({});
+    }, [dispatch]);
+
     if(post.status === 'loading') {
         return(<div><Article/></div>);
     }else if(post.errMess) {
@@ -191,7 +200,7 @@ export default function PostDetail() {
                         }
                         {
                             auth.isAuthenticated && openCommentBox ? 
-                                <PostCommentInput currentUserProfileImg={auth.currentUserProfileImg} postId={postId}/>: 
+                                <PostCommentInput handleCommentSubmit={handleCommentSubmit} currentUserProfileImg={auth.currentUserProfileImg} postId={postId}/>: 
                             undefined
                         }
                         {/*
