@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
-import { createAnswerComments, fetchAnswerComments } from '../../../redux/ActionCreators';
+import { fetchAnswerComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/answerCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
 export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId, handleCommentSubmit }) => {
 
     const classes = useStyles();
-    const dispatch = useDispatch();
 
     const { postId } = useParams();
 
