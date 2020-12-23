@@ -42,10 +42,9 @@ export default function Answer() {
     const classes = useStyles();
 
     const answers = useSelector(state => state.Answers)
-    /*const auth = useSelector(state => state.Auth);
-    const answerVotesLoading = useSelector(state => state.answerVotes.status)
+    const auth = useSelector(state => state.Auth);
+    //const answerVotesLoading = useSelector(state => state.answerVotes.status)
     const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
-    const answerComments = useSelector(state => state.AnswerComments);*/
 
     const dispatch = useDispatch();
 
@@ -67,22 +66,18 @@ export default function Answer() {
     const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
 
-    //let refs = null;
+    let refs = answers.answers.reduce((acc, value) => {
+        acc[value.id] = React.createRef();
+        return acc;
+    }, {});
 
-    /*if(answers.status === 'succeeded') {
-        refs = answers.answers.reduce((acc, value) => {
-            acc[value.id] = React.createRef();
-            return acc;
-        }, {});
-    }*/
+    const scrollTo = (id) =>
+        refs[id].current.scrollIntoView({
+            //behavior: 'smooth',
+            block: 'center',
+    });
 
-    /*const scrollTo = (id) =>
-    refs[id].current.scrollIntoView({
-        //behavior: 'smooth',
-        block: 'center',
-    });*/
-
-    /*React.useEffect(() => {
+    React.useEffect(() => {
         if(auth.isAuthenticated) {
             if(votesStatus) {   
                 if(refs && refs[Number(hash)]) {
@@ -96,13 +91,14 @@ export default function Answer() {
                 refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
             }
         }
-    }, []);*/
-    /*React.useEffect(() => {
+    }, []);
+    
+    React.useEffect(() => {
         if(refs && refs[Number(hash)]) {
             scrollTo(Number(hash)); 
             refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
         }
-    }, []);*/
+    }, []);
 
     const handleModalOpen = (answer) => {
         setSelectedAnswerContent(answer.answerContent);
@@ -127,7 +123,7 @@ export default function Answer() {
     };
 
     const AnswersList =  answers.answers.map((answer) => (
-        <Grid item /*innerRef={refs[answer.id]}*/ key={answer.id}> 
+        <Grid item innerRef={refs[answer.id]} key={answer.id}> 
             <AnswerViewCard
                 answer={answer} 
                 handleModalOpen={handleModalOpen}
