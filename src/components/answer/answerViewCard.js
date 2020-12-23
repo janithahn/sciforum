@@ -1,16 +1,23 @@
 import React from 'react';
 import { Grid, Typography, Avatar, Button, Box } from '@material-ui/core';
 import { Preview } from './answerPreview';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
 import { AnswerCommentInput, AnswerCommentRender } from './comment/comment';
+import { EditorState } from 'draft-js';
+import { createAnswerComments } from '../../redux/ActionCreators';
+import { useParams } from 'react-router-dom';
 
 export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen}) {
 
     const classes = useStyles();
+
+    const { postId } = useParams();
+
+    const dispatch = useDispatch();
 
     const auth = useSelector(state => state.Auth);
 
@@ -28,6 +35,14 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
     const handleShowAddComment = () => {
         setShowAddComment(false);
     };
+
+    const handleCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text }) => {
+        if(text.length !== 0) {
+            dispatch(createAnswerComments(submitVal, postId));
+        }
+        setEditorState(() => EditorState.createEmpty());
+        setSubmitVal({});
+    }, [dispatch]);
 
     return(
         <React.Fragment>
@@ -117,7 +132,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                         }
                         {
                             auth.isAuthenticated && openCommentBox ? 
-                                <AnswerCommentInput currentUserProfileImg={auth.currentUserProfileImg} answerId={answer.id}/>: 
+                                <AnswerCommentInput handleCommentSubmit={handleCommentSubmit} currentUserProfileImg={auth.currentUserProfileImg} answerId={answer.id}/>: 
                             undefined
                         }
                     </Grid>

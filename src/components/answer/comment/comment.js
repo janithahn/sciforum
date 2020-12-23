@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
+export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId, handleCommentSubmit }) => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -69,12 +69,9 @@ export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
         });
     };
 
-    const handleCommentSubmit = () => {
-        if(text.length !== 0) {
-            dispatch(createAnswerComments(submitVal, postId));
-        }
-        setSubmitVal({});
-        setEditorState(() => EditorState.createEmpty());
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        handleCommentSubmit({ submitVal, setEditorState, setSubmitVal, text });
     };
 
     return(
@@ -93,13 +90,13 @@ export function AnswerCommentInput({ currentUserProfileImg, answerId }) {
                         </Paper>
                     </Grid>
                     <Grid item lg={1} sm={1} md={1} xs={1}>
-                        <Button size="small" style={{textTransform: 'none'}} onClick={handleCommentSubmit} color="primary">Add</Button>
+                        <Button size="small" style={{textTransform: 'none'}} onClick={handleSubmit} color="primary">Add</Button>
                     </Grid>
                 </Grid>
             </Grid>
         </Grid>
     );
-}
+});
 
 export function AnswerCommentRender({ answerId }) {
     const classes = useStyles();
