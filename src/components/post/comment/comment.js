@@ -3,7 +3,7 @@ import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@m
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchPostComments } from '../../../redux/ActionCreators';
+import { fetchPostComments, updatePostComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/postCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
@@ -85,15 +85,15 @@ const ItemList = () => {
     );
 };*/
 
-export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, handleCommentSubmit }) => {
-    console.log("rendering new comment");
+export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, handleCommentSubmit, displayContent, editCommentId }) => {
+    //console.log("rendering new comment");
 
     const classes = useStyles();
 
     const [content, setContent] = React.useState();
     const [text, setText] = React.useState('');
     const [editorState, setEditorState] = React.useState(
-        content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
+        displayContent ? displayContent: content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
     );
     const [submitVal, setSubmitVal] = React.useState({});
 
@@ -122,7 +122,7 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        handleCommentSubmit({ submitVal, setEditorState, setSubmitVal, text });
+        handleCommentSubmit({ submitVal, setEditorState, setSubmitVal, text, editCommentId });
     };
 
     return(
@@ -149,38 +149,62 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
     );
 });
 
-const Comment = React.memo(({item, classes, displayContent, auth, handleDeleteModalOpen}) => {
+const Comment = React.memo(({item, classes, displayContent, auth, handleDeleteModalOpen, handleEditComment, edit, editCommentId, handleEditCommentSubmit}) => {
     
-    console.log("only one comment");
+    //console.log("only one comment");
 
     return(
         <Grid item> 
             <Grid container direction="column">
                 <Grid item>
-                    <Paper component="form" className={classes.root} elevation={0} variant="outlined">
-                        <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
-                        <div className={classes.input}>
-                            <Editor readOnly editorState={displayContent}/>
-                        </div>
-                    </Paper>
+                    {editCommentId !== item.id ? 
+                        <Paper component="form" className={classes.root} elevation={0} variant="outlined">
+                            <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                            <div className={classes.input}>
+                                <Editor readOnly editorState={displayContent}/>
+                            </div>
+                        </Paper>:
+                        undefined
+                    }
+                    {edit &&  editCommentId === item.id? 
+                        <PostCommentInput 
+                            currentUserProfileImg={item.ownerAvatar} 
+                            postId={item.postBelong} 
+                            displayContent={displayContent} 
+                            handleCommentSubmit={handleEditCommentSubmit}
+                            editCommentId={editCommentId}
+                        />:
+                        undefined
+                    }
                 </Grid>
                 <Grid item>
                     <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
-                        <Grid item>
+                        {editCommentId !== item.id ? <Grid item>
                             <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
                                 <TimeAgo live={false} date={item.updated_at}/>
                             </Typography>
+                        </Grid>: undefined}
+                        {editCommentId !== item.id ? <Grid item>
+                            <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
+                        </Grid>: undefined}
+                        <Grid item>
+                            {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() && editCommentId !== item.id ? <Grid item>
+                                <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleEditComment(item)}>
+                                    <Typography variant="body2">
+                                        {"Edit"}
+                                    </Typography>
+                                </Button>
+                            </Grid>: undefined}
                         </Grid>
                         <Grid item>
-                            <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
+                            {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
+                                <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
+                                    <Typography variant="body2">
+                                        {"Delete"}
+                                    </Typography>
+                                </Button>
+                            </Grid>: undefined}
                         </Grid>
-                        {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
-                            <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
-                                <Typography variant="body2">
-                                    {"Delete"}
-                                </Typography>
-                            </Button>
-                        </Grid>: undefined}
                     </Grid>
                 </Grid>
             </Grid>
@@ -198,6 +222,9 @@ export function PostCommentRender() {
     const postComments = useSelector(state => state.PostComments);
 
     const comments = postComments.postComments;
+
+    const [edit, setEdit] = React.useState(false);
+    const [editCommentId, setEditCommentId] = React.useState();
 
     const fetchData = React.useCallback(
         (postId) => dispatch(fetchPostComments(postId)),
@@ -223,6 +250,21 @@ export function PostCommentRender() {
         setOpenDeleteModal(false);
     };
 
+    const handleEditComment = (comment) => {
+        setEdit(true);
+        setEditCommentId(comment.id);
+    };
+
+    const handleEditCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text, editCommentId }) => {
+        if(text.length !== 0) {
+            dispatch(updatePostComments(submitVal, editCommentId, postId));
+        }
+        setEditorState(() => EditorState.createEmpty());
+        setSubmitVal({});
+        setEdit(false);
+        setEditCommentId(undefined);
+    }, [dispatch]);
+
     const CommentsList = comments.map(item => {
 
         const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
@@ -235,6 +277,10 @@ export function PostCommentRender() {
                 auth={auth}
                 item={item} 
                 handleDeleteModalOpen={handleDeleteModalOpen}
+                handleEditComment={handleEditComment}
+                edit={edit}
+                editCommentId={editCommentId}
+                handleEditCommentSubmit={handleEditCommentSubmit}
             />
         );
     });
