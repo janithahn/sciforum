@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAnswerComments } from '../../../redux/ActionCreators';
+import { fetchAnswerComments, updateAnswerComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/answerCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId, handleCommentSubmit }) => {
+export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId, handleCommentSubmit, displayContent, editCommentId }) => {
 
     const classes = useStyles();
 
@@ -40,7 +40,7 @@ export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId,
     const [content, setContent] = React.useState();
     const [text, setText] = React.useState('');
     const [editorState, setEditorState] = React.useState(
-        content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
+        displayContent ? displayContent: content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
     );
     const [submitVal, setSubmitVal] = React.useState({});
 
@@ -70,7 +70,7 @@ export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId,
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        handleCommentSubmit({ submitVal, setEditorState, setSubmitVal, text });
+        handleCommentSubmit({ submitVal, setEditorState, setSubmitVal, text, editCommentId });
     };
 
     return(
@@ -106,6 +106,9 @@ export function AnswerCommentRender({ answerId }) {
     
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
+    const [edit, setEdit] = React.useState(false);
+    const [editCommentId, setEditCommentId] = React.useState();
+
     const [selectedCommentId, setSelectedCommentId] = React.useState(null);
     const [selectedCommentAnswerBelong, setSelectedCommentAnswerBelong] = React.useState(null);
 
@@ -125,17 +128,45 @@ export function AnswerCommentRender({ answerId }) {
         if(answerComments.status === 'idle') dispatch(fetchAnswerComments(postId));
     }, [dispatch, answerComments]);
 
+    const handleEditComment = (comment) => {
+        setEdit(true);
+        setEditCommentId(comment.id);
+    };
+
+    const handleEditCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text, editCommentId }) => {
+        if(text.length !== 0) {
+            dispatch(updateAnswerComments(submitVal, editCommentId, postId));
+        }
+        setEditorState(() => EditorState.createEmpty());
+        setSubmitVal({});
+        setEdit(false);
+        setEditCommentId(undefined);
+    }, [dispatch]);
+
     const CommentsList = answerComments.answerComments.map(item => item.answer === answerId ?
 
         <Grid item key={item.id}>
             <Grid container direction="column">
                 <Grid item>
-                    <Paper component="form" className={classes.root} elevation={0} variant="outlined">
-                        <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
-                        <div className={classes.input}>
-                            <Editor readOnly editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)))}/>
-                        </div>
-                    </Paper>
+                    {editCommentId !== item.id ?
+                        <Paper component="form" className={classes.root} elevation={0} variant="outlined">
+                            <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                            <div className={classes.input}>
+                                <Editor readOnly editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)))}/>
+                            </div>
+                        </Paper>:
+                        undefined
+                    }
+                    {edit &&  editCommentId === item.id? 
+                        <AnswerCommentInput 
+                            currentUserProfileImg={item.ownerAvatar} 
+                            answerId={item.answer} 
+                            displayContent={EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)))} 
+                            handleCommentSubmit={handleEditCommentSubmit}
+                            editCommentId={editCommentId}
+                        />:
+                        undefined
+                    }
                 </Grid>
                 <Grid item>
                     <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
@@ -147,6 +178,13 @@ export function AnswerCommentRender({ answerId }) {
                         <Grid item>
                             <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
                         </Grid>
+                        {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() && editCommentId !== item.id ? <Grid item>
+                            <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleEditComment(item)}>
+                                <Typography variant="body2">
+                                    {"Edit"}
+                                </Typography>
+                            </Button>
+                        </Grid>: undefined}
                         {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
                             <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
                                 <Typography variant="body2">
