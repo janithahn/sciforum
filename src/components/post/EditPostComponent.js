@@ -32,12 +32,12 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
 
   console.log({title, body});
 
-  const handlePostInfo = (postId, postOwner, title, body) => {
+  const handlePostInfo = React.useCallback((postId, postOwner, title, body) => {
     setTitle(title);
     setQuestion(body);
     id = postId;
     owner = postOwner;
-  }
+  }, []);
 
   React.useEffect(() => {
     if(post.status === 'idle') {
@@ -53,7 +53,7 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
 
   React.useEffect(() => {
     fetchTags(tagList, setTagList);
-  }, []);
+  }, [tagList]);
 
   function handleSubmit(event) {
     dispatch(editPost({

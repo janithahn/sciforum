@@ -233,7 +233,7 @@ export function PostCommentRender() {
 
     React.useEffect(() => {
         if(postComments.status === 'idle') fetchData(postId);
-    }, [dispatch]);
+    }, [dispatch, fetchData]);
     
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 

@@ -227,7 +227,7 @@ export default function EnhancedTable({ rows, currentUser }) {
   }, [selected, rowsData, handleUnreadState]);
 
   // handle unread state for marking them as read
-  const handleUnreadState = () => {
+  const handleUnreadState = React.useCallback(() => {
     const checkArr = [];
 
     for(let item of rowsData) {
@@ -240,7 +240,7 @@ export default function EnhancedTable({ rows, currentUser }) {
 
     if(checkArr.includes(true)) setUnreadState(true);
     else setUnreadState(false);
-  };
+  }, []);
 
   //console.log(unreadState);
 
@@ -248,7 +248,6 @@ export default function EnhancedTable({ rows, currentUser }) {
     if (event.target.checked) {
       const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
-      return;
     }
     setSelected([]);
   };
@@ -297,7 +296,8 @@ export default function EnhancedTable({ rows, currentUser }) {
             state: false,
         }
         items[index] = item;
-        setRowsData(items);
+        setRowsData(items)
+        return id;
     });
     setSelected([]);
     setSnackMessage(notificationsCount + ' ' + getMessageKeyword(notificationsCount) + ' marked as read');
@@ -316,7 +316,7 @@ export default function EnhancedTable({ rows, currentUser }) {
             state: false,
         }
         newRowsData.push(newItem);
-        return;
+        return item;
     });
     setRowsData(newRowsData);
     handleClose();
@@ -333,6 +333,7 @@ export default function EnhancedTable({ rows, currentUser }) {
         }
         dispatch(deleteNotifications(id));
         setRowsData(items);
+        return id;
     });
     notificationsCount = selected.length;
     setSelected([]);
@@ -344,7 +345,7 @@ export default function EnhancedTable({ rows, currentUser }) {
     rowsData.map(item => {
         notificationsCount += 1;
         dispatch(deleteNotifications(item.id));
-        return;
+        return item;
     });
     setRowsData([]);
     setSelected([]);

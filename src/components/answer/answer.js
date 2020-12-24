@@ -71,11 +71,11 @@ export default function Answer() {
         return acc;
     }, {});
 
-    const scrollTo = (id) =>
+    const scrollTo = React.useCallback((id) =>
         refs[id].current.scrollIntoView({
             //behavior: 'smooth',
             block: 'center',
-    });
+    }), []);
 
     React.useEffect(() => {
         if(auth.isAuthenticated) {
@@ -91,7 +91,7 @@ export default function Answer() {
                 refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
             }
         }
-    }, []);
+    }, [auth.isAuthenticated, refs, hash, scrollTo]);
     
     React.useEffect(() => {
         if(refs && refs[Number(hash)]) {

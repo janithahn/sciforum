@@ -114,7 +114,7 @@ export default function PostDetail() {
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
-    }, [dispatch]);
+    }, [dispatch, postId]);
 
     if(post.status === 'loading') {
         return(<div><Article/></div>);

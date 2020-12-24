@@ -28,7 +28,7 @@ import { postPostCommentVote, updatePostCommentVote, fetchPostCommentVotesByLogg
         if(auth.isAuthenticated && postCommentVotes.status === 'idle') {
             if(commentId) dispatch(fetchPostCommentVotesByLoggedInUser(auth.currentUserId, commentId));
         }
-    }, [dispatch, auth, commentId]);
+    }, [dispatch, auth, commentId, postCommentVotes.status]);
 
     React.useEffect(() => {
         if(postCommentVotes.votes && postCommentVotes.votes.length !== 0) handleCurrentUserVote({type: postCommentVotes.votes[0].voteType, comment: postCommentVotes.votes[0].comment});
