@@ -75,7 +75,7 @@ export default function Answer() {
         refs[id].current.scrollIntoView({
             //behavior: 'smooth',
             block: 'center',
-    }), []);
+    }), [refs]);
 
     React.useEffect(() => {
         if(auth.isAuthenticated) {
@@ -91,7 +91,7 @@ export default function Answer() {
                 refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
             }
         }
-    }, [auth.isAuthenticated, refs, hash, scrollTo]);
+    }, [auth.isAuthenticated, refs, hash, scrollTo, votesStatus]);
     
     React.useEffect(() => {
         if(refs && refs[Number(hash)]) {

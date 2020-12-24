@@ -65,7 +65,7 @@ import { postAnswerCommentVote, updateAnswerCommentVote, fetchAnswerCommentVotes
                 }
             }
         }
-    }, [currentUserVote, isAuthenticated, commentId]);
+    }, [currentUserVote, isAuthenticated, commentId, auth.currentUserId]);
 
     const handleModalOpen = () => {
         setOpenModal(true);

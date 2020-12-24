@@ -222,10 +222,6 @@ export default function EnhancedTable({ rows, currentUser }) {
   const open = Boolean(anchorEl);
   const id = open ? 'more-popover' : undefined;
 
-  React.useEffect(() => {
-    handleUnreadState();
-  }, [selected, rowsData, handleUnreadState]);
-
   // handle unread state for marking them as read
   const handleUnreadState = React.useCallback(() => {
     const checkArr = [];
@@ -240,7 +236,11 @@ export default function EnhancedTable({ rows, currentUser }) {
 
     if(checkArr.includes(true)) setUnreadState(true);
     else setUnreadState(false);
-  }, []);
+  }, [rowsData, selected]);
+
+  React.useEffect(() => {
+    handleUnreadState();
+  }, [selected, rowsData, handleUnreadState]);
 
   //console.log(unreadState);
 
