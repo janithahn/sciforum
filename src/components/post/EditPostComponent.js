@@ -22,8 +22,10 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
 
   const [title, setTitle] = React.useState(post.post ? post.post.title: '');
   const [body, setQuestion] = React.useState(post.post ? post.post.body: '');
-  let id = post.post ? post.post.id: null;
-  let owner = post.post ? post.post.owner: null;
+  const [id, setId] = React.useState(post.post ? post.post.id: null);
+  const [owner, setOwner] = React.useState(post.post ? post.post.owner: null);
+  //let id = post.post ? post.post.id: null;
+  //let owner = post.post ? post.post.owner: null;
 
   const [tagList, setTagList] = React.useState([]);
   const [tagValue, setTagValue] = React.useState(post.post ? post.post.tags: []);
@@ -35,8 +37,8 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
   const handlePostInfo = React.useCallback((postId, postOwner, title, body) => {
     setTitle(title);
     setQuestion(body);
-    id = postId;
-    owner = postOwner;
+    setId(postId);
+    setOwner(postOwner);
   }, []);
 
   React.useEffect(() => {

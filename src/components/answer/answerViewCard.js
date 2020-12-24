@@ -88,7 +88,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                                             <Grid item>
                                                 <Grid container justify="center" alignItems="center" spacing={0}>
                                                     <Grid item>
-                                                        {isAuthenticated && answer.owner == currentUserId ?
+                                                        {isAuthenticated && answer.owner && answer.owner.toString() === currentUserId.toString() ?
                                                         <Grid item>
                                                             <Button color="primary" className={classes.editButton} onClick={() => handleModalOpen(answer)}>
                                                                 <Typography className={classes.iconWrap} variant="body2">
