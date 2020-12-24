@@ -57,7 +57,7 @@ export default function Answer() {
 
     React.useEffect(() => {
         if(answers.status === 'idle') dispatch(fetchAnswers(postId));
-    }, [dispatch]);
+    }, [dispatch, answers.status, postId]);
 
     const [openModal, setOpenModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
@@ -98,7 +98,7 @@ export default function Answer() {
             scrollTo(Number(hash)); 
             refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
         }
-    }, []);
+    }, [refs, hash, scrollTo]);
 
     const handleModalOpen = (answer) => {
         setSelectedAnswerContent(answer.answerContent);

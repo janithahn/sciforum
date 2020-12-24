@@ -44,7 +44,7 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
     
     React.useEffect(() => {
         if(answerVotes && answerVotes.votes.length !== 0) handleCurrentUserVote({type: answerVotes.votes[0].voteType, answer: answerVotes.votes[0].answer});
-    }, [answerVotes.votes]);
+    }, [answerVotes]);
 
     const handleCurrentUserVote = (vote) => {
         setCurrentUserVote(vote);
@@ -67,7 +67,7 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
                 }
             }
         }
-    }, [currentUserVote, isAuthenticated, answerId]);
+    }, [currentUserVote, isAuthenticated, answerId, currentUserId]);
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -81,18 +81,18 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
         if(isAuthenticated) {
             if(dislikeColorChange === "primary") setDislikeColorChange("secondary");
 
-            if(likedUser == currentUserId) {
+            if(likedUser.toString() === currentUserId.toString()) {
                 setLikeColorChange("secondary");
                 setLikedUser('');
                 setLikeCount(likeCount - 1);
                 dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
             }
-            if(likedUser != currentUserId) {
+            if(likedUser.toString() !== currentUserId.toString()) {
                 setLikeColorChange("primary");
                 setLikedUser(currentUserId);
                 setLikeCount(likeCount + 1);
                 dispatch(postAnswerVote(answerId, 'LIKE', currentUserId));
-                if(dislikedUser == currentUserId) {
+                if(dislikedUser.toString() === currentUserId.toString()) {
                     setDislikedUser('');
                     setDislikeCount(dislikeCount - 1);
                     dispatch(updateAnswerVote(answerId, 'LIKE', currentUserId));
@@ -107,18 +107,18 @@ import { postAnswerVote, updateAnswerVote, fetchAnswerVotesByLoggedInUser } from
         if(isAuthenticated) {
             if(likeColorChange === "primary") setLikeColorChange("secondary");
             
-            if(dislikedUser == currentUserId) {
+            if(dislikedUser.toString() === currentUserId.toString()) {
                 setDislikeColorChange("secondary");
                 setDislikedUser('');
                 setDislikeCount(dislikeCount - 1);
                 dispatch(updateAnswerVote(answerId, 'EMPTY', currentUserId));
             }
-            if(dislikedUser != currentUserId) {
+            if(dislikedUser.toString() !== currentUserId.toString()) {
                 setDislikeColorChange("primary");
                 setDislikedUser(currentUserId);
                 setDislikeCount(dislikeCount + 1);
                 dispatch(postAnswerVote(answerId, 'DISLIKE', currentUserId));
-                if(likedUser == currentUserId) {
+                if(likedUser.toString() === currentUserId.toString()) {
                     setLikedUser('');
                     setLikeCount(likeCount - 1);
                     dispatch(updateAnswerVote(answerId, 'DISLIKE', currentUserId));

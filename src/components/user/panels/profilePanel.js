@@ -35,19 +35,19 @@ export default function ProfilePanel() {
     //fetching user credentials
     React.useEffect(() => {
         if(userEmployment.status === 'idle') dispatch(fetchUserEmployment(username));
-    }, [dispatch]);
+    }, [dispatch, userEmployment.status, username]);
 
     React.useEffect(() => {
         if(userEducation.status === 'idle') dispatch(fetchUserEducation(username));
-    }, [dispatch]);
+    }, [dispatch, userEducation.status, username]);
 
     React.useEffect(() => {
         if(userSkills.status === 'idle') dispatch(fetchUserSkills(username));
-    }, [dispatch]);
+    }, [dispatch, userSkills.status, username]);
 
     React.useEffect(() => {
         if(userLanguages.status === 'idle') dispatch(fetchUserLanguages(username));
-    }, [dispatch]);
+    }, [dispatch, userLanguages.status, username]);
 
     //relevant credential states
     const [contact, setContact] = React.useState(user.user ? user.user.contact: null);

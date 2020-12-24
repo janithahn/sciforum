@@ -224,7 +224,7 @@ export default function EnhancedTable({ rows, currentUser }) {
 
   React.useEffect(() => {
     handleUnreadState();
-  }, [selected, rowsData]);
+  }, [selected, rowsData, handleUnreadState]);
 
   // handle unread state for marking them as read
   const handleUnreadState = () => {
@@ -316,6 +316,7 @@ export default function EnhancedTable({ rows, currentUser }) {
             state: false,
         }
         newRowsData.push(newItem);
+        return;
     });
     setRowsData(newRowsData);
     handleClose();
@@ -343,6 +344,7 @@ export default function EnhancedTable({ rows, currentUser }) {
     rowsData.map(item => {
         notificationsCount += 1;
         dispatch(deleteNotifications(item.id));
+        return;
     });
     setRowsData([]);
     setSelected([]);

@@ -45,7 +45,7 @@ function Main(props) {
 
     useEffect(() => {
         setShowProgressBar(isLoading);
-    });
+    }, [isLoading]);
 
     useEffect(() => {
         //dispatch(fetchPosts());
@@ -101,7 +101,7 @@ function Main(props) {
 
         if(post.post) {
             return (<Route {...rest} render={() => (
-                auth.isAuthenticated && post.post.owner == auth.currentUser
+                auth.isAuthenticated && post.post.owner && post.post.owner.toString() === auth.currentUser.toString()
                 ? <Component postId={post.post.id}/>
                 : <Redirect to='/' />
             )} />)

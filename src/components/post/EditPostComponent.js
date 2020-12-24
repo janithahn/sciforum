@@ -32,28 +32,28 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
 
   console.log({title, body});
 
-  React.useEffect(() => {
-    if(post.status === 'idle') {
-        dispatch(fetchPostDetail(postId));
-    }
-  }, [post, dispatch]);
-
-  React.useEffect(() => {
-    if(post.post) {
-      handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body);
-    }
-  }, [post]);
-
-  React.useEffect(() => {
-    fetchTags(tagList, setTagList);
-  }, []);
-
   const handlePostInfo = (postId, postOwner, title, body) => {
     setTitle(title);
     setQuestion(body);
     id = postId;
     owner = postOwner;
   }
+
+  React.useEffect(() => {
+    if(post.status === 'idle') {
+        dispatch(fetchPostDetail(postId));
+    }
+  }, [post.status, dispatch, postId]);
+
+  React.useEffect(() => {
+    if(post.post) {
+      handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body);
+    }
+  }, [post, handlePostInfo]);
+
+  React.useEffect(() => {
+    fetchTags(tagList, setTagList);
+  }, []);
 
   function handleSubmit(event) {
     dispatch(editPost({

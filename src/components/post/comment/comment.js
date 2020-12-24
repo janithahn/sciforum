@@ -263,7 +263,7 @@ export function PostCommentRender() {
         setSubmitVal({});
         setEdit(false);
         setEditCommentId(undefined);
-    }, [dispatch]);
+    }, [dispatch, postId]);
 
     const CommentsList = comments.map(item => {
 

@@ -42,7 +42,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
-    }, [dispatch]);
+    }, [dispatch, postId]);
 
     return(
         <React.Fragment>
@@ -99,7 +99,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                                                         undefined}
                                                     </Grid>
                                                     <Grid item>
-                                                        {isAuthenticated && answer.owner == currentUserId ?
+                                                        {isAuthenticated && answer.owner && answer.owner.toString() === currentUserId.toString() ?
                                                         <Grid item>
                                                             <Button color="secondary" className={classes.editButton} onClick={() => handleDeleteModalOpen(answer)}>
                                                                 <Typography className={classes.iconWrap} variant="body2">

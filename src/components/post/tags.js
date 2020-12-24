@@ -57,9 +57,9 @@ export function fetchTags(tagList, setTagList) {
     axios.get(tagUrl)
     .then(tags => {
       const tempTags = [];
-      tags.data.map(item => {
-        tempTags.push(item.name);
-      });
+      tags.data.map(item => 
+        tempTags.push(item.name)
+      );
       setTagList(tempTags);
     })
     .catch(error => {

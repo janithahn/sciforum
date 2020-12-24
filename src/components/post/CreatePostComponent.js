@@ -58,7 +58,7 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
 
   React.useEffect(() => {
     fetchTags(tagList, setTagList);
-  }, []);
+  }, [tagList]);
 
   return (
     <div className={classes.root}>

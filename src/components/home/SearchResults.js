@@ -63,9 +63,9 @@ export default function Search() {
             console.log(posts);
             if(posts.data) {
                 let tempData = postData;
-                posts.data.results.map((post) => {
-                    tempData.push(post);
-                });
+                posts.data.results.map((post) => 
+                    tempData.push(post)
+                );
 
                 if(posts.data.next) {
                     setPostData(tempData);

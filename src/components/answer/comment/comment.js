@@ -126,7 +126,7 @@ export function AnswerCommentRender({ answerId }) {
 
     React.useEffect(() => {
         if(answerComments.status === 'idle') dispatch(fetchAnswerComments(postId));
-    }, [dispatch, answerComments]);
+    }, [dispatch, answerComments, postId]);
 
     const handleEditComment = (comment) => {
         setEdit(true);
@@ -141,7 +141,7 @@ export function AnswerCommentRender({ answerId }) {
         setSubmitVal({});
         setEdit(false);
         setEditCommentId(undefined);
-    }, [dispatch]);
+    }, [dispatch, postId]);
 
     const CommentsList = answerComments.answerComments.map(item => item.answer === answerId ?
 

@@ -65,7 +65,7 @@ import { postPostCommentVote, updatePostCommentVote, fetchPostCommentVotesByLogg
                 }
             }
         }
-    }, [currentUserVote, isAuthenticated, commentId]);
+    }, [currentUserVote, isAuthenticated, commentId, auth]);
 
     const handleModalOpen = () => {
         setOpenModal(true);
@@ -79,18 +79,18 @@ import { postPostCommentVote, updatePostCommentVote, fetchPostCommentVotesByLogg
         if(isAuthenticated) {
             if(dislikeColorChange === "primary") setDislikeColorChange("secondary");
 
-            if(likedUser == auth.currentUserId) {
+            if(likedUser.toString() === auth.currentUserId.toString()) {
                 setLikeColorChange("secondary");
                 setLikedUser('');
                 setLikeCount(likeCount - 1);
                 dispatch(updatePostCommentVote(commentId, 'EMPTY', auth.currentUserId));
             }
-            if(likedUser != auth.currentUserId) {
+            if(likedUser.toString() !== auth.currentUserId.toString()) {
                 setLikeColorChange("primary");
                 setLikedUser(auth.currentUserId);
                 setLikeCount(likeCount + 1);
                 dispatch(postPostCommentVote(commentId, 'LIKE', auth.currentUserId));
-                if(dislikedUser == auth.currentUserId) {
+                if(dislikedUser.toString() === auth.currentUserId.toString()) {
                     setDislikedUser('');
                     setDislikeCount(dislikeCount - 1);
                     dispatch(updatePostCommentVote(commentId, 'LIKE', auth.currentUserId));
@@ -105,18 +105,18 @@ import { postPostCommentVote, updatePostCommentVote, fetchPostCommentVotesByLogg
         if(isAuthenticated) {
             if(likeColorChange === "primary") setLikeColorChange("secondary");
             
-            if(dislikedUser == auth.currentUserId) {
+            if(dislikedUser.toString() === auth.currentUserId.toString()) {
                 setDislikeColorChange("secondary");
                 setDislikedUser('');
                 setDislikeCount(dislikeCount - 1);
                 dispatch(updatePostCommentVote(commentId, 'EMPTY', auth.currentUserId));
             }
-            if(dislikedUser != auth.currentUserId) {
+            if(dislikedUser.toString() !== auth.currentUserId.toString()) {
                 setDislikeColorChange("primary");
                 setDislikedUser(auth.currentUserId);
                 setDislikeCount(dislikeCount + 1);
                 dispatch(postPostCommentVote(commentId, 'DISLIKE', auth.currentUserId));
-                if(likedUser == auth.currentUserId) {
+                if(likedUser.toString() === auth.currentUserId.toString()) {
                     setLikedUser('');
                     setLikeCount(likeCount - 1);
                     dispatch(updatePostCommentVote(commentId, 'DISLIKE', auth.currentUserId));

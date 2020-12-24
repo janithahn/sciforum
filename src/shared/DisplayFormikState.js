@@ -2,7 +2,7 @@ import React from 'react';
 
 export const DisplayFormikState = props => (
     <div style={{ margin: '1rem 0' }}>
-        <h3 style={{ fontFamily: 'monospace' }} />
+        <h3 style={{ fontFamily: 'monospace' }} >FORMIK STATE</h3>
         <pre
         style={{
             background: '#f6f8fa',
