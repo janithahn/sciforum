@@ -34,13 +34,12 @@ export default function UpdateProfileImage(props) {
     const handleImage = (event) => {
         setImage(event.target.files[0]);
         console.log(event.target.files[0]);
-        console.log(image);
+        //console.log(image);
     }
 
     const handleImageUpload = () => {
         const formData = new FormData();
         formData.append('profileImg', image, image.name);
-        console.log(auth);
         dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
         //dispatch(fetchUser(null, usernameFromTheUrl));
         handleModalClose();
