@@ -41,10 +41,11 @@ const converter = new Showdown.Converter({
 });
 
 export default function MDEditor(props) {
-  const [value, setValue] = React.useState(props.data);
+  //const [value, setValue] = React.useState(props.data);
   const [selectedTab, setSelectedTab] = React.useState("write");
 
-  const save = async function* (data) {
+  /*const save = async function* (data) {
+    console.log(data);
     // Promise that waits for "time" milliseconds
     const wait = function (time) {
       return new Promise((a, r) => {
@@ -64,7 +65,17 @@ export default function MDEditor(props) {
 
     // returns true meaning that the save was successful
     return true;
-  };
+  };*/
+
+  const saveImages = async function* (data) {
+    console.log(data);
+    const blob = new Blob([data]);
+    const url = URL.createObjectURL(blob);
+
+    yield url;
+
+    return true;
+  }
 
   return (
     <div className="container">
@@ -84,7 +95,7 @@ export default function MDEditor(props) {
             }
           }}
           paste={{
-            saveImage: save
+            saveImage: saveImages
           }}
         />
       </ThemeProvider>
