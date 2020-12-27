@@ -147,7 +147,7 @@ const Header = (props) => {
                                 Login
                             </Typography>
                         </Button>: 
-                        <DropDown username={auth.currentUser} profileImage={currentUserProfileImg} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
+                        <DropDown username={auth.currentUser} profileImage={currentUserProfileImg ? currentUserProfileImg: auth.currentUserProfileImg} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
                     }
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>

@@ -351,6 +351,7 @@ export const fetchUser = (token, currentUser) => (dispatch) => {
     .then(res => {
         console.log(res.data);
         dispatch(addUser(res.data));
+        localStorage.setItem("currentUserProfileImg", res.data.profile.profileImg);
     })
     .catch(error => {
         dispatch(userFailed(error));

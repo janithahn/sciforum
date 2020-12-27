@@ -27,6 +27,8 @@ export default function UpdateProfileImage(props) {
     const [pictures, setPictures] = useState([]);
     const [image, setImage] = useState(null);
 
+    console.log(pictures);
+
     const onDrop = picture => {
         setPictures([...pictures, picture]);
     };

@@ -67,8 +67,6 @@ const Profile = ({ className, ...rest }) => {
   const [aboutMe, setAboutMe] = React.useState( user.user && user.user.profile ? user.user.profile.aboutMe: null);
   const [profileImage, setProfileImage] = React.useState(user.user && user.user.profile ? user.user.profile.profileImg: null);
 
-  console.log(user);
-
   React.useEffect(() => {
     if(user.status === 'idle') {
       dispatch(fetchUser(auth.token, usernameFromTheUrl));
