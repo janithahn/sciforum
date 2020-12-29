@@ -6,7 +6,9 @@ import axios from 'axios';
 
 const tagUrl = 'http://localhost:8000/tag_api/tags/';
 
-export default function Tags({classes, value, setValue, tagList, setTagList}) {
+export default function Tags({classes, value, setValue/*, tagList, setTagList*/}) {
+
+  const [tagList, setTagList] = React.useState([]);
 
   const handleKeyDown = (event) => {
     console.log(value);
@@ -32,6 +34,10 @@ export default function Tags({classes, value, setValue, tagList, setTagList}) {
     ))
   };
 
+  const handleFocus = () => {
+    fetchTags(setTagList);
+  };
+
   return(
     <div className={classes.tags}>
       <Autocomplete
@@ -48,21 +54,23 @@ export default function Tags({classes, value, setValue, tagList, setTagList}) {
           return <TextField {...params} variant="outlined" /*label="Tags"*/ placeholder="Tags"/>
         }}
         size="small"
+        onFocus={() => handleFocus()}
       />
     </div>
   );
 }
 
-export function fetchTags(tagList, setTagList) {
-    axios.get(tagUrl)
-    .then(tags => {
-      const tempTags = [];
-      tags.data.map(item => 
-        tempTags.push(item.name)
-      );
-      setTagList(tempTags);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+export function fetchTags(setTagList) {
+
+  axios.get(tagUrl)
+  .then(tags => {
+    const tempTags = [];
+    tags.data.map(item => 
+      tempTags.push(item.name)
+    );
+    setTagList(tempTags);
+  })
+  .catch(error => {
+    console.log(error);
+  });
 }

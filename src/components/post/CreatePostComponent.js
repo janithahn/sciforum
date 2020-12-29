@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { theme, useStyles } from './styles/postsStyles';
 //import Editor from './EditorComponent';
 import MDEditor from './MDE';
-import Tags, {fetchTags} from './tags';
+import Tags from './tags';
 import { useSelector, useDispatch } from 'react-redux';
 import { postPost } from '../../redux/ActionCreators';
 import { useFormik } from 'formik';
@@ -18,7 +18,7 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
   const [title, setTitle] = React.useState('');
   const [body, setQuestion] = React.useState('');
 
-  const [tagList, setTagList] = React.useState([]);
+  //const [tagList, setTagList] = React.useState([]);
   const [tagValue, setTagValue] = React.useState([]);
   
   const [answerSubmitError, setAnswerSubmitError] = React.useState('');
@@ -56,9 +56,9 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
     history.goBack();
   }
 
-  React.useEffect(() => {
-    fetchTags(tagList, setTagList);
-  }, [tagList]);
+  /*React.useEffect(() => {
+    fetchTags(setTagList);
+  }, []);*/
 
   return (
     <div className={classes.root}>
@@ -100,8 +100,8 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
                   classes={classes} 
                   value={tagValue} 
                   setValue={setTagValue} 
-                  tagList={tagList} 
-                  setTagList={setTagList}
+                  //tagList={tagList} 
+                  //setTagList={setTagList}
                 />
               </Grid>
               <Grid item lg={8} sm xs={12}>

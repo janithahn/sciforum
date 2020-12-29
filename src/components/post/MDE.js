@@ -6,6 +6,8 @@ import "react-mde/lib/styles/css/react-mde-all.css";
 import "draft-js/dist/Draft.css";
 import { ThemeProvider } from '@material-ui/core';
 import { theme } from './styles/postsStyles';
+import fs from 'fs';
+//var Future = require('fibers/future');
 
 function loadSuggestions(text) {
   return new Promise((accept, reject) => {
@@ -67,12 +69,36 @@ export default function MDEditor(props) {
     return true;
   };*/
 
+  //let fut = new future();
+
   const saveImages = async function* (data) {
     console.log(data);
     const blob = new Blob([data]);
     const url = URL.createObjectURL(blob);
 
     yield url;
+
+    const path = '../../../public/image.png'
+
+    /*fs.appendFileSync(path, Buffer.from(data), function (err) {
+      if (err) {
+        fut.throw(err);
+      } else {
+        fut.return(data.length);
+      }
+    });*/
+
+    fs.appendFileSync(path, Buffer.from(data), function(error) {
+      if(error) console.log(error); else console.log("File created!");
+    });
+
+    // Buffer
+    fs.writeFileSync('../../../public/image.png', Buffer.from(data), callback);
+
+    var callback = (err) => {
+      if (err) throw err;
+      console.log('It\'s saved!');
+    }
 
     return true;
   }
