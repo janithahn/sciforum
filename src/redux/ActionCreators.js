@@ -130,6 +130,42 @@ export const postReset = () => ({
     type: ActionTypes.POST_RESET,
 });
 
+//POST_IMAGES
+export const UploadPostImages = (imgData)  => async (dispatch) => {
+    const url = 'https://api.imgur.com/3/image';
+    const clientId = 'a178005f2b29b10';
+
+    dispatch(postImagesLoading());
+
+    return axios.post(url, imgData, {
+        "headers": {Authorization: `Client-ID ${clientId}`}
+    })
+    .then(res => dispatch(addPostImages(res.data.data)))
+    .catch(error => {
+        console.log(error);
+        dispatch(postImagesFailed(error));
+    });
+
+}
+
+export const postImagesLoading = () => ({
+    type: ActionTypes.POST_IMAGES_LOADING
+});
+
+export const postImagesFailed = (errmess) => ({
+    type: ActionTypes.POST_IMAGES_FAILED,
+    payload: errmess
+});
+
+export const addPostImages = (images) => ({
+    type: ActionTypes.ADD_POST_IMAGES,
+    payload: images
+});
+
+export const postImagesReset = () => ({
+    type: ActionTypes.POST_IMAGES_RESET,
+});
+
 //MY POSTS
 export const fetchMyPosts = (ownerId, page) => async (dispatch) => {
     dispatch(myPostsLoading());

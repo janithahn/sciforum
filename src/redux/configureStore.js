@@ -2,6 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { Posts } from './actions/posts';
+import { PostImages } from './actions/postImages';
 import { Auth } from './actions/auth';
 import { User } from './actions/user';
 import { UserEmployment } from './actions/credentials/employment';
@@ -34,6 +35,7 @@ export const ConfigureStore = () => {
         combineReducers({
             router: routerReducer,
             Posts,
+            PostImages,
             Auth,
             User,
             UserEmployment,
