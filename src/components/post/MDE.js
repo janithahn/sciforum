@@ -4,7 +4,7 @@ import * as Showdown from "showdown";
 //import "./styles/MDEStyles.css";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import "draft-js/dist/Draft.css";
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, FormHelperText } from '@material-ui/core';
 import { theme } from './styles/postsStyles';
 import axios from 'axios';
 
@@ -68,14 +68,24 @@ export default function MDEditor(props) {
     return true;
   };*/
 
+  const [imgError, setImgError] = React.useState('');
+
   const saveImages = async function* (data) {
 
     let yieldUrl = '';
+    const maxImgSize = 262144;
+
+    setImgError('');
 
     // Call to the imgur api
     const handleImgur = async (imgData) => {
       const url = 'https://api.imgur.com/3/image';
       const clientId = 'a178005f2b29b10';
+
+      if(imgData.size > maxImgSize) {
+        setImgError('The size of the image that you are trying to upload is greater than 2Mb');
+        return false;
+      }
   
       await axios.post(url, imgData,
       {
@@ -120,6 +130,7 @@ export default function MDEditor(props) {
             saveImage: saveImages
           }}
         />
+        <FormHelperText error>{imgError}</FormHelperText>
       </ThemeProvider>
     </div>
   );
