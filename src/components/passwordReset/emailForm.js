@@ -8,12 +8,13 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { ThemeProvider, FormHelperText } from '@material-ui/core';
+import { ThemeProvider, FormHelperText, TextField } from '@material-ui/core';
 import { theme, useStylesSignUp as useStyles, ValidationTextField } from './styles/styles';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
-import { useSelector } from 'react-redux';
+import { sendPasswordResetLink } from './actionsCreators';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Copyright() {
     return (
@@ -28,9 +29,13 @@ function Copyright() {
     );
 }
 
-export default function EmailForm({ sendLink, setResponseMessage }) {
+export default function EmailForm() {
     const classes = useStyles();
+
+    const dispatch = useDispatch();
+    const sendResetPassword = useSelector(state => state.SendResetPassword);
     const auth = useSelector(state => state.Auth);
+
     const [credentialError, setCredentialError] = React.useState('');
   
     const signupSchema = Yup.object().shape({
@@ -38,6 +43,14 @@ export default function EmailForm({ sendLink, setResponseMessage }) {
         .email()
         .required('Required'),
     });
+
+    const handleCredentialError = (message) => {
+      setCredentialError(message);
+    }
+
+    React.useEffect(() => {
+      if(sendResetPassword.status === 'failed') handleCredentialError(sendResetPassword.errMess);
+    }, [sendResetPassword]);
   
     return (
       <Container component="main" maxWidth="xs" className={classes.content}>
@@ -53,17 +66,19 @@ export default function EmailForm({ sendLink, setResponseMessage }) {
           <ThemeProvider theme={theme}>
           
           <Formik
-            initialValues={{email: ''}}
+            initialValues={{email: auth.isAuthenticated ? auth.currentUserEmail: ''}}
             onSubmit={(values) => {
-              sendLink(values, setCredentialError, setResponseMessage);
+              setCredentialError('');
+              dispatch(sendPasswordResetLink(values));
             }}
             validationSchema={signupSchema}
           >
             {(props) => {
-              const {
-                values, touched, errors, handleChange,
-                handleBlur, handleSubmit,
-              } = props;
+
+              const { values, touched, errors, handleChange, handleSubmit } = props;
+
+              console.log(values);
+
               return(
                 <form className={classes.form} onSubmit={handleSubmit}>
                   <Grid container spacing={2}>
@@ -77,7 +92,7 @@ export default function EmailForm({ sendLink, setResponseMessage }) {
                         autoComplete="email"
                         aria-describedby="email-errors"
                         error={errors.email && touched.email}
-                        values={values.email}
+                        value={values.email}
                         helperText={(errors.email && touched.email) && errors.email}
                         onChange={handleChange}
                         size="small"
@@ -91,6 +106,7 @@ export default function EmailForm({ sendLink, setResponseMessage }) {
                     color="primary"
                     className={classes.submit}
                     size="small"
+                    disabled={sendResetPassword.status === 'loading'}
                   >
                     Send
                   </Button>

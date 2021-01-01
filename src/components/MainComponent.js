@@ -25,6 +25,7 @@ import Account from './user/index';
 import Notifications from './notifications/index';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
+import ResetConfirm from './passwordReset/resetConfirm';
 
 function Main(props) {
     const post = useSelector(state => state.Post);
@@ -36,7 +37,7 @@ function Main(props) {
         state.Auth.status, state.Answers.status, state.Notifications.status, 
         state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, 
         state.answerVotes.status, state.postVotes.status, state.PostComments.status,
-        state.AnswerComments.status
+        state.AnswerComments.status, state.SendResetPassword.status
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -165,6 +166,7 @@ function Main(props) {
                     <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
                     <Route exact path="/password/reset" component={() => <PasswordReset/>}/>
+                    <Route exact path="/users/profile/password_reset/confirm/:token" component={() => <ResetConfirm/>}/>
                     <Route component={PageNotFound}/>
                     <Redirect to="/"/>
                 </Switch>
