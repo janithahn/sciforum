@@ -77,8 +77,6 @@ export default function EmailForm() {
 
               const { values, touched, errors, handleChange, handleSubmit } = props;
 
-              console.log(values);
-
               return(
                 <form className={classes.form} onSubmit={handleSubmit}>
                   <Grid container spacing={2}>

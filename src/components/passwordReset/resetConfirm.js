@@ -110,29 +110,29 @@ export default function ResetConfirm() {
                     <FormControl fullWidth variant="outlined">
                         <InputLabel error={errors.password1 && touched.password1} htmlFor="outlined-adornment-password">New Password</InputLabel>
                         <ValidationOutlinedInput
-                        id="password1"
-                        name="password1"
-                        label="New Password"
-                        fullWidth
-                        type={showPassword ? 'text' : 'password'}
-                        value={values.password1}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        onFocus={() => setPasswordFocus(true)}
-                        error={errors.password1 && touched.password1}
-                        endAdornment={
-                            <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                            >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                            </InputAdornment>
-                        }
-                        labelWidth={70}
+                            id="password1"
+                            name="password1"
+                            label="New Password"
+                            fullWidth
+                            type={showPassword ? 'text' : 'password'}
+                            value={values.password1}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            onFocus={() => setPasswordFocus(true)}
+                            error={errors.password1 && touched.password1}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                                </InputAdornment>
+                            }
+                            labelWidth={70}
                         />
                         <FormHelperText error={true} variant="outlined">{(errors.password1 && touched.password1) && errors.password1}</FormHelperText>
                     </FormControl>

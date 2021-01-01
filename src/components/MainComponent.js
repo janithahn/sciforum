@@ -23,6 +23,7 @@ import SearchByTag from './home/SearchByTagResults';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
 import Notifications from './notifications/index';
+import UserSettings from './settings/settings';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
 import ResetConfirm from './passwordReset/resetConfirm';
@@ -128,6 +129,14 @@ function Main(props) {
         )} />
     );
 
+    const PrivateRouteSettings = ({ component: Component, ...rest}) => (
+        <Route {...rest} render={() => (
+            auth.isAuthenticated
+            ? <Component/>
+            : <Redirect to="/signin"/>
+        )} />
+    );
+
     const PrivateRouteMyPosts = ({ component: Component, ...rest}) => (
         <Route {...rest} render={() => (
             auth.isAuthenticated
@@ -164,6 +173,7 @@ function Main(props) {
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen} postPost={(post) => dispatch(postPost(post))}/>}/>
                     <Route path="/profile/:username" component={AccountView}/>
                     <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
+                    <PrivateRouteSettings path="/settings" component={() => <UserSettings/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
                     <Route exact path="/password/reset" component={() => <PasswordReset/>}/>
                     <Route exact path="/users/profile/password_reset/confirm/:token" component={() => <ResetConfirm/>}/>

@@ -5,6 +5,7 @@ import { Posts } from './actions/posts';
 import { PostImages } from './actions/postImages';
 import { Auth } from './actions/auth';
 import { User } from './actions/user';
+import { DeleteUser } from './actions/deleteUser';
 import { UserEmployment } from './actions/credentials/employment';
 import { UserEducation } from './actions/credentials/education';
 import { UserLanguages } from './actions/credentials/languages';
@@ -39,6 +40,7 @@ export const ConfigureStore = () => {
             PostImages,
             Auth,
             User,
+            DeleteUser,
             UserEmployment,
             Post,
             Answers,

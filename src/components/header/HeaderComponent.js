@@ -62,6 +62,9 @@ const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, 
                 <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/notifications`}>
                     <MenuItem>Notifications</MenuItem>
                 </RouterLink>
+                <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/settings`}>
+                    <MenuItem>Settings</MenuItem>
+                </RouterLink>
                 <MenuItem onClick={handleLogOut}>Logout</MenuItem>
             </Menu>
         </div>
