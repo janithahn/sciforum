@@ -164,10 +164,10 @@ export default function SignIn(props) {
               />
               <FormHelperText error={true} variant="outlined">{(formik.errors.password && formik.touched.password) && formik.errors.password}</FormHelperText>
             </FormControl>
-            <FormControlLabel
+            {/*<FormControlLabel
               control={<Checkbox value="remember" color="primary" onChange={(event) => formik.setFieldValue('rememberMe', event.target.checked)}/>}
               label="Remember me"
-            />
+            />*/}
             <Button
               type="submit"
               fullWidth
@@ -189,8 +189,8 @@ export default function SignIn(props) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
+                <Link href="/password/reset" variant="body2">
+                  {"Forgot password?"}
                 </Link>
               </Grid>
               <Grid item>

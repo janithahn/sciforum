@@ -9,6 +9,7 @@ import { postPost, logout, getNewToken } from '../redux/ActionCreators';
 import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
 import SignIn from './sign/SignInComponent';
+import PasswordReset from './passwordReset/passwordReset';
 import MainDrawer from './drawer/DrawerComponent';
 //import PostDetail from './post/PostDetailComponent';
 import PostView from './post/index';
@@ -163,6 +164,7 @@ function Main(props) {
                     <Route path="/profile/:username" component={AccountView}/>
                     <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
+                    <Route exact path="/password/reset" component={() => <PasswordReset/>}/>
                     <Route component={PageNotFound}/>
                     <Redirect to="/"/>
                 </Switch>
