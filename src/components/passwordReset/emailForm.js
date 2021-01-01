@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { ThemeProvider, FormHelperText, TextField } from '@material-ui/core';
+import { ThemeProvider, FormHelperText } from '@material-ui/core';
 import { theme, useStylesSignUp as useStyles, ValidationTextField } from './styles/styles';
 import { Formik } from 'formik';
 import * as Yup from 'yup';

@@ -10,7 +10,7 @@ import { theme, useStyles } from './styles/postsStyles';
 import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import MDEditor from './MDE';
-import Tags, {fetchTags} from './tags';
+import Tags from './tags';
 
 export default function EditPost({setSnackMessage, setSnackOpen}) {
   const classes = useStyles();
@@ -27,7 +27,6 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
   //let id = post.post ? post.post.id: null;
   //let owner = post.post ? post.post.owner: null;
 
-  const [tagList, setTagList] = React.useState([]);
   const [tagValue, setTagValue] = React.useState(post.post ? post.post.tags: []);
 
   const { postId } = useParams();
@@ -52,10 +51,6 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
       handlePostInfo(post.post.id, post.post.owner, post.post.title, post.post.body);
     }
   }, [post, handlePostInfo]);
-
-  React.useEffect(() => {
-    fetchTags(tagList, setTagList);
-  }, [tagList]);
 
   function handleSubmit(event) {
     dispatch(editPost({
@@ -114,9 +109,7 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
                     <Tags 
                       classes={classes} 
                       value={tagValue} 
-                      setValue={setTagValue} 
-                      tagList={tagList} 
-                      setTagList={setTagList}
+                      setValue={setTagValue}
                     />
                   </Grid>
                   <Grid item lg={8} sm xs={12}>

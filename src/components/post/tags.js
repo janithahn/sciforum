@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const tagUrl = 'http://localhost:8000/tag_api/tags/';
 
-export default function Tags({classes, value, setValue/*, tagList, setTagList*/}) {
+export default function Tags({classes, value, setValue}) {
 
   const [tagList, setTagList] = React.useState([]);
 
