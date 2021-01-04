@@ -70,7 +70,7 @@ export default function Home() {
         });
     }
 
-    const PostsList = postData.map((post, key) => <QuestionViewCard key={key} item={post}/>);
+    const PostsList = postData.map((post, key) => <QuestionViewCard key={post.id} item={post}/>);
 
 
     if(posts.status === 'loading') {

@@ -2,6 +2,7 @@ import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
 import { isJWTExpired } from '../shared/AdditionalFunctions';
+import { db } from '../firebase/config';
 
 const headerWithToken = {
     "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
@@ -243,6 +244,25 @@ export const loginError = (loginErrMessage) => {
 export const loginUser = (creds) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
+    /*await firebaseAuth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+
+        return firebaseAuth().signInWithEmailAndPassword(creds.username, creds.password)
+        .then((res) => {
+            console.log(res);
+            localStorage.setItem("chatUserAuth", JSON.stringify(firebaseAuth().currentUser));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+    });*/
+
     return await axios.post(baseUrl + '/jwtlogin/', {
         username: creds.username,
         password: creds.password,
@@ -260,6 +280,7 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
+        localStorage.setItem('currentUserRoomKeys', "[]");
         window.location.reload();
         dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));
@@ -281,8 +302,42 @@ export const logoutSuccess = () => {
     }
 }
 
+const snapshotToArray = (snapshot) => {
+    const returnArr = [];
+
+    snapshot.forEach((childSnapshot) => {
+        const item = childSnapshot.val();
+        item.key = childSnapshot.key;
+        returnArr.push(item);
+    });
+
+    return returnArr;
+}
+
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
+    const currentUserRoomKeys = JSON.parse(localStorage.getItem('currentUserRoomKeys'));
+    if(currentUserRoomKeys) {
+        for(let roomKey of currentUserRoomKeys) {
+            db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey.toString()).once('value', (resp) => {
+                let roomuser = [];
+                roomuser = snapshotToArray(resp);
+
+                for(let user of roomuser) {
+                    if(user !== undefined){
+                        const userRef = db.ref('roomusers/').child(user.key);
+                        userRef.update({status: "offline"})
+                        .then(() => {
+                            console.log("Status updated successfully!");
+                        })
+                        .catch(() => {
+                            console.log("Status update failed!");
+                        });
+                    }
+                }
+            });
+        }
+    }
     localStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentUserId');
@@ -295,11 +350,30 @@ export const logout = () => (dispatch) => {
 }
 
 //SIGNUP
-export const signupUser = (creds) => (dispatch) => {
+export const signupUser = (creds) => async (dispatch) => {
     //console.log(creds);
     dispatch(requestLogin(creds));
 
-    axios.post(baseUrl + '/jwtregister/', {
+    /*await firebaseAuth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+
+        return firebaseAuth().createUserWithEmailAndPassword(creds.email, creds.password1)
+        .then((res) => {
+            console.log(res);
+            localStorage.setItem("chatUserAuth", JSON.stringify(firebaseAuth().currentUser));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    })
+    .catch((error) => {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+    });*/
+
+    await axios.post(baseUrl + '/jwtregister/', {
         username: creds.username,
         password1: creds.password1,
         password2: creds.password2,
@@ -315,6 +389,7 @@ export const signupUser = (creds) => (dispatch) => {
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
+        localStorage.setItem('currentUserRoomKeys', "[]");
         window.location.reload();
         dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
         //dispatch(fetchUser(token, currentUser));
@@ -363,6 +438,7 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
+        localStorage.setItem('currentUserRoomKeys', "[]");
         window.location.reload();
         dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));

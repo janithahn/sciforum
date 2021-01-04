@@ -116,8 +116,6 @@ export default function PostDetail() {
         setSubmitVal({});
     }, [dispatch, postId]);
 
-    console.log(owner, auth.currentUser);
-
     if(post.status === 'loading') {
         return(<div><Article/></div>);
     }else if(post.errMess) {

@@ -13,6 +13,9 @@ import { UserSkills } from './actions/credentials/skills';
 import { UserContact } from './actions/credentials/contact';
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
+import { ChatRooms } from './actions/chat/chatRooms';
+import { CreateChatRoom } from './actions/chat/createChatRoom';
+import { ChatMessages } from './actions/chat/chatMessages';
 import { ResetPassword, SendResetPassword } from './actions/resetPassword';
 import { answerVotes, postVotes } from './actions/votes';
 import { answerCommentVotes, postCommentVotes } from './actions/commentVotes';
@@ -58,6 +61,9 @@ export const ConfigureStore = () => {
             AnswerComments,
             ResetPassword,
             SendResetPassword,
+            ChatRooms,
+            CreateChatRoom,
+            ChatMessages,
         }),
         composeEnhancers(applyMiddleware(thunk, logger, routerMiddleware))
     );

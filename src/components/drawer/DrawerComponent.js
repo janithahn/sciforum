@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconButton, Drawer, Hidden, List, Divider, ListItemIcon, ListItemText, MenuItem, Link, useTheme } from '@material-ui/core';
-import { Inbox, ChevronLeft, Home } from '@material-ui/icons';
+import { Inbox, ChevronLeft, Home, Chat } from '@material-ui/icons';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchPosts } from '../../redux/ActionCreators';
@@ -24,7 +24,7 @@ function RenderDrawer({ handleDrawerClose, classes, open, variant, handleSelecte
             <Divider />
             <div className={classes.drawerContainer}>
                 <List>
-                    {[{text: 'Home', url: '/', icon: <Home/>}, {text: 'My Posts', url: '/myposts', icon: <Inbox/>}].map((item, index) => (
+                    {[{text: 'Home', url: '/', icon: <Home/>}, {text: 'My Posts', url: '/myposts', icon: <Inbox/>}, {text: 'Chat Rooms', url: '/chatrooms', icon: <Chat/>}].map((item, index) => (
                         <Link to={item.url} component={NavLink} underline='none' color='inherit' key={index}>
                             <MenuItem button key={index} onClick={() => handleSelectedItem(item.url)} selected={selected === item.url}>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -56,6 +56,7 @@ export default function MainDrawer(props) {
 
     React.useEffect(() => {
         setLocation(location.pathname);
+        if(location.pathname.includes('/chatroom')) setLocation('/chatrooms');
     }, [location.pathname]);
 
     return(

@@ -1,11 +1,10 @@
 import React from 'react';
 import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded';
-import { Button, Typography, Divider, Grid, Hidden } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Button, Typography, Divider, Grid, Hidden, Link } from '@material-ui/core';
 import { Preview } from './MarkdownPreview';
 import TimeAgo from 'react-timeago';
 import LoginModal from '../sign/LoginModal';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function RenderCard({title, body, viewCount, created_at, updated_at, owner, handleModalOpen, classes}) {
 
@@ -14,6 +13,7 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
     }*/
 
     const auth = useSelector(state => state.Auth)
+    const dispatch = useDispatch();
 
     const [openModal, setOpenModal] = React.useState(false);
 
@@ -45,7 +45,7 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
                             <Grid item>
                                 <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
                                     {"Posted by  "}
-                                    <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${owner}/`}>{owner}</Link>
+                                    <Link style={{textDecoration: 'none', fontSize: 14}} href={`/profile/${owner}/`}>{owner}</Link>
                                 </Typography>
                             </Grid>
                             <Grid item>

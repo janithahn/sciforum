@@ -27,6 +27,12 @@ import UserSettings from './settings/settings';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
 import ResetConfirm from './passwordReset/resetConfirm';
+import { auth as firebaseAuth} from '../firebase/config';
+// Chat App
+import Login from './chat/login';
+import RoomList from './chat/roomList';
+import AddRoom from './chat/addRoom';
+import ChatRoom from './chat/chatRoom';
 
 function Main(props) {
     const post = useSelector(state => state.Post);
@@ -34,11 +40,14 @@ function Main(props) {
     const location = useLocation();
     const dispatch = useDispatch();
 
+    //console.log(firebaseAuth().currentUser);
+
     const isLoading = useSelector(state => [
         state.Auth.status, state.Answers.status, state.Notifications.status, 
         state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, 
         state.answerVotes.status, state.postVotes.status, state.PostComments.status,
-        state.AnswerComments.status, state.SendResetPassword.status
+        state.AnswerComments.status, state.SendResetPassword.status, state.ChatRooms.status,
+        state.ChatMessages
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -155,6 +164,35 @@ function Main(props) {
         next();
     }*/
 
+    function SecureRoute({ children, ...rest }) {
+        return (
+            <Route
+            {...rest}
+            render={({ location }) =>
+                auth.currentUser ? (
+                children
+                ) : (
+                <Redirect
+                    to={{
+                    pathname: "/signin",
+                    state: { from: location }
+                    }}
+                />
+                )
+            }
+            />
+        );
+    }
+
+    
+    const PrivateChatRoute = ({ component: Component, ...rest}) => (
+        <Route {...rest} render={() => (
+            auth.isAuthenticated
+            ? <Component/>
+            : <Redirect to="/signin"/>
+        )} />
+    );
+
     return (
         <div>
             <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open} showProgressBar={showProgressBar} snackOpen={snackOpen} setSnackOpen={setSnackOpen} snackMessage={snackMessage}/>
@@ -177,6 +215,10 @@ function Main(props) {
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
                     <Route exact path="/password/reset" component={() => <PasswordReset/>}/>
                     <Route exact path="/users/profile/password_reset/confirm/:token" component={() => <ResetConfirm/>}/>
+
+                    <PrivateChatRoute exact path="/chatrooms" component={() => <RoomList/>}/>
+                    <PrivateChatRoute exact path="/chatroom/:roomKey" component={() => <ChatRoom/>}/>
+
                     <Route component={PageNotFound}/>
                     <Redirect to="/"/>
                 </Switch>

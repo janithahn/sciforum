@@ -35,10 +35,12 @@ function LoginModal({openModal, classes, handleModalClose}) {
 
 const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, handleClick}) => {
 
+    console.log(profileImage);
+
     return(
         <div>
             <IconButton size="small" color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{textTransform: 'none'}}>
-                <Avatar src={profileImage}/>
+                <Avatar alt={username} src={profileImage}/>
             </IconButton>
             <Menu
                 elevation={2}
@@ -76,7 +78,6 @@ const Header = (props) => {
     const classes = useStyles();
 
     const auth = useSelector(state => state.Auth);
-    const currentUserProfileImg = useSelector(state => state.User.user.profile ? state.User.user.profile.profileImg: null);
     const [openModal, setOpenModal] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const location = useLocation();
@@ -150,7 +151,7 @@ const Header = (props) => {
                                 Login
                             </Typography>
                         </Button>: 
-                        <DropDown username={auth.currentUser} profileImage={currentUserProfileImg ? currentUserProfileImg: auth.currentUserProfileImg} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
+                        <DropDown username={auth.currentUser} profileImage={auth.currentUserProfileImg} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
                     }
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>

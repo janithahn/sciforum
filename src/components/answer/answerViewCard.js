@@ -1,14 +1,13 @@
 import React from 'react';
-import { Grid, Typography, Avatar, Button, Box } from '@material-ui/core';
+import { Grid, Typography, Avatar, Button, Box, Link } from '@material-ui/core';
 import { Preview } from './answerPreview';
 import { useSelector, useDispatch } from 'react-redux';
 import TimeAgo from 'react-timeago';
-import { Link } from 'react-router-dom';
 import { useStyles } from './styles/answerStyles';
 import VoteButtons from '../vote/answerVoteButtons';
 import { AnswerCommentInput, AnswerCommentRender } from './comment/comment';
 import { EditorState } from 'draft-js';
-import { createAnswerComments } from '../../redux/ActionCreators';
+import { createAnswerComments, fetchUser } from '../../redux/ActionCreators';
 import { useParams } from 'react-router-dom';
 
 export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen}) {
@@ -59,7 +58,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
                                         <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={0}>
                                             <Grid item>
                                                 <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                                    <Link style={{textDecoration: 'none', fontSize: 14}} to={`/profile/${answer.ownerDisplayName}/`}>{answer.ownerDisplayName}</Link>
+                                                    <Link style={{textDecoration: 'none', fontSize: 14}} href={`/profile/${answer.ownerDisplayName}/`} >{answer.ownerDisplayName}</Link>
                                                 </Typography>
                                             </Grid>
                                             <Grid item>
