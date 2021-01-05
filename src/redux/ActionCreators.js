@@ -223,10 +223,11 @@ export const requestLogin = (creds) => {
     });
 }
 
-export const loginSuccess = (token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg) => {
+export const loginSuccess = (token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg) => {
     return({
         type: ActionTypes.LOGIN_SUCCESS,
         token,
+        firebase_token,
         currentUser,
         currentUserId,
         currentUserEmail,
@@ -267,13 +268,14 @@ export const loginUser = (creds) => async (dispatch) => {
         });
 
         localStorage.setItem('token', token);
+        localStorage.setItem('firebase_token', firebase_token);
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
         //window.location.reload();
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {
@@ -329,11 +331,19 @@ export const logout = () => (dispatch) => {
             });
         }
     }
+    auth().signOut()
+    .then(() => {
+        console.log("Sign out firebase successfull");
+    })
+    .catch(() => {
+        console.log("Sign out firebase error");
+    });
     localStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentUserId');
     localStorage.removeItem('currentUserEmail');
     localStorage.removeItem('token');
+    localStorage.removeItem('firebase_token');
     localStorage.removeItem('currentUserProfileImg');
     dispatch(resetPostVotes());
     dispatch(resetAnswersVotes());
@@ -345,25 +355,6 @@ export const signupUser = (creds) => async (dispatch) => {
     //console.log(creds);
     dispatch(requestLogin(creds));
 
-    /*await firebaseAuth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-    .then(() => {
-
-        return firebaseAuth().createUserWithEmailAndPassword(creds.email, creds.password1)
-        .then((res) => {
-            console.log(res);
-            localStorage.setItem("chatUserAuth", JSON.stringify(firebaseAuth().currentUser));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    })
-    .catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode, errorMessage)
-    });*/
-
     await axios.post(baseUrl + '/jwtregister/', {
         username: creds.username,
         password1: creds.password1,
@@ -373,16 +364,27 @@ export const signupUser = (creds) => async (dispatch) => {
     .then(res => {
         console.log(res);
         const token = res.data.token;
+        const firebase_token = res.data.firebase_token;
         const currentUser = res.data.user.username;
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
+
+        auth().signInWithCustomToken(firebase_token)
+        .then((user) => {
+            console.log("FIREBASE_SUCCESS:", user);
+        })
+        .catch((error) => {
+            console.log("FIREBASE_ERROR:", error);
+        });
+
         localStorage.setItem('token', token);
+        localStorage.setItem('firebase_token', firebase_token);
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserRoomKeys', "[]");
         window.location.reload();
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail));
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail));
         //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })

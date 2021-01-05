@@ -3,7 +3,9 @@ import * as ActionTypes from '../ActionTypes';
 export const Auth = (state = {
         status: 'idle',
         isAuthenticated: localStorage.getItem('token') ? true: false,
+        isFirebaseAuthenticated: localStorage.getItem('firebase_token') ? true: false,
         token: localStorage.getItem('token'),
+        firebase_token: localStorage.getItem('firebase_token'),
         currentUser: localStorage.getItem('currentUser'),
         currentUserId: localStorage.getItem('currentUserId'),
         currentUserEmail: localStorage.getItem('currentUserEmail'),
@@ -22,8 +24,10 @@ export const Auth = (state = {
             return {...state,
                 status: 'succeeded',
                 isAuthenticated: true,
+                isFirebaseAuthenticated: action.firebase_token ? true: false,
                 errMess: null,
                 token: action.token,
+                firebase_token: action.firebase_token,
                 currentUser: action.currentUser,
                 currentUserId: action.currentUserId,
                 currentUserEmail: action.currentUserEmail,
@@ -41,13 +45,16 @@ export const Auth = (state = {
             return {...state,
                 status: 'loading',
                 isAuthenticated: true,
+                ifFirebaseAuthenticated: action.firebase_token ? true: false,
             };
 
         case ActionTypes.LOGOUT_SUCCESS:
             return {...state,
                 status: 'succeeded',
                 isAuthenticated: false,
+                isFirebaseAuthenticated: false,
                 token: '',
+                firebase_token: '',
             };
 
         default:

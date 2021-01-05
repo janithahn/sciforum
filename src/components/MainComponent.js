@@ -187,7 +187,7 @@ function Main(props) {
     
     const PrivateChatRoute = ({ component: Component, ...rest}) => (
         <Route {...rest} render={() => (
-            auth.isAuthenticated
+            auth.isAuthenticated && auth.isFirebaseAuthenticated
             ? <Component/>
             : <Redirect to="/signin"/>
         )} />
