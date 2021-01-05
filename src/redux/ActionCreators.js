@@ -274,7 +274,7 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        //window.location.reload();
+        window.location.reload();
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));
     })
@@ -421,19 +421,30 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
         console.log(res);
         const googleToken = creds.tokenObj.access_token;
         const token = res.data.token;
+        const firebase_token = res.data.firebase_token;
         const currentUser = res.data.user.username;
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
         const currentUserProfileImg = creds.profileObj.imageUrl;
+
+        auth().signInWithCustomToken(firebase_token)
+        .then((user) => {
+            console.log("FIREBASE_SUCCESS:", user);
+        })
+        .catch((error) => {
+            console.log("FIREBASE_ERROR:", error);
+        });
+
         localStorage.setItem('googleToken', googleToken);
         localStorage.setItem('token', token);
+        localStorage.setItem('firebase_token', firebase_token);
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
         window.location.reload();
-        dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {

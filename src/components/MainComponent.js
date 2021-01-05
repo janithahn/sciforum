@@ -27,11 +27,9 @@ import UserSettings from './settings/settings';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
 import ResetConfirm from './passwordReset/resetConfirm';
-import { auth as firebaseAuth} from '../firebase/config';
 // Chat App
-import Login from './chat/login';
+import ChatroomPermissionDenied from './chat/permissionDenied';
 import RoomList from './chat/roomList';
-import AddRoom from './chat/addRoom';
 import ChatRoom from './chat/chatRoom';
 
 function Main(props) {
@@ -189,6 +187,8 @@ function Main(props) {
         <Route {...rest} render={() => (
             auth.isAuthenticated && auth.isFirebaseAuthenticated
             ? <Component/>
+            : auth.isAuthenticated && !auth.isFirebaseAuthenticated
+            ?  <ChatroomPermissionDenied/>
             : <Redirect to="/signin"/>
         )} />
     );
