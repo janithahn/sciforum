@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from "react-router-dom";
-import { InputBase, Button, Container, Grid, Chip, Avatar, Link, makeStyles, Card, Paper, Tabs, Tab, withStyles, Typography, IconButton, Menu, MenuItem, Modal, Backdrop, Fade } from '@material-ui/core';
+import { 
+    InputBase, Button, Container, Grid, Chip, Avatar, Link, makeStyles,
+    Card, Paper, Tabs, Tab, withStyles, Typography, IconButton, Menu, 
+    MenuItem, Modal, Backdrop, Fade, 
+} from '@material-ui/core';
 import { Settings } from '@material-ui/icons';
 import Moment from 'moment';
 import { db } from '../../firebase/config';
@@ -299,7 +303,7 @@ export default function ChatRoom() {
     };
 
     const [show, setShow] = useState(false);
-    const handleOnMouseOver = () => {
+    const handleOnMouseOver = (currentKey) => {
         setShow(true);
     };
 
@@ -391,14 +395,14 @@ export default function ChatRoom() {
                         <Card variant="outlined" style={{paddingBottom: 8}}>
                             <ScrollToBottom className="ChatContent">
                                 {chats.map((item) => (
-                                    <div key={item.key} className="MessageBox">
+                                    <div key={item.key} className="MessageBox" onMouseLeave={() => handleMouseLeave()} onMouseOver={() => handleOnMouseOver(item.key)}>
                                         {item.type ==='join' || item.type === 'exit' ?
                                             <div className="ChatStatus">
                                                 <span className="ChatDate">{item.date}</span>
                                                 <span className="ChatContentCenter">{item.message}</span>
                                             </div>:
                                             <div className="ChatMessage">
-                                                <div className={`${item.username === username ? "RightBubble": "LeftBubble"}`} onMouseLeave={() => handleMouseLeave()} onMouseOver={() => handleOnMouseOver()}>
+                                                <div className={`${item.username === username ? "RightBubble": "LeftBubble"}`} >
                                                     {item.username === username ? 
                                                         <span className="MsgName">Me</span>:<span className="MsgName">{item.username}</span>
                                                     }

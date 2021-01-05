@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Moment from 'moment';
-import { Button, Card, CardActions, CardContent, Typography, Grid, Modal, Backdrop, Fade, Avatar } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Typography, Grid, Modal, Backdrop, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { db } from '../../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
@@ -113,7 +113,6 @@ export default function RoomList() {
     const [openModal, setOpenModal] = React.useState(false);
 
     const room = chatRooms.rooms;
-    const history = useHistory();
 
     useEffect(() => {
         if(chatRooms.status === 'idle') dispatch(fetchRooms());
@@ -145,7 +144,7 @@ export default function RoomList() {
     const handleModalClose = () => {
       setOpenModal(false);
     };
-    
+
     const RoomList = room.map((item) => (
         <Grid item key={item.key}>
             <Card className={classes.root} variant="outlined">
