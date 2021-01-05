@@ -14,9 +14,9 @@ import { theme, useStyles } from './styles/styles';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
-import { createRoom } from './actionCreators';
+import { createRoom, editRoom } from './actionCreators';
 
-export default function AddRoomModal({ handleModalClose }) {
+export default function AddRoomModal({ handleModalClose, type, currentRoomname, currentDescription, currentRoomKey }) {
   const classes = useStyles();
   const auth = useSelector(state => state.Auth);
   const createChatRoom = useSelector(state => state.CreateChatRoom);
@@ -49,8 +49,8 @@ export default function AddRoomModal({ handleModalClose }) {
 
   const formik = useFormik({
     initialValues: {
-      roomname: '', 
-      description: '',
+      roomname: currentRoomname ? currentRoomname: '', 
+      description: currentDescription ? currentDescription: '',
     },
     initialErrors: {
 
@@ -62,7 +62,8 @@ export default function AddRoomModal({ handleModalClose }) {
         owner: auth.currentUser,
         ownerId: auth.currentUserId
       }
-      dispatch(createRoom(roomVal, handleModalClose));
+      if(type === "create") dispatch(createRoom(roomVal, handleModalClose));
+      if(type === "edit") dispatch(editRoom(roomVal, currentRoomKey, handleModalClose));
     },
     validationSchema: schema,
   });

@@ -202,7 +202,7 @@ export default function RoomList() {
             </Grid>
             <EditModal>
                 <Fade in={openModal}>
-                    <AddRoomModal openModal={openModal} handleModalClose={handleModalClose}/>
+                    <AddRoomModal type="create" openModal={openModal} handleModalClose={handleModalClose}/>
                 </Fade>
             </EditModal>
         </div>

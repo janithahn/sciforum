@@ -57,20 +57,51 @@ const roomCreationFailed = (data) => ({
     payload: data
 });
 
-export const createRoom = (room, handleModalClose) => async (dispatch) => {
+export const createRoom = (room, handleModalClose) => (dispatch) => {
 
     dispatch(roomCreationLoading());
     const ref = db.ref('rooms/');
 
-    await ref.orderByChild('roomname').equalTo(room.roomname).once('value', snapshot => {
-        if (snapshot.exists()) {
-            dispatch(roomCreationFailed({message: "Room name already exists!"}));
-        } else {
-            const newRoom = db.ref('rooms/').push();
-            newRoom.set(room);
-            dispatch(roomCreationSuccess({message: "Room created successfully!"}));
-            handleModalClose();
-        }
+    try {
+        ref.orderByChild('roomname').equalTo(room.roomname).once('value', snapshot => {
+            if (snapshot.exists()) {
+                dispatch(roomCreationFailed({message: "Room name already exists!"}));
+            } else {
+                const newRoom = db.ref('rooms/').push();
+                newRoom.set(room)
+                .then(() => {
+                    console.log("Room created successfully!");
+                })
+                .catch((error) => {
+                    dispatch(roomCreationFailed(error));
+                });
+                dispatch(roomCreationSuccess({message: "Room created successfully!"}));
+                handleModalClose();
+            }
+        }, (error) => {
+            if(error) {
+                dispatch(roomCreationFailed(error));
+            }else {
+                console.log("Room created successfully!");
+            }
+        });
+        
+    } catch (error) {
+        dispatch(roomCreationFailed(error));
+    }
+};
+
+export const editRoom = (room, roomKey, handleModalClose) => (dispatch) => {
+    dispatch(roomCreationLoading());
+    const ref = db.ref('rooms/' + roomKey);
+
+    ref.update(room)
+    .then((data) => {
+        dispatch(roomCreationSuccess(data));
+        handleModalClose();
+    })
+    .catch((error) => {
+        dispatch(roomCreationFailed(error));
     });
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from "react-router-dom";
-import { InputBase, Button, Container, Grid, Chip, Avatar, Link, makeStyles, Card, Paper, Tabs, Tab, withStyles, Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { InputBase, Button, Container, Grid, Chip, Avatar, Link, makeStyles, Card, Paper, Tabs, Tab, withStyles, Typography, IconButton, Menu, MenuItem, Modal, Backdrop, Fade } from '@material-ui/core';
 import { Settings } from '@material-ui/icons';
 import Moment from 'moment';
 import { db } from '../../firebase/config';
@@ -9,6 +9,7 @@ import './Styles.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchData as fetchRooms, fetchMessages } from './actionCreators';
 import { RoomDeleteAlert, MessageDeleteAlert } from './alerts';
+import AddRoomModal from './addRoomModal';
 
 const TabEnhanced = withStyles((theme) => ({
     root: {
@@ -28,7 +29,7 @@ const TabEnhanced = withStyles((theme) => ({
     selected: {},
   }))((props) => <Tab disableRipple {...props} />);
 
-  const DropDown = ({ anchorEl, handleClick, open, handleClose, id, handleDeleteRoom }) => {
+  const DropDown = ({ anchorEl, handleClick, open, handleClose, id, handleDeleteRoom, handleEditRoom }) => {
         return(
             <div>
                 <IconButton
@@ -55,6 +56,7 @@ const TabEnhanced = withStyles((theme) => ({
                         horizontal: 'center',
                     }}
                 >
+                    <MenuItem onClick={handleEditRoom}>Edit</MenuItem>
                     <MenuItem onClick={handleDeleteRoom}>Delete room</MenuItem>
                 </Menu>
         </div>
@@ -170,7 +172,13 @@ export default function ChatRoom() {
         chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
         chat.type = 'message';
         const newMessage = db.ref('chats/').push();
-        if(chat.message.trim().length !== 0) newMessage.set(chat);
+        if(chat.message.trim().length !== 0) newMessage.set(chat)
+            .then(() => {
+                console.log("Message sent successfully");
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         setNewchat({ roomname: '', username: '', message: '', date: '', type: '' });
     };
 
@@ -210,6 +218,32 @@ export default function ChatRoom() {
         history.push('/chatrooms');
     }
 
+    //Room edit/delete
+    const [openModal, setOpenModal] = React.useState(false);
+    
+    const handleModalOpen = () => {
+        setOpenModal(true);
+    };
+    
+      const handleModalClose = () => {
+        setOpenModal(false);
+    };
+
+    const EditModal = ({...rest}) => (
+        <Modal {...rest}
+          open={openModal} 
+          className={classes.modal} 
+          onClose={handleModalClose}
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+              timeout: 500,
+          }}
+        />
+    );
+
     const deleteRoom = () => {
         const roomRef = db.ref('rooms/' + roomKey);
         const roomuserRef = db.ref('roomusers/' + roomKey);
@@ -248,6 +282,10 @@ export default function ChatRoom() {
 
     const handleDeleteModalClose = () => {
         setOpenDeleteModal(false);
+    };
+
+    const handleEditRoom = () => {
+        handleModalOpen();
     };
     
     //Individual Message
@@ -311,6 +349,7 @@ export default function ChatRoom() {
                                             anchorEl={anchorEl}
                                             handleClick={handleSettings} 
                                             handleClose={handleSettingsClose}
+                                            handleEditRoom={handleEditRoom}
                                             handleDeleteRoom={handleDeleteModalOpen}
                                         />
                                     </Grid>: undefined}
@@ -366,7 +405,7 @@ export default function ChatRoom() {
                                                         <span className="MsgName">Me</span>:<span className="MsgName">{item.username}</span>
                                                     }
                                                     <span className="MsgDate"> at {item.date}</span>
-                                                    {show && item.username === username && 
+                                                    {show && 
                                                         <Button 
                                                             className={classes.deleteButton} 
                                                             variant="text" 
@@ -418,6 +457,18 @@ export default function ChatRoom() {
                 openDeleteModal={openMessageDeleteModal}
                 deleteMessage={deleteMessage}
             />
+            <EditModal>
+                <Fade in={openModal}>
+                    <AddRoomModal 
+                        type="edit" 
+                        openModal={openModal} 
+                        handleModalClose={handleModalClose} 
+                        currentRoomname={currentRoom ? currentRoom.roomname: ""} 
+                        currentDescription={currentRoom ? currentRoom.description: ""}
+                        currentRoomKey={currentRoom ? currentRoom.key: ""}
+                    />
+                </Fade>
+            </EditModal>
         </Container>
     );
 }
@@ -470,5 +521,10 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 1,
         minHeight: 0,
         maxHeight: 0,
-    }
+    },
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 }));
