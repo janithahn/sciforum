@@ -111,8 +111,6 @@ export default function RoomList() {
     const messages = useSelector(state => state.ChatMessages);
     const auth = useSelector(state => state.Auth);
 
-    console.log(messages);
-
     const [openModal, setOpenModal] = React.useState(false);
 
     const room = chatRooms.rooms;

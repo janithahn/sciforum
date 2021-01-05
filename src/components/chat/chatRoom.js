@@ -366,7 +366,7 @@ export default function ChatRoom() {
                                                         <span className="MsgName">Me</span>:<span className="MsgName">{item.username}</span>
                                                     }
                                                     <span className="MsgDate"> at {item.date}</span>
-                                                    {show && 
+                                                    {show && item.username === username && 
                                                         <Button 
                                                             className={classes.deleteButton} 
                                                             variant="text" 
