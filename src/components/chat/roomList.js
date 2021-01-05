@@ -5,7 +5,7 @@ import { Button, Card, CardActions, CardContent, Typography, Grid, Modal, Backdr
 import { makeStyles } from '@material-ui/core/styles';
 import { db } from '../../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchData as fetchRooms } from './actionCreators';
+import { fetchData as fetchRooms, resetMessages } from './actionCreators';
 import AddRoomModal from './addRoomModal';
 
 const useStyles = makeStyles({
@@ -108,7 +108,10 @@ export default function RoomList() {
 
     const dispatch = useDispatch();
     const chatRooms = useSelector(state => state.ChatRooms);
+    const messages = useSelector(state => state.ChatMessages);
     const auth = useSelector(state => state.Auth);
+
+    console.log(messages);
 
     const [openModal, setOpenModal] = React.useState(false);
 
@@ -118,6 +121,10 @@ export default function RoomList() {
     useEffect(() => {
         if(chatRooms.status === 'idle') dispatch(fetchRooms());
     }, [dispatch, chatRooms]);
+
+    useEffect(() => {
+        if(messages.status === 'succeeded') dispatch(resetMessages());
+    }, [dispatch]);
 
     const EditModal = ({...rest}) => (
         <Modal {...rest}

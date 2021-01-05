@@ -89,6 +89,10 @@ const messagesFailed = (data) => ({
     payload: data
 });
 
+export const resetMessages = () => ({
+    type: ActionTypes.RESET_MESSAGES
+});
+
 export const fetchMessages = (roomname) => (dispatch) => {
     dispatch(messagesLoading());
 

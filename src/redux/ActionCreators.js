@@ -2,7 +2,7 @@ import * as ActionTypes from './ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
 import { isJWTExpired } from '../shared/AdditionalFunctions';
-import { db } from '../firebase/config';
+import { db, auth } from '../firebase/config';
 
 const headerWithToken = {
     "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
@@ -244,25 +244,6 @@ export const loginError = (loginErrMessage) => {
 export const loginUser = (creds) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
-    /*await firebaseAuth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-    .then(() => {
-
-        return firebaseAuth().signInWithEmailAndPassword(creds.username, creds.password)
-        .then((res) => {
-            console.log(res);
-            localStorage.setItem("chatUserAuth", JSON.stringify(firebaseAuth().currentUser));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    })
-    .catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode, errorMessage)
-    });*/
-
     return await axios.post(baseUrl + '/jwtlogin/', {
         username: creds.username,
         password: creds.password,
@@ -271,17 +252,27 @@ export const loginUser = (creds) => async (dispatch) => {
     .then(res => {
         console.log(res);
         const token = res.data.token;
+        const firebase_token = res.data.firebase_token;
         const currentUser = res.data.user.username;
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
         const currentUserProfileImg = res.data.user.profile.profileImg;
+
+        auth().signInWithCustomToken(firebase_token)
+        .then((user) => {
+            console.log("FIREBASE_SUCCESS:", user);
+        })
+        .catch((error) => {
+            console.log("FIREBASE_ERROR:", error);
+        });
+
         localStorage.setItem('token', token);
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        window.location.reload();
+        //window.location.reload();
         dispatch(loginSuccess(token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         //dispatch(fetchUser(token, currentUser));
     })

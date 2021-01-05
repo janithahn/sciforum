@@ -7,6 +7,9 @@ export const ChatMessages = (state = {
     }, action) => {
     switch(action.type) {
 
+        case ActionTypes.RESET_MESSAGES:
+            return {status: 'idle', errMess: null, messages: []}
+
         case ActionTypes.ADD_MESSAGES:
             return {...state, status: 'succeeded', errMess: null, messages: action.payload}
 

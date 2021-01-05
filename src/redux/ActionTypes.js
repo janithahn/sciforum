@@ -48,6 +48,7 @@ export const ROOM_CREATION_FAILED = 'ROOM_CREATION_FAILED';
 export const ADD_MESSAGES = 'ADD_MESSAGES';
 export const MESSAGES_LOADING = 'MESSAGES_LOADING';
 export const MESSAGES_FAILED = 'MESSAGES_FAILED';
+export const RESET_MESSAGES = 'RESET_MESSAGES';
 
 // Curret User
 export const ADD_USER = 'ADD_USER';
