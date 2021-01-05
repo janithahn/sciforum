@@ -81,7 +81,7 @@ export default function ChatRoom() {
     //const [chats, setChats] = useState([]);
     const [users, setUsers] = useState([]);
     const [roomname, setRoomname] = useState('');
-    const [newchat, setNewchat] = useState({ roomname: '', username: '', message: '', date: '', type: '' });
+    const [newchat, setNewchat] = useState({ roomKey: '', username: '', message: '', date: '', type: '' });
     const history = useHistory();
     const { roomKey } = useParams();
     
@@ -137,8 +137,8 @@ export default function ChatRoom() {
         fetchData();
     }, [db, room, roomname]);*/
     useEffect(() => {
-        if(room) dispatch(fetchMessages(room))
-    }, [dispatch, room]);
+        if(roomKey) dispatch(fetchMessages(roomKey))
+    }, [dispatch, roomKey]);
 
     useEffect(() => {
         const fetchData = () => {
@@ -167,7 +167,7 @@ export default function ChatRoom() {
     const submitMessage = (e) => {
         e.preventDefault();
         const chat = newchat;
-        chat.roomname = roomname;
+        chat.roomKey = roomKey;
         chat.username = username;
         chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
         chat.type = 'message';
@@ -179,7 +179,7 @@ export default function ChatRoom() {
             .catch((error) => {
                 console.log(error);
             });
-        setNewchat({ roomname: '', username: '', message: '', date: '', type: '' });
+        setNewchat({ roomKey: '', roomname: '', username: '', message: '', date: '', type: '' });
     };
 
     const onChange = (e) => {
@@ -405,7 +405,7 @@ export default function ChatRoom() {
                                                         <span className="MsgName">Me</span>:<span className="MsgName">{item.username}</span>
                                                     }
                                                     <span className="MsgDate"> at {item.date}</span>
-                                                    {show && 
+                                                    {item.username === username && show && 
                                                         <Button 
                                                             className={classes.deleteButton} 
                                                             variant="text" 

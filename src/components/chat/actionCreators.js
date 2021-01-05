@@ -124,11 +124,11 @@ export const resetMessages = () => ({
     type: ActionTypes.RESET_MESSAGES
 });
 
-export const fetchMessages = (roomname) => (dispatch) => {
+export const fetchMessages = (roomKey) => (dispatch) => {
     dispatch(messagesLoading());
 
     try {
-        db.ref('chats/').orderByChild('roomname').equalTo(roomname).on('value', resp => {
+        db.ref('chats/').orderByChild('roomKey').equalTo(roomKey).on('value', resp => {
           dispatch(messagesLoaded(snapshotToArray(resp)));
         }, (error) => {
             if(error) {
