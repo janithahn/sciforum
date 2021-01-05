@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import Moment from 'moment';
 import { Button, Card, CardActions, CardContent, Typography, Grid, Modal, Backdrop, Fade, Avatar } from '@material-ui/core';
@@ -121,7 +121,7 @@ export default function RoomList() {
 
     useEffect(() => {
         if(messages.status === 'succeeded') dispatch(resetMessages());
-    }, [dispatch]);
+    }, [dispatch, messages]);
 
     const EditModal = ({...rest}) => (
         <Modal {...rest}
@@ -145,12 +145,7 @@ export default function RoomList() {
     const handleModalClose = () => {
       setOpenModal(false);
     };
-
-    const logout = () => {
-        localStorage.removeItem('username');
-        history.push('/chatlogin');
-    }
-
+    
     const RoomList = room.map((item) => (
         <Grid item key={item.key}>
             <Card className={classes.root} variant="outlined">

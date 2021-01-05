@@ -161,27 +161,6 @@ function Main(props) {
         }
         next();
     }*/
-
-    function SecureRoute({ children, ...rest }) {
-        return (
-            <Route
-            {...rest}
-            render={({ location }) =>
-                auth.currentUser ? (
-                children
-                ) : (
-                <Redirect
-                    to={{
-                    pathname: "/signin",
-                    state: { from: location }
-                    }}
-                />
-                )
-            }
-            />
-        );
-    }
-
     
     const PrivateChatRoute = ({ component: Component, ...rest}) => (
         <Route {...rest} render={() => (

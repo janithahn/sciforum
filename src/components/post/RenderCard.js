@@ -4,7 +4,7 @@ import { Button, Typography, Divider, Grid, Hidden, Link } from '@material-ui/co
 import { Preview } from './MarkdownPreview';
 import TimeAgo from 'react-timeago';
 import LoginModal from '../sign/LoginModal';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function RenderCard({title, body, viewCount, created_at, updated_at, owner, handleModalOpen, classes}) {
 
@@ -12,8 +12,7 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
         return new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date)
     }*/
 
-    const auth = useSelector(state => state.Auth)
-    const dispatch = useDispatch();
+    const auth = useSelector(state => state.Auth);
 
     const [openModal, setOpenModal] = React.useState(false);
 

@@ -25,7 +25,7 @@ export default function AddRoomModal({ handleModalClose, type, currentRoomname, 
   const [credentialError, setCredentialError] = React.useState('');
 
   React.useEffect(() => {
-    if(createChatRoom.status === 'failed' && createChatRoom.errMess) {
+    if(createChatRoom.status === 'failed') {
       if(createChatRoom.errMess) {
         setCredentialError(createChatRoom.errMess.message);
       } else {

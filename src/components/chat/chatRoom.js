@@ -160,7 +160,7 @@ export default function ChatRoom() {
         };
       
         fetchData();
-    }, [db, roomKey]);
+    }, [roomKey]);
 
     const submitMessage = (e) => {
         e.preventDefault();
@@ -428,7 +428,7 @@ export default function ChatRoom() {
                             <div className="StickyFooter">
                                 <form onSubmit={submitMessage}>
                                     <Grid container direction="row" alignItems="center" justify="space-between" spacing={0}>
-                                        <Grid item item lg={11} sm={11} md={10} xs={11}>
+                                        <Grid item lg={11} sm={11} md={10} xs={11}>
                                             <Paper className={classes.paperInput} elevation={0} variant="outlined">
                                                 <div className={classes.inputDiv}>
                                                     <InputBase disabled={currentRoom ? false: true} multiline fullWidth type="text" name="message" id="message" placeholder="Enter message here" value={newchat.message} onChange={onChange} />
