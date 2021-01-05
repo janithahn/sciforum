@@ -49,10 +49,9 @@ function ChatEnterButton({ roomname, roomKey }) {
 
     const handleChatRoomEnter = () => {
 
-        const chat = { roomKey: '', roomname: '', username: '', message: '', date: '', type: '' };
+        const chat = { roomKey: '', username: '', message: '', date: '', type: '' };
 
         chat.roomKey = roomKey;
-        chat.roomname = roomname;
         chat.username = auth.currentUser;
         chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
         chat.message = `${auth.currentUser} enter the room`;

@@ -1,4 +1,5 @@
 import * as ActionTypes from '../../redux/ActionTypes';
+import Moment from 'moment';
 import { db } from '../../firebase/config';
 
 const addRooms = (data) => ({
@@ -57,6 +58,24 @@ const roomCreationFailed = (data) => ({
     payload: data
 });
 
+const roomMessage = (roomKey, currentUser, message) => {
+    const chat = { roomKey: '', username: '', message: '', date: '', type: '' };
+
+    chat.roomKey = roomKey;
+    chat.username = currentUser;
+    chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
+    chat.message = `${currentUser} ${message}`;
+    chat.type = 'join';
+    const newMessage = db.ref('chats/').push();
+    newMessage.set(chat)
+    .then(() => {
+        console.log("Room messaged added successfully!");
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
 export const createRoom = (room, handleModalClose) => (dispatch) => {
 
     dispatch(roomCreationLoading());
@@ -71,6 +90,7 @@ export const createRoom = (room, handleModalClose) => (dispatch) => {
                 newRoom.set(room)
                 .then(() => {
                     console.log("Room created successfully!");
+                    roomMessage(newRoom.key, room.owner, "created the room");
                 })
                 .catch((error) => {
                     dispatch(roomCreationFailed(error));
@@ -91,13 +111,14 @@ export const createRoom = (room, handleModalClose) => (dispatch) => {
     }
 };
 
-export const editRoom = (room, roomKey, handleModalClose) => (dispatch) => {
+export const editRoom = (room, roomKey, currentRoomname, handleModalClose) => (dispatch) => {
     dispatch(roomCreationLoading());
     const ref = db.ref('rooms/' + roomKey);
 
     ref.update(room)
     .then((data) => {
         dispatch(roomCreationSuccess(data));
+        roomMessage(roomKey, room.owner, `updated room name from ${currentRoomname} to ${room.roomname}`);
         handleModalClose();
     })
     .catch((error) => {

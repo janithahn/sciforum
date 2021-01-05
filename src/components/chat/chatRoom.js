@@ -80,7 +80,6 @@ export default function ChatRoom() {
     
     //const [chats, setChats] = useState([]);
     const [users, setUsers] = useState([]);
-    const [roomname, setRoomname] = useState('');
     const [newchat, setNewchat] = useState({ roomKey: '', username: '', message: '', date: '', type: '' });
     const history = useHistory();
     const { roomKey } = useParams();
@@ -142,9 +141,8 @@ export default function ChatRoom() {
 
     useEffect(() => {
         const fetchData = () => {
-            setRoomname(room);
             try {
-                db.ref('roomusers/').orderByChild('roomname').equalTo(roomname).on('value', (resp2) => {
+                db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey).once('value', (resp2) => {
                   setUsers([]);
                   const roomusers = snapshotToArray(resp2);
                   setUsers(roomusers.filter(x => x.status === 'online'));
@@ -162,7 +160,7 @@ export default function ChatRoom() {
         };
       
         fetchData();
-    }, [db, room, roomname]);
+    }, [db, roomKey]);
 
     const submitMessage = (e) => {
         e.preventDefault();
@@ -179,7 +177,7 @@ export default function ChatRoom() {
             .catch((error) => {
                 console.log(error);
             });
-        setNewchat({ roomKey: '', roomname: '', username: '', message: '', date: '', type: '' });
+        setNewchat({ roomKey: '', username: '', message: '', date: '', type: '' });
     };
 
     const onChange = (e) => {
@@ -189,8 +187,8 @@ export default function ChatRoom() {
 
     const exitChat = () => {
 
-        const chat = { roomname: '', username: '', message: '', date: '', type: '' };
-        chat.roomname = roomname;
+        const chat = { roomKey: '', username: '', message: '', date: '', type: '' };
+        chat.roomKey = roomKey;
         chat.username = username;
         chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
         chat.message = `${username} leave the room`;

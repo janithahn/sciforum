@@ -62,12 +62,8 @@ export default function AddRoomModal({ handleModalClose, type, currentRoomname, 
         owner: auth.currentUser,
         ownerId: auth.currentUserId
       };
-      const roomUpdateVal = {
-        roomname: values.roomname,
-        description: values.description,
-      };
       if(type === "create") dispatch(createRoom(roomVal, handleModalClose));
-      if(type === "edit") dispatch(editRoom(roomUpdateVal, currentRoomKey, handleModalClose));
+      if(type === "edit") dispatch(editRoom(roomVal, currentRoomKey, currentRoomname, handleModalClose));
     },
     validationSchema: schema,
   });
