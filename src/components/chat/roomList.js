@@ -101,7 +101,7 @@ function ChatEnterButton({ roomname, roomKey }) {
     );
 }
 
-export default function RoomList() {
+export default function RoomList({ setSnackMessage, setSnackOpen }) {
 
     const classes = useStyles();
 
@@ -195,7 +195,13 @@ export default function RoomList() {
             </Grid>
             <EditModal>
                 <Fade in={openModal}>
-                    <AddRoomModal type="create" openModal={openModal} handleModalClose={handleModalClose}/>
+                    <AddRoomModal 
+                        type="create" 
+                        openModal={openModal} 
+                        handleModalClose={handleModalClose}
+                        setSnackMessage={setSnackMessage}
+                        setSnackOpen={setSnackOpen}
+                    />
                 </Fade>
             </EditModal>
         </div>

@@ -9,7 +9,7 @@ import SignIn from '../sign/SignInComponent';
 import AlertSnackbar from '../alert/snackbar';
 import { useLocation, Link as RouterLink, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../redux/ActionCreators';
+import { logout, fetchUser, fetchUserEmployment, fetchUserEducation, fetchUserSkills, fetchUserLanguages } from '../../redux/ActionCreators';
 import { useStyles } from './styles/headerStyle';
 
 function LoginModal({openModal, classes, handleModalClose}) {
@@ -36,6 +36,14 @@ function LoginModal({openModal, classes, handleModalClose}) {
 const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, handleClick}) => {
 
     console.log(profileImage);
+    const dispatch = useDispatch();
+    const handleProfile = () => {
+        dispatch(fetchUser('', username));
+        dispatch(fetchUserEmployment(username));
+        dispatch(fetchUserEducation(username));
+        dispatch(fetchUserSkills(username));
+        dispatch(fetchUserLanguages(username));
+    }
 
     return(
         <div>
@@ -58,7 +66,7 @@ const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, 
                 anchorEl={anchorEl}
                 onClose={() => setAnchorEl(null)}   
             >
-                <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/profile/${username}/`}>
+                <RouterLink onClick={handleProfile} style={{textDecoration: 'none', color: 'inherit'}} to={`/profile/${username}/`}>
                     <MenuItem>Profile</MenuItem>
                 </RouterLink>
                 <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/notifications`}>
@@ -110,6 +118,8 @@ const Header = (props) => {
         setAnchorEl(null);
         dispatch(logout());
     }
+
+    console.log(auth);
 
     return (
         <div className={props.classes.root}>

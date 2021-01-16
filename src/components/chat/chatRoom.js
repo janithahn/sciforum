@@ -303,7 +303,7 @@ export default function ChatRoom() {
     };
 
     const [show, setShow] = useState(false);
-    const handleOnMouseOver = (currentKey) => {
+    const handleOnMouseOver = () => {
         setShow(true);
     };
 
@@ -395,7 +395,7 @@ export default function ChatRoom() {
                         <Card variant="outlined" style={{paddingBottom: 8}}>
                             <ScrollToBottom className="ChatContent">
                                 {chats.map((item) => (
-                                    <div key={item.key} className="MessageBox" onMouseLeave={() => handleMouseLeave()} onMouseOver={() => handleOnMouseOver(item.key)}>
+                                    <div key={item.key} className="MessageBox" onMouseLeave={() => handleMouseLeave()} onMouseOver={() => handleOnMouseOver()}>
                                         {item.type ==='join' || item.type === 'exit' ?
                                             <div className="ChatStatus">
                                                 <span className="ChatDate">{item.date}</span>

@@ -89,7 +89,6 @@ export const createRoom = (room, handleModalClose) => (dispatch) => {
                 const newRoom = db.ref('rooms/').push();
                 newRoom.set(room)
                 .then(() => {
-                    console.log("Room created successfully!");
                     roomMessage(newRoom.key, room.owner, "created the room");
                 })
                 .catch((error) => {
