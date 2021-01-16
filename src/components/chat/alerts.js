@@ -9,6 +9,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchData } from './actionCreators';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,10 +27,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export const RoomDeleteAlert = ({ handleDeleteModalClose, openDeleteModal, deleteRoom }) => {
 
+  const dispatch = useDispatch();
   const history = useHistory();
 
   function handleDeleteAnswer() {
     deleteRoom();
+    dispatch(fetchData());
     handleDeleteModalClose();
     history.push('/chatrooms');
   }

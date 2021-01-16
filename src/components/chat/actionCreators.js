@@ -1,24 +1,6 @@
 import * as ActionTypes from '../../redux/ActionTypes';
 import Moment from 'moment';
-import { db } from '../../firebase/config';
-
-const addRooms = (data) => ({
-    type: ActionTypes.ADD_ROOMS,
-    payload: data
-});
-
-const roomsLoading = () => ({
-    type: ActionTypes.ROOMS_LOADING
-});
-
-/*const roomsFailed = (data) => ({
-    type: ActionTypes.ROOMS_FAILED,
-    payload: data
-});*/
-
-export const roomsReset = () => ({
-    type: ActionTypes.RESET_ROOMS,
-});
+import { db, auth as firebaseAuth } from '../../firebase/config';
 
 const snapshotToArray = (snapshot) => {
     const returnArr = [];
@@ -32,15 +14,53 @@ const snapshotToArray = (snapshot) => {
     return returnArr;
 }
 
+const addRooms = (data) => ({
+    type: ActionTypes.ADD_ROOMS,
+    payload: data
+});
+
+const roomsLoading = () => ({
+    type: ActionTypes.ROOMS_LOADING
+});
+
+const roomsFailed = (data) => ({
+    type: ActionTypes.ROOMS_FAILED,
+    payload: data
+});
+
+export const roomsReset = () => ({
+    type: ActionTypes.RESET_ROOMS,
+});
+
 export const fetchData = () => (dispatch) => {
     //setNickname(localStorage.getItem('nickname'));
 
     dispatch(roomsLoading());
 
-    db.ref('rooms/').on('value', resp => {
-        dispatch(addRooms(snapshotToArray(resp)));
-        //setNickname(localStorage.getItem('nickname'));
+    firebaseAuth().signInWithCustomToken(localStorage.getItem("firebase_token"))
+        .then((user) => {
+            console.log("FIREBASE_SUCCESS:", user);
+        })
+        .catch((error) => {
+            console.log("FIREBASE_ERROR:", error);
+    })
+    .then(() => {
+        db.ref('rooms/').once('value', resp => {
+            dispatch(addRooms(snapshotToArray(resp)));
+            //setNickname(localStorage.getItem('nickname'));
+        }, (error) => {
+            if(error) {
+                dispatch(roomsFailed(error));
+                console.log("Rooms failed to load");
+            }else {
+                console.log("Rooms loaded successfully");
+            }
+        });
+    })
+    .catch((error) => {
+        console.log(error);
     });
+
 };
 
 //Room Creation
@@ -90,6 +110,7 @@ export const createRoom = (room, handleModalClose) => (dispatch) => {
                 newRoom.set(room)
                 .then(() => {
                     roomMessage(newRoom.key, room.owner, "created the room");
+                    dispatch(fetchData());
                 })
                 .catch((error) => {
                     dispatch(roomCreationFailed(error));
@@ -119,6 +140,7 @@ export const editRoom = (room, roomKey, currentRoomname, handleModalClose) => (d
         dispatch(roomCreationSuccess(data));
         roomMessage(roomKey, room.owner, `updated room name from ${currentRoomname} to ${room.roomname}`);
         handleModalClose();
+        dispatch(fetchData());
     })
     .catch((error) => {
         dispatch(roomCreationFailed(error));

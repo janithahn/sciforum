@@ -274,8 +274,8 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        window.location.reload();
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
+        window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {
@@ -383,8 +383,8 @@ export const signupUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        window.location.reload();
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail));
+        window.location.reload();
         //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
     })
@@ -443,8 +443,8 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        window.location.reload();
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
+        window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {

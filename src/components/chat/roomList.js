@@ -110,6 +110,8 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
     const messages = useSelector(state => state.ChatMessages);
     const auth = useSelector(state => state.Auth);
 
+    console.log(chatRooms);
+
     const [openModal, setOpenModal] = React.useState(false);
 
     const room = chatRooms.rooms;

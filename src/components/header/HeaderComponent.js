@@ -35,8 +35,8 @@ function LoginModal({openModal, classes, handleModalClose}) {
 
 const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, handleClick}) => {
 
-    console.log(profileImage);
     const dispatch = useDispatch();
+    
     const handleProfile = () => {
         dispatch(fetchUser('', username));
         dispatch(fetchUserEmployment(username));
@@ -118,8 +118,6 @@ const Header = (props) => {
         setAnchorEl(null);
         dispatch(logout());
     }
-
-    console.log(auth);
 
     return (
         <div className={props.classes.root}>
