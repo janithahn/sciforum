@@ -309,8 +309,11 @@ const snapshotToArray = (snapshot) => {
 
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
+
     const currentUserRoomKeys = JSON.parse(localStorage.getItem('currentUserRoomKeys'));
     if(currentUserRoomKeys) {
+        let len = currentUserRoomKeys.length;
+
         for(let roomKey of currentUserRoomKeys) {
             db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey.toString()).once('value', (resp) => {
                 let roomuser = [];
@@ -327,18 +330,24 @@ export const logout = () => (dispatch) => {
                             console.log("Status update failed!");
                         });
                     }
+                    len = len - 1;
+                    if(len === 0) {    
+                        auth().signOut()
+                        .then(() => {
+                            console.log("Sign out firebase successfull");
+                        })
+                        .catch(() => {
+                            console.log("Sign out firebase error");
+                        });
+                        localStorage.clear();
+                    }
                 }
             });
+
         }
     }
-    auth().signOut()
-    .then(() => {
-        console.log("Sign out firebase successfull");
-    })
-    .catch(() => {
-        console.log("Sign out firebase error");
-    });
-    localStorage.clear();
+
+    //localStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentUserId');
     localStorage.removeItem('currentUserEmail');
