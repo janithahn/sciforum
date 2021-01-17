@@ -11,6 +11,8 @@ import { red } from '@material-ui/core/colors';
 import { MeetingRoom } from '@material-ui/icons';
 import axios from 'axios';
 import { Grid, Box } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchwebinars } from './actions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,31 +38,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Webinars() {
-  const classes = useStyles();
+    const classes = useStyles();
 
-  const webinarsUrl = 'http://127.0.0.1:8000/news/webinars/?ordering=-created_at';
-  const [webinars, setWebinars] = React.useState([]);
+    const dispatch = useDispatch();
+    const webinars = useSelector(state => state.webinars);
 
-  const handleSetWebinars = (data) => {
-    setWebinars(data)
-  };
+    React.useEffect(() => {
+        if(webinars.status === 'idle') dispatch(fetchwebinars());
+    }, [dispatch]);
 
-  const fetchEvents = () => {
-    axios.get(webinarsUrl)
-    .then((res) => {
-        console.log(res.data);
-        handleSetWebinars(res.data.results);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-  }
-
-  React.useEffect(() => {
-      fetchEvents();
-  }, []);
-
-  const webinarsList = webinars.map((item) => {
+    const webinarsList = webinars.webinars.map((item) => {
         const title = item.title;
         const ref_url = item.reference_url;
         const link = item.link;
@@ -91,26 +78,32 @@ export default function Webinars() {
                 </Link>
             </Grid>
         );
-  });
+    });
 
-  return (
-    <Card className={classes.root}>
-      <CardHeader
-        avatar={
-          <Avatar aria-label="recipe">
-            <MeetingRoom/>
-          </Avatar>
-        }
-        title="Webinar News"
-        subheader="Registration links for webinars around the faculty"
-      />
-      <CardContent>
-        <Box width="100%">
-            <Grid container direction="column" justify="center" alignItems="flex-start" spacing={2}>
-                {webinarsList}
-            </Grid>
-        </Box>
-      </CardContent>
-    </Card>
-  );
+    if(webinars.status === 'loading') {
+        return(<div></div>);
+    }else if(webinars.status === 'failed') {
+        return(<p>Error loading news and events</p>);
+    }else {
+        return (
+            <Card className={classes.root}>
+            <CardHeader
+                avatar={
+                <Avatar aria-label="recipe">
+                    <MeetingRoom/>
+                </Avatar>
+                }
+                title="Webinar News"
+                subheader="Registration links for webinars around the faculty"
+            />
+            <CardContent>
+                <Box width="100%">
+                    <Grid container direction="column" justify="center" alignItems="flex-start" spacing={2}>
+                        {webinarsList}
+                    </Grid>
+                </Box>
+            </CardContent>
+            </Card>
+        );
+    }
 }
