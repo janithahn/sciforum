@@ -1,11 +1,9 @@
 import React from 'react';
-import { makeStyles, Container, Typography, Grid, TextField } from '@material-ui/core';
+import { makeStyles, Container, Grid } from '@material-ui/core';
 import Events from './events';
 import Webinars from './webinars';
 
 export default function News() {
-
-    const classes = useStyles();
 
     return(
         <Container /*className={classes.root}*/>
