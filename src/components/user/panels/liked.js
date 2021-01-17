@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, Typography, Link } from '@material-ui/core';
+import { Grid, Paper, Typography, Link, Divider } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchLikedPosts } from './actions';
 
@@ -13,8 +13,6 @@ export default function Liked() {
        if(likedPosts.status === 'idle') dispatch(fetchLikedPosts(auth.currentUserId));
     }, [dispatch, likedPosts, auth]);
 
-    console.log(likedPosts);
-
     const postsList = likedPosts.posts.map(item => (
         <Grid item key={item.id}>
             <Paper variant="elevation" style={{padding: 4}} elevation={0}>
@@ -22,6 +20,7 @@ export default function Liked() {
                     <Typography variant="subtitle1" color="textPrimary">{item.postTitle}</Typography>
                 </Link>
             </Paper>
+            <Divider/>
         </Grid>
     ));
 

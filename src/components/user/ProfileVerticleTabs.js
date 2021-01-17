@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ProfilePanel from './panels/profilePanel';
 import Liked from './panels/liked';
+import MyAnswers from './panels/myAnswes';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -117,9 +118,8 @@ export default function ProfileTabs({ credentialsLoadingState }) {
         >
           <TabEnhanced label="Profile" {...a11yProps(0)} />
           <TabEnhanced label="Recent" {...a11yProps(1)} />
-          <TabEnhanced label="Questions" {...a11yProps(2)} />
-          <TabEnhanced label="Answers" {...a11yProps(3)} />
-          <TabEnhanced label="Liked" {...a11yProps(4)} />
+          <TabEnhanced label="Answers" {...a11yProps(2)} />
+          <TabEnhanced label="Liked" {...a11yProps(3)} />
         </Tabs>
         {credentialsLoadingState ? 
           <LinearProgress color="secondary" style={{height: 1}} /*className={classes.progressBar}*//>: 
@@ -132,12 +132,9 @@ export default function ProfileTabs({ credentialsLoadingState }) {
         Item Two
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <MyAnswers/>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
         <Liked/>
       </TabPanel>
     </div>
