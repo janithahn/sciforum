@@ -9,7 +9,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import { MeetingRoom } from '@material-ui/icons';
-import axios from 'axios';
 import { Grid, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchwebinars } from './actions';
