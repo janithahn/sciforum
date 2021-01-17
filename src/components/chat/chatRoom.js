@@ -139,9 +139,25 @@ export default function ChatRoom() {
       
         fetchData();
     }, [db, room, roomname]);*/
+
+    /*useEffect(() => {
+        console.log('loading chats');
+        db.ref('chats/').orderByChild('roomKey').equalTo(roomKey).on('value', resp => {
+            //dispatch(messagesLoaded(snapshotToArray(resp)));
+            handleChats(snapshotToArray(resp));
+            }, (error) => {
+                if(error) {
+                    //dispatch(messagesFailed(error));
+                    console.log(error);
+                }else{
+                    console.log("Loaded successfully!");
+                }
+            });
+    }, [roomKey]);*/
+
     useEffect(() => {
-        if(roomKey) dispatch(fetchMessages(roomKey))
-    }, [dispatch, roomKey]);
+        if(roomKey && chatMessages.status === 'idle') dispatch(fetchMessages(roomKey))
+    }, [dispatch, roomKey, chatMessages]);
 
     useEffect(() => {
         const fetchData = () => {
