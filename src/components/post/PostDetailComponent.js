@@ -151,66 +151,64 @@ export default function PostDetail() {
                     <Grid container direction="row" justify="flex-start" alignItems="center" spacing={1}>
                         {RenderPostTags}
                     </Grid>
-                    <Grid item lg={8} sm xs={12}>
-                        <Grid container justify="space-between" alignItems="center" spacing={0}>
+                    <Grid container justify="space-between" alignItems="center" spacing={0}>
+                        <Grid item>
+                            <Grid container justify="center" alignItems="center" spacing={0}>
+                                <VoteButtons
+                                    likes={likes}
+                                    dislikes={dislikes}
+                                />
+                            </Grid>
+                        </Grid>
+                        {auth.isAuthenticated && auth.currentUser === owner ?
                             <Grid item>
                                 <Grid container justify="center" alignItems="center" spacing={0}>
-                                    <VoteButtons
-                                        likes={likes}
-                                        dislikes={dislikes}
-                                    />
-                                </Grid>
-                            </Grid>
-                            {auth.isAuthenticated && auth.currentUser === owner ?
-                                <Grid item>
-                                    <Grid container justify="center" alignItems="center" spacing={0}>
-                                        <Grid item>
-                                            <RouterLink to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
-                                                <Button
-                                                    className={classes.submit}
-                                                    color="primary"
-                                                    size="small"
-                                                >
-                                                Edit
-                                                </Button>
-                                            </RouterLink>
-                                        </Grid>
-                                        <Grid item>
+                                    <Grid item>
+                                        <RouterLink to={`/posts/${postId}/edit/`} style={{textDecoration: 'none'}}>
                                             <Button
                                                 className={classes.submit}
-                                                color="secondary"
-                                                onClick={handleClickOpen}
+                                                color="primary"
                                                 size="small"
                                             >
-                                                Delete
+                                            Edit
                                             </Button>
-                                        </Grid>
+                                        </RouterLink>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            className={classes.submit}
+                                            color="secondary"
+                                            onClick={handleClickOpen}
+                                            size="small"
+                                        >
+                                            Delete
+                                        </Button>
                                     </Grid>
                                 </Grid>
-                                : undefined
-                            }
-                        </Grid>
-                        <Divider/>
-                        {
-                            auth.isAuthenticated && showAddComment ? 
-                                <Button variant="text" size="small" style={{textTransform: "none"}} color="inherit" onClick={handleCommentBoxOpen}>
-                                    <Typography variant="subtitle2" color="primary">Add comment</Typography>
-                                </Button>: 
-                            undefined
+                            </Grid>
+                            : undefined
                         }
-                        {
-                            auth.isAuthenticated && openCommentBox ? 
-                                <PostCommentInput handleCommentSubmit={handleCommentSubmit} currentUserProfileImg={auth.currentUserProfileImg} postId={postId}/>: 
-                            undefined
-                        }
-                        {/*
-                            postComments.status === 'succeeded' && postComments.postComments !== [] ?
-                                <PostCommentRender/>:
-                            undefined
-                        */}
-                        <PostCommentRender/>
-                        <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
                     </Grid>
+                    <Divider/>
+                    {
+                        auth.isAuthenticated && showAddComment ? 
+                            <Button variant="text" size="small" style={{textTransform: "none"}} color="inherit" onClick={handleCommentBoxOpen}>
+                                <Typography variant="subtitle2" color="primary">Add comment</Typography>
+                            </Button>: 
+                        undefined
+                    }
+                    {
+                        auth.isAuthenticated && openCommentBox ? 
+                            <PostCommentInput handleCommentSubmit={handleCommentSubmit} currentUserProfileImg={auth.currentUserProfileImg} postId={postId}/>: 
+                        undefined
+                    }
+                    {/*
+                        postComments.status === 'succeeded' && postComments.postComments !== [] ?
+                            <PostCommentRender/>:
+                        undefined
+                    */}
+                    <PostCommentRender/>
+                    <AlertDialogSlide open={open} handleClose={handleClose} postId={id}/>
                 </ThemeProvider>
             </div>
         );

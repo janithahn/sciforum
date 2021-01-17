@@ -34,7 +34,7 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
 
     return(
        <Grid container direction="column" spacing={1}>
-           <Grid item lg={8} sm xs={12}>
+           <Grid item>
                 <Typography variant="h5" gutterBottom>
                     {title}
                 </Typography>
@@ -75,13 +75,13 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item lg={8} sm xs={12}>
+            <Grid item>
                 <Divider/>
             </Grid>
-            <Grid item lg={8} sm xs={12}>
+            <Grid item>
                 <Preview source={body}/>
             </Grid>
-            <Grid item lg={8} sm xs={12}>
+            <Grid item>
                 <Divider/>
             </Grid>
             <LoginModal openModal={openModal} classes={classes} handleModalClose={handleLoginModalClose}/>
