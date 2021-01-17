@@ -12,6 +12,7 @@ import { MeetingRoom } from '@material-ui/icons';
 import { Grid, Box } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchwebinars } from './actions';
+import { NewsSkel } from './skeletons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,7 +81,7 @@ export default function Webinars() {
     });
 
     if(webinars.status === 'loading') {
-        return(<div></div>);
+        return(<NewsSkel/>);
     }else if(webinars.status === 'failed') {
         return(<p>Error loading news and events</p>);
     }else {

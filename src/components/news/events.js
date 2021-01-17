@@ -12,6 +12,7 @@ import { LineWeight } from '@material-ui/icons';
 import { Grid } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchEvents } from './actions';
+import { NewsSkel } from './skeletons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Events() {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
 
   const dispatch = useDispatch();
   const events = useSelector(state => state.events);
@@ -73,7 +73,7 @@ export default function Events() {
   });
 
   if(events.status === 'loading') {
-    return(<div></div>);
+    return(<NewsSkel/>);
   }else if(events.status === 'failed') {
     return(<p>Error loading webinars</p>);
   }else {
