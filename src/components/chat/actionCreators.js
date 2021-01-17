@@ -37,14 +37,33 @@ export const fetchData = () => (dispatch) => {
 
     dispatch(roomsLoading());
 
-    firebaseAuth().signInWithCustomToken(localStorage.getItem("firebase_token"))
-        .then((user) => {
-            console.log("FIREBASE_SUCCESS:", user);
+    if(localStorage.getItem("isFirebaseAuthenticated") === "false"){
+        firebaseAuth().signInWithCustomToken(localStorage.getItem("firebase_token"))
+            .then((user) => {
+                console.log("FIREBASE_SUCCESS:", user);
+                localStorage.setItem("isFirebaseAuthenticated", true);
+            })
+            .catch((error) => {
+                console.log("FIREBASE_ERROR:", error);
+                localStorage.setItem("isFirebaseAuthenticated", false);
+        })
+        .then(() => {
+            db.ref('rooms/').once('value', resp => {
+                dispatch(addRooms(snapshotToArray(resp)));
+                //setNickname(localStorage.getItem('nickname'));
+            }, (error) => {
+                if(error) {
+                    dispatch(roomsFailed(error));
+                    console.log("Rooms failed to load");
+                }else {
+                    console.log("Rooms loaded successfully");
+                }
+            });
         })
         .catch((error) => {
-            console.log("FIREBASE_ERROR:", error);
-    })
-    .then(() => {
+            console.log(error);
+        });
+    }else {
         db.ref('rooms/').once('value', resp => {
             dispatch(addRooms(snapshotToArray(resp)));
             //setNickname(localStorage.getItem('nickname'));
@@ -56,10 +75,7 @@ export const fetchData = () => (dispatch) => {
                 console.log("Rooms loaded successfully");
             }
         });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+    }
 
 };
 

@@ -274,6 +274,7 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
+        localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
@@ -392,6 +393,7 @@ export const signupUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserRoomKeys', "[]");
+        localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
@@ -452,6 +454,7 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
+        localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
