@@ -7,6 +7,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import ProfilePanel from './panels/profilePanel';
+import Liked from './panels/liked';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -137,13 +138,7 @@ export default function ProfileTabs({ credentialsLoadingState }) {
         Item Four
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
+        <Liked/>
       </TabPanel>
     </div>
   );

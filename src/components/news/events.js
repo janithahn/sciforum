@@ -45,7 +45,7 @@ export default function Events() {
 
   React.useEffect(() => {
       if(events.status === 'idle') dispatch(fetchEvents());
-  }, [dispatch]);
+  }, [dispatch, events]);
 
   const eventsList = events.events.map((event) => {
         const title = event.title;

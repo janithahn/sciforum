@@ -45,7 +45,7 @@ export default function Webinars() {
 
     React.useEffect(() => {
         if(webinars.status === 'idle') dispatch(fetchwebinars());
-    }, [dispatch]);
+    }, [dispatch, webinars]);
 
     const webinarsList = webinars.webinars.map((item) => {
         const title = item.title;

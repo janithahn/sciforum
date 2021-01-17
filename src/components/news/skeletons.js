@@ -11,11 +11,6 @@ export const NewsSkel = props => (
         foregroundColor="#ecebeb"
         {...props}
     >
-        {/*<circle cx="31" cy="31" r="20" /> 
-        <rect x="58" y="18" rx="2" ry="2" width="160" height="10" /> 
-        <rect x="58" y="34" rx="2" ry="2" width="140" height="10" /> 
-        <rect x="0" y="60" rx="2" ry="2" width="345" height="400" />*/}
-
         <circle cx="35" cy="55" r="20" /> 
         <rect x="70" y="42" rx="2" ry="2" width="160" height="10" /> 
         <rect x="70" y="58" rx="2" ry="2" width="140" height="10" />

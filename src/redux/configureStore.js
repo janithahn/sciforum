@@ -23,6 +23,7 @@ import { Notifications } from './actions/notifications';
 import { MyPosts } from './actions/myposts';
 import { PostComments, AnswerComments } from './actions/comments';
 import { events, webinars } from './actions/news';
+import { LikedPosts } from './actions/profilePanels/liked';
 import { createReduxHistoryContext, reachify } from "redux-first-history";
 import { createBrowserHistory } from 'history';
 import { globalHistory } from "@reach/router";
@@ -67,6 +68,7 @@ export const ConfigureStore = () => {
             ChatMessages,
             events,
             webinars,
+            LikedPosts,
         }),
         composeEnhancers(applyMiddleware(thunk, logger, routerMiddleware))
     );
