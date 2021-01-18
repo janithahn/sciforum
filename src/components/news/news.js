@@ -23,7 +23,7 @@ export const useStyles = makeStyles((theme) => ({
     root: {
         //background: 'white',
         position: '-webkit-sticky',
-        position: 'sticky',
+        //position: 'sticky',
         top: 80,
         //bottom: 20, 
         //paddingTop: '50px',
