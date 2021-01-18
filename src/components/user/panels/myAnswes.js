@@ -31,7 +31,7 @@ export default function MyAnswes() {
     }else {
         return(
             <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
-                {postsList.length === 0 ? <Typography variant="subtitle1" color="textPrimary">{"You haven't to answered any question yet"}</Typography>: postsList}
+                {postsList.length === 0 ? <Typography variant="subtitle1" color="textPrimary">{"You haven't answered any question yet"}</Typography>: postsList}
             </Grid>
         );
     }
