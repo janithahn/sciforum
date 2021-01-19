@@ -98,7 +98,7 @@ export default function SignIn(props) {
 
   const googleResponse = (response) => {
     console.log(response);
-    dispatch(loginUserWithGoogle(response));
+    dispatch(loginUserWithGoogle(response, history, from));
   }
 
   const googleResponseOnFailure = (response) => {

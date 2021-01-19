@@ -421,7 +421,7 @@ const getTokenByKey = (obj, label, results=[]) => {
 };
 
 //GOOGLE AUTHENTICATION
-export const loginUserWithGoogle = (creds) => async (dispatch) => {
+export const loginUserWithGoogle = (creds, history, from) => async (dispatch) => {
     dispatch(requestLogin(creds));
 
     const access_token = getTokenByKey(creds, 'access_token');
@@ -458,6 +458,7 @@ export const loginUserWithGoogle = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserRoomKeys', "[]");
         localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
+        history.replace(from);
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })
