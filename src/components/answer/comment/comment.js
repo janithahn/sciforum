@@ -6,7 +6,7 @@ import { fetchAnswerComments, updateAnswerComments } from '../../../redux/Action
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/answerCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -103,6 +103,7 @@ export function AnswerCommentRender({ answerId }) {
 
     const auth = useSelector(state => state.Auth);
     const answerComments = useSelector(state => state.AnswerComments);
+    const answerCommentVotes = useSelector(state => state.answerCommentVotes.status === 'succeeded');
     
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
@@ -143,9 +144,40 @@ export function AnswerCommentRender({ answerId }) {
         setEditCommentId(undefined);
     }, [dispatch, postId]);
 
+    //Scrolling function
+    const location = useLocation();
+    const hash = location.hash;
+
+    let refs = answerComments.answerComments.reduce((acc, value) => {
+        acc["#ac" + value.id] = React.createRef();
+        return acc;
+    }, {});
+
+    const scrollTo = React.useCallback((id) =>
+        refs[id].current.scrollIntoView({
+            //behavior: 'smooth',
+            block: 'center',
+    }), [refs]);
+
+    React.useEffect(() => {
+        if(auth.isAuthenticated) {
+            if(answerCommentVotes) {   
+                if(refs && refs[hash].current) {
+                    scrollTo(hash); 
+                    refs[hash].current.style.animation = 'answer-background-fade 8s';
+                }
+            }
+        }else {
+            if(refs && refs[hash].current) {
+                scrollTo(hash); 
+                refs[hash].current.style.animation = 'answer-background-fade 8s';
+            }
+        }
+    }, [auth.isAuthenticated, refs, hash, scrollTo, answerCommentVotes]);
+
     const CommentsList = answerComments.answerComments.map(item => item.answer === answerId ?
 
-        <Grid item key={item.id}>
+        <Grid item key={item.id} innerRef={refs["#ac" + item.id]}>
             <Grid container direction="column">
                 <Grid item>
                     {editCommentId !== item.id ?

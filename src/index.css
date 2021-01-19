@@ -42,6 +42,23 @@ code {
   }
 }
 
+/* SELECTED COMMENT BACKGROUND STYLES */
+@-webkit-keyframes comment-background-fade {
+  25% {
+      background-color:#dcedc8;
+  }
+}
+@-moz-keyframes comment-background-fade {
+  25% {
+      background-color:#dcedc8;
+  }
+}
+@keyframes comment-background-fade {
+  25% {
+      background-color:#dcedc8;
+  }
+}
+
 /*body {
   font-family: sans-serif;
   line-height: 1.15;

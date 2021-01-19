@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
 import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { fetchPostComments, updatePostComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/postCommentVoteButtons';
@@ -149,62 +149,60 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
     );
 });
 
-const Comment = React.memo(({item, classes, displayContent, auth, handleDeleteModalOpen, handleEditComment, edit, editCommentId, handleEditCommentSubmit}) => {
+const Comment = React.memo(({item , classes, displayContent, auth, handleDeleteModalOpen, handleEditComment, edit, editCommentId, handleEditCommentSubmit}) => {
     
     //console.log("only one comment");
 
     return(
-        <Grid item> 
-            <Grid container direction="column">
-                <Grid item>
-                    {editCommentId !== item.id ? 
-                        <Paper component="form" className={classes.root} elevation={0} variant="outlined">
-                            <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
-                            <div className={classes.input}>
-                                <Editor readOnly editorState={displayContent}/>
-                            </div>
-                        </Paper>:
-                        undefined
-                    }
-                    {edit &&  editCommentId === item.id? 
-                        <PostCommentInput 
-                            currentUserProfileImg={item.ownerAvatar} 
-                            postId={item.postBelong} 
-                            displayContent={displayContent} 
-                            handleCommentSubmit={handleEditCommentSubmit}
-                            editCommentId={editCommentId}
-                        />:
-                        undefined
-                    }
-                </Grid>
-                <Grid item>
-                    <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
-                        {editCommentId !== item.id ? <Grid item>
-                            <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                <TimeAgo live={false} date={item.updated_at}/>
-                            </Typography>
+        <Grid container direction="column">
+            <Grid item>
+                {editCommentId !== item.id ? 
+                    <Paper component="form" className={classes.root} elevation={0} variant="outlined">
+                        <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                        <div className={classes.input}>
+                            <Editor readOnly editorState={displayContent}/>
+                        </div>
+                    </Paper>:
+                    undefined
+                }
+                {edit &&  editCommentId === item.id? 
+                    <PostCommentInput 
+                        currentUserProfileImg={item.ownerAvatar} 
+                        postId={item.postBelong} 
+                        displayContent={displayContent} 
+                        handleCommentSubmit={handleEditCommentSubmit}
+                        editCommentId={editCommentId}
+                    />:
+                    undefined
+                }
+            </Grid>
+            <Grid item>
+                <Grid container direction="row" alignItems="center" justify="flex-end" spacing={1}>
+                    {editCommentId !== item.id ? <Grid item>
+                        <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
+                            <TimeAgo live={false} date={item.updated_at}/>
+                        </Typography>
+                    </Grid>: undefined}
+                    {editCommentId !== item.id ? <Grid item>
+                        <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
+                    </Grid>: undefined}
+                    <Grid item>
+                        {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() && editCommentId !== item.id ? <Grid item>
+                            <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleEditComment(item)}>
+                                <Typography variant="body2">
+                                    {"Edit"}
+                                </Typography>
+                            </Button>
                         </Grid>: undefined}
-                        {editCommentId !== item.id ? <Grid item>
-                            <VoteButtons commentId={item.id} likes={item.likes} dislikes={item.dislikes}/>
+                    </Grid>
+                    <Grid item>
+                        {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
+                            <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
+                                <Typography variant="body2">
+                                    {"Delete"}
+                                </Typography>
+                            </Button>
                         </Grid>: undefined}
-                        <Grid item>
-                            {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() && editCommentId !== item.id ? <Grid item>
-                                <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleEditComment(item)}>
-                                    <Typography variant="body2">
-                                        {"Edit"}
-                                    </Typography>
-                                </Button>
-                            </Grid>: undefined}
-                        </Grid>
-                        <Grid item>
-                            {auth.isAuthenticated && auth.currentUserId.toString() === item.owner.toString() ? <Grid item>
-                                <Button color="secondary" size="small" className={classes.deleteButton} onClick={() => handleDeleteModalOpen(item)}>
-                                    <Typography variant="body2">
-                                        {"Delete"}
-                                    </Typography>
-                                </Button>
-                            </Grid>: undefined}
-                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
@@ -220,6 +218,7 @@ export function PostCommentRender() {
 
     const auth = useSelector(state => state.Auth);
     const postComments = useSelector(state => state.PostComments);
+    const postCommentVotes = useSelector(state => state.postCommentVotes.status === 'succeeded');
 
     const comments = postComments.postComments;
 
@@ -265,23 +264,56 @@ export function PostCommentRender() {
         setEditCommentId(undefined);
     }, [dispatch, postId]);
 
+    //Scrolling function
+    const location = useLocation();
+    const hash = location.hash;
+
+    let refs = comments.reduce((acc, value) => {
+        acc["#pc" + value.id] = React.createRef();
+        return acc;
+    }, {});
+
+    const scrollTo = React.useCallback((id) =>
+        refs[id].current.scrollIntoView({
+            //behavior: 'smooth',
+            block: 'center',
+    }), [refs]);
+
+    React.useEffect(() => {
+        if(auth.isAuthenticated) {
+            if(postCommentVotes) {   
+                if(refs && refs[hash].current) {
+                    scrollTo(hash); 
+                    refs[hash].current.style.animation = 'answer-background-fade 8s';
+                }
+            }
+        }else {
+            if(refs && refs[hash].current) {
+                scrollTo(hash); 
+                refs[hash].current.style.animation = 'answer-background-fade 8s';
+            }
+        }
+    }, [auth.isAuthenticated, refs, hash, scrollTo, postCommentVotes]);
+
     const CommentsList = comments.map(item => {
 
         const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
 
-        return(
-            <Comment 
-                key={item.id} 
-                classes={classes}
-                displayContent={displayContent}
-                auth={auth}
-                item={item} 
-                handleDeleteModalOpen={handleDeleteModalOpen}
-                handleEditComment={handleEditComment}
-                edit={edit}
-                editCommentId={editCommentId}
-                handleEditCommentSubmit={handleEditCommentSubmit}
-            />
+        return( 
+            <Grid item innerRef={refs["#pc" + item.id]}> 
+                <Comment
+                    key={item.id} 
+                    classes={classes}
+                    displayContent={displayContent}
+                    auth={auth}
+                    item={item} 
+                    handleDeleteModalOpen={handleDeleteModalOpen}
+                    handleEditComment={handleEditComment}
+                    edit={edit}
+                    editCommentId={editCommentId}
+                    handleEditCommentSubmit={handleEditCommentSubmit}
+                />
+            </Grid>
         );
     });
 

@@ -8,6 +8,7 @@ import { useStyles, themeVote } from './styles/voteStyles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { postPostVote, updatePostVote, fetchPostVotesByLoggedInUser } from '../../redux/ActionCreators';
+import AlertSnackbar from '../alert/snackbar';
 
  export default function VoteButtons({ likes, dislikes }) {
 
@@ -15,6 +16,8 @@ import { postPostVote, updatePostVote, fetchPostVotesByLoggedInUser } from '../.
 
     const auth = useSelector(state => state.Auth);
     const postVotes = useSelector(state => state.postVotes);
+
+    const [snackbar, setSnackbar] = React.useState(false);
 
     const [currentUserVote, setCurrentUserVote] = React.useState({
         type: '',
@@ -81,6 +84,10 @@ import { postPostVote, updatePostVote, fetchPostVotesByLoggedInUser } from '../.
         setOpenModal(false);
     };
 
+    const handleSnackbar = () => {
+        setSnackbar(true)
+    };
+
     const handleLike = () => {
         if(isAuthenticated) {
             if(dislikeColorChange === "primary") setDislikeColorChange("secondary");
@@ -96,10 +103,12 @@ import { postPostVote, updatePostVote, fetchPostVotesByLoggedInUser } from '../.
                 setLikedUser(currentUserId);
                 setLikeCount(likeCount + 1);
                 dispatch(postPostVote(postId, 'LIKE', currentUserId));
+                handleSnackbar();
                 if(dislikedUser.toString() === currentUserId.toString()) {
                     setDislikedUser('');
                     setDislikeCount(dislikeCount - 1);
                     dispatch(updatePostVote(postId, 'LIKE', currentUserId));
+                    handleSnackbar();
                 }
             }
         }else {
@@ -162,6 +171,7 @@ import { postPostVote, updatePostVote, fetchPostVotesByLoggedInUser } from '../.
                 </Grid>
             </Grid>
             <LoginModal openModal={openModal} classes={classes} handleModalClose={handleModalClose}/>
+            <AlertSnackbar message={"Added to liked posts"} setOpen={setSnackbar} open={snackbar}/>
         </ThemeProvider>
     );
 }

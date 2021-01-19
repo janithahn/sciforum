@@ -7,7 +7,7 @@ import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
 import AnswerViewCard from './answerViewCard';
-//import AnswerSkel from './skeletons/answer';
+import AnswerSkel from './skeletons/answer';
 
 function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, answerId, postId, ...rest}) {
     return(
@@ -43,7 +43,7 @@ export default function Answer() {
 
     const answers = useSelector(state => state.Answers)
     const auth = useSelector(state => state.Auth);
-    //const answerVotesLoading = useSelector(state => state.answerVotes.status)
+    const answerVotesLoading = useSelector(state => state.answerVotes.status)
     const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
 
     const dispatch = useDispatch();
@@ -93,12 +93,12 @@ export default function Answer() {
         }
     }, [auth.isAuthenticated, refs, hash, scrollTo, votesStatus]);
     
-    React.useEffect(() => {
+    /*React.useEffect(() => {
         if(refs && refs[Number(hash)]) {
             scrollTo(Number(hash)); 
             refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
         }
-    }, [refs, hash, scrollTo]);
+    }, [refs, hash, scrollTo]);*/
 
     const handleModalOpen = (answer) => {
         setSelectedAnswerContent(answer.answerContent);
@@ -132,7 +132,7 @@ export default function Answer() {
         </Grid>
     ));
 
-    /*if(answers.status === 'loading' || answerVotesLoading === 'loading') {
+    if(answers.status === 'loading' || answerVotesLoading === 'loading') {
         return(
             <div>
                 <AnswerSkel/>
@@ -141,7 +141,7 @@ export default function Answer() {
         );
     }else if(answers.status === 'failed') {
         return(<h4>Error loading...!</h4>);
-    }else {*/
+    }else {
 
         return(
             <div className={classes.root}>
@@ -179,5 +179,5 @@ export default function Answer() {
                 </ThemeProvider>
             </div>
         );
-    
+    }
 }

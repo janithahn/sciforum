@@ -359,6 +359,34 @@ export default function EnhancedTable({ rows, currentUser }) {
 
   //console.log(rows);
 
+  const pickLink = (row) => {
+    if(row.action_object){
+      if(row.action_object.notification_type === "comment | answer comment") return(
+        <Link color="inherit" underline="none" href={`/questions/${row.action_object.post}/#ac${row.action_object.id}`}>
+          {row.notification}
+        </Link>
+      );
+
+      if(row.action_object.notification_type === "comment | post comment") return(
+        <Link color="inherit" underline="none" href={`/questions/${row.action_object.post}/#pc${row.action_object.id}`}>
+          {row.notification}
+        </Link>
+      )
+
+      if(row.action_object.notification_type === "answer | answer") return(
+        <Link color="inherit" underline="none" href={`/questions/${row.action_object.postBelong}/#${row.action_object.id}`}>
+          {row.notification}
+        </Link>
+      )
+
+      if(row.action_object.notification_type === "post | post") return(
+        <Link color="inherit" underline="none" href={`/questions/${row.action_object.id}/`}>
+          {row.notification}
+        </Link>
+      )
+    }
+  };
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -394,7 +422,7 @@ export default function EnhancedTable({ rows, currentUser }) {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  //console.log(row.action_object);
+                  console.log(row);
 
                   if(row.actor.username === currentUser) {
                     return <div key={row.id}></div>
@@ -417,10 +445,8 @@ export default function EnhancedTable({ rows, currentUser }) {
                             </TableCell>
                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                 <Box fontWeight={row.state ? "fontWeightBold": ""} fontSize={14}>
-                                  {row.action_object && row.action_object.answerContent ? 
-                                    <Link color="inherit" underline="none" href={`/questions/${row.action_object.postBelong}/#${row.action_object.id}`}>
-                                      {row.notification}
-                                    </Link>: row.notification
+                                  {row.action_object ? 
+                                    pickLink(row): row.notification
                                   }
                                 </Box>
                             </TableCell>
