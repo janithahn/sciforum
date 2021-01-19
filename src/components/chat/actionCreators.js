@@ -37,7 +37,7 @@ export const fetchData = () => (dispatch) => {
 
     dispatch(roomsLoading());
 
-    if(localStorage.getItem("isFirebaseAuthenticated") === "false"){
+    /*if(localStorage.getItem("isFirebaseAuthenticated") === "false"){
         firebaseAuth().signInWithCustomToken(localStorage.getItem("firebase_token"))
             .then((user) => {
                 console.log("FIREBASE_SUCCESS:", user);
@@ -63,7 +63,7 @@ export const fetchData = () => (dispatch) => {
         .catch((error) => {
             console.log(error);
         });
-    }else {
+    }else {*/
         db.ref('rooms/').once('value', resp => {
             dispatch(addRooms(snapshotToArray(resp)));
             //setNickname(localStorage.getItem('nickname'));
@@ -75,7 +75,7 @@ export const fetchData = () => (dispatch) => {
                 console.log("Rooms loaded successfully");
             }
         });
-    }
+    
 
 };
 

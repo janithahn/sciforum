@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Header from './header/HeaderComponent';
 import Home from './home/HomeComponent';
 import MyPosts from './myposts/MyPosts';
-import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter, useLocation, useHistory } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { postPost, logout, getNewToken } from '../redux/ActionCreators';
@@ -110,10 +110,14 @@ function Main(props) {
         //const post = posts.posts.filter((post) => post.id === parseInt(postId))[0]
 
         if(post.post) {
-            return (<Route {...rest} render={() => (
+            return (<Route {...rest} render={(location) => (
                 auth.isAuthenticated && post.post.owner && post.post.owner.toString() === auth.currentUser.toString()
                 ? <Component postId={post.post.id}/>
-                : <Redirect to='/' />
+                : <Redirect to={{
+                    pathname: '/',
+                    state: { from: location }
+                }}
+                />
             )} />)
         } else {
             return (<NotFound/>)
@@ -121,34 +125,50 @@ function Main(props) {
     };
 
     const PrivateRoutPostCreate = ({ component: Component, ...rest }) => (
-        <Route {...rest} render={() => (
+        <Route {...rest} render={({location}) => (
             auth.isAuthenticated
             ? <Component/>
-            : <Redirect to="/signin"/> //or you can add props.history.push('/signin') here
+            : <Redirect to={{
+                pathname: '/signin',
+                state: { from: location }
+            }}
+            /> //or you can add props.history.push('/signin') here
         )} />
     );
 
     const PrivateRouteNotifications = ({ component: Component, ...rest}) => (
-        <Route {...rest} render={() => (
+        <Route {...rest} render={({location}) => (
             auth.isAuthenticated
             ? <Component/>
-            : <Redirect to="/signin"/>
+            : <Redirect to={{
+                pathname: '/signin',
+                state: { from: location }
+            }}
+            />
         )} />
     );
 
     const PrivateRouteSettings = ({ component: Component, ...rest}) => (
-        <Route {...rest} render={() => (
+        <Route {...rest} render={({location}) => (
             auth.isAuthenticated
             ? <Component/>
-            : <Redirect to="/signin"/>
+            : <Redirect to={{
+                pathname: '/signin',
+                state: { from: location }
+            }}
+            />
         )} />
     );
 
     const PrivateRouteMyPosts = ({ component: Component, ...rest}) => (
-        <Route {...rest} render={() => (
+        <Route {...rest} render={({location}) => (
             auth.isAuthenticated
             ? <Component/>
-            : <Redirect to="/signin"/>
+            : <Redirect to={{
+                pathname: '/signin',
+                state: { from: location }
+            }}
+            />
         )} />
     );
 
@@ -161,14 +181,20 @@ function Main(props) {
         }
         next();
     }*/
+
+    let { from } = location.state || { from: { pathname: "/" } };
     
     const PrivateChatRoute = ({ component: Component, ...rest}) => (
-        <Route {...rest} render={() => (
+        <Route {...rest} render={({location}) => (
             auth.isAuthenticated && auth.isFirebaseAuthenticated
             ? <Component/>
             : auth.isAuthenticated && !auth.isFirebaseAuthenticated
             ?  <ChatroomPermissionDenied/>
-            : <Redirect to="/signin"/>
+            : <Redirect to={{
+                pathname: '/signin',
+                state: { from: location }
+            }}
+            />
         )} />
     );
 

@@ -282,13 +282,13 @@ export function PostCommentRender() {
     React.useEffect(() => {
         if(auth.isAuthenticated) {
             if(postCommentVotes) {   
-                if(refs && refs[hash].current) {
+                if(refs && refs[hash] && refs[hash].current) {
                     scrollTo(hash); 
                     refs[hash].current.style.animation = 'answer-background-fade 8s';
                 }
             }
         }else {
-            if(refs && refs[hash].current) {
+            if(refs && refs[hash] && refs[hash].current) {
                 scrollTo(hash); 
                 refs[hash].current.style.animation = 'answer-background-fade 8s';
             }

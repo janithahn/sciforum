@@ -242,7 +242,8 @@ export const loginError = (loginErrMessage) => {
     });
 }
 
-export const loginUser = (creds) => async (dispatch) => {
+export const loginUser = (creds, history, from) => async (dispatch) => {
+
     dispatch(requestLogin(creds));
 
     return await axios.post(baseUrl + '/jwtlogin/', {
@@ -276,7 +277,8 @@ export const loginUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserRoomKeys', "[]");
         localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
-        window.location.reload();
+        history.replace(from);
+        //window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {

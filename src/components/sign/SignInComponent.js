@@ -24,6 +24,7 @@ import { loginUser, loginUserWithGoogle } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGoogleLogin } from 'react-google-login';
 import { clientId } from '../../shared/googleApiClientId';
+import { useHistory, useLocation } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -55,6 +56,10 @@ export default function SignIn(props) {
   const [credentialError, setCredentialError] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
   
+  let history = useHistory();
+  let location = useLocation();
+  let { from } = location.state || { from: { pathname: "/" } };
+  
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {
       if(auth.errMess.response) {
@@ -74,7 +79,7 @@ export default function SignIn(props) {
   const formik = useFormik({
     initialValues: {username: '', email: '', password: '', rememberMe: false},
     onSubmit: (values) => {
-      dispatch(loginUser(values));
+      dispatch(loginUser(values, history, from));
       /*if(auth.isAuthenticated) {
         return(<Redirect to="/questions"/>);
       }*/

@@ -162,13 +162,13 @@ export function AnswerCommentRender({ answerId }) {
     React.useEffect(() => {
         if(auth.isAuthenticated) {
             if(answerCommentVotes) {   
-                if(refs && refs[hash].current) {
+                if(refs && refs[hash] && refs[hash].current) {
                     scrollTo(hash); 
                     refs[hash].current.style.animation = 'answer-background-fade 8s';
                 }
             }
         }else {
-            if(refs && refs[hash].current) {
+            if(refs && refs[hash] && refs[hash].current) {
                 scrollTo(hash); 
                 refs[hash].current.style.animation = 'answer-background-fade 8s';
             }
