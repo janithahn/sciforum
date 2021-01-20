@@ -269,8 +269,10 @@ export const loginUser = (creds, history, from) => async (dispatch) => {
         localStorage.setItem('currentUserRoomKeys', "[]");
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
         history.replace(from); //redirecting back to where it was
-        window.location.reload();
         //dispatch(fetchUser(token, currentUser));
+    })
+    .then(() => {
+        window.location.reload();
     })
     .catch(error => {
         dispatch(loginError(error));
