@@ -7,6 +7,7 @@ import { db } from '../../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData as fetchRooms, resetMessages } from './actionCreators';
 import AddRoomModal from './addRoomModal';
+import ChatroomPermissionDenied from './permissionDenied';
 
 const useStyles = makeStyles({
     root: {
@@ -109,6 +110,7 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
     const chatRooms = useSelector(state => state.ChatRooms);
     const messages = useSelector(state => state.ChatMessages);
     const auth = useSelector(state => state.Auth);
+    const authFirebase = useSelector(state => state.AuthFirebase);
 
     console.log(chatRooms);
 
@@ -117,8 +119,8 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
     const room = chatRooms.rooms;
 
     useEffect(() => {
-        if(chatRooms.status === 'idle') dispatch(fetchRooms());
-    }, [dispatch, chatRooms]);
+        if(chatRooms.status === 'idle' && authFirebase.isAuthenticated) dispatch(fetchRooms());
+    }, [dispatch, chatRooms, authFirebase]);
 
     useEffect(() => {
         if(messages.status === 'succeeded') dispatch(resetMessages());
@@ -169,44 +171,50 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
         </Grid>
     ));
 
-    return (
-        <div>
-            {/*{username} <Button style={{textTransform: 'none'}} onClick={() => logout()} size="small">Logout</Button>*/}
-            <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
-                <Grid item>
-                    <Typography variant="h5">Chat Rooms</Typography>
+    if(authFirebase.status === 'loading') {
+        return(<div></div>)
+    }else if(authFirebase.status === 'failed') {
+        return(<ChatroomPermissionDenied/>)
+    }else {
+        return (
+            <div>
+                {/*{username} <Button style={{textTransform: 'none'}} onClick={() => logout()} size="small">Logout</Button>*/}
+                <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
+                    <Grid item>
+                        <Typography variant="h5">Chat Rooms</Typography>
+                    </Grid>
+                    <Grid item>
+                        {auth.isAuthenticated ? 
+                            <Button
+                                style={{textTransform: 'none'}} 
+                                color="secondary" 
+                                variant="outlined" 
+                                size="small" 
+                                onClick={handleModalOpen}
+                            >
+                                Add Room
+                            </Button>:
+                            undefined
+                        }
+                    </Grid>
                 </Grid>
-                <Grid item>
-                    {auth.isAuthenticated ? 
-                        <Button
-                            style={{textTransform: 'none'}} 
-                            color="secondary" 
-                            variant="outlined" 
-                            size="small" 
-                            onClick={handleModalOpen}
-                        >
-                            Add Room
-                        </Button>:
-                        undefined
-                    }
+                <br/>
+                <Grid container direction="row" justify="flex-start" alignItems="stretch" spacing={2}>
+                    {RoomList}
                 </Grid>
-            </Grid>
-            <br/>
-            <Grid container direction="row" justify="flex-start" alignItems="stretch" spacing={2}>
-                {RoomList}
-            </Grid>
-            <EditModal>
-                <Fade in={openModal}>
-                    <AddRoomModal 
-                        type="create" 
-                        openModal={openModal} 
-                        handleModalClose={handleModalClose}
-                        setSnackMessage={setSnackMessage}
-                        setSnackOpen={setSnackOpen}
-                    />
-                </Fade>
-            </EditModal>
-        </div>
-    );
+                <EditModal>
+                    <Fade in={openModal}>
+                        <AddRoomModal 
+                            type="create" 
+                            openModal={openModal} 
+                            handleModalClose={handleModalClose}
+                            setSnackMessage={setSnackMessage}
+                            setSnackOpen={setSnackOpen}
+                        />
+                    </Fade>
+                </EditModal>
+            </div>
+        );
+    }
 
 }

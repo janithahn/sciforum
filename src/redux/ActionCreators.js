@@ -260,14 +260,6 @@ export const loginUser = (creds, history, from) => async (dispatch) => {
         const currentUserEmail = res.data.user.email;
         const currentUserProfileImg = res.data.user.profile.profileImg;
 
-        auth().signInWithCustomToken(firebase_token)
-        .then((user) => {
-            console.log("FIREBASE_SUCCESS:", user);
-        })
-        .catch((error) => {
-            console.log("FIREBASE_ERROR:", error);
-        });
-
         localStorage.setItem('token', token);
         localStorage.setItem('firebase_token', firebase_token);
         localStorage.setItem('currentUser', currentUser);
@@ -275,10 +267,9 @@ export const loginUser = (creds, history, from) => async (dispatch) => {
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
-        history.replace(from);
-        //window.location.reload();
+        history.replace(from); //redirecting back to where it was
+        window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })
     .catch(error => {
@@ -298,6 +289,64 @@ export const logoutSuccess = () => {
     }
 }
 
+//START FIREBASE AUTH
+export const requestFirebaseLogin = () => {
+    return ({
+        type: ActionTypes.FIREBASE_LOGIN_REQUEST,
+    });
+}
+
+export const firebaseLoginSuccess = (firebase_user) => {
+    return({
+        type: ActionTypes.FIREBASE_LOGIN_SUCCESS,
+        firebase_user,
+    });
+}
+
+export const firebaseLoginError = (loginErrMessage) => {
+    return({
+        type: ActionTypes.FIREBASE_LOGIN_FAILURE,
+        errMess: loginErrMessage
+    });
+}
+
+export const firebaseLoginUser = (access_token) => async (dispatch) => {
+
+    dispatch(requestFirebaseLogin());
+
+    auth().signInWithCustomToken(access_token)
+    .then((user) => {
+        console.log("FIREBASE_SUCCESS:", user);
+        dispatch(firebaseLoginSuccess(user));
+        localStorage.setItem('firebase_user', user)
+    })
+    .catch((error) => {
+        console.log("FIREBASE_ERROR:", error);
+        dispatch(firebaseLoginError(error));
+    });
+
+}
+
+export const requestFirebaseLogout = () => {
+    return {
+      type: ActionTypes.FIREBASE_LOGOUT_REQUEST
+    }
+}
+  
+export const firebaseLogoutSuccess = () => {
+    return {
+      type: ActionTypes.FIREBASE_LOGOUT_SUCCESS
+    }
+}
+
+export const firebaseLogoutFailure = (error) => {
+    return {
+      type: ActionTypes.FIREBASE_LOGOUT_FAILURE,
+      errMess: error
+    }
+}
+//END FIREBASE AUTH
+
 const snapshotToArray = (snapshot) => {
     const returnArr = [];
 
@@ -310,43 +359,63 @@ const snapshotToArray = (snapshot) => {
     return returnArr;
 }
 
+const roomsReset = () => ({
+    type: ActionTypes.RESET_ROOMS,
+});
+
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
+
+    dispatch(requestFirebaseLogout());
 
     const currentUserRoomKeys = JSON.parse(localStorage.getItem('currentUserRoomKeys'));
     if(currentUserRoomKeys) {
         let len = currentUserRoomKeys.length;
-
-        for(let roomKey of currentUserRoomKeys) {
-            db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey.toString()).once('value', (resp) => {
-                let roomuser = [];
-                roomuser = snapshotToArray(resp);
-
-                for(let user of roomuser) {
-                    if(user !== undefined){
-                        const userRef = db.ref('roomusers/').child(user.key);
-                        userRef.update({status: "offline"})
-                        .then(() => {
-                            console.log("Status updated successfully!");
-                        })
-                        .catch(() => {
-                            console.log("Status update failed!");
-                        });
-                    }
-                    len = len - 1;
-                    if(len === 0) {    
-                        auth().signOut()
-                        .then(() => {
-                            console.log("Sign out firebase successfull");
-                        })
-                        .catch(() => {
-                            console.log("Sign out firebase error");
-                        });
-                        localStorage.clear();
-                    }
-                }
+        
+        if(len === 0) {    
+            auth().signOut()
+            .then(() => {
+                console.log("Sign out firebase successfull");
+                dispatch(firebaseLogoutSuccess());
+            })
+            .catch((error) => {
+                console.log("Sign out firebase error");
+                dispatch(firebaseLogoutFailure(error));
             });
+            localStorage.clear();
+        }else {
+            for(let roomKey of currentUserRoomKeys) {
+                db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey.toString()).once('value', (resp) => {
+                    let roomuser = [];
+                    roomuser = snapshotToArray(resp);
 
+                    for(let user of roomuser) {
+                        if(user !== undefined){
+                            const userRef = db.ref('roomusers/').child(user.key);
+                            userRef.update({status: "offline"})
+                            .then(() => {
+                                console.log("Status updated successfully!");
+                            })
+                            .catch(() => {
+                                console.log("Status update failed!");
+                            });
+                        }
+                        len = len - 1;
+                        if(len === 0) {    
+                            auth().signOut()
+                            .then(() => {
+                                console.log("Sign out firebase successfull");
+                                dispatch(firebaseLogoutSuccess());
+                            })
+                            .catch((error) => {
+                                console.log("Sign out firebase error");
+                                dispatch(firebaseLogoutFailure(error));
+                            });
+                            localStorage.clear();
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -359,6 +428,7 @@ export const logout = () => (dispatch) => {
     localStorage.removeItem('currentUserProfileImg');
     dispatch(resetPostVotes());
     dispatch(resetAnswersVotes());
+    dispatch(roomsReset());
     dispatch(logoutSuccess());
 }
 
@@ -381,21 +451,12 @@ export const signupUser = (creds) => async (dispatch) => {
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
 
-        auth().signInWithCustomToken(firebase_token)
-        .then((user) => {
-            console.log("FIREBASE_SUCCESS:", user);
-        })
-        .catch((error) => {
-            console.log("FIREBASE_ERROR:", error);
-        });
-
         localStorage.setItem('token', token);
         localStorage.setItem('firebase_token', firebase_token);
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
@@ -440,14 +501,6 @@ export const loginUserWithGoogle = (creds, history, from) => async (dispatch) =>
         const currentUserEmail = res.data.user.email;
         const currentUserProfileImg = creds.profileObj.imageUrl;
 
-        auth().signInWithCustomToken(firebase_token)
-        .then((user) => {
-            console.log("FIREBASE_SUCCESS:", user);
-        })
-        .catch((error) => {
-            console.log("FIREBASE_ERROR:", error);
-        });
-
         localStorage.setItem('googleToken', googleToken);
         localStorage.setItem('token', token);
         localStorage.setItem('firebase_token', firebase_token);
@@ -456,9 +509,8 @@ export const loginUserWithGoogle = (creds, history, from) => async (dispatch) =>
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        localStorage.setItem("isFirebaseAuthenticated", false);
         dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
-        history.replace(from);
+        history.replace(from); //redirecting back to where it was
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
     })

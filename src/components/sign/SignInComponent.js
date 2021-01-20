@@ -56,6 +56,7 @@ export default function SignIn(props) {
   const [credentialError, setCredentialError] = React.useState('');
   const [showPassword, setShowPassword] = React.useState(false);
   
+  //these are used to redirect back to where it was when the user logs in
   let history = useHistory();
   let location = useLocation();
   let { from } = location.state || { from: { pathname: "/" } };

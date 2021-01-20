@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import Header from './header/HeaderComponent';
 import Home from './home/HomeComponent';
 import MyPosts from './myposts/MyPosts';
-import { Switch, Route, Redirect, withRouter, useLocation, useHistory } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter, useLocation } from 'react-router-dom';
 import { useStyles } from './../styles/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { postPost, logout, getNewToken } from '../redux/ActionCreators';
+import { postPost, logout, getNewToken, firebaseLoginUser } from '../redux/ActionCreators';
 import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
 import SignIn from './sign/SignInComponent';
@@ -28,13 +28,13 @@ import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
 import ResetConfirm from './passwordReset/resetConfirm';
 // Chat App
-import ChatroomPermissionDenied from './chat/permissionDenied';
 import RoomList from './chat/roomList';
 import ChatRoom from './chat/chatRoom';
 
 function Main(props) {
     const post = useSelector(state => state.Post);
     const auth = useSelector(state => state.Auth);
+    const authFirebase = useSelector(state => state.AuthFirebase);
     const location = useLocation();
     const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ function Main(props) {
         state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, 
         state.answerVotes.status, state.postVotes.status, state.PostComments.status,
         state.AnswerComments.status, state.SendResetPassword.status, state.ChatRooms.status,
-        state.ChatMessages.status, state.events.status, state.webinars.status
+        state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -53,6 +53,14 @@ function Main(props) {
     const [snackOpen, setSnackOpen] = React.useState(false);
     const [snackMessage, setSnackMessage] = React.useState('');
 
+    //login user into firebase if already not
+    useEffect(() => {
+        if(auth.isAuthenticated && authFirebase.status === 'idle' && !authFirebase.isAuthenticated)
+            dispatch(firebaseLoginUser(auth.firebase_token));
+    }, [dispatch, authFirebase, auth]);
+    console.log(authFirebase);
+
+    //showing the progress bar under the appbar
     useEffect(() => {
         setShowProgressBar(isLoading);
     }, [isLoading]);
@@ -181,15 +189,11 @@ function Main(props) {
         }
         next();
     }*/
-
-    let { from } = location.state || { from: { pathname: "/" } };
     
     const PrivateChatRoute = ({ component: Component, ...rest}) => (
         <Route {...rest} render={({location}) => (
-            auth.isAuthenticated && auth.isFirebaseAuthenticated
+            auth.isAuthenticated
             ? <Component/>
-            : auth.isAuthenticated && !auth.isFirebaseAuthenticated
-            ?  <ChatroomPermissionDenied/>
             : <Redirect to={{
                 pathname: '/signin',
                 state: { from: location }
