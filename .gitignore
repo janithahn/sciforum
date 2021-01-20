@@ -27,3 +27,4 @@ yarn-error.log*
 
 /src/shared/googleApiClientId.js
 src/shared/googleApiClientId.js
+.env

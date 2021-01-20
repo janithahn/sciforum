@@ -1,6 +1,6 @@
 import * as ActionTypes from '../../redux/ActionTypes';
 import Moment from 'moment';
-import { db, auth as firebaseAuth } from '../../firebase/config';
+import { db } from '../../firebase/config';
 
 const snapshotToArray = (snapshot) => {
     const returnArr = [];
