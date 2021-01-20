@@ -55,7 +55,7 @@ function Main(props) {
 
     //login user into firebase if already not
     useEffect(() => {
-        if(auth.isAuthenticated && authFirebase.status === 'idle' && !authFirebase.isAuthenticated)
+        if(auth.isAuthenticated && authFirebase.status === 'idle' && authFirebase.isAuthenticated === false)
             dispatch(firebaseLoginUser(auth.firebase_token));
     }, [dispatch, authFirebase, auth]);
     console.log(authFirebase);

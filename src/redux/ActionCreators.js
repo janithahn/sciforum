@@ -366,13 +366,12 @@ const roomsReset = () => ({
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
 
-    dispatch(requestFirebaseLogout());
-
     const currentUserRoomKeys = JSON.parse(localStorage.getItem('currentUserRoomKeys'));
     if(currentUserRoomKeys) {
         let len = currentUserRoomKeys.length;
         
-        if(len === 0) {    
+        if(len === 0) { 
+            dispatch(requestFirebaseLogout());   
             auth().signOut()
             .then(() => {
                 console.log("Sign out firebase successfull");
@@ -401,7 +400,8 @@ export const logout = () => (dispatch) => {
                             });
                         }
                         len = len - 1;
-                        if(len === 0) {    
+                        if(len === 0) { 
+                            dispatch(requestFirebaseLogout());   
                             auth().signOut()
                             .then(() => {
                                 console.log("Sign out firebase successfull");
