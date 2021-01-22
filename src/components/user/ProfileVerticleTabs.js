@@ -9,6 +9,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import ProfilePanel from './panels/profilePanel';
 import Liked from './panels/liked';
 import MyAnswers from './panels/myAnswes';
+import { useSelector } from 'react-redux';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -99,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProfileTabs({ credentialsLoadingState }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const auth = useSelector(state => state.Auth);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -117,9 +119,9 @@ export default function ProfileTabs({ credentialsLoadingState }) {
           aria-label="scrollable auto tabs"
         >
           <TabEnhanced label="Profile" {...a11yProps(0)} />
-          <TabEnhanced label="Recent" {...a11yProps(1)} />
-          <TabEnhanced label="Answers" {...a11yProps(2)} />
-          <TabEnhanced label="Liked" {...a11yProps(3)} />
+          {auth.isAuthenticated ? <TabEnhanced label="Recent" {...a11yProps(1)} />: undefined}
+          {auth.isAuthenticated ? <TabEnhanced label="Answers" {...a11yProps(2)} />: undefined}
+          {auth.isAuthenticated ? <TabEnhanced label="Liked" {...a11yProps(3)} />: undefined}
         </Tabs>
         {credentialsLoadingState ? 
           <LinearProgress color="secondary" style={{height: 1}} /*className={classes.progressBar}*//>: 
@@ -128,15 +130,17 @@ export default function ProfileTabs({ credentialsLoadingState }) {
       <TabPanel value={value} index={0}>
         <ProfilePanel/>
       </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <MyAnswers/>
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <Liked/>
-      </TabPanel>
+      {auth.isAuthenticated ? <div>
+        <TabPanel value={value} index={1}>
+          Item Two
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <MyAnswers/>
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <Liked/>
+        </TabPanel>
+      </div>: undefined}
     </div>
   );
 }
