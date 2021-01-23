@@ -7,10 +7,35 @@ import "draft-js/dist/Draft.css";
 import { ThemeProvider, FormHelperText } from '@material-ui/core';
 import { theme } from './styles/postsStyles';
 import axios from 'axios';
+import { baseUrl } from '../../shared/baseUrl';
+import { isJWTExpired } from '../../shared/AdditionalFunctions';
+
+const headerWithToken = {
+  "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+};
+
+function fetchMentions(setMentions) {
+  axios(baseUrl + "/profile_api/mentions/list/", headerWithToken)
+  .then((res) => {
+    console.log(res.data);
+    const tempLst = [];
+    for(let item of res.data) {
+      const lstItem = {
+        preview: item.first_name + " " + item.last_name,
+        value: item.username,
+      }
+      tempLst.push(lstItem);
+    }
+
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
+}
 
 function loadSuggestions(text) {
   return new Promise((accept, reject) => {
-    setTimeout(() => {
+    /*setTimeout(() => {
       const suggestions = [
         {
           preview: "Andre",
@@ -30,7 +55,25 @@ function loadSuggestions(text) {
         }
       ].filter((i) => i.preview.toLowerCase().includes(text.toLowerCase()));
       accept(suggestions);
-    }, 5000);
+      fetchMentions();
+    }, 250);*/
+    
+    axios(baseUrl + "/profile_api/mentions/list/", headerWithToken)
+    .then((res) => {
+      console.log(res.data);
+      const suggestions = [];
+      for(let item of res.data) {
+        const suggestItem = {
+          preview: item.username,
+          value: "@"+item.username,
+        }
+        suggestions.push(suggestItem);
+      }
+      accept(suggestions.filter((i) => i.preview.toLowerCase().includes(text.toLowerCase())));
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
   });
 }
 
