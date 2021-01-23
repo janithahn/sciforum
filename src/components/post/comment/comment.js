@@ -1,12 +1,18 @@
 import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
-import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+import { Editor as DraftEditor, EditorState, convertFromRaw, convertToRaw, CompositeDecorator } from 'draft-js';
+import Editor from '@draft-js-plugins/editor';
+import createMentionPlugin, { defaultSuggestionsFilter } from '@draft-js-plugins/mention';
+//import '@draft-js-plugins/mention/lib/plugin.css'
+import './plugin.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
 import { fetchPostComments, updatePostComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/postCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
+import { fetchMentions } from './Mentions';
+import _ from 'lodash';
 //import { createSelector } from 'reselect';
 
 const useStyles = makeStyles((theme) => ({
@@ -101,6 +107,39 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
     function focusEditor() {
         editor.current.focus();
     }
+    
+    //mentions
+    let mentions = [];
+    const [open, setOpen] = React.useState(true);
+    const [suggestions, setSuggestions] = React.useState(mentions);
+
+    console.log(suggestions);
+    console.log(mentions);
+
+    React.useEffect(() => {
+        fetchMentions()
+        .then((res) => {
+            mentions = res;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }, []);
+
+    const { MentionSuggestions, plugins } = React.useMemo(() => {
+        const mentionPlugin = createMentionPlugin();
+        const { MentionSuggestions } = mentionPlugin;
+        const plugins = [mentionPlugin];
+        return { plugins, MentionSuggestions };
+    }, []);
+
+    const onOpenChange = React.useCallback((_open) => {
+        setOpen(_open);
+    }, []);
+    const onSearchChange = React.useCallback(({ value }) => {
+        setSuggestions(defaultSuggestionsFilter(value, mentions));
+    }, []);
+    //end mentions
 
     const saveContent = (content) => {
         setContent(JSON.stringify(convertToRaw(content)));
@@ -136,7 +175,17 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
                         <Paper component="form" className={classes.root} elevation={0} variant="outlined" onClick={focusEditor}>
                             <Avatar style={{height: 25, width: 25}} src={currentUserProfileImg} />
                             <div className={classes.input}>
-                                <Editor ref={editor} editorState={editorState} onChange={onEditorChange} placeholder="comment"/>
+                                <Editor plugins={plugins} ref={editor} editorState={editorState} onChange={onEditorChange} placeholder="comment"/>
+                                <MentionSuggestions
+                                    open={open}
+                                    onOpenChange={onOpenChange}
+                                    suggestions={suggestions}
+                                    onSearchChange={onSearchChange}
+                                    onAddMention={(elem) => {
+                                        // get the mention object selected
+                                        console.log(elem);
+                                    }}
+                                />
                             </div>
                         </Paper>
                     </Grid>
@@ -149,9 +198,16 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
     );
 });
 
-const Comment = React.memo(({item , classes, displayContent, auth, handleDeleteModalOpen, handleEditComment, edit, editCommentId, handleEditCommentSubmit}) => {
+const Comment = React.memo(({item , classes, displayContent, plugins, auth, handleDeleteModalOpen, handleEditComment, edit, editCommentId, handleEditCommentSubmit}) => {
     
     //console.log("only one comment");
+
+    //draft-js needs this onChange to show decorations even though it is in readOnly mode
+    const [editorState, setEditorState] = React.useState(displayContent);
+
+    const onEditorChange = (editorState) => {
+        setEditorState(editorState);
+    };
 
     return(
         <Grid container direction="column">
@@ -160,7 +216,7 @@ const Comment = React.memo(({item , classes, displayContent, auth, handleDeleteM
                     <Paper component="form" className={classes.root} elevation={0} variant="outlined">
                         <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
                         <div className={classes.input}>
-                            <Editor readOnly editorState={displayContent}/>
+                            <Editor plugins={plugins} onChange={state => onEditorChange(state)} readOnly editorState={editorState}/>
                         </div>
                     </Paper>:
                     undefined
@@ -295,18 +351,24 @@ export function PostCommentRender() {
         }
     }, [auth.isAuthenticated, refs, hash, scrollTo, postCommentVotes]);
 
-    const CommentsList = comments.map(item => {
+    //mention plugins and decorations
+    const mentionPlugin = createMentionPlugin();
+    const plugins = [mentionPlugin];
+    const decorators = _.flattenDeep(plugins.map((plugin) => plugin.decorators));
+    const decorator = new CompositeDecorator( decorators.filter((decorator, index) => index !== 1) );
 
-        const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)));
+    const CommentsList = comments.map(item => {
+        const displayContent = EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)), decorator);
 
         return( 
-            <Grid item innerRef={refs["#pc" + item.id]}> 
+            <Grid item innerRef={refs["#pc" + item.id]}>
                 <Comment
                     key={item.id} 
                     classes={classes}
                     displayContent={displayContent}
+                    plugins={plugins}
                     auth={auth}
-                    item={item} 
+                    item={item}
                     handleDeleteModalOpen={handleDeleteModalOpen}
                     handleEditComment={handleEditComment}
                     edit={edit}

@@ -14,25 +14,6 @@ const headerWithToken = {
   "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
 };
 
-function fetchMentions(setMentions) {
-  axios(baseUrl + "/profile_api/mentions/list/", headerWithToken)
-  .then((res) => {
-    console.log(res.data);
-    const tempLst = [];
-    for(let item of res.data) {
-      const lstItem = {
-        preview: item.first_name + " " + item.last_name,
-        value: item.username,
-      }
-      tempLst.push(lstItem);
-    }
-
-  })
-  .catch((error) => {
-    console.log(error.message);
-  });
-}
-
 function loadSuggestions(text) {
   return new Promise((accept, reject) => {
     /*setTimeout(() => {
