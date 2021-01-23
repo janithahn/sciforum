@@ -27,6 +27,17 @@ export function isEmpty(obj) {
     return true;
 }
 
+export function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 export function isJWTExpired(token) {
     let tokenDecode = jwt_decode(localStorage.getItem('token'));
     let expDate = (tokenDecode.exp * 1000) - 60000

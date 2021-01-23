@@ -12,6 +12,7 @@ import VoteButtons from '../../vote/postCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
 import { fetchMentions } from './Mentions';
 import _ from 'lodash';
+import { containsObject } from '../../../shared/AdditionalFunctions';
 //import { createSelector } from 'reselect';
 
 const useStyles = makeStyles((theme) => ({
@@ -101,6 +102,7 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
         displayContent ? displayContent: content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
     );
     const [submitVal, setSubmitVal] = React.useState({});
+    const [mentionedUsers, setMentionedUsers] = React.useState([]);
 
     const editor = React.useRef(null);
     function focusEditor() {
@@ -153,7 +155,17 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
             owner: localStorage.getItem('currentUserId'),
             comment: content,
         });
+        //mentions
+        const entityMap = convertToRaw(contentState).entityMap;
+        const tempMentionedUsers = [];
+        for(const entity in entityMap) {
+            if(entityMap[entity].type === "mention") {
+                tempMentionedUsers.push(entityMap[entity].data.mention);
+            }
+        }
+        setMentionedUsers(tempMentionedUsers);
     };
+    console.log(mentionedUsers.filter((v,i,a)=>a.findIndex(t=>(t.name === v.name))===i));
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -180,6 +192,7 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
                                     onAddMention={(elem) => {
                                         // get the mention object selected
                                         console.log(elem);
+                                        setMentionedUsers([...mentionedUsers, elem]);
                                     }}
                                 />
                             </div>
