@@ -30,7 +30,7 @@ function loadSuggestions(text) {
         }
       ].filter((i) => i.preview.toLowerCase().includes(text.toLowerCase()));
       accept(suggestions);
-    }, 250);
+    }, 5000);
   });
 }
 
@@ -95,7 +95,8 @@ export default function MDEditor(props) {
           yieldUrl = res.data.data.link;
       })
       .catch(error => {
-          console.log(error);
+          setImgError(error.message);
+          console.log(error.message);
       })
     };
 

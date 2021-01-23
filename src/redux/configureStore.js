@@ -24,6 +24,7 @@ import { Notifications } from './actions/notifications';
 import { MyPosts } from './actions/myposts';
 import { PostComments, AnswerComments } from './actions/comments';
 import { events, webinars } from './actions/news';
+import { TopPosts } from './actions/topposts';
 import { LikedPosts } from './actions/profilePanels/liked';
 import { MyAnswers } from './actions/profilePanels/myAnswers';
 import { createReduxHistoryContext, reachify } from "redux-first-history";
@@ -71,6 +72,7 @@ export const ConfigureStore = () => {
             ChatMessages,
             events,
             webinars,
+            TopPosts,
             LikedPosts,
             MyAnswers,
         }),

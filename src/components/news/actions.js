@@ -1,8 +1,9 @@
 import * as ActionTypes from '../../redux/ActionTypes';
 import axios from 'axios';
+import { baseUrl } from '../../shared/baseUrl';
 
-const eventsUrl = 'http://127.0.0.1:8000/news/events/?ordering=-created_at';
-const webinarsUrl = 'http://127.0.0.1:8000/news/webinars/?ordering=-created_at';
+const eventsUrl = `${baseUrl}/news/events/?ordering=-created_at`;
+const webinarsUrl = `${baseUrl}/news/webinars/?ordering=-created_at`;
 
 const addEvents = (data) => ({
     type: ActionTypes.ADD_EVENTS,
