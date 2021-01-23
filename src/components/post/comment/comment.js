@@ -1,9 +1,8 @@
 import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
-import { Editor as DraftEditor, EditorState, convertFromRaw, convertToRaw, CompositeDecorator } from 'draft-js';
+import { EditorState, convertFromRaw, convertToRaw, CompositeDecorator } from 'draft-js';
 import Editor from '@draft-js-plugins/editor';
 import createMentionPlugin, { defaultSuggestionsFilter } from '@draft-js-plugins/mention';
-//import '@draft-js-plugins/mention/lib/plugin.css'
 import './plugin.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
@@ -112,9 +111,6 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
     let mentions = [];
     const [open, setOpen] = React.useState(true);
     const [suggestions, setSuggestions] = React.useState(mentions);
-
-    console.log(suggestions);
-    console.log(mentions);
 
     React.useEffect(() => {
         fetchMentions()

@@ -1,12 +1,17 @@
 import React from 'react';
 import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
-import { Editor, EditorState, convertFromRaw, convertToRaw } from 'draft-js';
+import { EditorState, convertFromRaw, convertToRaw, CompositeDecorator } from 'draft-js';
+import Editor from '@draft-js-plugins/editor';
+import createMentionPlugin, { defaultSuggestionsFilter } from '@draft-js-plugins/mention';
+import './plugin.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAnswerComments, updateAnswerComments } from '../../../redux/ActionCreators';
 import TimeAgo from 'react-timeago';
 import VoteButtons from '../../vote/answerCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
 import { useParams, useLocation } from 'react-router-dom';
+import { fetchMentions } from './Mentions';
+import _ from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,6 +54,36 @@ export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId,
         editor.current.focus();
     }
 
+    //mentions
+    let mentions = [];
+    const [open, setOpen] = React.useState(true);
+    const [suggestions, setSuggestions] = React.useState(mentions);
+
+    React.useEffect(() => {
+        fetchMentions()
+        .then((res) => {
+            mentions = res;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }, []);
+
+    const { MentionSuggestions, plugins } = React.useMemo(() => {
+        const mentionPlugin = createMentionPlugin();
+        const { MentionSuggestions } = mentionPlugin;
+        const plugins = [mentionPlugin];
+        return { plugins, MentionSuggestions };
+    }, []);
+
+    const onOpenChange = React.useCallback((_open) => {
+        setOpen(_open);
+    }, []);
+    const onSearchChange = React.useCallback(({ value }) => {
+        setSuggestions(defaultSuggestionsFilter(value, mentions));
+    }, []);
+    //end mentions
+
     const saveContent = (content) => {
         setContent(JSON.stringify(convertToRaw(content)));
     };
@@ -84,7 +119,17 @@ export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId,
                         <Paper component="form" className={classes.root} elevation={0} variant="outlined" onClick={focusEditor}>
                             <Avatar style={{height: 25, width: 25}} src={currentUserProfileImg} />
                             <div className={classes.input}>
-                                <Editor ref={editor} editorState={editorState} onChange={onEditorChange} placeholder="comment"/>
+                                <Editor plugins={plugins} ref={editor} editorState={editorState} onChange={onEditorChange} placeholder="comment"/>
+                                <MentionSuggestions
+                                    open={open}
+                                    onOpenChange={onOpenChange}
+                                    suggestions={suggestions}
+                                    onSearchChange={onSearchChange}
+                                    onAddMention={(elem) => {
+                                        // get the mention object selected
+                                        console.log(elem);
+                                    }}
+                                />
                             </div>
                         </Paper>
                     </Grid>
@@ -175,6 +220,19 @@ export function AnswerCommentRender({ answerId }) {
         }
     }, [auth.isAuthenticated, refs, hash, scrollTo, answerCommentVotes]);
 
+    //mentions 
+    //mention plugins and decorations
+    const mentionPlugin = createMentionPlugin();
+    const plugins = [mentionPlugin];
+    const decorators = _.flattenDeep(plugins.map((plugin) => plugin.decorators));
+    const decorator = new CompositeDecorator( decorators.filter((decorator, index) => index !== 1) );
+
+    const [editorState, setEditorState] = React.useState(EditorState.createEmpty());   
+
+    const onEditorChange = (editorState) => {
+        setEditorState(editorState);
+    };
+
     const CommentsList = answerComments.answerComments.map(item => item.answer === answerId ?
 
         <Grid item key={item.id} innerRef={refs["#ac" + item.id]}>
@@ -184,7 +242,7 @@ export function AnswerCommentRender({ answerId }) {
                         <Paper component="form" className={classes.root} elevation={0} variant="outlined">
                             <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
                             <div className={classes.input}>
-                                <Editor readOnly editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)))}/>
+                                <Editor readOnly plugins={plugins} onChange={state => onEditorChange(state)} editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)), decorator)}/>
                             </div>
                         </Paper>:
                         undefined
