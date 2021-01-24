@@ -12,7 +12,6 @@ import VoteButtons from '../../vote/postCommentVoteButtons';
 import AlertDialogSlide from './alertComment';
 import { fetchMentions } from './Mentions';
 import _ from 'lodash';
-import { containsObject } from '../../../shared/AdditionalFunctions';
 //import { createSelector } from 'reselect';
 
 const useStyles = makeStyles((theme) => ({
@@ -154,18 +153,19 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
             post: postId,
             owner: localStorage.getItem('currentUserId'),
             comment: content,
+            post_comment_mentions: mentionedUsers,
         });
         //mentions
         const entityMap = convertToRaw(contentState).entityMap;
         const tempMentionedUsers = [];
         for(const entity in entityMap) {
             if(entityMap[entity].type === "mention") {
-                tempMentionedUsers.push(entityMap[entity].data.mention);
+                const userObj = {user: entityMap[entity].data.mention.id};
+                tempMentionedUsers.push(userObj);
             }
         }
         setMentionedUsers(tempMentionedUsers);
     };
-    console.log(mentionedUsers.filter((v,i,a)=>a.findIndex(t=>(t.name === v.name))===i));
 
     const handleSubmit = (event) => {
         event.preventDefault();

@@ -13,6 +13,7 @@ export function fetchMentions() {
           const suggestions = [];
           for(let item of res.data) {
             const suggestItem = {
+              id: item.id,
               name: item.username,
               link: `http://localhost:8000/profile/${item.username}/`,
               avatar: item.avatar,

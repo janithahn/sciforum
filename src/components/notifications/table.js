@@ -422,8 +422,6 @@ export default function EnhancedTable({ rows, currentUser }) {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  console.log(row);
-
                   if(row.actor.username === currentUser) {
                     return <div key={row.id}></div>
                   }else {

@@ -48,6 +48,7 @@ export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId,
         displayContent ? displayContent: content ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(content))): () => EditorState.createEmpty()
     );
     const [submitVal, setSubmitVal] = React.useState({});
+    const [mentionedUsers, setMentionedUsers] = React.useState([]);
 
     const editor = React.useRef(null);
     function focusEditor() {
@@ -63,6 +64,7 @@ export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId,
         fetchMentions()
         .then((res) => {
             mentions = res;
+            console.log(res)
         })
         .catch((error) => {
             console.log(error);
@@ -100,8 +102,20 @@ export const AnswerCommentInput = React.memo(({ currentUserProfileImg, answerId,
             post: postId,
             owner: localStorage.getItem('currentUserId'),
             comment: content,
+            answer_comment_mentions: mentionedUsers,
         });
+        //mentions
+        const entityMap = convertToRaw(contentState).entityMap;
+        const tempMentionedUsers = [];
+        for(const entity in entityMap) {
+            if(entityMap[entity].type === "mention") {
+                const userObj = {user: entityMap[entity].data.mention.id};
+                tempMentionedUsers.push(userObj);
+            }
+        }
+        setMentionedUsers(tempMentionedUsers);
     };
+    console.log(mentionedUsers);
 
     const handleSubmit = (event) => {
         event.preventDefault();
