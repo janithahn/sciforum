@@ -20,7 +20,7 @@ import { ChatMessages } from './actions/chat/chatMessages';
 import { ResetPassword, SendResetPassword } from './actions/resetPassword';
 import { answerVotes, postVotes } from './actions/votes';
 import { answerCommentVotes, postCommentVotes } from './actions/commentVotes';
-import { Notifications } from './actions/notifications';
+import { Notifications, UnreadNotifications } from './actions/notifications';
 import { MyPosts } from './actions/myposts';
 import { PostComments, AnswerComments } from './actions/comments';
 import { events, webinars } from './actions/news';
@@ -58,6 +58,7 @@ export const ConfigureStore = () => {
             answerCommentVotes,
             postCommentVotes,
             Notifications,
+            UnreadNotifications,
             MyPosts,
             UserEducation,
             UserLanguages,

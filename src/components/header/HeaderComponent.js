@@ -36,8 +36,6 @@ function LoginModal({openModal, classes, handleModalClose}) {
 
 const DropDown = ({ username, profileImage, anchorEl, setAnchorEl, handleLogOut, handleClick, unreadNotifications }) => {
 
-    const classes = useStyles();
-
     const dispatch = useDispatch();
     
     const handleProfile = () => {
@@ -91,6 +89,7 @@ const Header = (props) => {
     const classes = useStyles();
 
     const auth = useSelector(state => state.Auth);
+    const unreadNotifications = useSelector(state => state.UnreadNotifications.count);
     const [openModal, setOpenModal] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const location = useLocation();
@@ -101,15 +100,8 @@ const Header = (props) => {
     const [searchParams, setSearchParams] = React.useState('');
 
     //fetch unread notifications
-    const [unreadNotifications, setUnreadNotifiication] = React.useState(0);
     React.useEffect(() => {
-        fetchUnreadNotifications(auth.currentUserId)
-        .then((count) => {
-            setUnreadNotifiication(count);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        dispatch(fetchUnreadNotifications(auth.currentUserId));
     }, []);
 
     const handleKeyDown = (event) => {

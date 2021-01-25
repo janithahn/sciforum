@@ -3,6 +3,7 @@ import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
 import { isJWTExpired } from '../shared/AdditionalFunctions';
 import { db, auth } from '../firebase/config';
+import { fetchUnreadNotifications } from '../components/header/actions';
 
 const headerWithToken = {
     "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
@@ -1669,6 +1670,7 @@ export const deleteNotifications = (id) => (dispatch) => {
     axios.delete(baseUrl + `/inbox/notifications/${id}/`, headerWithToken)
     .then(res => {
         console.log(res);
+        dispatch(fetchUnreadNotifications(localStorage.getItem("currentUserId")));
     })
     .catch(error => {
         console.log(error);
@@ -1681,6 +1683,7 @@ export const patchNotifications = (id, unread) => (dispatch) => {
     }, headerWithToken)
     .then(res => {
         console.log(res);
+        dispatch(fetchUnreadNotifications(localStorage.getItem("currentUserId")));
     })
     .catch(error => {
         console.log(error);
