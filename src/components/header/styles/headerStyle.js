@@ -10,4 +10,7 @@ export const useStyles = makeStyles((theme) => ({
         },
         background: '#00a3c1',
     },
+    badge: {
+        color: '#00a3c1',
+    },
 }));

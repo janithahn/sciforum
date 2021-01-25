@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, InputBase,  IconButton, Typography, Button, 
-    CssBaseline, Modal, Backdrop, Fade, Link, Menu, MenuItem, Avatar, LinearProgress } from '@material-ui/core';
+    CssBaseline, Modal, Backdrop, Fade, Link, Menu, MenuItem, Avatar, LinearProgress, Badge } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
@@ -11,6 +11,7 @@ import { useLocation, Link as RouterLink, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, fetchUser, fetchUserEmployment, fetchUserEducation, fetchUserSkills, fetchUserLanguages } from '../../redux/ActionCreators';
 import { useStyles } from './styles/headerStyle';
+import { fetchUnreadNotifications } from './actions';
 
 function LoginModal({openModal, classes, handleModalClose}) {
     return(
@@ -33,7 +34,9 @@ function LoginModal({openModal, classes, handleModalClose}) {
     );
 }
 
-const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, handleClick}) => {
+const DropDown = ({ username, profileImage, anchorEl, setAnchorEl, handleLogOut, handleClick, unreadNotifications }) => {
+
+    const classes = useStyles();
 
     const dispatch = useDispatch();
     
@@ -48,7 +51,9 @@ const DropDown = ({username, profileImage, anchorEl, setAnchorEl, handleLogOut, 
     return(
         <div>
             <IconButton size="small" color="inherit" aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} style={{textTransform: 'none'}}>
-                <Avatar alt={username} src={profileImage}/>
+                <Badge color="error" variant="dot" overlap="circle" badgeContent={unreadNotifications}>
+                    <Avatar alt={username} src={profileImage}/>
+                </Badge>
             </IconButton>
             <Menu
                 elevation={2}
@@ -94,6 +99,18 @@ const Header = (props) => {
     const history = useHistory();
 
     const [searchParams, setSearchParams] = React.useState('');
+
+    //fetch unread notifications
+    const [unreadNotifications, setUnreadNotifiication] = React.useState(0);
+    React.useEffect(() => {
+        fetchUnreadNotifications(auth.currentUserId)
+        .then((count) => {
+            setUnreadNotifiication(count);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }, []);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
@@ -159,7 +176,15 @@ const Header = (props) => {
                                 Login
                             </Typography>
                         </Button>: 
-                        <DropDown username={auth.currentUser} profileImage={auth.currentUserProfileImg} handleLogOut={handleLogOut} handleClick={handleClick} anchorEl={anchorEl} setAnchorEl={setAnchorEl}/>)
+                        <DropDown 
+                            username={auth.currentUser} 
+                            profileImage={auth.currentUserProfileImg} 
+                            handleLogOut={handleLogOut} 
+                            handleClick={handleClick} 
+                            anchorEl={anchorEl} 
+                            setAnchorEl={setAnchorEl}
+                            unreadNotifications={unreadNotifications}
+                        />)
                     }
                     <LoginModal openModal={openModal} classes={props.classes} handleModalClose={handleModalClose}/>
                 </Toolbar>

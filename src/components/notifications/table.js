@@ -296,12 +296,26 @@ export default function EnhancedTable({ rows, currentUser }) {
             state: false,
         }
         items[index] = item;
-        setRowsData(items)
+        setRowsData(items);
         return id;
     });
     setSelected([]);
     setSnackMessage(notificationsCount + ' ' + getMessageKeyword(notificationsCount) + ' marked as read');
     setSnackOpen(true);
+  };
+
+  const handleOnClickMarkAsRead = (id) => {
+    let items = rowsData;
+    const index = getItemIndexById(items, id);
+    if(items[index].state) {
+        dispatch(patchNotifications(id, false));
+    }
+    let item = {
+        ...items[index],
+        state: false,
+    }
+    items[index] = item;
+    setRowsData(items);
   };
 
   const handleMarkAllAsRead = () => {
@@ -368,7 +382,7 @@ export default function EnhancedTable({ rows, currentUser }) {
       );
 
       if(row.action_object.notification_type === "comment | post comment") return(
-        <Link color="inherit" underline="none" href={`/questions/${row.action_object.post}/#pc${row.action_object.id}`}>
+        <Link onClick={() => handleOnClickMarkAsRead(row.id)} color="inherit" underline="none" href={`/questions/${row.action_object.post}/#pc${row.action_object.id}`}>
           {row.notification}
         </Link>
       )

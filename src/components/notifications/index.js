@@ -23,8 +23,6 @@ export default function Notifications({currentUserId}) {
 
     const rows = [];
 
-    console.log(notifications);
-
     if(notifications.status === 'loading' || notifications.status === 'idle') {
         return(<TableLoader/>);
     }else if(notifications.errMess) {
