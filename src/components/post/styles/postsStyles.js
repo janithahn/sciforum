@@ -66,5 +66,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   chip: {
     marginTop: theme.spacing(1),
+    height: 20,
   }
 }));
