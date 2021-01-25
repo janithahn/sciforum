@@ -96,7 +96,7 @@ export default function Home() {
                             {PostsList}
                         </InfiniteScroll>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item lg={4}>
                         <Hidden smDown>
                             <News/>
                         </Hidden>
