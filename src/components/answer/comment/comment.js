@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
+import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography, Tooltip, Link } from '@material-ui/core';
 import { EditorState, convertFromRaw, convertToRaw, CompositeDecorator } from 'draft-js';
 import Editor from '@draft-js-plugins/editor';
 import createMentionPlugin, { defaultSuggestionsFilter } from '@draft-js-plugins/mention';
@@ -246,6 +246,21 @@ export function AnswerCommentRender({ answerId }) {
     const onEditorChange = (editorState) => {
         setEditorState(editorState);
     };
+      
+    function AvatarTooltip(props) {
+        const classes = useStyles();
+        return <Tooltip arrow classes={classes} {...props} />;
+    }
+
+    function TooltipDetails({ username }) {
+        return(
+            <React.Fragment>
+                <Link href={`/profile/${username}/`} underline="none" color="inherit">
+                    <Typography color="inherit" variant="body2">{username}</Typography>
+                </Link>
+            </React.Fragment>
+        );
+    }
 
     const CommentsList = answerComments.answerComments.map(item => item.answer === answerId ?
 
@@ -254,7 +269,9 @@ export function AnswerCommentRender({ answerId }) {
                 <Grid item>
                     {editCommentId !== item.id ?
                         <Paper component="form" className={classes.root} elevation={0} variant="outlined">
-                            <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                            <AvatarTooltip title={<TooltipDetails username={item.ownerDisplayName}/>} disableFocusListener interactive>
+                                <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                            </AvatarTooltip>
                             <div className={classes.input}>
                                 <Editor readOnly plugins={plugins} onChange={state => onEditorChange(state)} editorState={EditorState.createWithContent(convertFromRaw(JSON.parse(item.comment)), decorator)}/>
                             </div>

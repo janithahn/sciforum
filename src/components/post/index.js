@@ -39,7 +39,7 @@ export default function PostView() {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item lg={4}>
                     <Hidden smDown>
                         <News/>
                     </Hidden>

@@ -73,7 +73,9 @@ const DropDown = ({ username, profileImage, anchorEl, setAnchorEl, handleLogOut,
                     <MenuItem>Profile</MenuItem>
                 </RouterLink>
                 <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/notifications`}>
-                    <MenuItem>Notifications</MenuItem>
+                    <Badge color="error" variant="standard" max={999} overlap="circle" badgeContent={unreadNotifications}>
+                        <MenuItem>Notifications</MenuItem>
+                    </Badge>
                 </RouterLink>
                 <RouterLink style={{textDecoration: 'none', color: 'inherit'}} to={`/settings`}>
                     <MenuItem>Settings</MenuItem>

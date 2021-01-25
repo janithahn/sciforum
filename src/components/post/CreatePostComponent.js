@@ -65,7 +65,7 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
     <div className={classes.root}>
         <ThemeProvider theme={theme}>
           <Grid container direction="row" alignItems="flex-start" justify="space-between" spacing={2}>
-            <Grid item  lg={8} sm xs={12}>
+            <Grid item lg={8} sm xs={12}>
               <Grid container direction="column" justify="center" spacing={2}>
                 <form onSubmit={formik.handleSubmit}>
                   <Grid item>

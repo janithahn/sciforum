@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography } from '@material-ui/core';
+import { Grid, Divider, Avatar, makeStyles, Paper, Button, Typography, Tooltip, Link } from '@material-ui/core';
 import { EditorState, convertFromRaw, convertToRaw, CompositeDecorator } from 'draft-js';
 import Editor from '@draft-js-plugins/editor';
 import createMentionPlugin, { defaultSuggestionsFilter } from '@draft-js-plugins/mention';
@@ -34,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'none',
         padding: 0,
         margin: 0,
+    },
+    arrow: {
+      color: theme.palette.common.black,
+    },
+    tooltip: {
+      backgroundColor: theme.palette.common.black,
     },
 }));
 
@@ -206,6 +212,21 @@ export const PostCommentInput = React.memo(({ currentUserProfileImg, postId, han
         </Grid>
     );
 });
+  
+function AvatarTooltip(props) {
+    //const classes = useStyles();
+    return <Tooltip arrow /*classes={classes}*/ {...props} />;
+}
+
+function TooltipDetails({ username }) {
+    return(
+        <React.Fragment>
+            <Link href={`/profile/${username}/`} underline="none" color="inherit">
+                <Typography color="inherit" variant="body2">{username}</Typography>
+            </Link>
+        </React.Fragment>
+    );
+}
 
 const Comment = React.memo(({item , classes, displayContent, plugins, auth, handleDeleteModalOpen, handleEditComment, edit, editCommentId, handleEditCommentSubmit}) => {
     
@@ -223,7 +244,9 @@ const Comment = React.memo(({item , classes, displayContent, plugins, auth, hand
             <Grid item>
                 {editCommentId !== item.id ? 
                     <Paper component="form" className={classes.root} elevation={0} variant="outlined">
-                        <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                        <AvatarTooltip title={<TooltipDetails username={item.ownerDisplayName}/>} disableFocusListener interactive>
+                            <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
+                        </AvatarTooltip>
                         <div className={classes.input}>
                             <Editor plugins={plugins} onChange={state => onEditorChange(state)} readOnly editorState={editorState}/>
                         </div>
