@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,6 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { ThemeProvider, FormHelperText, OutlinedInput, FormControl } from '@material-ui/core';
 import { theme, useStylesSignin as useStyles } from './styles/signinSignupStyles';
 import btn_google_light_normal_ios from './styles/btn_google_light_normal_ios.svg';
+import community from './styles/community.svg';
 import { useFormik } from 'formik';
 //import { DisplayFormikState } from '../shared/DisplayFormikState';
 import * as Yup from 'yup';
@@ -119,9 +119,7 @@ export default function SignIn(props) {
       <Container component="main" maxWidth="xs" className={classes.content}>
         <CssBaseline />
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon/>
-          </Avatar>
+          <img className={classes.logo} alt="sciforum_logo" src={community}/>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>

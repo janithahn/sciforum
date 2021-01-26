@@ -22,9 +22,9 @@ export  const useStylesSignUp = makeStyles(() => ({
       flexDirection: 'column',
       alignItems: 'center',
     },
-    avatar: {
+    logo: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
+      //backgroundColor: theme.palette.secondary.main,
     },
     form: {
       width: '100%', // Fix IE 11 issue.
@@ -65,9 +65,9 @@ export const useStylesSignin = makeStyles(() => ({
       padding: theme.spacing(3),
       backgroundColor: '#fafafa',
     },
-    avatar: {
+    logo: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
+      //backgroundColor: theme.palette.secondary.main,
     },
     form: {
       width: '100%', // Fix IE 11 issue.

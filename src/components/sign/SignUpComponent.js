@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import IconButton from '@material-ui/core/IconButton';
@@ -24,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGoogleLogin } from 'react-google-login';
 import { clientId } from '../../shared/googleApiClientId';
 import btn_google_light_normal_ios from './styles/btn_google_light_normal_ios.svg';
+import community from './styles/community.svg';
 
 /*function handleSubmit(values) {
   alert("Current State is: " + JSON.stringify(values));
@@ -127,9 +127,7 @@ export default function SignUp() {
     <Container component="main" maxWidth="xs" className={classes.content}>
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <img className={classes.logo} alt="sciforum_logo" src={community}/>
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>

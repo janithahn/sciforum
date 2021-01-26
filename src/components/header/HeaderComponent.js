@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout, fetchUser, fetchUserEmployment, fetchUserEducation, fetchUserSkills, fetchUserLanguages } from '../../redux/ActionCreators';
 import { useStyles } from './styles/headerStyle';
 import { fetchUnreadNotifications } from './actions';
+import community from './styles/community.svg';
 
 function LoginModal({openModal, classes, handleModalClose}) {
     return(
@@ -142,6 +143,7 @@ const Header = (props) => {
                     {location.pathname !== '/signup' && location.pathname !== '/signin' && <IconButton edge="start" className={clsx(props.classes.menuButton, props.open && props.classes.hide)} onClick={props.handleDrawerOpen} color="inherit" aria-label="menu">
                         <MenuIcon />
                     </IconButton>}
+                    <img alt="sciforum_logo" src={community} style={{margin: 2}}/>
                     <Typography className={props.classes.title}>
                         <Link href="/" color="inherit" underline="none" variant="h6">
                             sciForum
