@@ -3,8 +3,9 @@ import TextField from '@material-ui/core/TextField';
 import { Chip } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
+import { baseUrl } from '../../shared/baseUrl';
 
-const tagUrl = 'http://localhost:8000/tag_api/tags/';
+const tagUrl = `${baseUrl}/tag_api/tags/`;
 
 export default function Tags({classes, value, setValue}) {
 

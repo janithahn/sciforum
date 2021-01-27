@@ -27,23 +27,19 @@ export default function UpdateProfileImage(props) {
     const [pictures, setPictures] = useState([]);
     const [image, setImage] = useState(null);
 
-    console.log(pictures);
-
     const onDrop = picture => {
-        setPictures([...pictures, picture]);
+        setPictures(picture);
     };
 
-    const handleImage = (event) => {
+    /*const handleImage = (event) => {
         setImage(event.target.files[0]);
-        console.log(event.target.files[0]);
-        //console.log(image);
-    }
+    }*/
 
     const handleImageUpload = () => {
         const formData = new FormData();
-        formData.append('profileImg', image, image.name);
+        //formData.append('profileImg', image, image.name);
+        if(pictures.length !== 0) formData.append('profileImg', pictures[0], pictures[0].name);
         dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
-        //dispatch(fetchUser(null, usernameFromTheUrl));
         handleModalClose();
     }
 
@@ -54,10 +50,10 @@ export default function UpdateProfileImage(props) {
         onSubmit: (values) => {
             //console.log(values);
             //console.log(pictures[0]);
-            console.log(image);
+            //console.log(image);
             //formData.append('profileImg', image, image.name);
             //console.log(formData.values);
-            dispatch(updateUserProfileImage(auth, image));
+            //dispatch(updateUserProfileImage(auth, image));
             setImage(values.image);
             handleModalClose();
         },
@@ -72,15 +68,16 @@ export default function UpdateProfileImage(props) {
             />
             <Divider />
             <CardContent>
-                <Input type="file"
+                {/*<Input type="file"
                     id="profileImage"
                     aria-label="Profile Image"
                     name="profileImage"
                     onChange={handleImage}
-                />
+                />*/}
                 {/*<Button onClick={handleUpload}>Upload</Button>*/}
                 <ImageUploader
                     {...props}
+                    singleImage
                     withIcon={true}
                     onChange={onDrop}
                     imgExtension={[".jpg", ".gif", ".png", ".gif"]}
