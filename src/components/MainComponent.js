@@ -32,6 +32,8 @@ import RoomList from './chat/roomList';
 import ChatRoom from './chat/chatRoom';
 
 function Main(props) {
+    const classes = useStyles();
+    
     const post = useSelector(state => state.Post);
     const auth = useSelector(state => state.Auth);
     const authFirebase = useSelector(state => state.AuthFirebase);
@@ -58,7 +60,6 @@ function Main(props) {
         if(auth.isAuthenticated && authFirebase.status === 'idle' && authFirebase.isAuthenticated === false)
             dispatch(firebaseLoginUser(auth.firebase_token));
     }, [dispatch, authFirebase, auth]);
-    console.log(authFirebase);
 
     //showing the progress bar under the appbar
     useEffect(() => {
@@ -84,17 +85,6 @@ function Main(props) {
             dispatch(logout());
         }
     }, [dispatch]);
-
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
 
     const AccountView = ({match}) => {
         return(
@@ -204,8 +194,7 @@ function Main(props) {
 
     return (
         <div>
-            <Header classes={classes} handleDrawerOpen={handleDrawerOpen} open={open} showProgressBar={showProgressBar} snackOpen={snackOpen} setSnackOpen={setSnackOpen} snackMessage={snackMessage}/>
-            {location.pathname !== '/signup' && location.pathname !== '/signin' && <MainDrawer open={open} classes={classes} handleDrawerClose={handleDrawerClose}/>}
+            <Header classes={classes} showProgressBar={showProgressBar} snackOpen={snackOpen} setSnackOpen={setSnackOpen} snackMessage={snackMessage}/>
             <main className={(location.pathname !== '/signup' && location.pathname !== '/signin') ? classes.content: undefined}>
                 <Switch>
                     <Route exact path="/" component={() => <Home classes={classes}/>} />

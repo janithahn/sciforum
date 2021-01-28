@@ -7,10 +7,10 @@ export const Posts = (state = {
     }, action) => {
     switch(action.type) {
         case ActionTypes.RESET_POST_LIST:
-            return { status: 'idle', errMess: null, posts: state.posts }
+            return { status: 'idle', errMess: null, posts: [] }
 
         case ActionTypes.ADD_POST_LIST:
-            return {...state, status: 'succeeded', errMess: null, posts: action.payload}
+            return {...state, status: 'succeeded', errMess: null, posts: [...state.posts, action.payload]}
             //...state is the spread operator from the ES6 and whatever the state is coming from the state above.
             //whatever else that is passed after the {...state, *here}, is added as modification to the state
             //hense state is not immutable here

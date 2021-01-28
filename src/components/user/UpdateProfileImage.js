@@ -48,11 +48,7 @@ export default function UpdateProfileImage(props) {
         profileImage: image
         },
         onSubmit: (values) => {
-            //console.log(values);
-            //console.log(pictures[0]);
-            //console.log(image);
             //formData.append('profileImg', image, image.name);
-            //console.log(formData.values);
             //dispatch(updateUserProfileImage(auth, image));
             setImage(values.image);
             handleModalClose();

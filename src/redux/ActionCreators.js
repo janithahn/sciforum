@@ -10,15 +10,23 @@ const headerWithToken = {
 };
 
 //POSTS
-export const fetchPosts = () => async (dispatch) => {
+export const fetchPosts = (pageNum, setNextHref, setHasMoreItems, nextHref) => async (dispatch) => {
     dispatch(postsLoading());
 
-    axios.get(baseUrl + '/api/')
-    .then(response => {
-        //console.log(response);
-        return response;
+    var url = baseUrl + `/api/?page=${pageNum}`;
+    if(nextHref) {
+        url = nextHref;
+    }
+    axios.get(url)
+    .then(posts => {
+        posts.data.results.map(post => dispatch(addPosts(post)));
+        //dispatch(addPosts(posts.data.results.map(post => post)));
+        if(posts.data.next) {
+            setNextHref(posts.data.next);
+        } else {
+            setHasMoreItems(false);
+        }
     })
-    .then(posts => dispatch(addPosts(posts.data)))
     .catch(error => {
         console.log(error);
         dispatch(postsFailed(error));

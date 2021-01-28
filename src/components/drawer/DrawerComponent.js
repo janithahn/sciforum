@@ -1,12 +1,12 @@
 import React from 'react';
-import { IconButton, Drawer, Hidden, List, Divider, ListItemIcon, ListItemText, MenuItem, Link, useTheme } from '@material-ui/core';
-import { Inbox, ChevronLeft, Home, Chat } from '@material-ui/icons';
+import { Drawer, Hidden, List, Divider, ListItemIcon, ListItemText, MenuItem, Link, useTheme } from '@material-ui/core';
+import { Inbox, Home, Chat } from '@material-ui/icons';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchPosts } from '../../redux/ActionCreators';
 import { useStyles } from './styles/drawerStyles';
 
-function RenderDrawer({ handleDrawerClose, classes, open, variant, handleSelectedItem, selected }) {
+function RenderDrawer({ classes, open, variant, handleSelectedItem, selected }) {
 
     return (
         <Drawer
@@ -16,11 +16,7 @@ function RenderDrawer({ handleDrawerClose, classes, open, variant, handleSelecte
             open={open}
             classes={{ paper: classes.drawerPaper }}
         >
-            <div className={classes.drawerHeader}>
-                <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeft/>
-                </IconButton>
-            </div>
+            <div className={classes.drawerHeader}>{/* Drawer Header */}</div>
             <Divider />
             <div className={classes.drawerContainer}>
                 <List>
@@ -62,10 +58,10 @@ export default function MainDrawer(props) {
     return(
         <React.Fragment>
             <Hidden smDown>
-                <RenderDrawer variant="permanent" selected={selected} handleSelectedItem={handleSelectedItem} handleDrawerClose={props.handleDrawerClose} classes={classes} theme={theme} open={props.open}/>
+                <RenderDrawer variant="permanent" selected={selected} handleSelectedItem={handleSelectedItem} classes={classes} theme={theme} open={props.open}/>
             </Hidden>
             <Hidden mdUp>
-                <RenderDrawer variant="persistent" selected={selected} handleSelectedItem={handleSelectedItem} handleDrawerClose={props.handleDrawerClose} classes={classes} theme={theme} open={props.open}/>
+                <RenderDrawer variant="persistent" selected={selected} handleSelectedItem={handleSelectedItem} classes={classes} theme={theme} open={props.open}/>
             </Hidden>
         </React.Fragment>
     );
