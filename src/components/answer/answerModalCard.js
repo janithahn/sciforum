@@ -8,6 +8,7 @@ import {
   Divider,
   ThemeProvider,
   FormHelperText,
+  Container
 } from '@material-ui/core';
 import { theme, useStyles } from './styles/answerStyles';
 import { useSelector, useDispatch } from 'react-redux';
@@ -36,6 +37,7 @@ export default function AnswerModalCard({answerContent, setAnswerContent, postId
 
   return (
     <ThemeProvider theme={theme}>
+    <Container maxWidth="md" fixed>
         <Card>
             <CardHeader
                 title="Drop your answer"
@@ -69,6 +71,7 @@ export default function AnswerModalCard({answerContent, setAnswerContent, postId
                 </Button>
             </Box>
         </Card>
+        </Container>
     </ThemeProvider>
   );
 };

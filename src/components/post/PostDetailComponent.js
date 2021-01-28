@@ -16,28 +16,28 @@ import { EditorState } from 'draft-js';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
     return(
-        <Modal {...rest}
-            open={openModal} 
-            className={classes.modal}
-            onClose={handleModalClose}
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            closeAfterTransition
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-                timeout: 500,
-            }}
-        >  
-            <Fade in={openModal}>
-                <AnswerModalCard 
-                    answerContent={answerContent} 
-                    setAnswerContent={setAnswerContent} 
-                    postId={postId} 
-                    handleModalClose={handleModalClose}
-                    answerType={"create"}
-                />
-            </Fade>
-        </Modal>
+            <Modal {...rest}
+                open={openModal} 
+                className={classes.modal}
+                onClose={handleModalClose}
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >  
+                <Fade in={openModal}>
+                    <AnswerModalCard 
+                        answerContent={answerContent} 
+                        setAnswerContent={setAnswerContent} 
+                        postId={postId} 
+                        handleModalClose={handleModalClose}
+                        answerType={"create"}
+                    />
+                </Fade>
+            </Modal>
     );
 }
 
