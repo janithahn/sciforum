@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { Button, Grid, Hidden } from '@material-ui/core';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -10,7 +9,6 @@ import HomeLoader from './skeletons/homeSkels';
 import News from '../news/news';
 
 export default function SearchByTag() {
-    const posts = useSelector(state => state.Posts);
 
     const { tagname } = useParams();
 
