@@ -37,40 +37,40 @@ export default function AnswerModalCard({answerContent, setAnswerContent, postId
 
   return (
     <ThemeProvider theme={theme}>
-    <Container maxWidth="md" fixed>
-        <Card>
-            <CardHeader
-                title="Drop your answer"
-            />
-            <Divider />
-            <CardContent>
-                <MDEditor data={answerContent} setText={setAnswerContent}/>
-                <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
-            </CardContent>
-            <Divider />
-            <Box
-                display="flex"
-                justifyContent="flex-end"
-                p={0}
-            >
-                <Button
-                    onClick={() => handleModalClose()}
-                    color="primary"
-                    variant="contained"
-                    className={classes.submit}
+        <Container maxWidth="md" fixed>
+            <Card>
+                <CardHeader
+                    title="Drop your answer"
+                />
+                <Divider />
+                <CardContent>
+                    <MDEditor data={answerContent} setText={setAnswerContent}/>
+                    <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
+                </CardContent>
+                <Divider />
+                <Box
+                    display="flex"
+                    justifyContent="flex-end"
+                    p={0}
                 >
-                    Cancel
-                </Button>
-                <Button
-                    onClick={handleSubmit}
-                    color="primary"
-                    variant="contained"
-                    className={classes.submit}
-                >
-                    Submit
-                </Button>
-            </Box>
-        </Card>
+                    <Button
+                        onClick={() => handleModalClose()}
+                        color="primary"
+                        variant="contained"
+                        className={classes.submit}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleSubmit}
+                        color="primary"
+                        variant="contained"
+                        className={classes.submit}
+                    >
+                        Submit
+                    </Button>
+                </Box>
+            </Card>
         </Container>
     </ThemeProvider>
   );
