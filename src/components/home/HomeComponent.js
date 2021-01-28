@@ -1,12 +1,8 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Button, Grid, Hidden } from '@material-ui/core';
 import QuestionViewCard from '../post/QuestionViewCardComponent';
-import InfiniteScroll from 'react-infinite-scroller';
-import HomeLoader from './skeletons/homeSkels';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
-import News from '../news/news';
+import RenderPosts from './RenderPosts';
 
 export default function Home() {
     
@@ -50,30 +46,10 @@ export default function Home() {
     const PostsList = postData.map((post, key) => <div><QuestionViewCard key={post.id} item={post}/></div>);
 
     return(
-        <React.Fragment>
-            <Grid container direction="row" spacing={2} justify="space-between" alignItems="flex-start">
-                <Grid item lg={8} sm xs={12}>
-                    <Grid container direction="column" justify="center" alignItems="flex-end">
-                        <RouterLink to="/ask" style={{textDecoration: 'none'}}>
-                            <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>
-                        </RouterLink>
-                    </Grid>
-                    {<InfiniteScroll
-                        pageStart={0}
-                        loadMore={fetchPostInfinite}
-                        hasMore={hasMoreItems}
-                        loader={<HomeLoader/>}
-                        threshold={900}
-                    >
-                        {PostsList}
-                    </InfiniteScroll>}
-                </Grid>
-                <Grid item lg={4}>
-                    <Hidden smDown>
-                        <News/>
-                    </Hidden>
-                </Grid>
-            </Grid>
-        </React.Fragment>
+        <RenderPosts 
+            PostsList={PostsList} 
+            fetchPostInfinite={fetchPostInfinite} 
+            hasMoreItems={hasMoreItems} 
+        />
     );
 }
