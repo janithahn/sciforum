@@ -614,6 +614,7 @@ export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) =
     })
     .then(res => {
         console.log(res);
+        localStorage.setItem("currentUserProfileImg", res.data.profileImg);
         dispatch(fetchUser(null, usernameFromTheUrl));
     })
     .catch(error => {
