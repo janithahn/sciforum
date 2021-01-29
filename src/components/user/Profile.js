@@ -146,7 +146,7 @@ const Profile = ({ className, ...rest }) => {
     //return <CircularProgress color="secondary" size={15}/>
     return(<div></div>);
   }else if(user.status === 'failed') {
-    if(user.errMess.response.status === 404) {
+    if(user.errMess.response && user.errMess.response.status === 404) {
       return <PageNotFound/>
     }
     return <h2>Error loading!</h2>

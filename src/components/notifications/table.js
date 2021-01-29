@@ -376,7 +376,7 @@ export default function EnhancedTable({ rows, currentUser }) {
   const pickLink = (row) => {
     if(row.action_object){
       if(row.action_object.notification_type === "comment | answer comment") return(
-        <Link color="inherit" underline="none" href={`/questions/${row.action_object.post}/#ac${row.action_object.id}`}>
+        <Link onClick={() => handleOnClickMarkAsRead(row.id)} color="inherit" underline="none" href={`/questions/${row.action_object.post}/#ac${row.action_object.id}`}>
           {row.notification}
         </Link>
       );
@@ -388,13 +388,13 @@ export default function EnhancedTable({ rows, currentUser }) {
       )
 
       if(row.action_object.notification_type === "answer | answer") return(
-        <Link color="inherit" underline="none" href={`/questions/${row.action_object.postBelong}/#${row.action_object.id}`}>
+        <Link onClick={() => handleOnClickMarkAsRead(row.id)} color="inherit" underline="none" href={`/questions/${row.action_object.postBelong}/#${row.action_object.id}`}>
           {row.notification}
         </Link>
       )
 
       if(row.action_object.notification_type === "post | post") return(
-        <Link color="inherit" underline="none" href={`/questions/${row.action_object.id}/`}>
+        <Link onClick={() => handleOnClickMarkAsRead(row.id)} color="inherit" underline="none" href={`/questions/${row.action_object.id}/`}>
           {row.notification}
         </Link>
       )
