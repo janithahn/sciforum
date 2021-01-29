@@ -48,7 +48,7 @@ export default function ConfirmEmail() {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button onClick={() => handleConfirm()} className={classes.button} size="small" variant="outlined" >Confirm</Button>
+                    <Button onClick={() => handleConfirm()} className={classes.button} size="small" variant="outlined" >Send</Button>
                 </CardActions>
             </Card>
         </div>

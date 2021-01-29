@@ -68,3 +68,38 @@ export const sendConfirmationEmail = (email) => dispatch => {
         dispatch(resetEmailConfirm());
     });
 };
+
+//verify account with confirmation token
+export const accountVerified = (data) => ({
+    type: ActionTypes.SEND_CONFIRM_TOKEN_SUCCESS,
+    payload: data
+});
+
+export const accountVerifing = () => ({
+    type: ActionTypes.SEND_CONFIRM_TOKEN_REQUEST
+});
+
+export const accountVerifyFailed = (data) => ({
+    type: ActionTypes.SEND_CONFIRM_TOKEN_FAILURE,
+    payload: data
+});
+
+export const resetAccountVerify = () => ({
+    type: ActionTypes.RESET_CONFIRM_TOKEN
+});
+
+export const sendConfirmationToken = (key) => dispatch => {
+
+    dispatch(accountVerifing());
+
+    axios.post(baseUrl + `/rest-auth/account-confirm-email/`, {key}, headerWithToken)
+    .then((res) => {
+        dispatch(accountVerified(res.data));
+        localStorage.setItem('currentUserEmailVerified', true);
+        //dispatch(resetAccountVerify()); //if needed
+    })
+    .catch((error) => {
+        dispatch(accountVerifyFailed(error.message));
+        //dispatch(resetAccountVerify());
+    });
+};

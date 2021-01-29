@@ -10,7 +10,6 @@ import Footer from './footer/FooterComponent';
 import SignUp from './sign/SignUpComponent';
 import SignIn from './sign/SignInComponent';
 import PasswordReset from './passwordReset/passwordReset';
-import MainDrawer from './drawer/DrawerComponent';
 //import PostDetail from './post/PostDetailComponent';
 import PostView from './post/index';
 import CreatePost from  './post/CreatePostComponent';
@@ -27,6 +26,7 @@ import UserSettings from './settings/settings';
 import jwt_decode from 'jwt-decode';
 import GoogleSocialAuth from './GoogleLoginComponent';
 import ResetConfirm from './passwordReset/resetConfirm';
+import ConfirmEmailRedirect from './settings/confirmEmailRedirect';
 // Chat App
 import RoomList from './chat/roomList';
 import ChatRoom from './chat/chatRoom';
@@ -47,7 +47,8 @@ function Main(props) {
         state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, 
         state.answerVotes.status, state.postVotes.status, state.PostComments.status,
         state.AnswerComments.status, state.SendResetPassword.status, state.ChatRooms.status,
-        state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status, state.ConfirmEmail.status,
+        state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status, 
+        state.ConfirmEmail.status, state.VerifyAccount.status,
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -193,6 +194,18 @@ function Main(props) {
         )} />
     );
 
+    const PrivateAccountConfirmRoute = ({ component: Component, ...rest}) => (
+        <Route {...rest} render={({location}) => (
+            auth.isAuthenticated
+            ? <Component/>
+            : <Redirect to={{
+                pathname: '/signin',
+                state: { from: location }
+            }}
+            />
+        )} />
+    );
+
     return (
         <div>
             <Header classes={classes} showProgressBar={showProgressBar} snackOpen={snackOpen} setSnackOpen={setSnackOpen} snackMessage={snackMessage}/>
@@ -212,8 +225,10 @@ function Main(props) {
                     <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
                     <PrivateRouteSettings path="/settings" component={() => <UserSettings/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
-                    <Route exact path="/password/reset" component={() => <PasswordReset/>}/>
-                    <Route exact path="/users/profile/password_reset/confirm/:token" component={() => <ResetConfirm/>}/>
+                    
+                    <PrivateAccountConfirmRoute exact path="/password/reset" component={() => <PasswordReset/>}/>
+                    <PrivateAccountConfirmRoute exact path="/users/profile/password_reset/confirm/:token" component={() => <ResetConfirm/>}/>
+                    <PrivateAccountConfirmRoute exact path="/verify-email/:token" component={() => <ConfirmEmailRedirect/>}/>
 
                     <PrivateChatRoute exact path="/chatrooms" component={() => <RoomList/>}/>
                     <PrivateChatRoute exact path="/chatroom/:roomKey" component={() => <ChatRoom/>}/>
