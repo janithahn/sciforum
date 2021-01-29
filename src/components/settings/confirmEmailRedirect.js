@@ -24,7 +24,7 @@ export default function ConfirmEmailRedirect() {
   const history = useHistory();
 
   React.useEffect(() => {
-    if(verifyAccount.status === 'idle') dispatch(sendConfirmationToken(token));
+    if(verifyAccount.status === 'idle' && auth.currentUserEmailVerified === "false") dispatch(sendConfirmationToken(token));
   }, [dispatch, verifyAccount.status]);
 
   React.useEffect(() => {
