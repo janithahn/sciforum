@@ -47,11 +47,12 @@ function Main(props) {
         state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, 
         state.answerVotes.status, state.postVotes.status, state.PostComments.status,
         state.AnswerComments.status, state.SendResetPassword.status, state.ChatRooms.status,
-        state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status
+        state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status, state.ConfirmEmail.status,
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
 
+    //posts snackbar
     const [snackOpen, setSnackOpen] = React.useState(false);
     const [snackMessage, setSnackMessage] = React.useState('');
 

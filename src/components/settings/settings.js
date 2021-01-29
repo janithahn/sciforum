@@ -1,6 +1,7 @@
 import React from 'react';
 import DeleteAccount from './deleteAccount';
 import ResetPassword from './resetPassword';
+import ConfirmEmail from './confirmEmail';
 import { Grid, ThemeProvider } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import AfterMessage from './afterMessage';
@@ -16,6 +17,9 @@ export default function UserSettings() {
         <React.Fragment>
             <ThemeProvider theme={theme}>
                 <Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <ConfirmEmail/>
+                    </Grid>
                     <Grid item xs={12} sm={12} md={12}>
                         <ResetPassword/>
                     </Grid>

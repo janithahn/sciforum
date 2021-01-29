@@ -18,6 +18,7 @@ import { ChatRooms } from './actions/chat/chatRooms';
 import { CreateChatRoom } from './actions/chat/createChatRoom';
 import { ChatMessages } from './actions/chat/chatMessages';
 import { ResetPassword, SendResetPassword } from './actions/resetPassword';
+import { ConfirmEmail } from './actions/confirmEmail';
 import { answerVotes, postVotes } from './actions/votes';
 import { answerCommentVotes, postCommentVotes } from './actions/commentVotes';
 import { Notifications, UnreadNotifications } from './actions/notifications';
@@ -67,6 +68,7 @@ export const ConfigureStore = () => {
             PostComments,
             AnswerComments,
             ResetPassword,
+            ConfirmEmail,
             SendResetPassword,
             ChatRooms,
             CreateChatRoom,

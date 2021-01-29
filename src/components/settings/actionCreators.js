@@ -27,11 +27,44 @@ export const deleteUser = (username) => dispatch => {
 
     axios.delete(baseUrl + `/users/${username}/delete/`, headerWithToken)
     .then((res) => {
-        console.log(res);
         dispatch(deleteUserSuccess(res));
     })
     .catch((error) => {
-        console.log(error.response);
         dispatch(deleteUserFailed(error.response));
+    });
+};
+
+//Email confirmation
+export const emailSent = (data) => ({
+    type: ActionTypes.SEND_CONFIRM_EMAIL_SUCCESS,
+    payload: data
+});
+
+export const emailSending = () => ({
+    type: ActionTypes.SEND_CONFIRM_EMAIL_REQUEST
+});
+
+export const emailSendingFailed = (data) => ({
+    type: ActionTypes.SEND_CONFIRM_EMAIL_FAILURE,
+    payload: data
+});
+
+export const resetEmailConfirm = () => ({
+    type: ActionTypes.RESET_CONFIRM_EMAIL
+});
+
+export const sendConfirmationEmail = (email) => dispatch => {
+
+    dispatch(emailSending());
+
+    axios.post(baseUrl + `/users/profile/account-confirm-email/`, {email}, headerWithToken)
+    .then((res) => {
+        dispatch(emailSent(res.data.message));
+        dispatch(resetEmailConfirm());
+    })
+    .catch((error) => {
+        console.log(error.response);
+        dispatch(emailSendingFailed(error.message));
+        dispatch(resetEmailConfirm());
     });
 };
