@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { Button } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/ActionCreators';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,8 +16,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AfterMessage() {
   const classes = useStyles();
+  const deleteUser = useSelector(state => state.DeleteUser)
 
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if(deleteUser.status === 'succeeded') {
+      setTimeout(
+        function() {
+          handleProceed()
+      }, 3000);
+    }
+  }, []);
 
   const handleProceed = () => {
     dispatch(logout());

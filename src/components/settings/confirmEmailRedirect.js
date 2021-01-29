@@ -31,6 +31,7 @@ export default function ConfirmEmailRedirect() {
     if(verifyAccount.status === 'succeeded') {
         setTimeout(function() {
             history.push("/");
+            window.location.reload();
         }, 4000);
     }
   }, [verifyAccount.status, history]);
