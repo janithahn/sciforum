@@ -22,6 +22,8 @@ import UpdateName from './UpdateName';
 import UpdateAboutMe from './UpdateAboutMe';
 import UpdateProfileImage from './UpdateProfileImage';
 import ProfileTabs from './ProfileVerticleTabs';
+import { useHistory } from 'react-router-dom';
+import PageNotFound from '../alert/PageNotFound/PageNotFound'
 
 /*function EditModal({openModal, className, handleModalClose, name, setName}) {
   return(
@@ -50,6 +52,8 @@ const Profile = ({ className, ...rest }) => {
 
   const user = useSelector(state => state.User);
   const auth = useSelector(state => state.Auth);
+
+  const history = useHistory();
 
   const credentialsLoadingState = useSelector(state => [state.UserEducation.status, state.UserLanguages.status, state.UserSkills.status].includes('loading'))
 
@@ -142,6 +146,9 @@ const Profile = ({ className, ...rest }) => {
     //return <CircularProgress color="secondary" size={15}/>
     return(<div></div>);
   }else if(user.status === 'failed') {
+    if(user.errMess.response.status === 404) {
+      return <PageNotFound/>
+    }
     return <h2>Error loading!</h2>
   }else {
     
