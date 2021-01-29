@@ -8,6 +8,7 @@ export const Auth = (state = {
         currentUser: localStorage.getItem('currentUser'),
         currentUserId: localStorage.getItem('currentUserId'),
         currentUserEmail: localStorage.getItem('currentUserEmail'),
+        currentUserEmailVerified: localStorage.getItem('currentUserEmailVerified'),
         currentUserProfileImg: localStorage.getItem('currentUserProfileImg'),
         errMess: null,
     }, action) => {
@@ -29,6 +30,7 @@ export const Auth = (state = {
                 currentUser: action.currentUser,
                 currentUserId: action.currentUserId,
                 currentUserEmail: action.currentUserEmail,
+                currentUserEmailVerified: action.currentUserEmailVerified,
                 currentUserProfileImg: action.currentUserProfileImg,
             };
 
