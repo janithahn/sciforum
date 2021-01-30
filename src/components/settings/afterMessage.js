@@ -37,7 +37,7 @@ export default function AfterMessage() {
     <div className={classes.root}>
       <Alert severity="success">
         <AlertTitle>Success</AlertTitle>
-        Your sciForum account has successfully been deleted — <Button style={{textTransform: "none"}} onClick={handleProceed} color="inherit"><strong>click here to proceed!</strong></Button>
+        Your sciForum account has successfully been deleted — <Button style={{textTransform: "none"}} onClick={handleProceed} color="inherit"><strong>you will be redirected!</strong></Button>
       </Alert>
     </div>
   );

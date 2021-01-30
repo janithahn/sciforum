@@ -94,7 +94,7 @@ export const sendConfirmationToken = (key) => dispatch => {
 
     axios.post(baseUrl + `/rest-auth/account-confirm-email/`, {key}, headerWithToken)
     .then((res) => {
-        dispatch(accountVerified(res.data));
+        dispatch(accountVerified(res.data.detail));
         localStorage.setItem('currentUserEmailVerified', true);
         //dispatch(resetAccountVerify()); //if needed
     })

@@ -24,7 +24,7 @@ export default function ConfirmEmailRedirect() {
   const history = useHistory();
 
   React.useEffect(() => {
-    if(verifyAccount.status === 'idle' && auth.currentUserEmailVerified === "false") dispatch(sendConfirmationToken(token));
+    if(verifyAccount.status === 'idle') dispatch(sendConfirmationToken(token));
   }, [dispatch, verifyAccount.status]);
 
   React.useEffect(() => {
@@ -36,39 +36,39 @@ export default function ConfirmEmailRedirect() {
     }
   }, [verifyAccount.status, history]);
 
-  if(auth.currentUserEmailVerified === "false") {
-    if(verifyAccount.status === 'loading'){
-        return <div className={classes.root}>
-            <Alert severity="success">
-            <AlertTitle>Please wait...</AlertTitle>
-                Your account is being confirmed
-            </Alert>
-        </div>
-    } else if(verifyAccount.status === 'failed') {
-        return <div className={classes.root}>
-            <Alert severity="error">
-            <AlertTitle>Error</AlertTitle>
-                Error occurred while verifying your account!
-            </Alert>
-        </div>
-    } else {
-        return (
-            <div className={classes.root}>
-                <Alert severity="success">
-                    <AlertTitle>Success</AlertTitle>
-                    Thank you for confirming your email — <Link style={{textDecoration: "none", color: "inherit"}} to="/"><strong>click here to proceed!</strong></Link>
-                </Alert>
-            </div>
-        );
-    }
-  }else {
-    return (
+  if(verifyAccount.status === 'loading'){
+      return <div className={classes.root}>
+          <Alert severity="success">
+          <AlertTitle>Please wait...</AlertTitle>
+              Your account is being confirmed
+          </Alert>
+      </div>
+  } else if(verifyAccount.status === 'failed') {
+      return <div className={classes.root}>
+          <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+              Error occurred while verifying your account!
+          </Alert>
+      </div>
+  } else {
+    if(verifyAccount.message === 'ok') {
+      return (
+          <div className={classes.root}>
+              <Alert severity="success">
+                  <AlertTitle>Success</AlertTitle>
+                  Thank you for confirming your email — <Link style={{textDecoration: "none", color: "inherit"}} to="/"><strong>you will be redirected!</strong></Link>
+              </Alert>
+          </div>
+      );
+    }else {
+      return (
         <div className={classes.root}>
             <Alert severity="success">
                 <AlertTitle>Already Verified</AlertTitle>
-                Your account has already been verified! — <Link style={{textDecoration: "none", color: "inherit"}} to="/"><strong>click here to proceed!</strong></Link>
+                Your account has already been verified! — <Link style={{textDecoration: "none", color: "inherit"}} to="/"><strong>you will be redirected!</strong></Link>
             </Alert>
         </div>
-    );
+      );
+    }
   }
 }

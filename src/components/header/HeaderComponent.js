@@ -105,6 +105,8 @@ const Header = (props) => {
 
     const [searchParams, setSearchParams] = React.useState('');
 
+    console.log(unreadNotifications);
+
     //fetch unread notifications
     React.useEffect(() => {
         dispatch(fetchUnreadNotifications(auth.currentUserId));

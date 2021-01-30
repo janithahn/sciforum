@@ -39,10 +39,6 @@ export default function Home() {
         });
     }
 
-    React.useEffect(() => {
-        console.log("LOADED");
-    }, []);
-
     const PostsList = postData.map((post, key) => <div><QuestionViewCard key={post.id} item={post}/></div>);
 
     return(
