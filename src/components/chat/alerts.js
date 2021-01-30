@@ -50,7 +50,7 @@ export const RoomDeleteAlert = ({ handleDeleteModalClose, openDeleteModal, delet
             <DialogTitle id="alert-dialog-slide-title">{"Delete Room"}</DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-                Are you sure about deleteting this chat room? This cannot be undone!
+                Are you sure about deleting this chat room? This cannot be undone!
             </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -86,7 +86,7 @@ export const MessageDeleteAlert = ({ handleDeleteModalClose, openDeleteModal, de
             <DialogTitle id="alert-dialog-slide-title">{"Delete Message"}</DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-                Are you sure about deleteting this message ?
+                Are you sure about deleting this message ?
             </DialogContentText>
             </DialogContent>
             <DialogActions>

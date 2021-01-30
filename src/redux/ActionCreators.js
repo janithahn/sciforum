@@ -380,6 +380,7 @@ const roomsReset = () => ({
 export const logout = () => (dispatch) => {
     dispatch(requestLogout());
 
+    //logging out from chat rooms
     const currentUserRoomKeys = JSON.parse(localStorage.getItem('currentUserRoomKeys'));
     if(currentUserRoomKeys) {
         let len = currentUserRoomKeys.length;

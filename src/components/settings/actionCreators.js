@@ -2,6 +2,7 @@ import * as ActionTypes from '../../redux/ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl';
 import { isJWTExpired } from '../../shared/AdditionalFunctions';
+import { db } from '../../firebase/config';
 
 const headerWithToken = {
     "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
@@ -21,6 +22,26 @@ export const deleteUserFailed = (data) => ({
     payload: data
 });
 
+const deleteChatDetails = (username) => {
+    db.ref('roomusers/').orderByChild('username').equalTo(username.toString()).once('value', (resp) => {
+        resp.forEach((child) => {
+            child.ref.remove();
+        });
+    });
+
+    db.ref('rooms/').orderByChild('owner').equalTo(username.toString()).once('value', (resp) => {
+        resp.forEach((child) => {
+            child.ref.remove();
+        })
+    });
+
+    db.ref('chats/').orderByChild('username').equalTo(username.toString()).once('value', (resp) => {
+        resp.forEach((child) => {
+            child.ref.remove();
+        });
+    });
+};
+
 export const deleteUser = (username) => dispatch => {
 
     dispatch(deleteUserLoading());
@@ -28,6 +49,7 @@ export const deleteUser = (username) => dispatch => {
     axios.delete(baseUrl + `/users/${username}/delete/`, headerWithToken)
     .then((res) => {
         dispatch(deleteUserSuccess(res));
+        deleteChatDetails(username);
     })
     .catch((error) => {
         dispatch(deleteUserFailed(error.response));
