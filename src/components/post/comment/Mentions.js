@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseUrl } from '../../../shared/baseUrl';
+import { baseUrl, appUrl } from '../../../shared/baseUrl';
 import { isJWTExpired } from '../../../shared/AdditionalFunctions';
 
 const headerWithToken = {
@@ -15,7 +15,7 @@ export function fetchMentions() {
             const suggestItem = {
               id: item.id,
               name: item.username,
-              link: `http://localhost:8000/profile/${item.username}/`,
+              link: `${appUrl}/profile/${item.username}/`,
               avatar: item.avatar,
             }
             suggestions.push(suggestItem);

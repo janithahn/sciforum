@@ -50,7 +50,7 @@ export default function ProfilePanel() {
     }, [dispatch, userLanguages.status, username]);
 
     //relevant credential states
-    const [contact, setContact] = React.useState(user.user ? user.user.contact: null);
+    const [contact, setContact] = React.useState(user.user ? user.user.contact: {});
 
     const [selectedCredentialItem, setSelectedCredentialItem] = React.useState();
 
@@ -281,7 +281,7 @@ export default function ProfilePanel() {
                 <Fade in={openModal}>
                 {
                     modalSelection === 'contact' ? 
-                        <EditContact contact={contact} setContact={setContact} handleModalClose={handleModalClose}/>: 
+                        <EditContact contact={contact ? contact: {}} setContact={setContact} handleModalClose={handleModalClose}/>: 
                     modalSelection === 'credentials' ? 
                         <EditCredentials 
                             handleModalClose={handleModalClose}
