@@ -23,33 +23,38 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
   const [tagValue, setTagValue] = React.useState([]);
   
   const [answerSubmitError, setAnswerSubmitError] = React.useState('');
+  const [tagListError, setTagListError] = React.useState('');
 
   const history = useHistory();
   const auth = useSelector(state => state.Auth);
 
   const dispatch = useDispatch();
 
-  const profileSchema = Yup.object().shape({
+  const schema = Yup.object().shape({
     title: Yup.string()
       .min(2, 'Too Short!')
       .required('Required'),
+    tags: Yup.array()
+      .min(3, 'Please at least put 3 tags related to your question')
+      .required('Please at least put 3 tags related to your question'),
   });
 
   const formik = useFormik({
     initialValues: {
       title: title,
+      tags: tagValue,
     },
     onSubmit: (values) => {
+      setAnswerSubmitError('');
       if(body.length === 0) {
         setAnswerSubmitError("Question cannot be blank!");
       }else {
         setAnswerSubmitError("");
         dispatch(postPost({owner: auth.currentUserId, title: values.title, body, tags: tagValue}, setSnackMessage, setSnackOpen));
         history.push('/myposts');
-        //history.goBack();
       }
     },
-    validationSchema: profileSchema,
+    validationSchema: schema,
   });
 
   function handleCancel() {
@@ -101,10 +106,11 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
                   <Grid item>
                     <Tags 
                       classes={classes} 
-                      value={tagValue} 
-                      setValue={setTagValue} 
-                      //tagList={tagList} 
-                      //setTagList={setTagList}
+                      value={formik.values.tags}
+                      setTagListError={setTagListError}
+                      error={formik.errors.tags && formik.touched.tags}
+                      helperText={(formik.errors.tags && formik.touched.tags) && formik.errors.tags}
+                      setFieldValue={formik.setFieldValue}
                     />
                   </Grid>
                   <Grid item>

@@ -7,7 +7,7 @@ import { baseUrl } from '../../shared/baseUrl';
 
 const tagUrl = `${baseUrl}/tag_api/tags/`;
 
-export default function Tags({classes, value, setValue}) {
+export default function Tags({classes, value, error, helperText, setFieldValue}) {
 
   const [tagList, setTagList] = React.useState([]);
 
@@ -20,7 +20,7 @@ export default function Tags({classes, value, setValue}) {
         event.preventDefault();
         event.stopPropagation();
         if(event.target.value.length > 0) {
-          if(!value.includes(event.target.value)) setValue([...value, event.target.value]); else setValue([...value]);
+          if(!value.includes(event.target.value)) setFieldValue("tags", [...value, event.target.value]); else setFieldValue("tags", [...value]);
           if(!tagList.includes(event.target.value)) setTagList([...tagList, event.target.value]);
         }
         break;
@@ -49,10 +49,12 @@ export default function Tags({classes, value, setValue}) {
         value={value}
         options={tagList}
         renderTags={(value, getTagProps) => handleRenderTags(value, getTagProps)}
-        onChange={(event, newValue) => setValue(newValue)}
+        onChange={(event, newValue) => {
+          setFieldValue("tags", newValue ? newValue: value);
+        }}
         renderInput={(params) => {
           params.inputProps.onKeyDown = handleKeyDown;
-          return <TextField {...params} variant="outlined" /*label="Tags"*/ placeholder="Tags"/>
+          return <TextField {...params} variant="outlined" /*label="Tags"*/ name="tags-filled" placeholder="Tags" error={error} helperText={helperText}/>
         }}
         size="small"
         onFocus={() => handleFocus()}
