@@ -43,7 +43,7 @@ export default function SearchByTag() {
         });
     }
 
-    const PostsList = postData.map((post, key) => <QuestionViewCard key={key} item={post}/>);
+    const PostsList = postData.map((post, key) => <div key={post.id}><QuestionViewCard item={post}/></div>);
 
     return(
         <RenderPosts 

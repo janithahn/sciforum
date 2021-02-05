@@ -35,4 +35,15 @@ export const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
     },
+    labelColor: {
+      width: 14,
+      height: 14,
+      flexShrink: 0,
+      borderRadius: 3,
+      marginRight: 8,
+      marginTop: 2,
+    },
+    labelText: {
+      flexGrow: 1,
+    },
 }));

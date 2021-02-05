@@ -18,6 +18,7 @@ import NotFound from './alert/NotFoundComponent';
 import PageNotFound from './alert/PageNotFound/PageNotFound';
 import Search from './home/SearchResults';
 import SearchByTag from './home/SearchByTagResults';
+import SearchByLabel from './home/SearchByLabels';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
@@ -216,6 +217,7 @@ function Main(props) {
                     <Route path="/search" component={() => <Search/>}/>
                     <Route exact path="/questions/:postId" component={() => <PostView/>}/>
                     <Route exact path="/questions/tagged/:tagname" component={() => <SearchByTag/>}/>
+                    <Route exact path="/questions/labeled/:label" component={() => <SearchByLabel/>}/>
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen}/>}/>
                     <PrivateRouteMyPosts exact path="/myposts" component={() => <MyPosts/>}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />

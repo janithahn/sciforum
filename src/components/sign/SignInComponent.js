@@ -60,8 +60,6 @@ export default function SignIn(props) {
   let history = useHistory();
   let location = useLocation();
   let { from } = location.state || { from: { pathname: history.location.pathname } };
-
-  console.log(history);
   
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {
