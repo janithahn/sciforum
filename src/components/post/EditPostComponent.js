@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, Typography, Grid } from '@material-ui/core';
+import { ThemeProvider, Typography, Grid, FormHelperText } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import NotFound from '../alert/NotFoundComponent';
 import { useHistory, useParams } from 'react-router-dom';
@@ -11,6 +11,10 @@ import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import MDEditor from './MDE';
 import Tags from './tags';
+import QuestionLabels from './labels';
+import { labels } from './styles/labelStyles';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 export default function EditPost({setSnackMessage, setSnackOpen}) {
   const classes = useStyles();
@@ -24,14 +28,13 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
   const [body, setQuestion] = React.useState(post.post ? post.post.body: '');
   const [id, setId] = React.useState(post.post ? post.post.id: null);
   const [owner, setOwner] = React.useState(post.post ? post.post.owner: null);
-  //let id = post.post ? post.post.id: null;
-  //let owner = post.post ? post.post.owner: null;
 
   const [tagValue, setTagValue] = React.useState(post.post ? post.post.tags: []);
+  const [labelValue, setLabelValue] = React.useState(post.post ? labels.filter(l => l.name === post.post.label): []);
+  
+  const [answerSubmitError, setAnswerSubmitError] = React.useState('');
 
   const { postId } = useParams();
-
-  console.log({title, body});
 
   const handlePostInfo = React.useCallback((postId, postOwner, title, body) => {
     setTitle(title);
@@ -68,6 +71,37 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
     history.push(`/questions/${id}/`);
   }
 
+  const schema = Yup.object().shape({
+    title: Yup.string()
+      .min(2, 'Too Short!')
+      .required('Required'),
+    tags: Yup.array()
+      .min(3, 'Please at least put 3 tags related to your question')
+      .required('Please at least put 3 tags related to your question'),
+    label: Yup.array()
+      .min(1, 'It is required to label your question')
+      .required('It is required to label your question'),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      title: title,
+      tags: tagValue,
+      label: labelValue,
+    },
+    onSubmit: (values) => {
+      setAnswerSubmitError('');
+      if(body.length === 0) {
+        setAnswerSubmitError("Question cannot be blank!");
+      }else {
+        setAnswerSubmitError("");
+        dispatch(editPost({id, owner, title: values.title, body, tags: values.tags, label: values.label[0].name}, setSnackMessage, setSnackOpen));
+        history.push(`/questions/${id}/`);
+      }
+    },
+    validationSchema: schema,
+  });
+
   if(post.status === 'loading' || post.status === 'idle') {
     //return(<CircularProgress color="secondary" size={15}/>);
     return(<div></div>);
@@ -79,15 +113,20 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
         <div className={classes.root}>
             <ThemeProvider theme={theme}>
               <Grid container direction="column" justify="center">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={formik.handleSubmit}>
                   <Grid item lg={8} sm xs={12}>
                     <Typography variant="h6" gutterBottom>
                       Title
                     </Typography>
                     <TextField
+                      error={formik.errors.title && formik.touched.title}
+                      helperText={(formik.errors.title && formik.touched.title) && formik.errors.title}
+                      onChange={formik.handleChange}
+                      //onBlur={formik.handleBlur}
                       className={classes.textField}
                       id="title"
-                      value={title}
+                      value={formik.values.title}
+                      placeholder='Question title'
                       name="title"
                       onInput={e => setTitle(e.target.value)}
                       margin="none"
@@ -104,12 +143,23 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
                     </Typography>
                     {/*<Editor setQuestion={(values) => setQuestion(values)} data={body}/>*/}
                     <MDEditor setText={setQuestion} data={body}/>
+                    <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
+                  </Grid>
+                  <Grid item lg={8} sm xs={12}>
+                    <QuestionLabels
+                      value={formik.values.label}
+                      setValue={formik.setFieldValue} 
+                      error={formik.errors.label && formik.touched.label}
+                      helperText={(formik.errors.label && formik.touched.label) && formik.errors.label}
+                    />
                   </Grid>
                   <Grid item lg={8} sm xs={12}>
                     <Tags 
                       classes={classes} 
-                      value={tagValue} 
-                      setValue={setTagValue}
+                      value={formik.values.tags}
+                      error={formik.errors.tags && formik.touched.tags}
+                      helperText={(formik.errors.tags && formik.touched.tags) && formik.errors.tags}
+                      setFieldValue={formik.setFieldValue}
                     />
                   </Grid>
                   <Grid item lg={8} sm xs={12}>

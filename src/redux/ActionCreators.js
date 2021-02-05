@@ -78,6 +78,7 @@ export const editPost = (post, setSnackMessage, setSnackOpen) => (dispatch, getS
         title: post.title,
         body: post.body,
         tags: post.tags,
+        label: post.label,
     },{
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
