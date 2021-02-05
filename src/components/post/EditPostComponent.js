@@ -4,8 +4,6 @@ import { ThemeProvider, Typography, Grid, FormHelperText } from '@material-ui/co
 import Button from '@material-ui/core/Button';
 import NotFound from '../alert/NotFoundComponent';
 import { useHistory, useParams } from 'react-router-dom';
-//import Editor from './EditorComponent';
-//import EditorDraft from './EditorDraftComponent';
 import { theme, useStyles } from './styles/postsStyles';
 import { fetchPostDetail, editPost } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,18 +53,6 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
     }
   }, [post, handlePostInfo]);
 
-  function handleSubmit(event) {
-    dispatch(editPost({
-      id,
-      owner,
-      title,
-      body,
-      tags: tagValue,
-    }, setSnackMessage, setSnackOpen));
-    //dispatch(fetchPosts());
-    history.push(`/questions/${id}/`);
-  }
-
   function handleCancel() {
     history.push(`/questions/${id}/`);
   }
@@ -103,7 +89,6 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
   });
 
   if(post.status === 'loading' || post.status === 'idle') {
-    //return(<CircularProgress color="secondary" size={15}/>);
     return(<div></div>);
   }else if(post.errMess) {
       return(<h4>Error loading!</h4>);

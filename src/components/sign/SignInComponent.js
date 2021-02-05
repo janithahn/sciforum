@@ -59,7 +59,9 @@ export default function SignIn(props) {
   //these are used to redirect back to where it was when the user logs in
   let history = useHistory();
   let location = useLocation();
-  let { from } = location.state || { from: { pathname: "/" } };
+  let { from } = location.state || { from: { pathname: history.location.pathname } };
+
+  console.log(history);
   
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {

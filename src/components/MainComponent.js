@@ -110,7 +110,7 @@ function Main(props) {
         //const post = posts.posts.filter((post) => post.id === parseInt(postId))[0]
 
         if(post.post) {
-            return (<Route {...rest} render={(location) => (
+            return (<Route {...rest} render={({location}) => (
                 auth.isAuthenticated && post.post.owner && post.post.owner.toString() === auth.currentUser.toString()
                 ? <Component postId={post.post.id}/>
                 : <Redirect to={{
