@@ -187,7 +187,7 @@ const Header = (props) => {
                             <Search />
                         </div>
                         <InputBase
-                            placeholder="Search…"
+                            placeholder="Search Questions…"
                             classes={{
                                 root: props.classes.inputRoot,
                                 input: props.classes.inputInput,

@@ -5,8 +5,9 @@ import { Preview } from './MarkdownPreview';
 import TimeAgo from 'react-timeago';
 import LoginModal from '../sign/LoginModal';
 import { useSelector } from 'react-redux';
+import { labels } from './styles/labelStyles';
 
-export default function RenderCard({title, body, viewCount, created_at, updated_at, owner, handleModalOpen, classes}) {
+export default function RenderCard({title, body, label, viewCount, created_at, updated_at, owner, handleModalOpen, classes}) {
 
     /*function getTime(date) {
         return new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date)
@@ -14,6 +15,8 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
 
     const auth = useSelector(state => state.Auth);
 
+    const labelColor = label ? labels.filter((l) => l.name === label)[0].color: '';
+    console.log('LABEL:', labelColor);
     const [openModal, setOpenModal] = React.useState(false);
 
     const handleLoginModalOpen = () => {
@@ -35,6 +38,7 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
     return(
        <Grid container direction="column" spacing={1}>
            <Grid item>
+                <Divider style={{padding: 1, background: labelColor}}/>
                 <Typography variant="h5" gutterBottom>
                     {title}
                 </Typography>
