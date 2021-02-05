@@ -4,6 +4,7 @@ export const useStyles = makeStyles({
     root: {
       minWidth: 275,
       marginTop: 5,
+      display: 'flex'
     },
     bullet: {
       display: 'inline-block',

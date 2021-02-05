@@ -3,15 +3,18 @@ import Card from '@material-ui/core/Card';
 import Link from '@material-ui/core/Link'
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 import { useStyles } from './styles/cardStyles';
+import { labels } from '../post/styles/labelStyles';
 
 export default function QuestionViewCard(props) {
     const classes = useStyles();
 
     const { item } = props;
+    const labelColor = labels.filter((label) => label.name === item.label)[0].color;
 
     const RenderPostTags = item.tags ? item.tags.map((tag, key) => 
         <Grid item key={key}>
@@ -20,6 +23,7 @@ export default function QuestionViewCard(props) {
 
     return (
         <Card className={classes.root} variant="outlined">
+            <CardMedia elevation={0} style={{padding: 1, backgroundColor: labelColor}}/>
             <CardContent>
                 <CardActions>
                     <Link underline="none"  href={`/questions/${item.id}/`} style={{textDecoration: 'none', color: 'inherit'}}>
