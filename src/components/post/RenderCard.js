@@ -49,7 +49,7 @@ export default function RenderCard({title, body, viewCount, created_at, updated_
                             </Grid>
                             <Grid item>
                                 <Typography style={{fontSize: 13}} variant="body2" color="textSecondary">
-                                    {viewCount === "1" ? viewCount + " View": viewCount + " Views"}
+                                    {viewCount === 1 ? `${viewCount} View`: `${viewCount} Views`}
                                 </Typography>
                             </Grid>
                             <Hidden smDown>

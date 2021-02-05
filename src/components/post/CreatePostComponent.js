@@ -8,6 +8,7 @@ import { theme, useStyles } from './styles/postsStyles';
 import MDEditor from './MDE';
 import Tags from './tags';
 import TopPosts from './TopPosts';
+import QuestionLabels from './labels';
 import { useSelector, useDispatch } from 'react-redux';
 import { postPost } from '../../redux/ActionCreators';
 import { useFormik } from 'formik';
@@ -18,12 +19,10 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
 
   const [title, setTitle] = React.useState('');
   const [body, setQuestion] = React.useState('');
-
-  //const [tagList, setTagList] = React.useState([]);
   const [tagValue, setTagValue] = React.useState([]);
+  const [labelValue, setLabelValue] = React.useState([]);
   
   const [answerSubmitError, setAnswerSubmitError] = React.useState('');
-  const [tagListError, setTagListError] = React.useState('');
 
   const history = useHistory();
   const auth = useSelector(state => state.Auth);
@@ -37,12 +36,16 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
     tags: Yup.array()
       .min(3, 'Please at least put 3 tags related to your question')
       .required('Please at least put 3 tags related to your question'),
+    label: Yup.array()
+      .min(1, 'It is required to label your question')
+      .required('It is required to label your question'),
   });
 
   const formik = useFormik({
     initialValues: {
       title: title,
       tags: tagValue,
+      label: labelValue,
     },
     onSubmit: (values) => {
       setAnswerSubmitError('');
@@ -50,7 +53,7 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
         setAnswerSubmitError("Question cannot be blank!");
       }else {
         setAnswerSubmitError("");
-        dispatch(postPost({owner: auth.currentUserId, title: values.title, body, tags: tagValue}, setSnackMessage, setSnackOpen));
+        dispatch(postPost({owner: auth.currentUserId, title: values.title, body, tags: values.tags, label: values.label[0].name}, setSnackMessage, setSnackOpen));
         history.push('/myposts');
       }
     },
@@ -104,10 +107,17 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
                     <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
                   </Grid>
                   <Grid item>
+                    <QuestionLabels
+                      value={formik.values.label}
+                      setValue={formik.setFieldValue} 
+                      error={formik.errors.label && formik.touched.label}
+                      helperText={(formik.errors.label && formik.touched.label) && formik.errors.label}
+                    />
+                  </Grid>
+                  <Grid item>
                     <Tags 
                       classes={classes} 
                       value={formik.values.tags}
-                      setTagListError={setTagListError}
                       error={formik.errors.tags && formik.touched.tags}
                       helperText={(formik.errors.tags && formik.touched.tags) && formik.errors.tags}
                       setFieldValue={formik.setFieldValue}
