@@ -27,6 +27,10 @@ export const useStyles = makeStyles((theme) => ({
     drawerContainer: {
         overflow: 'auto'
     },
+    drawerLabelsContainer: {
+        overflow: 'auto',
+        marginLeft: 1
+    },
     drawerHeader: {
         display: 'flex',
         alignItems: 'center',

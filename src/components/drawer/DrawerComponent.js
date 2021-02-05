@@ -33,7 +33,7 @@ function RenderDrawer({ classes, open, variant, handleSelectedItem, selected }) 
             </div>
             <Divider />
             <Typography variant="subtitle1" style={{margin: 5, fontWeight: "bold"}}>Labels</Typography>
-            <div className={classes.drawerContainer}>
+            <div className={classes.drawerLabelsContainer}>
                 <List>
                     {labels.map((item, index) => (
                         <Link to={item.url} component={NavLink} underline='none' color='inherit' key={index}>
