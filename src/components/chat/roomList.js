@@ -157,7 +157,9 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             setRooms(chatRooms.rooms.filter(item => 
-                item.roomname.includes(searchParams) || item.description.includes(searchParams) || item.owner.includes(searchParams))
+                item.roomname.toLowerCase().includes(searchParams.toLowerCase()) || 
+                item.description.toLowerCase().includes(searchParams.toLowerCase()) || 
+                item.owner.toLowerCase().includes(searchParams.toLowerCase()))
             );
         }
     };
