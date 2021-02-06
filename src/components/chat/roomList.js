@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Moment from 'moment';
-import { Button, Card, CardActions, CardContent, Typography, Grid, Modal, Backdrop, Fade } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Typography, Grid, Modal, Backdrop, Fade, InputBase, Link } from '@material-ui/core';
+import { Search } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { db } from '../../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +10,7 @@ import { fetchData as fetchRooms, resetMessages } from './actionCreators';
 import AddRoomModal from './addRoomModal';
 import ChatroomPermissionDenied from './permissionDenied';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
       minWidth: 275,
     },
@@ -29,7 +30,45 @@ const useStyles = makeStyles({
       alignItems: 'center',
       justifyContent: 'center',
     },
-});
+    search: {
+      position: 'relative',
+      backgroundColor: '#f5f5f5',
+      borderRadius: theme.shape.borderRadius,
+      marginRight: theme.spacing(2),
+      marginLeft: 10,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+      },
+    },
+    searchIcon: {
+      padding: theme.spacing(0, 2),
+      height: '100%',
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#757575'
+    },
+    inputRoot: {
+      color: 'inherit',
+    },
+    inputInput: {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        width: '20ch',
+        '&:focus': {
+          width: '40ch',
+        },
+      },
+    }
+}));
 
 const snapshotToArray = (snapshot) => {
     const returnArr = [];
@@ -112,11 +151,18 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
     const auth = useSelector(state => state.Auth);
     const authFirebase = useSelector(state => state.AuthFirebase);
 
-    console.log(chatRooms);
+    const [room, setRooms] = React.useState(chatRooms.rooms);
+
+    const [searchParams, setSearchParams] = React.useState('');
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            setRooms(chatRooms.rooms.filter(item => 
+                item.roomname.includes(searchParams) || item.description.includes(searchParams) || item.owner.includes(searchParams))
+            );
+        }
+    };
 
     const [openModal, setOpenModal] = React.useState(false);
-
-    const room = chatRooms.rooms;
 
     useEffect(() => {
         if(chatRooms.status === 'idle' && authFirebase.isAuthenticated) dispatch(fetchRooms());
@@ -162,10 +208,19 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
                 </CardContent>
 
                 <CardActions>
-                    <ChatEnterButton 
-                        roomname={item.roomname}
-                        roomKey={item.key}
-                    />
+                    <Grid container justify="space-between" alignItems="flex-end">
+                        <Grid item>
+                            <ChatEnterButton 
+                                roomname={item.roomname}
+                                roomKey={item.key}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Link href={`/profile/${item.owner}`} underline="none" color="inherit">
+                                <Typography variant="subtitle2" color="textSecondary">{item.owner}</Typography>
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </CardActions>
             </Card>
         </Grid>
@@ -182,6 +237,25 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
                 <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
                     <Grid item>
                         <Typography variant="h5">Chat Rooms</Typography>
+                    </Grid>
+                    <Grid item>
+                        <div className={classes.search}>
+                            <div className={classes.searchIcon}>
+                                <Search />
+                            </div>
+                            <InputBase
+                                placeholder="Search Chat Rooms…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                inputProps={{ 'aria-label': 'search' }}
+                                onChange={(event) => {
+                                    setSearchParams(event.target.value)
+                                }}
+                                onKeyDown={(event) => handleKeyDown(event)}
+                            />
+                        </div>
                     </Grid>
                     <Grid item>
                         {auth.isAuthenticated ? 
