@@ -17,6 +17,7 @@ import { Answers } from './actions/answers';
 import { ChatRooms } from './actions/chat/chatRooms';
 import { CreateChatRoom } from './actions/chat/createChatRoom';
 import { ChatMessages } from './actions/chat/chatMessages';
+import { RoomUsers } from './actions/chat/roomusers';
 import { ResetPassword, SendResetPassword } from './actions/resetPassword';
 import { ConfirmEmail, VerifyAccount } from './actions/confirmEmail';
 import { answerVotes, postVotes } from './actions/votes';
@@ -74,6 +75,7 @@ export const ConfigureStore = () => {
             ChatRooms,
             CreateChatRoom,
             ChatMessages,
+            RoomUsers,
             events,
             webinars,
             TopPosts,

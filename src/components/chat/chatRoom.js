@@ -11,7 +11,7 @@ import { db } from '../../firebase/config';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import './Styles.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchData as fetchRooms, fetchMessages } from './actionCreators';
+import { fetchData as fetchRooms, fetchMessages, fetchRoomUsers } from './actionCreators';
 import { RoomDeleteAlert, MessageDeleteAlert } from './alerts';
 import AddRoomModal from './addRoomModal';
 
@@ -106,8 +106,13 @@ export default function ChatRoom() {
 
     const auth = useSelector(state => state.Auth);
     const chatMessages = useSelector(state => state.ChatMessages);
+    const roomusers = useSelector(state => state.RoomUsers);
     const chatRoomsStatus = useSelector(state => state.ChatRooms.status);
     const currentRoom = useSelector(state => state.ChatRooms.rooms.filter(room => room.key === roomKey)[0]);
+
+    useEffect(() => {
+        //if(roomKey && roomusers.status === 'idle') dispatch(fetchRoomUsers(roomKey));
+    }, [dispatch, roomKey, roomusers]);
 
     const room = currentRoom ? currentRoom.roomname: null;
     const chats = chatMessages.messages;
@@ -162,7 +167,7 @@ export default function ChatRoom() {
     useEffect(() => {
         const fetchData = () => {
             try {
-                db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey).once('value', (resp2) => {
+                db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey).on('value', (resp2) => {
                   setUsers([]);
                   const roomusers = snapshotToArray(resp2);
                   setUsers(roomusers.filter(x => x.status === 'online'));

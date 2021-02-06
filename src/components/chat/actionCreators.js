@@ -79,6 +79,44 @@ export const fetchData = () => (dispatch) => {
 
 };
 
+const addRoomusers = (data) => ({
+    type: ActionTypes.ADD_ROOMUSERS,
+    payload: data
+});
+
+const roomusersLoading = () => ({
+    type: ActionTypes.ROOMUSERS_LOADING
+});
+
+const roomusersFailed = (data) => ({
+    type: ActionTypes.ROOMUSERS_FAILED,
+    payload: data
+});
+
+export const roomusersReset = () => ({
+    type: ActionTypes.RESET_ROOMUSERS,
+});
+
+export const fetchRoomUsers = (roomKey) => (dispatch) => {
+
+    dispatch(roomusersLoading());
+    
+    try {
+        db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey).on('value', (resp) => {
+            const roomusers = snapshotToArray(resp);
+            dispatch(addRoomusers(roomusers.filter(x => x.status === 'online')));
+        }, (error) => {
+            if(error) {
+                dispatch(roomusersFailed(error));
+            }else {
+                console.log("Room users loaded successfully!");
+            }
+        })
+    }catch(error) {
+        dispatch(roomusersFailed(error));
+    }
+};
+
 //Room Creation
 const roomCreationSuccess = (data) => ({
     type: ActionTypes.ROOM_CREATION_SUCCESS,
