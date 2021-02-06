@@ -3,72 +3,12 @@ import { useHistory } from "react-router-dom";
 import Moment from 'moment';
 import { Button, Card, CardActions, CardContent, Typography, Grid, Modal, Backdrop, Fade, InputBase, Link } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
 import { db } from '../../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData as fetchRooms, resetMessages } from './actionCreators';
 import AddRoomModal from './addRoomModal';
 import ChatroomPermissionDenied from './permissionDenied';
-
-const useStyles = makeStyles(theme => ({
-    root: {
-      minWidth: 275,
-    },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)',
-    },
-    title: {
-      fontSize: 14,
-    },
-    pos: {
-      marginBottom: 12,
-    },
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    search: {
-      position: 'relative',
-      backgroundColor: '#f5f5f5',
-      borderRadius: theme.shape.borderRadius,
-      marginRight: theme.spacing(2),
-      marginLeft: 10,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(3),
-        width: 'auto',
-      },
-    },
-    searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: '#757575'
-    },
-    inputRoot: {
-      color: 'inherit',
-    },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch',
-        '&:focus': {
-          width: '40ch',
-        },
-      },
-    }
-}));
+import { useRoomListStyles } from './styles/styles';
 
 const snapshotToArray = (snapshot) => {
     const returnArr = [];
@@ -143,7 +83,7 @@ function ChatEnterButton({ roomname, roomKey }) {
 
 export default function RoomList({ setSnackMessage, setSnackOpen }) {
 
-    const classes = useStyles();
+    const classes = useRoomListStyles();
 
     const dispatch = useDispatch();
     const chatRooms = useSelector(state => state.ChatRooms);
@@ -197,7 +137,20 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
       setOpenModal(false);
     };
 
-    const RoomList = room.map((item) => (
+    const RoomList = room.map((item) => {
+        let created_at = '';
+        if(item.created_at) {
+            const tempDate = Date.parse(item.created_at);
+            const year = new Date(tempDate).getFullYear();
+            const month = new Date(tempDate).getMonth();
+            const day = new Date(tempDate).getDate();
+            const hour = new Date(tempDate).getHours();
+            const minute = new Date(tempDate).getMinutes();
+            created_at = `${day}/${month}/${year}-${hour}:${minute}`
+            console.log(created_at.toString());
+        }
+
+        return (
         <Grid item key={item.key}>
             <Card className={classes.root} variant="outlined">
                 <CardContent>
@@ -218,15 +171,24 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
                             />
                         </Grid>
                         <Grid item>
-                            <Link href={`/profile/${item.owner}`} underline="none" color="inherit">
-                                <Typography variant="subtitle2" color="textSecondary">{item.owner}</Typography>
-                            </Link>
+                            <Grid container direction="column" alignItems="flex-end">
+                                <Grid item>
+                                    <Link href={`/profile/${item.owner}`} underline="none" color="inherit">
+                                        <Typography variant="subtitle2" color="textSecondary">{item.owner}</Typography>
+                                    </Link>
+                                </Grid>
+                                <Grid item>
+                                    <Typography variant="subtitle2" style={{fontSize: 10, fontStyle: "italic"}} color="textSecondary">
+                                        {created_at}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </CardActions>
             </Card>
-        </Grid>
-    ));
+        </Grid>)
+    });
 
     if(authFirebase.status === 'loading') {
         return(<div></div>)

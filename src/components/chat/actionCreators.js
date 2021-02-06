@@ -100,7 +100,7 @@ export const roomusersReset = () => ({
 export const fetchRoomUsers = (roomKey) => (dispatch) => {
 
     dispatch(roomusersLoading());
-    
+
     try {
         db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey).on('value', (resp) => {
             const roomusers = snapshotToArray(resp);
@@ -154,6 +154,8 @@ export const createRoom = (room, handleModalClose) => (dispatch) => {
 
     dispatch(roomCreationLoading());
     const ref = db.ref('rooms/');
+
+    console.log(room);
 
     try {
         ref.orderByChild('roomname').equalTo(room.roomname).once('value', snapshot => {
