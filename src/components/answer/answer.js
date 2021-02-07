@@ -1,5 +1,7 @@
 import React from 'react';
-import { ThemeProvider, Grid, Typography, Divider, Modal, Backdrop, Fade } from '@material-ui/core';
+import { ThemeProvider, Grid, Typography, Divider, Modal, Backdrop, Fade, 
+    Tooltip, IconButton, Popper, Grow, Paper, ClickAwayListener, MenuItem, MenuList } from '@material-ui/core';
+import { FilterList } from '@material-ui/icons';
 import { fetchAnswers } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
@@ -56,7 +58,7 @@ export default function Answer() {
     const { postId } = useParams();
 
     React.useEffect(() => {
-        if(answers.status === 'idle') dispatch(fetchAnswers(postId));
+        if(answers.status === 'idle') dispatch(fetchAnswers(postId, "-vote_count"));
     }, [dispatch, answers.status, postId]);
 
     const [openModal, setOpenModal] = React.useState(false);
@@ -66,6 +68,7 @@ export default function Answer() {
     const [selectedAnswerId, setSelectedAnswerId] = React.useState(null);
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
 
+    //scroll down and highlight the selected answer
     let refs = answers.answers.reduce((acc, value) => {
         acc[value.id] = React.createRef();
         return acc;
@@ -122,6 +125,39 @@ export default function Answer() {
         setOpenDeleteModal(false);
     };
 
+    //filter list
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef(null);
+
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
+
+    const filterByDate = (event) => {
+        dispatch(fetchAnswers(postId, "created_at"));
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+
+    const filterByActive = (event) => {
+        dispatch(fetchAnswers(postId, "-updated_at"));
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+
+    const filterByDefault = (event) => {
+        dispatch(fetchAnswers(postId, "-vote_count"));
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
+        setOpen(false);
+    };
+    //end filter list
+
     const AnswersList =  answers.answers.map((answer) => (
         <Grid item innerRef={refs[answer.id]} key={answer.id}> 
             <AnswerViewCard
@@ -150,7 +186,23 @@ export default function Answer() {
                         {answers.answers.length !== 0 ? 
                             <Grid item>
                                 <Grid item>
-                                    <Typography variant="h6">Answers</Typography>
+                                    <Grid container justify="space-between" alignItems="center">
+                                        <Grid item>
+                                            <Typography variant="h6">{`${answers.answers.length} Answers`}</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Tooltip title="Filter Chat Rooms By">
+                                                <IconButton size="small"
+                                                    ref={anchorRef}
+                                                    aria-controls={open ? 'menu-list-grow' : undefined}
+                                                    aria-haspopup="true"
+                                                    onClick={handleToggle}
+                                                >
+                                                    <FilterList/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                                 <Divider/>
                             </Grid>: 
@@ -177,7 +229,64 @@ export default function Answer() {
                         postBelong={selectedAnswerPostBelong}
                     />
                 </ThemeProvider>
+                <FilterMenu 
+                    open={open} 
+                    setOpen={setOpen} 
+                    anchorRef={anchorRef}
+                    filterByDate={filterByDate}
+                    filterByActive={filterByActive}
+                    filterByDefault={filterByDefault}
+                />
             </div>
         );
     }
+}
+
+const FilterMenu = ({ open, setOpen, anchorRef, filterByDate, filterByActive, filterByDefault }) => {
+
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+        return;
+        }
+
+        setOpen(false);
+    };
+
+    function handleListKeyDown(event) {
+        if (event.key === 'Tab') {
+        event.preventDefault();
+        setOpen(false);
+        }
+    }
+
+    // return focus to the button when we transitioned from !open -> open
+    const prevOpen = React.useRef(open);
+    React.useEffect(() => {
+        if (prevOpen.current === true && open === false) {
+        anchorRef.current.focus();
+        }
+
+        prevOpen.current = open;
+    }, [open]);
+
+    return(
+        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={handleClose}>
+                  <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+                    <MenuItem onClick={(event) => filterByDate(event)}>Date Created</MenuItem>
+                    <MenuItem onClick={(event) => filterByActive(event)}>Last Active</MenuItem>
+                    <MenuItem onClick={(event) => filterByDefault(event)}>Most Voted</MenuItem>
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
+    );
 }

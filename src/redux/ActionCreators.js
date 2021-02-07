@@ -1246,10 +1246,10 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
 }
 
 //ANSWER
-export const fetchAnswers = (postId) => (dispatch) => {
+export const fetchAnswers = (postId, ordering) => (dispatch) => {
     dispatch(answersLoading());
 
-    axios.get(baseUrl + `/answer_api/?postBelong=${postId}`, {
+    axios.get(baseUrl + `/answer_api/?ordering=${ordering}&postBelong=${postId}`, {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(answers => 

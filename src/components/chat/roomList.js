@@ -212,7 +212,7 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
         });
     }, []);
 
-    //this sorts the array based on another sorted array
+    //this function sorts an array based on another sorted array
     function mapOrder (array, order, key) {
   
         array.sort( function (a, b) {
