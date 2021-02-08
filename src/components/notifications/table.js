@@ -248,8 +248,8 @@ export default function EnhancedTable({ rows, currentUser }) {
     if (event.target.checked) {
       const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
-    }
-    setSelected([]);
+    }else
+      setSelected([]);
   };
 
   const handleClick = (event, id) => {
