@@ -50,15 +50,20 @@ export default function Answer() {
 
     const dispatch = useDispatch();
 
-    //console.log(answers);
-
     const location = useLocation();
     const hash = location.hash.substring(1);
 
-    const { postId } = useParams();
+    const { postId, answerId } = useParams();
+    console.log("answerId", answerId);
+
+    //get the answer page number
+    function useQuery() {
+        return new URLSearchParams(useLocation().search);
+    }
+    let answerPageNum = useQuery().get('page');
 
     React.useEffect(() => {
-        if(answers.status === 'idle') dispatch(fetchAnswers(postId, "-vote_count"));
+        if(answers.status === 'idle') dispatch(fetchAnswers(postId, "-vote_count", answerId, answerPageNum ? answerPageNum: 1));
     }, [dispatch, answers.status, postId]);
 
     const [openModal, setOpenModal] = React.useState(false);
@@ -69,10 +74,10 @@ export default function Answer() {
     const [selectedAnswerPostBelong, setSelectedAnswerPostBelong] = React.useState(null);
 
     //scroll down and highlight the selected answer
-    let refs = answers.answers.reduce((acc, value) => {
+    let refs = answers.answers.results ? answers.answers.results.reduce((acc, value) => {
         acc[value.id] = React.createRef();
         return acc;
-    }, {});
+    }, {}): {};
 
     const scrollTo = React.useCallback((id) =>
         refs[id].current.scrollIntoView({
@@ -158,7 +163,7 @@ export default function Answer() {
     };
     //end filter list
 
-    const AnswersList =  answers.answers.map((answer) => (
+    const AnswersList =  answers.answers.results ? answers.answers.results.map((answer) => (
         <Grid item innerRef={refs[answer.id]} key={answer.id}> 
             <AnswerViewCard
                 answer={answer} 
@@ -166,7 +171,7 @@ export default function Answer() {
                 handleDeleteModalOpen={handleDeleteModalOpen}
             />
         </Grid>
-    ));
+    )): undefined;
 
     if(answers.status === 'loading' || answerVotesLoading === 'loading') {
         return(
@@ -183,15 +188,15 @@ export default function Answer() {
             <div className={classes.root}>
                 <ThemeProvider theme={theme}>
                     <Grid container direction="column" spacing={3}>
-                        {answers.answers.length !== 0 ? 
+                        {answers.answers.count !== 0 ? 
                             <Grid item>
                                 <Grid item>
                                     <Grid container justify="space-between" alignItems="center">
                                         <Grid item>
-                                            <Typography variant="h6">{`${answers.answers.length} Answers`}</Typography>
+                                            <Typography variant="h6">{`${answers.answers.count} Answers`}</Typography>
                                         </Grid>
                                         <Grid item>
-                                            <Tooltip title="Filter Chat Rooms By">
+                                            <Tooltip title="Filter Answers By">
                                                 <IconButton size="small"
                                                     ref={anchorRef}
                                                     aria-controls={open ? 'menu-list-grow' : undefined}

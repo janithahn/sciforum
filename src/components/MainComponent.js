@@ -215,7 +215,7 @@ function Main(props) {
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
                     <Route path="/search" component={() => <Search/>}/>
-                    <Route exact path="/questions/:postId" component={() => <PostView/>}/>
+                    <Route exact path="/questions/:postId/:answerId?" component={() => <PostView/>}/>
                     <Route exact path="/questions/tagged/:tagname" component={() => <SearchByTag/>}/>
                     <Route exact path="/questions/labeled/:label" component={() => <SearchByLabel/>}/>
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen}/>}/>

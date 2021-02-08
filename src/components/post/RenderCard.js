@@ -16,7 +16,6 @@ export default function RenderCard({title, body, label, viewCount, created_at, u
     const auth = useSelector(state => state.Auth);
 
     const labelColor = label ? labels.filter((l) => l.name === label)[0].color: '';
-    console.log('LABEL:', labelColor);
     const [openModal, setOpenModal] = React.useState(false);
 
     const handleLoginModalOpen = () => {
