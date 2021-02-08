@@ -1246,10 +1246,25 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
 }
 
 //ANSWER
-export const fetchAnswers = (postId, ordering, answerId, pageNum) => (dispatch) => {
+export const fetchAnswers = (postId, ordering, answerId) => (dispatch) => {
     dispatch(answersLoading());
 
     axios.get(baseUrl + `/answer_api/?ordering=${ordering}&postBelong=${postId}&answer=${answerId}`, {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(answers => 
+        dispatch(addAnswers(answers.data))
+    )
+    .catch(error => {
+        console.log(error);
+        dispatch(answersFailed(error));
+    });
+}
+
+export const fetchAnswersForPagination = (postId, ordering, pageNum) => (dispatch) => {
+    dispatch(answersLoading());
+
+    axios.get(baseUrl + `/answer_api/?ordering=${ordering}&postBelong=${postId}&page=${pageNum}`, {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(answers => 

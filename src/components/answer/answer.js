@@ -1,8 +1,9 @@
 import React from 'react';
 import { ThemeProvider, Grid, Typography, Divider, Modal, Backdrop, Fade, 
     Tooltip, IconButton, Popper, Grow, Paper, ClickAwayListener, MenuItem, MenuList } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 import { FilterList } from '@material-ui/icons';
-import { fetchAnswers } from '../../redux/ActionCreators';
+import { fetchAnswers, fetchAnswersForPagination } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
@@ -79,22 +80,24 @@ export default function Answer() {
         return acc;
     }, {}): {};
 
-    const scrollTo = React.useCallback((id) =>
-        refs[id].current.scrollIntoView({
-            //behavior: 'smooth',
-            block: 'center',
-    }), [refs]);
+    const scrollTo = React.useCallback((id) => {
+        if(refs[id].current)
+            return refs[id].current.scrollIntoView({
+                //behavior: 'smooth',
+                block: 'center',
+            })
+    }, [refs]);
 
     React.useEffect(() => {
         if(auth.isAuthenticated) {
             if(votesStatus) {   
-                if(refs && refs[Number(hash)]) {
+                if(refs && refs[Number(hash)] && refs[Number(hash)].current) {
                     scrollTo(Number(hash)); 
                     refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
                 }
             }
         }else {
-            if(refs && refs[Number(hash)]) {
+            if(refs && refs[Number(hash)] && refs[Number(hash)].current) {
                 scrollTo(Number(hash)); 
                 refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
             }
@@ -173,6 +176,15 @@ export default function Answer() {
         </Grid>
     )): undefined;
 
+    //pagination
+    const total_pages = answers.answers.total_pages;
+    const current_page = answers.answers.current_page;
+
+    const handlePages = (event, page) => {
+        event.dispatchConfig = dispatch(fetchAnswersForPagination(postId, "-vote_count", page));
+    };
+    //end pagination
+
     if(answers.status === 'loading' || answerVotesLoading === 'loading') {
         return(
             <div>
@@ -193,7 +205,25 @@ export default function Answer() {
                                 <Grid item>
                                     <Grid container justify="space-between" alignItems="center">
                                         <Grid item>
-                                            <Typography variant="h6">{`${answers.answers.count} Answers`}</Typography>
+                                            <Grid container alignItems="center" justify="flex-start">
+                                                <Grid item>
+                                                    <Typography variant="h6">{`${answers.answers.count} Answers`}</Typography>
+                                                </Grid>
+                                                <Grid item>
+                                                    {answers.answers.count !== 0 ? 
+                                                        <Grid container direction="column" justify="center" alignItems="flex-end">
+                                                            <Pagination 
+                                                                className={classes.pagination} 
+                                                                page={current_page} count={total_pages} 
+                                                                variant="outlined"
+                                                                shape="rounded" 
+                                                                size="small"
+                                                                onChange={(event, page) => handlePages(event, page)}
+                                                            />
+                                                        </Grid>: 
+                                                    undefined}
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
                                         <Grid item>
                                             <Tooltip title="Filter Answers By">
@@ -215,6 +245,20 @@ export default function Answer() {
                         <Grid item>
                             <Grid container direction="column" spacing={4}>
                                 {AnswersList}
+                                <Grid item>
+                                    {answers.answers.count !== 0 ? 
+                                        <Grid container direction="column" justify="center" alignItems="flex-end">
+                                            <Pagination 
+                                                className={classes.pagination} 
+                                                page={current_page} count={total_pages} 
+                                                variant="outlined"
+                                                shape="rounded" 
+                                                size="small"
+                                                onChange={(event, page) => handlePages(event, page)}
+                                            />
+                                        </Grid>: 
+                                    undefined}
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>

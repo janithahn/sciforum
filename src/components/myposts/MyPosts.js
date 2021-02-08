@@ -43,7 +43,7 @@ export default function MyPosts() {
                     </RouterLink>
                 </Grid>
                 {PostsList}
-                {myposts.myposts.results.length !== 0 ? <Grid container direction="column" justify="center" alignItems="flex-end">
+                {myposts.myposts.count !== 0 ? <Grid container direction="column" justify="center" alignItems="flex-end">
                     <Pagination className={classes.pagination} page={current_page} count={total_pages} shape="rounded" onChange={(event, page) => handlePages(event, page)}/>
                 </Grid>: undefined} 
             </React.Fragment>

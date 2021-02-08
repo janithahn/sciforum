@@ -48,5 +48,8 @@ export const theme = createMuiTheme({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    pagination: {
+      margin: theme.spacing(1),
+    },
   }));
   
