@@ -440,7 +440,7 @@ export default function EnhancedTable({ rows, currentUser }) {
                       <TableRow
                           key={row.id}
                           hover
-                          onClick={(event) => handleClick(event, row.id)}
+                          //onClick={(event) => handleClick(event, row.id)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
@@ -448,7 +448,7 @@ export default function EnhancedTable({ rows, currentUser }) {
                       >
                           <TableCell padding="checkbox">
                               <Checkbox
-                                  //onClick={(event) => handleClick(event, row.id)}
+                                  onClick={(event) => handleClick(event, row.id)}
                                   checked={isItemSelected}
                                   inputProps={{ 'aria-labelledby': labelId }}
                               />
