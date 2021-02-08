@@ -114,66 +114,66 @@ export const labels = [
       name: 'CS',
       color: '#7057ff',
       description: 'Computer Science',
-      url: '/questions/labeled/CS'
+      url: '/labeled/CS'
     },
     {
       name: 'STAT',
       color: '#ff8f00',
       description: 'Statistics',
-      url: '/questions/labeled/STAT'
+      url: '/labeled/STAT'
     },
     {
       name: 'DS',
       color: '#7b1fa2',
       description: 'Data Science',
-      url: '/questions/labeled/DS'
+      url: '/labeled/DS'
     },
     {
       name: 'CHEMISTRY',
       color: '#002984',
       description: '',
-      url: '/questions/labeled/CHEMISTRY'
+      url: '/labeled/CHEMISTRY'
     },
     {
       name: 'PHYSICS',
       color: '#fbca04',
       description: '',
-      url: '/questions/labeled/PHYSICS'
+      url: '/labeled/PHYSICS'
     },
     {
       name: "MATHEMATICS",
       color: '#ba000d',
       description: '',
-      url: '/questions/labeled/MATHEMATICS'
+      url: '/labeled/MATHEMATICS'
     },
     {
       name: 'ZOOLOGY',
       color: '#006b75',
       description: '',
-      url: '/questions/labeled/ZOOLOGY'
+      url: '/labeled/ZOOLOGY'
     },
     {
       name: 'BOTANY',
       color: '#a5d6a7',
       description: '',
-      url: '/questions/labeled/BOTANY'
+      url: '/labeled/BOTANY'
     },
     {
       name: 'MB',
       color: '#212121',
       description: 'Molecular Biology',
-      url: '/questions/labeled/MB'
+      url: '/labeled/MB'
     },
     {
       name: 'ES',
       color: '#84b6eb',
       description: 'Educational Science',
-      url: '/questions/labeled/ES'
+      url: '/labeled/ES'
     },
     {
       name: 'OTHER',
       color: '#795548',
       description: 'Not subject related',
-      url: '/questions/labeled/OTHER'
+      url: '/labeled/OTHER'
     },
   ];

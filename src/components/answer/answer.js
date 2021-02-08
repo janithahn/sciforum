@@ -214,7 +214,8 @@ export default function Answer() {
                                                         <Grid container direction="column" justify="center" alignItems="flex-end">
                                                             <Pagination 
                                                                 className={classes.pagination} 
-                                                                page={current_page} count={total_pages} 
+                                                                page={current_page} 
+                                                                count={total_pages} 
                                                                 variant="outlined"
                                                                 shape="rounded" 
                                                                 size="small"
@@ -250,7 +251,8 @@ export default function Answer() {
                                         <Grid container direction="column" justify="center" alignItems="flex-end">
                                             <Pagination 
                                                 className={classes.pagination} 
-                                                page={current_page} count={total_pages} 
+                                                page={current_page} 
+                                                count={total_pages} 
                                                 variant="outlined"
                                                 shape="rounded" 
                                                 size="small"

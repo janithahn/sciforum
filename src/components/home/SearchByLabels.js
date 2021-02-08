@@ -42,7 +42,7 @@ export default function SearchByLabel() {
         });
     }
 
-    const PostsList = postData.map((post, key) => <div key={post.id}><QuestionViewCard key={key} item={post}/></div>);
+    const PostsList = postData.map((post) => <div key={post.id}><QuestionViewCard item={post}/></div>);
 
     return(
         <RenderPosts 

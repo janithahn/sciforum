@@ -217,7 +217,7 @@ function Main(props) {
                     <Route path="/search" component={() => <Search/>}/>
                     <Route exact path="/questions/:postId/:answerId?" component={() => <PostView/>}/>
                     <Route exact path="/questions/tagged/:tagname" component={() => <SearchByTag/>}/>
-                    <Route exact path="/questions/labeled/:label" component={() => <SearchByLabel/>}/>
+                    <Route exact path="/labeled/:label" component={() => <SearchByLabel/>}/>
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen}/>}/>
                     <PrivateRouteMyPosts exact path="/myposts" component={() => <MyPosts/>}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
