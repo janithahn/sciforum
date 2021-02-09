@@ -52,7 +52,8 @@ function Main(props) {
         state.answerVotes.status, state.postVotes.status, state.PostComments.status,
         state.AnswerComments.status, state.SendResetPassword.status, state.ChatRooms.status,
         state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status, 
-        state.ConfirmEmail.status, state.VerifyAccount.status,
+        state.ConfirmEmail.status, state.VerifyAccount.status, state.MyPostsProfile.status, state.MyAnswers.status,
+        state.UpdateProfileImage.status,
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);

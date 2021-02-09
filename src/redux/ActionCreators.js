@@ -619,11 +619,28 @@ export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
     })
 }
 
+//updating profile image
+export const profileImageUpateLoading = () => ({
+    type: ActionTypes.UPDATE_PROFILE_IMAGE_LOADING
+});
+
+export const profileImageUpateFailed = (errmess) => ({
+    type: ActionTypes.UPDATE_PROFILE_IMAGE_FAILED,
+    payload: errmess
+});
+
+export const profileImageUpateSuccess = (data) => ({
+    type: ActionTypes.UPDATE_PROFILE_IMAGE_FAILED,
+    payload: data
+});
+
 export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) => (dispatch) => {
     const headers = {
         'Content-Type': 'multipart/form-data',
         'Authorization': localStorage.getItem('token') !== null ? "JWT " + localStorage.getItem('token'): undefined
     }
+
+    dispatch(profileImageUpateLoading());
 
     axios.patch(baseUrl + `/profile_api/${auth.currentUserId}/`, profileImage,
     {
@@ -632,10 +649,11 @@ export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) =
     .then(res => {
         console.log(res);
         localStorage.setItem("currentUserProfileImg", res.data.profileImg);
+        dispatch(profileImageUpateSuccess(res.data));
         dispatch(fetchUser(null, usernameFromTheUrl));
     })
     .catch(error => {
-        console.log(error);
+        dispatch(profileImageUpateFailed(error));
     })
 }
 

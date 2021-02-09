@@ -21,6 +21,7 @@
     "@uiw/react-markdown-preview": "^1.0.9",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
+    "browser-image-compression": "^1.0.14",
     "browserify-fs": "^1.0.0",
     "clsx": "^1.1.1",
     "date-fns": "^2.16.1",

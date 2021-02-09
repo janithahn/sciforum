@@ -7,13 +7,14 @@ import {
   CardHeader,
   Divider,
   ThemeProvider,
-  Input,
+  //Input,
 } from '@material-ui/core';
 import { theme, useStyles } from './styles/profileStyles';
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUserProfileImage } from '../../redux/ActionCreators';
+import { updateUserProfileImage, profileImageUpateLoading } from '../../redux/ActionCreators';
 import ImageUploader from 'react-images-upload';
+import imageCompression from 'browser-image-compression';
 
 export default function UpdateProfileImage(props) {
 
@@ -35,12 +36,43 @@ export default function UpdateProfileImage(props) {
         setImage(event.target.files[0]);
     }*/
 
+    //upload image
     const handleImageUpload = () => {
-        const formData = new FormData();
+
+        const originalFileSize = pictures[0].size / 1024 / 1024;
+
+        //image compression before upload
+        //console.log('originalFile instanceof Blob', pictures[0] instanceof Blob); // true
+        console.log(`originalFile size ${pictures[0].size / 1024 / 1024} MB`);
+      
+        var options = {
+          maxSizeMB: 8,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          maxIteration: originalFileSize > 4 ? 2: 1,
+          onProgress: () => dispatch(profileImageUpateLoading()),
+        }
+
+        imageCompression(pictures[0], options)
+        .then(function (compressedFile) {
+            //console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+    
+            const formData = new FormData();
+            //formData.append('profileImg', image, image.name);
+            if(pictures.length !== 0) formData.append('profileImg', compressedFile, pictures[0].name);
+            dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
+            handleModalClose();
+        })
+        .catch(function (error) {
+            console.log(error.message);
+        });
+
+        /*const formData = new FormData();
         //formData.append('profileImg', image, image.name);
         if(pictures.length !== 0) formData.append('profileImg', pictures[0], pictures[0].name);
-        dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
-        handleModalClose();
+        //dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
+        handleModalClose();*/
     }
 
     const formik = useFormik({
@@ -71,15 +103,17 @@ export default function UpdateProfileImage(props) {
                     onChange={handleImage}
                 />*/}
                 {/*<Button onClick={handleUpload}>Upload</Button>*/}
-                <ImageUploader
-                    {...props}
-                    singleImage
-                    withIcon={true}
-                    onChange={onDrop}
-                    imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-                    maxFileSize={5242880}
-                    withPreview={true}
-                />
+                <Box maxWidth={450} maxHeight={450}>
+                    <ImageUploader
+                        {...props}
+                        singleImage
+                        withIcon={true}
+                        onChange={onDrop}
+                        imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                        maxFileSize={5242880}
+                        withPreview={true}
+                    />
+                </Box>
             </CardContent>
             <Divider />
             <Box
