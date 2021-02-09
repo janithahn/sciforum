@@ -4,8 +4,8 @@ import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 import RenderPosts from './RenderPosts';
 
-export default function Home() {
-    
+export default function FilterByHot() {
+
     const [postData, setPostData] = React.useState([]);
     const [hasMoreItems, setHasMoreItems] = React.useState(true);
     const [nextHref, setNextHref] = React.useState(null);
@@ -39,13 +39,13 @@ export default function Home() {
         });
     }
 
-    let PostsList = postData.map((post, key) => <div key={post.id}><QuestionViewCard item={post}/></div>);
+    const PostsList = postData.map((post) => <div key={post.id}><QuestionViewCard item={post}/></div>);
 
     return(
         <RenderPosts 
             PostsList={PostsList} 
             fetchPostInfinite={fetchPostInfinite} 
-            hasMoreItems={hasMoreItems}
+            hasMoreItems={hasMoreItems} 
         />
     );
 }

@@ -19,6 +19,9 @@ import PageNotFound from './alert/PageNotFound/PageNotFound';
 import Search from './home/SearchResults';
 import SearchByTag from './home/SearchByTagResults';
 import SearchByLabel from './home/SearchByLabels';
+import FilterByDate from './home/FilterByDate';
+import FilterByVote from './home/FilterByVote';
+import FilterByHot from './home/FilterByHot';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
@@ -216,8 +219,14 @@ function Main(props) {
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
                     <Route path="/search" component={() => <Search/>}/>
                     <Route exact path="/questions/:postId/:answerId?" component={() => <PostView/>}/>
-                    <Route exact path="/questions/tagged/:tagname" component={() => <SearchByTag/>}/>
+
+                    <Route exact path="/tagged/:tagname" component={() => <SearchByTag/>}/>
                     <Route exact path="/labeled/:label" component={() => <SearchByLabel/>}/>
+
+                    <Route exact path="/home/filter/latest" component={() => <FilterByDate/>}/>
+                    <Route exact path="/home/filter/by_vote" component={() => <FilterByVote/>}/>
+                    <Route exact path="/home/filter/by_hot" component={() => <FilterByHot/>}/>
+
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen}/>}/>
                     <PrivateRouteMyPosts exact path="/myposts" component={() => <MyPosts/>}/>
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
