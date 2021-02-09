@@ -47,10 +47,10 @@ const myAnswersFailed = (error) => ({
     payload: error
 });
 
-export const fetchMyAnswers = (ownerId) => (dispatch) => {
+export const fetchMyAnswers = (ownerId, page) => (dispatch) => {
     dispatch(myAnswersLoading());
 
-    axios.get(baseUrl + `/answer_api/?owner=${ownerId}`, headers)
+    axios.get(baseUrl + `/answer_api/?owner=${ownerId}&page=${page}`, headers)
     .then((res) => {
         dispatch(addMyAnswers(res.data));
     })

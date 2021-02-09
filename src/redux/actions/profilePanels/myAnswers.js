@@ -11,10 +11,10 @@ export const MyAnswers = (state = {
             return {...state, status: 'succeeded', errMess: null, answers: action.payload}
 
         case ActionTypes.MYANSWERS_LOADING:
-            return {...state, status: 'loading', errMess: null, answers: [...state.answers]}
+            return {...state, status: 'loading', errMess: null, answers: state.answers}
         
         case ActionTypes.MYANSWERS_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, answers: [...state.answers]}
+            return {...state, status: 'failed', errMess: action.payload, answers: state.answers}
 
         default:
             return state;

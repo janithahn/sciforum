@@ -3,4 +3,7 @@ export const useStyles = (theme) => ({
     verticalAlign: 'middle',
     display: 'inline-flex'
   },
+  pagination: {
+    margin: 1,
+  },
 })
