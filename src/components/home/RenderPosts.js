@@ -45,7 +45,7 @@ export default function RenderPosts({ fetchPostInfinite, hasMoreItems, PostsList
 
     return(
         <React.Fragment>
-            <Grid container direction="row" spacing={2} justify="space-between" alignItems="flex-start">
+            <Grid container direction="row" spacing={3} justify="space-between" alignItems="flex-start">
                 <Grid item lg={8} sm xs={12}>
                     <Grid container direction="row" justify="flex-end" alignItems="center">
                         <Grid item>

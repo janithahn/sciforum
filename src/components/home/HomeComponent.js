@@ -39,7 +39,7 @@ export default function Home() {
         });
     }
 
-    let PostsList = postData.map((post, key) => <div key={post.id}><QuestionViewCard item={post}/></div>);
+    let PostsList = postData.map((post) => <div key={post.id}><QuestionViewCard item={post}/></div>);
 
     return(
         <RenderPosts 
