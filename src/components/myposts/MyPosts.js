@@ -31,7 +31,7 @@ export default function MyPosts() {
     }else if(myposts.status === 'failed') {
         return(<h4>Error loading...!</h4>);
     } else {
-        const PostsList = myposts.myposts.results.map((post) => <QuestionViewCard key={post.id} item={post}/>);
+        const PostsList = myposts.myposts.results ? myposts.myposts.results.map((post) => <QuestionViewCard key={post.id} item={post}/>): undefined;
         const total_pages = myposts.myposts.total_pages;
         const current_page = myposts.myposts.current_page;
 
@@ -43,7 +43,7 @@ export default function MyPosts() {
                     </RouterLink>
                 </Grid>
                 {PostsList}
-                {myposts.myposts.count !== 0 ? <Grid container direction="column" justify="center" alignItems="flex-end">
+                {myposts.myposts.count !== 0 && total_pages > 1 ? <Grid container direction="column" justify="center" alignItems="flex-end">
                     <Pagination className={classes.pagination} page={current_page} count={total_pages} shape="rounded" onChange={(event, page) => handlePages(event, page)}/>
                 </Grid>: undefined} 
             </React.Fragment>

@@ -223,7 +223,7 @@ const Profile = ({ className, ...rest }) => {
             </CardContent>
           </Card>
           <Divider className={classes.divider}/>
-          <ProfileTabs credentialsLoadingState={credentialsLoadingState}/>
+          <ProfileTabs credentialsLoadingState={credentialsLoadingState} usernameFromTheUrl={usernameFromTheUrl}/>
         </ThemeProvider>
       </React.Fragment>
     );

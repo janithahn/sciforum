@@ -29,6 +29,7 @@ import { events, webinars } from './actions/news';
 import { TopPosts } from './actions/topposts';
 import { LikedPosts } from './actions/profilePanels/liked';
 import { MyAnswers } from './actions/profilePanels/myAnswers';
+import { MyPostsProfile } from './actions/profilePanels/myPosts';
 import { createReduxHistoryContext, reachify } from "redux-first-history";
 import { createBrowserHistory } from 'history';
 import { globalHistory } from "@reach/router";
@@ -81,6 +82,7 @@ export const ConfigureStore = () => {
             TopPosts,
             LikedPosts,
             MyAnswers,
+            MyPostsProfile,
         }),
         composeEnhancers(applyMiddleware(thunk, logger, routerMiddleware))
     );

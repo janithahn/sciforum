@@ -210,7 +210,7 @@ export default function Answer() {
                                                     <Typography variant="h6">{`${answers.answers.count} Answers`}</Typography>
                                                 </Grid>
                                                 <Grid item>
-                                                    {answers.answers.count !== 0 ? 
+                                                    {answers.answers.count !== 0 && total_pages > 1 ? 
                                                         <Grid container direction="column" justify="center" alignItems="flex-end">
                                                             <Pagination 
                                                                 className={classes.pagination} 
@@ -247,7 +247,7 @@ export default function Answer() {
                             <Grid container direction="column" spacing={4}>
                                 {AnswersList}
                                 <Grid item>
-                                    {answers.answers.count !== 0 ? 
+                                    {answers.answers.count !== 0 && total_pages > 1 ? 
                                         <Grid container direction="column" justify="center" alignItems="flex-end">
                                             <Pagination 
                                                 className={classes.pagination} 

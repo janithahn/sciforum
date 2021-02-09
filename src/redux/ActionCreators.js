@@ -193,6 +193,16 @@ export const fetchMyPosts = (ownerId, page) => async (dispatch) => {
     });
 }
 
+export const fetchMyPostsByUsername = (username, page) => (dispatch) => {
+    dispatch(myPostsLoading());
+
+    axios.get(baseUrl + `/api/?ordering=-created_at&owner__username=${username}&page=${page}`)
+    .then(myposts => dispatch(addMyPosts(myposts.data)))
+    .catch(error => {
+        dispatch(myPostsFailed(error));
+    });
+}
+
 export const myPostsLoading = () => ({
     type: ActionTypes.MYPOSTS_LOADING
 });

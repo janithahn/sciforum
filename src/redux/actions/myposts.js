@@ -13,10 +13,10 @@ export const MyPosts = (state = {
             //hense state is not immutable here
 
         case ActionTypes.MYPOSTS_LOADING:
-            return {...state, status: 'loading', errMess: null, myposts: []}
+            return {...state, status: 'loading', errMess: null, myposts: state.myposts}
         
         case ActionTypes.MYPOSTS_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, myposts: []}
+            return {...state, status: 'failed', errMess: action.payload, myposts: state.myposts}
 
         default:
             return state;

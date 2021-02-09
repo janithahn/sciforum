@@ -13,8 +13,6 @@ export default function MyAnswes() {
     const auth = useSelector(state => state.Auth);
     const myAnswers = useSelector(state => state.MyAnswers);
 
-    console.log("MY ANSWERS:", myAnswers);
-
     React.useEffect(() => {
        if(myAnswers.status === 'idle') dispatch(fetchMyAnswers(auth.currentUserId, 1));
     }, [dispatch, myAnswers, auth]);
@@ -42,13 +40,13 @@ export default function MyAnswes() {
     if(myAnswers.status === 'loading') {
         return(<div></div>);
     }else if(myAnswers.status === 'failed'){
-        return(<p>Error loading my answers</p>);
+        return(<p>Error loading your answers</p>);
     }else {
         return(
             <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
                 {myAnswers.answers.count === 0 ? <Typography variant="subtitle1" color="textPrimary">{"You haven't answered any questions yet"}</Typography>: postsList}
                 <Grid item>
-                    {myAnswers.answers.count !== 0 ? 
+                    {myAnswers.answers.count !== 0 && total_pages > 1 ? 
                         <Grid container direction="column" justify="center" alignItems="flex-end">
                             <Pagination 
                                 className={classes.pagination} 

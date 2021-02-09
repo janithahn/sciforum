@@ -58,3 +58,30 @@ export const fetchMyAnswers = (ownerId, page) => (dispatch) => {
         dispatch(myAnswersFailed(error))
     });
 }
+
+//my posts in profile panel
+const addMyPosts = (data) => ({
+    type: ActionTypes.ADD_PROFILE_MYPOSTS,
+    payload: data
+});
+
+const myPostsLoading = () => ({
+    type: ActionTypes.PROFILE_MYPOSTS_LOADING,
+});
+
+const myPostsFailed = (error) => ({
+    type: ActionTypes.PROFILE_MYPOSTS_FAILED,
+    payload: error
+});
+
+export const fetchMyPostsByUsername = (username, page) => (dispatch) => {
+    dispatch(myPostsLoading());
+
+    axios.get(baseUrl + `/api/?ordering=-created_at&owner__username=${username}&page=${page}`, headers)
+    .then((res) => {
+        dispatch(addMyPosts(res.data));
+    })
+    .catch((error) => {
+        dispatch(myPostsFailed(error))
+    });
+}
