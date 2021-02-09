@@ -50,7 +50,7 @@ export default function TopPosts() {
   const topPostsList = topPosts.posts.map((post) => {
         const id = post.id;
         const title = post.title;
-        const vote_count = post.vote_count;
+        const vote_count = post.likes;
         const truncate = (input) => input.length > 250 ? `${input.substring(0, 250)}...` : input;
 
         return(

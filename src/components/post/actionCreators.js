@@ -2,7 +2,7 @@ import * as ActionTypes from '../../redux/ActionTypes';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl';
 
-const url = `${baseUrl}/api/top/posts/?ordering=-vote_count`;
+const url = `${baseUrl}/api/hot/posts/`;
 
 const addTopPosts = (data) => ({
     type: ActionTypes.ADD_TOP_POSTS,
