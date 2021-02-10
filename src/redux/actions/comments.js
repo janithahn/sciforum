@@ -11,10 +11,10 @@ export const PostComments = (state = {
             return {...state, status: 'succeeded', errMess: null, postComments: action.payload}
 
         case ActionTypes.POST_COMMENTS_LOADING:
-            return {...state, status: 'loading', errMess: null, postComments: [...state.postComments]}
+            return {...state, status: 'loading', errMess: null, postComments: state.postComments}
         
         case ActionTypes.POST_COMMENTS_FAILED:
-            return {...state, status: 'failed', errMess: action.payload, postComments: [...state.postComments]}
+            return {...state, status: 'failed', errMess: action.payload, postComments: state.postComments}
 
         default:
             return state;

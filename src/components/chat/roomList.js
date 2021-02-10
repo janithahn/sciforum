@@ -3,7 +3,8 @@ import { useHistory } from "react-router-dom";
 import Moment from 'moment';
 import { Button, Card, CardActions, CardContent, Typography, Grid, 
     Modal, Backdrop, Fade, InputBase, Link, IconButton, Tooltip, Popper, 
-    Grow, MenuList, MenuItem, ClickAwayListener, Paper } from '@material-ui/core';
+    Grow, MenuList, MenuItem, ClickAwayListener, Paper, Avatar, Box } from '@material-ui/core';
+import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import { Search, FilterList } from '@material-ui/icons';
 import { db } from '../../firebase/config';
 import { useDispatch, useSelector } from 'react-redux';
@@ -51,7 +52,7 @@ function ChatEnterButton({ roomname, roomKey }) {
             const user = roomuser.find(x => x.username === auth.currentUser);
             if (user !== undefined) {
                 const userRef = db.ref('roomusers/').child(user.key);
-                userRef.update({status: "online"});
+                userRef.update({status: "online", userAvatar: auth.currentUserProfileImg});
             } else {
                 const newroomuser = { roomKey: '', userId: '', username: '', status: '', userAvatar: '' };
 
@@ -179,6 +180,7 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
 
     //fetching room users
     const [usersList, setUsersList] = React.useState([]);
+    const [userAvatars, setUserAvatars] = React.useState([]);
     //const [usersCount, setUsersCount] = React.useState([]);
     /*console.log(usersList.filter((thing, index) => {
         const _thing = JSON.stringify(thing);
@@ -186,7 +188,7 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
           return JSON.stringify(obj) === _thing;
         });
     }));*/
-    //console.log(usersList);
+    console.log(userAvatars);
     useEffect(() => {
         db.ref('rooms/').once('value', roomresp => {
             const rooms = snapshotToArray(roomresp);
@@ -194,10 +196,20 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
             rooms.forEach((room) => {
                 db.ref('roomusers/').orderByChild('roomKey').equalTo(room.key).once('value', (roomusersresp) => {
                     let count = snapshotToArray(roomusersresp).length;
+                    let userAvatars = [];
                     setUsersList(oldArray => [...oldArray, {key: room.key, count: count}]);
-                    /*snapshotToArray(roomusersresp).forEach((elem) => {
-                        setUsersList(oldArray => [...oldArray, {key: elem.roomKey, username: elem.username}]);
-                    });*/
+                    
+                    //taking avatars of chat room users with a promise
+                    new Promise((accept, reject) => {
+                        snapshotToArray(roomusersresp).forEach((elem) => {
+                            userAvatars.push({username: elem.username, avatar: elem.userAvatar});
+                        });
+                        accept(userAvatars);
+                    })
+                    .then((res) => {
+                        setUserAvatars(oldArray => [...oldArray, {key: room.key, avatars: res}]);
+                        console.log(room.roomname, res);
+                    });
                 });
             });
         }, (error) => {
@@ -284,6 +296,20 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
       setOpenModal(false);
     };
 
+    //this function shuffles arrays
+    function shuffle(array) {
+        var tmp, current, top = array.length;
+    
+        if(top) while(--top) {
+            current = Math.floor(Math.random() * (top + 1));
+            tmp = array[current];
+            array[current] = array[top];
+            array[top] = tmp;
+        }
+    
+        return array;
+    }
+
     const RoomList = room.map((item) => {
         let created_at = '';
         if(item.created_at) {
@@ -302,6 +328,12 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
                 usersCount = elem.count;
         });
 
+        let avatarList = [];
+        userAvatars.forEach((elem) => {
+            if(elem.key === item.key)
+                avatarList = elem.avatars;
+        });
+
         return (
         <Grid item key={item.key}>
             <Card className={classes.root} variant="outlined">
@@ -315,6 +347,13 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
                     <Typography variant="subtitle2" color="textSecondary">
                         {`${usersCount} People`}
                     </Typography>
+                    <AvatarGroup max={4}>
+                        {avatarList.length !== 0 ? shuffle(avatarList).map((avatar) => (
+                            <Tooltip arrow title={avatar.username}>
+                                <Avatar className={classes.avatars} alt={avatar.username} src={avatar.avatar} />
+                            </Tooltip>
+                        )): <div style={{opacity: 0}} className={classes.avatars}></div>}
+                    </AvatarGroup>
                 </CardContent>
 
                 <CardActions>

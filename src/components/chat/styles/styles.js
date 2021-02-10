@@ -139,5 +139,9 @@ export const useRoomListStyles = makeStyles(theme => ({
         width: '40ch',
       },
     },
-  }
+  },
+  avatars: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+  },
 }));
