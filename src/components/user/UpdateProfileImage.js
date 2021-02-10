@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
   Button,
@@ -7,10 +7,12 @@ import {
   CardHeader,
   Divider,
   ThemeProvider,
+  FormHelperText,
   //Input,
 } from '@material-ui/core';
 import { theme, useStyles } from './styles/profileStyles';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUserProfileImage, profileImageUpateLoading } from '../../redux/ActionCreators';
 import ImageUploader from 'react-images-upload';
@@ -25,67 +27,51 @@ export default function UpdateProfileImage(props) {
     //const user = useSelector(state => state.User);
     const dispatch = useDispatch();
 
-    const [pictures, setPictures] = useState([]);
-    const [image, setImage] = useState(null);
-
-    const onDrop = picture => {
-        setPictures(picture);
-    };
-
-    /*const handleImage = (event) => {
-        setImage(event.target.files[0]);
-    }*/
-
-    //upload image
-    const handleImageUpload = () => {
-
-        const originalFileSize = pictures[0].size / 1024 / 1024;
-
-        //image compression before upload
-        //console.log('originalFile instanceof Blob', pictures[0] instanceof Blob); // true
-        console.log(`originalFile size ${pictures[0].size / 1024 / 1024} MB`);
-      
-        var options = {
-          maxSizeMB: 8,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-          maxIteration: originalFileSize > 4 ? 2: 1,
-          onProgress: () => dispatch(profileImageUpateLoading()),
-        }
-
-        imageCompression(pictures[0], options)
-        .then(function (compressedFile) {
-            //console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-            console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-    
-            const formData = new FormData();
-            //formData.append('profileImg', image, image.name);
-            if(pictures.length !== 0) formData.append('profileImg', compressedFile, pictures[0].name);
-            dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
-            handleModalClose();
-        })
-        .catch(function (error) {
-            console.log(error.message);
-        });
-
-        /*const formData = new FormData();
-        //formData.append('profileImg', image, image.name);
-        if(pictures.length !== 0) formData.append('profileImg', pictures[0], pictures[0].name);
-        //dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
-        handleModalClose();*/
-    }
+    const schema = Yup.object().shape({
+        profileImage: Yup.array()
+          .min(1, 'Please select an image to upload')
+          .max(1, 'Only one image can be uploaded')
+          .required('Please select an image to upload'),
+    });
 
     const formik = useFormik({
         initialValues: {
-        profileImage: image
+            profileImage: [],
         },
         onSubmit: (values) => {
-            //formData.append('profileImg', image, image.name);
-            //dispatch(updateUserProfileImage(auth, image));
-            setImage(values.image);
-            handleModalClose();
+            //handling the image compression before upload it to the server
+            const originalFileSize = values.profileImage[0] ? values.profileImage[0].size / 1024 / 1024: 0;
+
+            console.log(`originalFile size ${originalFileSize} MB`);
+        
+            var options = {
+                maxSizeMB: 8,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true,
+                maxIteration: originalFileSize > 4 ? 2: 1,
+                onProgress: () => dispatch(profileImageUpateLoading()),
+            }
+
+            if(values.profileImage[0])
+                imageCompression(values.profileImage[0], options)
+                .then(function (compressedFile) {
+                    console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+            
+                    const formData = new FormData();
+                    if(values.profileImage.length !== 0) formData.append('profileImg', compressedFile, values.profileImage[0].name);
+                    dispatch(updateUserProfileImage(auth, formData, usernameFromTheUrl));
+                    handleModalClose();
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                });
         },
+        validationSchema: schema,
     });
+
+    const onDrop = picture => {
+        formik.setFieldValue("profileImage", picture);
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -96,23 +82,21 @@ export default function UpdateProfileImage(props) {
             />
             <Divider />
             <CardContent>
-                {/*<Input type="file"
-                    id="profileImage"
-                    aria-label="Profile Image"
-                    name="profileImage"
-                    onChange={handleImage}
-                />*/}
-                {/*<Button onClick={handleUpload}>Upload</Button>*/}
                 <Box maxWidth={450} maxHeight={450}>
                     <ImageUploader
                         {...props}
                         singleImage
-                        withIcon={true}
+                        withIcon={false}
                         onChange={onDrop}
                         imgExtension={[".jpg", ".gif", ".png", ".gif"]}
                         maxFileSize={5242880}
                         withPreview={true}
                     />
+                    <FormHelperText 
+                        error={formik.errors.profileImage && formik.touched.profileImage}
+                    >
+                        {(formik.errors.profileImage && formik.touched.profileImage) && formik.errors.profileImage}
+                    </FormHelperText>
                 </Box>
             </CardContent>
             <Divider />
@@ -130,7 +114,7 @@ export default function UpdateProfileImage(props) {
                     Cancel
                 </Button>
                 <Button
-                    onClick={handleImageUpload}
+                    onClick={formik.handleSubmit}
                     color="primary"
                     variant="contained"
                     className={classes.submit}

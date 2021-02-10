@@ -19,8 +19,6 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
 
   const [title, setTitle] = React.useState('');
   const [body, setQuestion] = React.useState('');
-  const [tagValue, setTagValue] = React.useState([]);
-  const [labelValue, setLabelValue] = React.useState([]);
   
   const [answerSubmitError, setAnswerSubmitError] = React.useState('');
 
@@ -44,8 +42,8 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
   const formik = useFormik({
     initialValues: {
       title: title,
-      tags: tagValue,
-      label: labelValue,
+      tags: [],
+      label: [],
     },
     onSubmit: (values) => {
       setAnswerSubmitError('');
