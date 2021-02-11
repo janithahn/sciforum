@@ -1274,8 +1274,10 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
 }
 
 //ANSWER
-export const fetchAnswers = (postId, ordering, answerId) => (dispatch) => {
+export const fetchAnswers = (postId, ordering, answerId, pageNum) => (dispatch) => {
     dispatch(answersLoading());
+
+    let pageUrl = pageNum ? `&page=${pageNum}`: ""
 
     axios.get(baseUrl + `/answer_api/?ordering=${ordering}&postBelong=${postId}&answer=${answerId}`, {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined

@@ -5,7 +5,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import { FilterList } from '@material-ui/icons';
 import { fetchAnswers, fetchAnswersForPagination } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
 import AnswerModalCard from './answerModalCard';
 import AlertDialogSlide from './alert';
@@ -52,6 +52,7 @@ export default function Answer() {
     const dispatch = useDispatch();
 
     const location = useLocation();
+    const history = useHistory();
     const hash = location.hash.substring(1);
 
     const { postId, answerId } = useParams();
@@ -64,7 +65,12 @@ export default function Answer() {
     let answerPageNum = useQuery().get('page');
 
     React.useEffect(() => {
-        if(answers.status === 'idle') dispatch(fetchAnswers(postId, "-vote_count", answerId, answerPageNum ? answerPageNum: 1));
+        if(answers.status === 'idle') {
+            if(answerPageNum)
+                dispatch(fetchAnswersForPagination(postId, "-vote_count", answerPageNum));
+            else
+                dispatch(fetchAnswers(postId, "-vote_count", answerId));
+        }
     }, [dispatch, answers.status, postId]);
 
     const [openModal, setOpenModal] = React.useState(false);
@@ -182,6 +188,7 @@ export default function Answer() {
 
     const handlePages = (event, page) => {
         event.dispatchConfig = dispatch(fetchAnswersForPagination(postId, "-vote_count", page));
+        history.push(`/questions/${postId}/?page=${page}`);
     };
     //end pagination
 

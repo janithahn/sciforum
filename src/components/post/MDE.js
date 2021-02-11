@@ -103,8 +103,8 @@ export default function MDEditor(props) {
 
     // Call to the imgur api
     const handleImgur = async (imgData) => {
-      const url = 'https://api.imgur.com/3/image';
-      const clientId = 'a178005f2b29b10';
+      const url = process.env.REACT_APP_IMGUR_URL;
+      const clientId = process.env.REACT_APP_IMGUR_API_CLIENT_ID;
 
       if(imgData.size > maxImgSize) {
         setImgError('The size of the image that you are trying to upload is greater than 2Mb');
