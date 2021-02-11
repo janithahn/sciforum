@@ -59,7 +59,7 @@ export default function SignUp() {
       .max(50, 'Too Long!')
       .required('Required')
       .matches(/^\S*$/, "Username cannot contain any spaces."),
-      //.matches(/^(?!\s+$).*/, "Please enter a valid username."),
+      //.matches(/^(?!\s+$).*/, "Please enter a valid username."), //checks if a string contains only spaces
     /*firstname: Yup.string()
       .min(2, 'Too Short!')
       .max(50, 'Too Long!')

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchMyPostsByUsername } from './actions';
 import { useStyles } from './styles';
 
-export default function MyPosts({ usernameFromTheUrl }) {
+export default function MyPostsAccount({ usernameFromTheUrl }) {
 
     const classes = useStyles();
 

@@ -25,6 +25,7 @@ import FilterByHot from './home/FilterByHot';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
+import MyPostsAccount from './user/panels/myPosts';
 import Notifications from './notifications/index';
 import UserSettings from './settings/settings';
 import jwt_decode from 'jwt-decode';
@@ -233,7 +234,10 @@ function Main(props) {
                     <PrivateRoute exact path="/signup" component={() => <SignUp/>} />
                     <PrivateRoute exact path="/signin" component={() => <SignIn/>}/>
                     <PrivateRoutPostCreate exact path="/ask" component={() => <CreatePost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen} postPost={(post) => dispatch(postPost(post))}/>}/>
-                    <Route path="/profile/:username" component={AccountView}/>
+                    
+                    <Redirect exact from="/profile/:username" to="/profile/:username/index"/>
+                    <Route exact path="/profile/:username/:tabname?" component={AccountView}/>
+
                     <PrivateRouteNotifications path="/notifications" component={() => <Notifications currentUserId={auth.currentUserId}/>}/>
                     <PrivateRouteSettings path="/settings" component={() => <UserSettings/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>

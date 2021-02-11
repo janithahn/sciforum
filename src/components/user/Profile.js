@@ -22,7 +22,6 @@ import UpdateName from './UpdateName';
 import UpdateAboutMe from './UpdateAboutMe';
 import UpdateProfileImage from './UpdateProfileImage';
 import ProfileTabs from './ProfileVerticleTabs';
-import { useHistory } from 'react-router-dom';
 import PageNotFound from '../alert/PageNotFound/PageNotFound'
 
 /*function EditModal({openModal, className, handleModalClose, name, setName}) {
@@ -53,8 +52,6 @@ const Profile = ({ className, ...rest }) => {
   const user = useSelector(state => state.User);
   const auth = useSelector(state => state.Auth);
 
-  const history = useHistory();
-
   const credentialsLoadingState = useSelector(state => [state.UserEducation.status, state.UserLanguages.status, state.UserSkills.status].includes('loading'))
 
   const dispatch = useDispatch();
@@ -70,6 +67,9 @@ const Profile = ({ className, ...rest }) => {
   });
   const [aboutMe, setAboutMe] = React.useState( user.user && user.user.profile ? user.user.profile.aboutMe: null);
   const [profileImage, setProfileImage] = React.useState(user.user && user.user.profile ? user.user.profile.profileImg: null);
+
+  //set tab values
+  const [tabValue, setTabValue] = React.useState(0);
 
   React.useEffect(() => {
     if(user.status === 'idle') {
@@ -223,7 +223,10 @@ const Profile = ({ className, ...rest }) => {
             </CardContent>
           </Card>
           <Divider className={classes.divider}/>
-          <ProfileTabs credentialsLoadingState={credentialsLoadingState} usernameFromTheUrl={usernameFromTheUrl}/>
+          <ProfileTabs 
+            credentialsLoadingState={credentialsLoadingState} 
+            usernameFromTheUrl={usernameFromTheUrl}
+          />
         </ThemeProvider>
       </React.Fragment>
     );
