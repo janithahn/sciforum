@@ -344,7 +344,7 @@ export function PostCommentRender() {
 
     const handleEditCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text, editCommentId }) => {
         if(text.length !== 0) {
-            dispatch(updatePostComments(submitVal, editCommentId, postId));
+            dispatch(updatePostComments(submitVal, editCommentId));
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
@@ -430,8 +430,7 @@ export function PostCommentRender() {
             <AlertDialogSlide
                 openDeleteModal={openDeleteModal} 
                 handleDeleteModalClose={handleDeleteModalClose} 
-                commentId={selectedCommentId} 
-                postBelong={selectedCommentPostBelong} 
+                commentId={selectedCommentId}
             />
         </React.Fragment>
     );

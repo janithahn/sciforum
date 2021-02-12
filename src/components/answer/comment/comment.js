@@ -195,7 +195,7 @@ export function AnswerCommentRender({ answerId }) {
 
     const handleEditCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text, editCommentId }) => {
         if(text.length !== 0) {
-            dispatch(updateAnswerComments(submitVal, editCommentId, postId));
+            dispatch(updateAnswerComments(submitVal, editCommentId));
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
@@ -338,8 +338,7 @@ export function AnswerCommentRender({ answerId }) {
                 openDeleteModal={openDeleteModal} 
                 handleDeleteModalClose={handleDeleteModalClose} 
                 commentId={selectedCommentId} 
-                answerBelong={selectedCommentAnswerBelong} 
-                postId={postId}
+                answerBelong={selectedCommentAnswerBelong}
             />
         </React.Fragment>
     );

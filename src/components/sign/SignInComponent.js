@@ -63,7 +63,7 @@ export default function SignIn(props) {
   
   React.useEffect(() => {
     if(auth.status === 'failed' && auth.errMess) {
-      if(auth.errMess.response) {
+      if(auth.errMess.response && auth.errMess.response.data) {
         setCredentialError(auth.errMess.response.data.non_field_errors[0]);
       } else {
         setCredentialError('Server error! Please try again!');

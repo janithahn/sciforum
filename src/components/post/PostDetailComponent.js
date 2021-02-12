@@ -111,7 +111,7 @@ export default function PostDetail() {
 
     const handleCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text }) => {
         if(text.length !== 0) {
-            dispatch(createPostComments(submitVal, postId));
+            dispatch(createPostComments(submitVal));
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});

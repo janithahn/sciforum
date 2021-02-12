@@ -220,7 +220,7 @@ function Main(props) {
                     <Route exact path="/" component={() => <Home classes={classes}/>} />
                     <Route exact path="/questions" component={() => <Home classes={classes}/>}/>
                     <Route path="/search" component={() => <Search/>}/>
-                    <Route exact path="/questions/:postId/:answerId?" component={() => <PostView/>}/>
+                    <Route exact path="/questions/:postId/:answerId?" component={PostView}/>
 
                     <Route exact path="/tagged/:tagname" component={() => <SearchByTag/>}/>
                     <Route exact path="/labeled/:label" component={() => <SearchByLabel/>}/>

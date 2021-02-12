@@ -17,7 +17,7 @@ export default function AlertDialogSlide(props) {
     const dispatch = useDispatch();
 
     function handleDeleteAnswer() {
-        dispatch(deleteAnswerComments(props.commentId, props.postId));
+        dispatch(deleteAnswerComments(props.commentId));
         props.handleDeleteModalClose();
     }
 

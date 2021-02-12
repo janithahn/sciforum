@@ -37,7 +37,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
 
     const handleCommentSubmit = React.useCallback(({ submitVal, setEditorState, setSubmitVal, text }) => {
         if(text.length !== 0) {
-            dispatch(createAnswerComments(submitVal, postId));
+            dispatch(createAnswerComments(submitVal));
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});

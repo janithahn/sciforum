@@ -1089,7 +1089,11 @@ export const addPostComments = (postComments) => ({
     payload: postComments
 });
 
-export const updatePostComments = (comment, commetId, postId) => (dispatch) => {
+export const postcommentChange = () => ({
+    type: ActionTypes.POST_COMMENT_CHANGE,
+});
+
+export const updatePostComments = (comment, commetId) => (dispatch) => {
     
     axios.patch(baseUrl + `/comment_api/post_comment_create/${commetId}/`, comment,
     {
@@ -1097,14 +1101,14 @@ export const updatePostComments = (comment, commetId, postId) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchPostComments(postId));
+        dispatch(postcommentChange());
     })
     .catch(error => {
         console.log(error);
     })
 }
 
-export const createPostComments = (comment, postId) => (dispatch) => {
+export const createPostComments = (comment) => (dispatch) => {
     
     axios.post(baseUrl + `/comment_api/post_comment_create/`, comment,
     {
@@ -1112,14 +1116,14 @@ export const createPostComments = (comment, postId) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchPostComments(postId));
+        dispatch(postcommentChange());
     })
     .catch(error => {
         console.log(error);
     })
 }
 
-export const deletePostComments = (commentId, postId) => (dispatch) => {
+export const deletePostComments = (commentId) => (dispatch) => {
     
     axios.delete(baseUrl + `/comment_api/post_comment_create/${commentId}/`,
     {
@@ -1127,7 +1131,7 @@ export const deletePostComments = (commentId, postId) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchPostComments(postId));
+        dispatch(postcommentChange());
     })
     .catch(error => {
         console.log(error);
@@ -1181,7 +1185,11 @@ export const addAnswerComments = (answerComments) => ({
     payload: answerComments,
 });
 
-export const updateAnswerComments = (comment, commetId, id) => (dispatch) => {
+export const answercommentChange = () => ({
+    type: ActionTypes.ANSWER_COMMENT_CHANGE,
+});
+
+export const updateAnswerComments = (comment, commetId) => (dispatch) => {
     
     axios.patch(baseUrl + `/comment_api/answer_comment_create/${commetId}/`, comment,
     {
@@ -1189,14 +1197,14 @@ export const updateAnswerComments = (comment, commetId, id) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchAnswerComments(id));
+        dispatch(answercommentChange());
     })
     .catch(error => {
         console.log(error);
     })
 }
 
-export const createAnswerComments = (comment, id) => (dispatch) => {
+export const createAnswerComments = (comment) => (dispatch) => {
     
     axios.post(baseUrl + `/comment_api/answer_comment_create/`, comment,
     {
@@ -1204,14 +1212,14 @@ export const createAnswerComments = (comment, id) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchAnswerComments(id));
+        dispatch(answercommentChange());
     })
     .catch(error => {
         console.log(error);
     })
 }
 
-export const deleteAnswerComments = (commentId, id) => (dispatch) => {
+export const deleteAnswerComments = (commentId) => (dispatch) => {
     
     axios.delete(baseUrl + `/comment_api/answer_comment_create/${commentId}/`,
     {
@@ -1219,7 +1227,7 @@ export const deleteAnswerComments = (commentId, id) => (dispatch) => {
     })
     .then(res => {
         console.log(res);
-        dispatch(fetchAnswerComments(id));
+        dispatch(answercommentChange());
     })
     .catch(error => {
         console.log(error);
@@ -1274,17 +1282,15 @@ export const updateUserProfile = (auth, aboutMe) => (dispatch) => {
 }
 
 //ANSWER
-export const fetchAnswers = (postId, ordering, answerId, pageNum) => (dispatch) => {
+export const fetchAnswers = (postId, ordering, answerId) => (dispatch) => {
     dispatch(answersLoading());
-
-    let pageUrl = pageNum ? `&page=${pageNum}`: ""
 
     axios.get(baseUrl + `/answer_api/?ordering=${ordering}&postBelong=${postId}&answer=${answerId}`, {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
-    .then(answers => 
-        dispatch(addAnswers(answers.data))
-    )
+    .then(answers => {
+        dispatch(addAnswers(answers.data));
+    })
     .catch(error => {
         console.log(error);
         dispatch(answersFailed(error));
@@ -1324,6 +1330,20 @@ export const addAnswers = (answers) => ({
     payload: answers
 });
 
+export const answerCreated = (data) => ({
+    type: ActionTypes.ANSWER_CREATED,
+    payload: data
+});
+
+export const answerDeleted = () => ({
+    type: ActionTypes.ANSWER_DELETED,
+});
+
+export const answerUpdated = (data) => ({
+    type: ActionTypes.ANSWER_UPDATED,
+    payload: data
+});
+
 export const postAnswer = (postBelong, owner, answerContent) => (dispatch) => {
     axios.post(baseUrl + `/answer_api/answer/create/`, {
         postBelong: postBelong,
@@ -1331,12 +1351,12 @@ export const postAnswer = (postBelong, owner, answerContent) => (dispatch) => {
         answerContent: answerContent,
     }, headerWithToken)
     .then(response => {
-        console.log(response);
-        dispatch(fetchAnswers(postBelong));
+        dispatch(answerCreated(JSON.parse(response.data)[0].pk));
+        //dispatch(fetchAnswers(postBelong));
     })
     .catch(error => {
         console.log(error);
-        //dispatch(answersFailed(error));
+        dispatch(answersFailed(error));
     });
 }
 
@@ -1346,23 +1366,22 @@ export const updateAnswer = (id, postBelong, answerContent) => (dispatch) => {
     }, headerWithToken)
     .then(response => {
         console.log(response);
-        dispatch(fetchAnswers(postBelong));
+        dispatch(answerUpdated(JSON.parse(response.data)[0].pk));
+        //dispatch(fetchAnswers(postBelong));
     })
     .catch(error => {
-        console.log(error);
-        //dispatch(answersFailed(error));
+        dispatch(answersFailed(error));
     });
 }
 
 export const deleteAnswer = (id, postBelong) => (dispatch) => {
     axios.delete(baseUrl + `/answer_api/answer/${id}/delete/`, headerWithToken)
     .then(response => {
-        console.log(response);
-        dispatch(fetchAnswers(postBelong));
+        dispatch(answerDeleted());
+        //dispatch(fetchAnswers(postBelong));
     })
     .catch(error => {
-        console.log(error);
-        //dispatch(answersFailed(error));
+        dispatch(answersFailed(error));
     });
 }
 

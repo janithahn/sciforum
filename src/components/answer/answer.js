@@ -3,7 +3,7 @@ import { ThemeProvider, Grid, Typography, Divider, Modal, Backdrop, Fade,
     Tooltip, IconButton, Popper, Grow, Paper, ClickAwayListener, MenuItem, MenuList } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import { FilterList } from '@material-ui/icons';
-import { fetchAnswers, fetchAnswersForPagination } from '../../redux/ActionCreators';
+import { fetchAnswers, fetchAnswersForPagination, resetAnswerChangeStatus } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
@@ -40,11 +40,11 @@ function AnswerEditModal({openModal, answerContent, setAnswerContent, handleModa
     );
 }
 
-export default function Answer() {
+const Answer = () => {
 
     const classes = useStyles();
 
-    const answers = useSelector(state => state.Answers)
+    const answers = useSelector(state => state.Answers);
     const auth = useSelector(state => state.Auth);
     const answerVotesLoading = useSelector(state => state.answerVotes.status)
     const votesStatus = useSelector(state => (state.answerVotes.status === 'succeeded' && state.postVotes.status === 'succeeded'));
@@ -52,11 +52,10 @@ export default function Answer() {
     const dispatch = useDispatch();
 
     const location = useLocation();
-    const history = useHistory();
+    const { push } = useHistory();
     const hash = location.hash.substring(1);
 
     const { postId, answerId } = useParams();
-    console.log("answerId", answerId);
 
     //get the answer page number
     function useQuery() {
@@ -72,6 +71,21 @@ export default function Answer() {
                 dispatch(fetchAnswers(postId, "-vote_count", answerId));
         }
     }, [dispatch, answers.status, postId]);
+
+    React.useEffect(() => {
+        if(answers.changedAnswer) {
+            dispatch(fetchAnswers(postId, "-vote_count", answers.changedAnswer));
+            push(`/questions/${postId}/${answers.changedAnswer}#${answers.changedAnswer}`);
+        }
+    }, [answers.changedAnswer, postId, push]);
+
+    React.useEffect(() => {
+        if(answers.changeStatus === 'deleted') {
+            dispatch(fetchAnswers(postId, "-vote_count"));
+            push(`/questions/${postId}/`);
+            //dispatch(resetAnswerChangeStatus());
+        }
+    }, [answers.changeStatus, push, postId, dispatch]);
 
     const [openModal, setOpenModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
@@ -103,6 +117,12 @@ export default function Answer() {
                 }
             }
         }else {
+            if(refs && refs[Number(hash)] && refs[Number(hash)].current) {
+                scrollTo(Number(hash)); 
+                refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
+            }
+        }
+        if(answers.status === 'succeeded') {
             if(refs && refs[Number(hash)] && refs[Number(hash)].current) {
                 scrollTo(Number(hash)); 
                 refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
@@ -188,7 +208,7 @@ export default function Answer() {
 
     const handlePages = (event, page) => {
         event.dispatchConfig = dispatch(fetchAnswersForPagination(postId, "-vote_count", page));
-        history.push(`/questions/${postId}/?page=${page}`);
+        push(`/questions/${postId}/?page=${page}`);
     };
     //end pagination
 
@@ -299,6 +319,8 @@ export default function Answer() {
         );
     }
 }
+
+export default Answer;
 
 const FilterMenu = ({ open, setOpen, anchorRef, filterByDate, filterByActive, filterByDefault }) => {
 
