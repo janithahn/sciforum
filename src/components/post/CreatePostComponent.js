@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, Typography, Grid, FormHelperText, Hidden } from '@material-ui/core';
+import { ThemeProvider, Typography, Grid, FormHelperText, Hidden, Box } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { theme, useStyles } from './styles/postsStyles';
@@ -98,11 +98,13 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
                       variant="outlined"
                     />
                   </Grid>
-                  <Grid item>
+                  <Grid item xs={12}>
                     <Typography className={classes.typo} variant="h6" gutterBottom>
                       Question
                     </Typography>
-                    <MDEditor setText={setQuestion} data={body}/>
+                    <Box>
+                      <MDEditor setText={setQuestion} data={body}/>
+                    </Box>
                     <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
                   </Grid>
                   <Grid item>

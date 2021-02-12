@@ -62,8 +62,9 @@ export default function EditPost({setSnackMessage, setSnackOpen}) {
       .min(2, 'Too Short!')
       .required('Required'),
     tags: Yup.array()
-      .min(3, 'Please at least put 3 tags related to your question')
-      .required('Please at least put 3 tags related to your question'),
+      .min(2, 'Please at least put 2 tags related to your question')
+      .max(5, 'Not more than 5 tags')
+      .required('Please at least put 2 tags related to your question'),
     label: Yup.array()
       .min(1, 'It is required to label your question')
       .required('It is required to label your question'),
