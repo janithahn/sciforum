@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, Typography, Grid, FormHelperText, Hidden, Box, Tooltip, ClickAwayListener, Paper, Container } from '@material-ui/core';
+import { ThemeProvider, Typography, Grid, FormHelperText, Hidden, Tooltip, ClickAwayListener, Paper, Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { theme, useStyles } from './styles/postsStyles';
@@ -118,9 +118,9 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
                       <Typography className={classes.typo} variant="h6" gutterBottom>
                         Question
                       </Typography>
-                      <Box>
+                      <Container maxWidth>
                         <MDEditor setText={setQuestion} data={body}/>
-                      </Box>
+                      </Container>
                       <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
                     </Grid>
                     <Grid item>

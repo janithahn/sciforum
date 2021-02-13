@@ -4,6 +4,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchMyAnswers } from './actions';
 import { useStyles } from './styles';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 export default function MyAnswes() {
 
@@ -13,6 +14,8 @@ export default function MyAnswes() {
     const auth = useSelector(state => state.Auth);
     const myAnswers = useSelector(state => state.MyAnswers);
 
+    const truncate = (input) => input.length > 250 ? `${input.substring(0, 250)}...` : input;
+
     React.useEffect(() => {
        if(myAnswers.status === 'idle') dispatch(fetchMyAnswers(auth.currentUserId, 1));
     }, [dispatch, myAnswers, auth]);
@@ -21,7 +24,7 @@ export default function MyAnswes() {
         <Grid item key={item.id}>
             <Paper variant="elevation" style={{padding: 4}} elevation={0}>
                 <Link href={`/questions/${item.postBelong}/#${item.id}`} underline="none" color="inherit">
-                    <Typography variant="subtitle1" color="textPrimary">{item.answerContent}</Typography>
+                    <MarkdownPreview source={truncate(item.answerContent)}/>
                 </Link>
             </Paper>
             <Divider/>

@@ -7,10 +7,9 @@ import DoneIcon from '@material-ui/icons/Done';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import InputBase from '@material-ui/core/InputBase';
-import { FormHelperText } from '@material-ui/core';
 import { labels, useStyles } from './styles/labelStyles';
 
-export default function QuestionLabels({ value, setValue, error, helperText }) {
+export default function QuestionLabels({ value, setValue, error }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [pendingValue, setPendingValue] = React.useState(null);
