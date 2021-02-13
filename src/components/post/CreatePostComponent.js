@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, Typography, Grid, FormHelperText, Hidden, Tooltip, ClickAwayListener, Paper, Container } from '@material-ui/core';
+import { ThemeProvider, Typography, Grid, FormHelperText, Hidden, Tooltip, ClickAwayListener, Paper, Box } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { theme, useStyles } from './styles/postsStyles';
@@ -87,7 +87,7 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
   return (
     <div className={classes.root}>
         <ThemeProvider theme={theme}>
-          <Grid container direction="row" alignItems="flex-start" justify="space-between" spacing={2}>
+          <Grid container direction="row" alignItems="flex-start" justify="space-between" spacing={3}>
             <Grid item lg={8} sm xs={12}>
               <form onSubmit={formik.handleSubmit}>
                 <Grid container direction="column" justify="center" spacing={1}>
@@ -118,9 +118,9 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
                       <Typography className={classes.typo} variant="h6" gutterBottom>
                         Question
                       </Typography>
-                      <Container maxWidth>
+                      <Box>
                         <MDEditor setText={setQuestion} data={body}/>
-                      </Container>
+                      </Box>
                       <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
                     </Grid>
                     <Grid item>
@@ -190,7 +190,7 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
               </form>
             </Grid>
 
-            <Grid item>
+            <Grid item lg={4}>
               <Hidden smDown>
                 <TopPosts/>
               </Hidden>
