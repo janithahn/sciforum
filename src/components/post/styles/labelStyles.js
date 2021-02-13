@@ -4,8 +4,8 @@ export const useStyles = makeStyles((theme) => ({
     root: {
       //width: 221,
       //fontSize: 13,
-      marginTop: 9,
-      marginBottom: 6,
+      marginTop: 6,
+      //marginBottom: 6,
     },
     button: {
       fontSize: 13,
@@ -107,6 +107,9 @@ export const useStyles = makeStyles((theme) => ({
       width: 18,
       height: 18,
     },
+    tooltip: {
+
+    }
   }));
   
 export const labels = [

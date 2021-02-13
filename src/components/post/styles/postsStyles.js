@@ -67,5 +67,10 @@ export const useStyles = makeStyles((theme) => ({
   chip: {
     marginTop: theme.spacing(1),
     height: 20,
+  },
+  labelPaper: {
+    paddingLeft: 4,
+    paddingRight: 4,
+    marginBottom: 3,
   }
 }));

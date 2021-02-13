@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { ThemeProvider, Typography, Grid, FormHelperText, Hidden, Box } from '@material-ui/core';
+import { ThemeProvider, Typography, Grid, FormHelperText, Hidden, Box, Tooltip, ClickAwayListener, Paper, Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { useHistory } from 'react-router-dom';
 import { theme, useStyles } from './styles/postsStyles';
@@ -68,90 +68,126 @@ export default function CreatePost({setSnackMessage, setSnackOpen}) {
     fetchTags(setTagList);
   }, []);*/
 
+  //label error tooltip
+  const [openTooltip, setOpenTooltip] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setOpenTooltip(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpenTooltip(true);
+  };
+
+  React.useEffect(() => {
+    if(formik.errors.label && formik.touched.label)
+      handleTooltipOpen();
+  });
+
   return (
     <div className={classes.root}>
         <ThemeProvider theme={theme}>
           <Grid container direction="row" alignItems="flex-start" justify="space-between" spacing={2}>
             <Grid item lg={8} sm xs={12}>
-              <Grid container direction="column" justify="center" spacing={2}>
-                <form onSubmit={formik.handleSubmit}>
-                  <Grid item>
-                    <Typography variant="h6" gutterBottom>
-                      Title
-                    </Typography>
-                    <TextField
-                      error={formik.errors.title && formik.touched.title}
-                      helperText={(formik.errors.title && formik.touched.title) && formik.errors.title}
-                      onChange={formik.handleChange}
-                      //onBlur={formik.handleBlur}
-                      className={classes.textField}
-                      id="title"
-                      value={formik.values.title}
-                      placeholder='Question title'
-                      name="title"
-                      onInput={e => setTitle(e.target.value)}
-                      margin="none"
-                      size="small"
-                      InputLabelProps={{
-                          shrink: true,
-                      }}
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Typography className={classes.typo} variant="h6" gutterBottom>
-                      Question
-                    </Typography>
-                    <Box>
-                      <MDEditor setText={setQuestion} data={body}/>
-                    </Box>
-                    <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
-                  </Grid>
-                  <Grid item>
-                    <QuestionLabels
-                      value={formik.values.label}
-                      setValue={formik.setFieldValue} 
-                      error={formik.errors.label && formik.touched.label}
-                      helperText={(formik.errors.label && formik.touched.label) && formik.errors.label}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Tags 
-                      classes={classes} 
-                      value={formik.values.tags}
-                      error={formik.errors.tags && formik.touched.tags}
-                      helperText={(formik.errors.tags && formik.touched.tags) && formik.errors.tags}
-                      setFieldValue={formik.setFieldValue}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Grid container direction="row" justify="flex-end" spacing={2}>
-                      <Grid item>
-                        <Button
-                          type="submit"
-                          color="primary"
-                          className={classes.submit}
-                          size="small"
-                          variant="outlined"
-                        >
-                          Submit
-                        </Button>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          onClick={handleCancel}
-                          color="secondary"
-                          className={classes.submit}
-                          size="small"
-                          variant="outlined"
-                        >
-                          Cancel
-                        </Button>
+              <form onSubmit={formik.handleSubmit}>
+                <Grid container direction="column" justify="center" spacing={1}>
+                    <Grid item>
+                      <Typography variant="h6" gutterBottom>
+                        Title
+                      </Typography>
+                      <TextField
+                        error={formik.errors.title && formik.touched.title}
+                        helperText={(formik.errors.title && formik.touched.title) && formik.errors.title}
+                        onChange={formik.handleChange}
+                        //onBlur={formik.handleBlur}
+                        className={classes.textField}
+                        id="title"
+                        value={formik.values.title}
+                        placeholder='Question title'
+                        name="title"
+                        onInput={e => setTitle(e.target.value)}
+                        margin="none"
+                        size="small"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        variant="outlined"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography className={classes.typo} variant="h6" gutterBottom>
+                        Question
+                      </Typography>
+                      <Box>
+                        <MDEditor setText={setQuestion} data={body}/>
+                      </Box>
+                      <FormHelperText error={true}>{answerSubmitError}</FormHelperText>
+                    </Grid>
+                    <Grid item>
+                      <ClickAwayListener onClickAway={handleTooltipClose}>
+                        <div>
+                          <Tooltip
+                            arrow
+                            placement="top-start"
+                            PopperProps={{
+                              disablePortal: true,
+                            }}
+                            onClose={handleTooltipClose}
+                            open={openTooltip}
+                            disableFocusListener
+                            disableHoverListener
+                            disableTouchListener
+                            title={"It is required to label your question"}
+                          >
+                              <Paper className={classes.labelPaper} variant="outlined">
+                                <QuestionLabels
+                                  value={formik.values.label}
+                                  setValue={formik.setFieldValue} 
+                                  error={formik.errors.label && formik.touched.label}
+                                  helperText={(formik.errors.label && formik.touched.label) && formik.errors.label}
+                                />
+                              </Paper>
+                          </Tooltip>
+                        </div>
+                      </ClickAwayListener>
+                    </Grid>
+                    <Grid item>
+                      <Tags 
+                        classes={classes} 
+                        value={formik.values.tags}
+                        error={formik.errors.tags && formik.touched.tags}
+                        helperText={(formik.errors.tags && formik.touched.tags) && formik.errors.tags}
+                        setFieldValue={formik.setFieldValue}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Grid container direction="row" justify="flex-end" spacing={2}>
+                        <Grid item>
+                          <Button
+                            type="submit"
+                            color="primary"
+                            className={classes.submit}
+                            size="small"
+                            variant="outlined"
+                          >
+                            Submit
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <Button
+                            onClick={handleCancel}
+                            color="secondary"
+                            className={classes.submit}
+                            size="small"
+                            variant="outlined"
+                          >
+                            Cancel
+                          </Button>
+                        </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
-                </form>
-              </Grid>
+                </Grid>
+              </form>
             </Grid>
 
             <Grid item>

@@ -47,7 +47,7 @@ export default function QuestionLabels({ value, setValue, error, helperText }) {
           <span>Label</span>
           <ArrowDropDown fontSize="large"/>
         </ButtonBase>
-        <FormHelperText error>{helperText}</FormHelperText>
+        {/*<FormHelperText error>{helperText}</FormHelperText>*/}
         {value.map((label) => (
           <div
             key={label.name}
