@@ -14,7 +14,7 @@ import { postPost } from '../../redux/ActionCreators';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-export default function CreatePost({setSnackMessage, setSnackOpen}) {
+export default function CreatePost({ setSnackMessage, setSnackOpen }) {
   const classes = useStyles();
 
   const [title, setTitle] = React.useState('');

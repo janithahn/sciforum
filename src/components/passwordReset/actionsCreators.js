@@ -72,6 +72,6 @@ export const sendPasswordResetLink = (data) => dispatch => {
     })
     .catch((error) => {
         console.log(error.response);
-        dispatch(sendResetPasswordError(error.response.data.email[0]));
+        dispatch(sendResetPasswordError(error.response.data.email ? error.response.data.email[0]: error.message));
     });
 }

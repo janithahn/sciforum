@@ -35,6 +35,7 @@ import ConfirmEmailRedirect from './settings/confirmEmailRedirect';
 // Chat App
 import RoomList from './chat/roomList';
 import ChatRoom from './chat/chatRoom';
+import ChooseInterests from './home/chooseInterestsModal';
 
 function Main(props) {
     const classes = useStyles();
@@ -54,7 +55,7 @@ function Main(props) {
         state.AnswerComments.status, state.SendResetPassword.status, state.ChatRooms.status,
         state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status, 
         state.ConfirmEmail.status, state.VerifyAccount.status, state.MyPostsProfile.status, state.MyAnswers.status,
-        state.UpdateProfileImage.status,
+        state.UpdateProfileImage.status, state.ProfileInterests.status,
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);
@@ -212,6 +213,19 @@ function Main(props) {
         )} />
     );
 
+    //choose interests
+    const [openInterestsModal, setOpenInterestsModal] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpenInterestsModal(true);
+    };
+
+    React.useEffect(() => {
+        if(auth.has_interests && auth.has_interests.toString() === "false") {
+            handleOpen();
+        }
+    }, [auth]);
+
     return (
         <div>
             <Header classes={classes} showProgressBar={showProgressBar} snackOpen={snackOpen} setSnackOpen={setSnackOpen} snackMessage={snackMessage}/>
@@ -242,8 +256,8 @@ function Main(props) {
                     <PrivateRouteSettings path="/settings" component={() => <UserSettings/>}/>
                     <Route exact path="/googlelogin" component={() => <GoogleSocialAuth/>}/>
                     
-                    <PrivateAccountConfirmRoute exact path="/password/reset" component={() => <PasswordReset/>}/>
-                    <PrivateAccountConfirmRoute exact path="/users/profile/password_reset/confirm/:token" component={() => <ResetConfirm/>}/>
+                    <Route exact path="/password/reset" component={() => <PasswordReset/>}/>
+                    <Route exact path="/users/profile/password_reset/confirm/:token" component={() => <ResetConfirm/>}/>
                     <PrivateAccountConfirmRoute exact path="/verify-email/:token" component={() => <ConfirmEmailRedirect/>}/>
 
                     <PrivateChatRoute exact path="/chatrooms" component={() => <RoomList/>}/>
@@ -254,6 +268,7 @@ function Main(props) {
                 </Switch>
             </main>
             {(location.pathname !== '/signup' && location.pathname !== '/signin') ? <Footer/>: undefined}
+            {auth.isAuthenticated ? <ChooseInterests open={openInterestsModal} setOpen={setOpenInterestsModal}/>: undefined}
         </div>
     );
 }

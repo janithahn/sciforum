@@ -60,14 +60,6 @@ export default function SignUp() {
       .required('Required')
       .matches(/^\S*$/, "Username cannot contain any spaces."),
       //.matches(/^(?!\s+$).*/, "Please enter a valid username."), //checks if a string contains only spaces
-    /*firstname: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'), 
-    lastname: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),*/
     email: Yup.string()
       .email()
       .required('Required'),
@@ -137,10 +129,10 @@ export default function SignUp() {
         <ThemeProvider theme={theme}>
         
         <Formik
-          initialValues={{username: '', /*firstname: '', lastname: '',*/ email: '', password1: '', password2: ''}}
+          initialValues={{username: '', email: '', password1: '', password2: ''}}
           onSubmit={(values) => {
             //setSubmitting(true);
-            dispatch(signupUser(values))
+            dispatch(signupUser(values));
           }}
           validationSchema={signupSchema}
         >
@@ -153,22 +145,6 @@ export default function SignUp() {
             return(
               <form className={classes.form} onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                  {/*<Grid item xs={12} sm={6}>
-                    <ValidationTextField
-                      autoComplete="fname"
-                      name="firstname"
-                      variant="outlined"
-                      fullWidth
-                      id="firstname"
-                      label="First Name"
-                      autoFocus
-                      values={values.firstname}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={errors.firstname && touched.firstname}
-                      helperText={(errors.firstname && touched.firstname) && errors.firstname}
-                    />
-                  </Grid>*/}
                   <Grid item xs={12}>
                     <ValidationTextField
                       variant="outlined"
@@ -202,22 +178,6 @@ export default function SignUp() {
                     />
                   </Grid>
                   <Grid item xs={12}>
-                   {/*<ValidationTextField
-                      variant="outlined"
-                      fullWidth
-                      name="password1"
-                      label="Password"
-                      type="password"
-                      id="password1"
-                      autoComplete="current-password"
-                      aria-describedby="password1-errors"
-                      error={errors.password1 && touched.password1}
-                      values={values.password1}
-                      helperText={(errors.password1 && touched.password1) && errors.password1}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      onFocus={() => setPasswordFocus(true)}
-                   />*/}
                    <FormControl fullWidth variant="outlined">
                     <InputLabel error={errors.password1 && touched.password1} htmlFor="outlined-adornment-password">Password</InputLabel>
                     <ValidationOutlinedInput

@@ -243,7 +243,7 @@ export const requestLogin = (creds) => {
     });
 }
 
-export const loginSuccess = (token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, currentUserProfileImg) => {
+export const loginSuccess = (token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, has_interests, currentUserProfileImg, currentUserRole) => {
     return({
         type: ActionTypes.LOGIN_SUCCESS,
         token,
@@ -252,7 +252,9 @@ export const loginSuccess = (token, firebase_token, currentUser, currentUserId, 
         currentUserId,
         currentUserEmail,
         currentUserEmailVerified,
+        has_interests,
         currentUserProfileImg,
+        currentUserRole,
     });
 }
 
@@ -281,6 +283,8 @@ export const loginUser = (creds, history, from) => async (dispatch) => {
         const currentUserEmail = res.data.user.email;
         const currentUserEmailVerified = res.data.user.email_verified;
         const currentUserProfileImg = res.data.user.profile.profileImg;
+        const currentUserRole = res.data.user.profile.userRole;
+        const has_interests = res.data.user.has_interests;
 
         localStorage.setItem('token', token);
         localStorage.setItem('firebase_token', firebase_token);
@@ -289,8 +293,10 @@ export const loginUser = (creds, history, from) => async (dispatch) => {
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserEmailVerified', currentUserEmailVerified);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
+        localStorage.setItem('currentUserRole', currentUserRole);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, currentUserProfileImg));
+        localStorage.setItem('has_interests', has_interests);
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, has_interests, currentUserProfileImg, currentUserRole));
         history.replace(from); //redirecting back to where it was
         //dispatch(fetchUser(token, currentUser));
     })
@@ -477,6 +483,7 @@ export const signupUser = (creds) => async (dispatch) => {
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
         const currentUserEmailVerified = res.data.user.email_verified;
+        const has_interests = res.data.user.has_interests;
 
         localStorage.setItem('token', token);
         localStorage.setItem('firebase_token', firebase_token);
@@ -484,8 +491,9 @@ export const signupUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
         localStorage.setItem('currentUserEmailVerified', currentUserEmailVerified);
+        localStorage.setItem('has_interests', has_interests);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified));
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, has_interests));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
@@ -527,7 +535,9 @@ export const loginUserWithGoogle = (creds, history, from) => async (dispatch) =>
         const currentUser = res.data.user.username;
         const currentUserId = res.data.user.id;
         const currentUserEmail = res.data.user.email;
+        const currentUserRole = res.data.user.role;
         const currentUserProfileImg = creds.profileObj.imageUrl;
+        const has_interests = res.data.user.has_interests;
 
         localStorage.setItem('googleToken', googleToken);
         localStorage.setItem('token', token);
@@ -535,9 +545,11 @@ export const loginUserWithGoogle = (creds, history, from) => async (dispatch) =>
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
+        localStorage.setItem('currentUserRole', currentUserRole);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserProfileImg));
+        localStorage.setItem('has_interests', has_interests);
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, true, has_interests, currentUserProfileImg, currentUserRole));
         history.replace(from); //redirecting back to where it was
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));

@@ -31,6 +31,7 @@ import { LikedPosts } from './actions/profilePanels/liked';
 import { MyAnswers } from './actions/profilePanels/myAnswers';
 import { MyPostsProfile } from './actions/profilePanels/myPosts';
 import { UpdateProfileImage } from './actions/profilePanels/updateProfileImage';
+import { ProfileInterests } from './actions/profileInterests';
 import { createReduxHistoryContext, reachify } from "redux-first-history";
 import { createBrowserHistory } from 'history';
 import { globalHistory } from "@reach/router";
@@ -85,6 +86,7 @@ export const ConfigureStore = () => {
             MyAnswers,
             MyPostsProfile,
             UpdateProfileImage,
+            ProfileInterests,
         }),
         composeEnhancers(applyMiddleware(thunk, logger, routerMiddleware))
     );

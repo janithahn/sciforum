@@ -9,7 +9,9 @@ export const Auth = (state = {
         currentUserId: localStorage.getItem('currentUserId'),
         currentUserEmail: localStorage.getItem('currentUserEmail'),
         currentUserEmailVerified: localStorage.getItem('currentUserEmailVerified'),
+        has_interests: localStorage.getItem('has_interests'),
         currentUserProfileImg: localStorage.getItem('currentUserProfileImg'),
+        currentUserRole: localStorage.getItem('currentUserRole'),
         errMess: null,
     }, action) => {
     switch (action.type) {
@@ -31,7 +33,9 @@ export const Auth = (state = {
                 currentUserId: action.currentUserId,
                 currentUserEmail: action.currentUserEmail,
                 currentUserEmailVerified: action.currentUserEmailVerified,
+                has_interests: action.has_interests,
                 currentUserProfileImg: action.currentUserProfileImg,
+                currentUserRole: action.currentUserRole,
             };
 
         case ActionTypes.LOGIN_FAILURE:
