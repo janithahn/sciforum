@@ -12,6 +12,7 @@ import { UserEducation } from './actions/credentials/education';
 import { UserLanguages } from './actions/credentials/languages';
 import { UserSkills } from './actions/credentials/skills';
 import { UserContact } from './actions/credentials/contact';
+import { UserInterests } from './actions/credentials/interests';
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
 import { ChatRooms } from './actions/chat/chatRooms';
@@ -69,6 +70,7 @@ export const ConfigureStore = () => {
             UserLanguages,
             UserSkills,
             UserContact,
+            UserInterests,
             PostComments,
             AnswerComments,
             ResetPassword,

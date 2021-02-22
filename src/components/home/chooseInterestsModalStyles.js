@@ -18,6 +18,17 @@ export const useStyles = makeStyles((theme) => ({
       outline: 'none',
       maxWidth: 400,
     },
+    mainPaperProfilePanel: {
+      //boxShadow: theme.shadows[5],
+      //padding: theme.spacing(5),
+      marginTop: theme.spacing(3),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: theme.spacing(3),
+      outline: 'none',
+      maxWidth: 400,
+    },
     root: {
       width: 221,
       fontSize: 13,

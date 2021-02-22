@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, Link, Divider, IconButton, Modal, Fade, Backdrop, Box } from '@material-ui/core';
+import { useTheme, Grid, Typography, Link, Divider, IconButton, Modal, Fade, Backdrop, Box } from '@material-ui/core';
 import { Facebook, LinkedIn, GitHub, Edit, School, Work, Language, Build } from '@material-ui/icons';
 import EditContact from './editors/editContact';
 import EditCredentials from './editors/editCredentials';
@@ -7,14 +7,17 @@ import CreateEmployment from './editors/credentials/createEmployment';
 import CreateEducation from './editors/credentials/createEducation';
 import CreateSkills from './editors/credentials/createSkills';
 import CreateLanguages from './editors/credentials/createLanguages';
+import ChooseInterests from './editors/editInterests';
 import { useStyles } from '../styles/profileStyles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchUserEmployment, fetchUserEducation, fetchUserSkills, fetchUserLanguages } from '../../../redux/ActionCreators';
+import { fetchUserEmployment, fetchUserEducation, fetchUserSkills, fetchUserLanguages, fetchUserInterests } from '../../../redux/ActionCreators';
+import { labels } from '../../post/styles/labelStyles'
 
 export default function ProfilePanel() {
 
     const classes = useStyles();
+    const theme = useTheme();
 
     const dispatch = useDispatch();
 
@@ -26,11 +29,13 @@ export default function ProfilePanel() {
     const userEducation = useSelector(state => state.UserEducation);
     const userSkills = useSelector(state => state.UserSkills);
     const userLanguages = useSelector(state => state.UserLanguages);
+    const userInterests = useSelector(state => state.UserInterests);
 
     const employment = userEmployment.userEmployment;
     const education = userEducation.userEducation;
     const skills = userSkills.userSkills;
     const languages = userLanguages.userLanguages;
+    const interests = userInterests.interests;
 
     //fetching user credentials
     React.useEffect(() => {
@@ -48,6 +53,10 @@ export default function ProfilePanel() {
     React.useEffect(() => {
         if(userLanguages.status === 'idle') dispatch(fetchUserLanguages(username));
     }, [dispatch, userLanguages.status, username]);
+    
+    React.useEffect(() => {
+        if(userInterests.status === 'idle') dispatch(fetchUserInterests(username));
+    }, [dispatch, userInterests.status, username]);
 
     //relevant credential states
     const [contact, setContact] = React.useState(user.user ? user.user.contact: {});
@@ -171,6 +180,9 @@ export default function ProfilePanel() {
         </Grid>
     );
 
+    //taking filtered list of labels according to the user interests
+    const getFilteredLabels = () => labels.filter(label => interests.map(interest => interest.interest).includes(label.name));
+
     return(
         <React.Fragment>
             <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={2}>
@@ -276,6 +288,37 @@ export default function ProfilePanel() {
                         </Grid>
                     </Grid>
                 </Grid>
+                <Grid item>
+                    <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={2}>
+                        <Grid item>
+                            <Grid container direction="row" alignItems="center" justify="flex-start" spacing={1}>
+                                <Grid item>
+                                    <Typography variant="h6" style={{fontSize: 16}}>Interests</Typography>
+                                    <Divider/>
+                                </Grid>
+                                {auth.isAuthenticated && auth.currentUser === username ? <Grid item>
+                                    <IconButton size="small" onClick={() => handleModalOpen("interests")}>
+                                        <Edit fontSize="small"/>
+                                    </IconButton>
+                                </Grid>: undefined}
+                            </Grid>
+                        </Grid>
+                        <Grid item>
+                            {getFilteredLabels().map((label) => (
+                                <div
+                                    key={label.name}
+                                    className={classes.interestTag}
+                                    style={{
+                                    backgroundColor: label.color,
+                                    color: theme.palette.getContrastText(label.color),
+                                    }}
+                                >
+                                    {label.name}
+                                </div>
+                            ))}
+                        </Grid>
+                    </Grid>
+                </Grid>
             </Grid>
             <EditModal>
                 <Fade in={openModal}>
@@ -344,6 +387,11 @@ export default function ProfilePanel() {
                             handleModalClose={handleModalClose}
                             selectedLanguageItem={selectedCredentialItem}
                             varient="update"
+                        />:
+                    modalSelection === 'interests' ?
+                        <ChooseInterests
+                            interests={getFilteredLabels()}
+                            handleModalClose={handleModalClose}
                         />:
                     undefined
                 }

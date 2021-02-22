@@ -1069,6 +1069,36 @@ export const deleteUserLanguages = (languageId) => (dispatch) => {
     })
 }
 
+//USER_INTERESTS
+export const fetchUserInterests = (requestUsername) => (dispatch) => {
+    dispatch(userInterestsLoading());
+
+    axios.get(baseUrl + `/profile_api/user_interests/viewset/?username=${requestUsername}`,
+    {
+        "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
+    })
+    .then(res => {
+        dispatch(addUserInterests(res.data));
+    })
+    .catch(error => {
+        dispatch(userInterestsFailed(error));
+    })
+} 
+
+export const userInterestsLoading = () => ({
+    type: ActionTypes.USER_INTERESTS_LOADING
+});
+
+export const userInterestsFailed = (errmess) => ({
+    type: ActionTypes.USER_INTERESTS_FAILED,
+    payload: errmess
+});
+
+export const addUserInterests = (data) => ({
+    type: ActionTypes.ADD_USER_INTERESTS,
+    payload: data
+});
+
 //POST COMMENTS
 export const fetchPostComments = (postId) => (dispatch) => {
 

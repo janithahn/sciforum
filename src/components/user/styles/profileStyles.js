@@ -80,6 +80,14 @@ export const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(3),
   },
+  interestTag: {
+    marginTop: 3,
+    height: 20,
+    padding: '.15em 4px',
+    fontWeight: 600,
+    lineHeight: '15px',
+    borderRadius: 2,
+  },
 }));
 
 export const CustomTooltip = withStyles({
