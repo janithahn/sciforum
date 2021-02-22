@@ -3,6 +3,7 @@ import QuestionViewCard from '../post/QuestionViewCardComponent';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 import RenderPosts from './RenderPosts';
+import { headerWithToken } from './headerWithToken';
 
 export default function FilterByDate() {
 
@@ -12,12 +13,12 @@ export default function FilterByDate() {
 
     const fetchPostInfinite = (pageNum) => {
 
-        var url = baseUrl + `/api/?page=${pageNum}&ordering=-created_at`;
+        var url = baseUrl + `/api/latest/posts/?page=${pageNum}`;
         if(nextHref) {
             url = nextHref;
         }
 
-        axios.get(url)
+        axios.get(url, headerWithToken)
         .then(posts => {
             console.log(posts);
             if(posts.data) {

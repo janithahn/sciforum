@@ -3,6 +3,7 @@ import QuestionViewCard from '../post/QuestionViewCardComponent';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 import RenderPosts from './RenderPosts';
+import { headerWithToken } from './headerWithToken';
 
 export default function FilterByVote() {
 
@@ -17,7 +18,7 @@ export default function FilterByVote() {
             url = nextHref;
         }
 
-        axios.get(url)
+        axios.get(url, headerWithToken)
         .then(posts => {
             console.log(posts);
             if(posts.data) {
