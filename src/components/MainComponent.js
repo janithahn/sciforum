@@ -22,6 +22,7 @@ import SearchByLabel from './home/SearchByLabels';
 import FilterByDate from './home/FilterByDate';
 import FilterByVote from './home/FilterByVote';
 import FilterByHot from './home/FilterByHot';
+import UnansweredPosts from './home/unanswered';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
@@ -242,6 +243,7 @@ function Main(props) {
                     <Route exact path="/home/filter/latest" component={() => <FilterByDate/>}/>
                     <Route exact path="/home/filter/by_vote" component={() => <FilterByVote/>}/>
                     <Route exact path="/home/filter/by_hot" component={() => <FilterByHot/>}/>
+                    <Route exact path="/unanswered" component={() => <UnansweredPosts/>}/>
 
                     <PrivateRoutPostEdit path="/posts/:postId/edit" component={() => <EditPost setSnackMessage={setSnackMessage} setSnackOpen={setSnackOpen}/>}/>
                     <PrivateRouteMyPosts exact path="/myposts" component={() => <MyPosts/>}/>

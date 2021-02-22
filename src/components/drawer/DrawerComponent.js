@@ -1,6 +1,6 @@
 import React from 'react';
 import { Drawer, Hidden, List, Divider, ListItemIcon, ListItemText, MenuItem, Link, useTheme, Typography } from '@material-ui/core';
-import { Inbox, Home, Chat } from '@material-ui/icons';
+import { Inbox, Home, Chat, LiveHelp } from '@material-ui/icons';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchPosts } from '../../redux/ActionCreators';
@@ -21,7 +21,12 @@ function RenderDrawer({ classes, open, variant, handleSelectedItem, selected }) 
             <Divider />
             <div className={classes.drawerContainer}>
                 <List>
-                    {[{text: 'Home', url: '/', icon: <Home/>}, {text: 'My Posts', url: '/myposts', icon: <Inbox/>}, {text: 'Chat Rooms', url: '/chatrooms', icon: <Chat/>}].map((item, index) => (
+                    {[
+                        {text: 'Home', url: '/', icon: <Home/>}, 
+                        {text: 'My Posts', url: '/myposts', icon: <Inbox/>}, 
+                        {text: 'Chat Rooms', url: '/chatrooms', icon: <Chat/>}, 
+                        {text: 'Unanswered', url: '/unanswered', icon: <LiveHelp/>}
+                    ].map((item, index) => (
                         <Link to={item.url} component={NavLink} underline='none' color='inherit' key={index}>
                             <MenuItem button key={index} onClick={() => handleSelectedItem(item.url)} selected={selected === item.url}>
                                 <ListItemIcon>{item.icon}</ListItemIcon>
