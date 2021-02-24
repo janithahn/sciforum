@@ -243,7 +243,7 @@ export const requestLogin = (creds) => {
     });
 }
 
-export const loginSuccess = (token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, has_interests, currentUserProfileImg, currentUserRole) => {
+export const loginSuccess = (token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, is_email_subscribed, has_interests, currentUserProfileImg, currentUserRole) => {
     return({
         type: ActionTypes.LOGIN_SUCCESS,
         token,
@@ -255,6 +255,7 @@ export const loginSuccess = (token, firebase_token, currentUser, currentUserId, 
         has_interests,
         currentUserProfileImg,
         currentUserRole,
+        is_email_subscribed,
     });
 }
 
@@ -285,6 +286,7 @@ export const loginUser = (creds, history, from) => async (dispatch) => {
         const currentUserProfileImg = res.data.user.profile.profileImg;
         const currentUserRole = res.data.user.profile.userRole;
         const has_interests = res.data.user.has_interests;
+        const is_email_subscribed = res.data.user.profile.is_email_subscribed;
 
         localStorage.setItem('token', token);
         localStorage.setItem('firebase_token', firebase_token);
@@ -296,7 +298,8 @@ export const loginUser = (creds, history, from) => async (dispatch) => {
         localStorage.setItem('currentUserRole', currentUserRole);
         localStorage.setItem('currentUserRoomKeys', "[]");
         localStorage.setItem('has_interests', has_interests);
-        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, has_interests, currentUserProfileImg, currentUserRole));
+        localStorage.setItem('is_email_subscribed', is_email_subscribed);
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, is_email_subscribed, has_interests, currentUserProfileImg, currentUserRole));
         history.replace(from); //redirecting back to where it was
         //dispatch(fetchUser(token, currentUser));
     })
@@ -484,6 +487,7 @@ export const signupUser = (creds) => async (dispatch) => {
         const currentUserEmail = res.data.user.email;
         const currentUserEmailVerified = res.data.user.email_verified;
         const has_interests = res.data.user.has_interests;
+        const is_email_subscribed = res.data.user.is_email_subscribed;
 
         localStorage.setItem('token', token);
         localStorage.setItem('firebase_token', firebase_token);
@@ -493,7 +497,8 @@ export const signupUser = (creds) => async (dispatch) => {
         localStorage.setItem('currentUserEmailVerified', currentUserEmailVerified);
         localStorage.setItem('has_interests', has_interests);
         localStorage.setItem('currentUserRoomKeys', "[]");
-        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, has_interests));
+        localStorage.setItem('is_email_subscribed', is_email_subscribed);
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, currentUserEmailVerified, is_email_subscribed, has_interests));
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
         //dispatch(checkAuthTimeout(3600));
@@ -538,6 +543,7 @@ export const loginUserWithGoogle = (creds, history, from) => async (dispatch) =>
         const currentUserRole = res.data.user.role;
         const currentUserProfileImg = creds.profileObj.imageUrl;
         const has_interests = res.data.user.has_interests;
+        const is_email_subscribed = res.data.user.is_email_subscribed;
 
         localStorage.setItem('googleToken', googleToken);
         localStorage.setItem('token', token);
@@ -545,11 +551,13 @@ export const loginUserWithGoogle = (creds, history, from) => async (dispatch) =>
         localStorage.setItem('currentUser', currentUser);
         localStorage.setItem('currentUserId', currentUserId);
         localStorage.setItem('currentUserEmail', currentUserEmail);
+        localStorage.setItem('currentUserEmailVerified', true);
         localStorage.setItem('currentUserRole', currentUserRole);
         localStorage.setItem('currentUserProfileImg', currentUserProfileImg);
         localStorage.setItem('currentUserRoomKeys', "[]");
         localStorage.setItem('has_interests', has_interests);
-        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, true, has_interests, currentUserProfileImg, currentUserRole));
+        localStorage.setItem('is_email_subscribed', is_email_subscribed);
+        dispatch(loginSuccess(token, firebase_token, currentUser, currentUserId, currentUserEmail, true, is_email_subscribed, has_interests, currentUserProfileImg, currentUserRole));
         history.replace(from); //redirecting back to where it was
         window.location.reload();
         //dispatch(fetchUser(token, currentUser));
@@ -1386,7 +1394,21 @@ export const answerUpdated = (data) => ({
     payload: data
 });
 
+export const answerCreatedLoading = () => ({
+    type: ActionTypes.ANSWER_CREATED_LOADING,
+});
+
+export const answerDeletedLoading = () => ({
+    type: ActionTypes.ANSWER_DELETED_LOADING,
+});
+
+export const answerUpdatedLoading = () => ({
+    type: ActionTypes.ANSWER_UPDATED_LOADING,
+});
+
 export const postAnswer = (postBelong, owner, answerContent) => (dispatch) => {
+    dispatch(answerCreatedLoading());
+
     axios.post(baseUrl + `/answer_api/answer/create/`, {
         postBelong: postBelong,
         owner: owner,
@@ -1403,6 +1425,8 @@ export const postAnswer = (postBelong, owner, answerContent) => (dispatch) => {
 }
 
 export const updateAnswer = (id, postBelong, answerContent) => (dispatch) => {
+    dispatch(answerUpdatedLoading());
+    
     axios.patch(baseUrl + `/answer_api/answer/${id}/update/`, {
         answerContent,
     }, headerWithToken)
@@ -1417,6 +1441,8 @@ export const updateAnswer = (id, postBelong, answerContent) => (dispatch) => {
 }
 
 export const deleteAnswer = (id, postBelong) => (dispatch) => {
+    dispatch(answerDeletedLoading());
+    
     axios.delete(baseUrl + `/answer_api/answer/${id}/delete/`, headerWithToken)
     .then(response => {
         dispatch(answerDeleted());

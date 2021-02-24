@@ -220,7 +220,12 @@ const Answer = () => {
             </div>
         );
     }else if(answers.status === 'failed') {
-        return(<h4>Error loading...!</h4>);
+        return(
+            <div>
+                <AnswerSkel/>
+                <AnswerSkel/>
+            </div>
+        );
     }else {
 
         return(

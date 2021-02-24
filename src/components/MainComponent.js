@@ -50,13 +50,14 @@ function Main(props) {
     //console.log(firebaseAuth().currentUser);
 
     const isLoading = useSelector(state => [
-        state.Auth.status, state.Answers.status, state.Notifications.status, 
+        state.Auth.status, state.Answers.status, state.Answers.changeStatus, state.Notifications.status, 
         state.Post.status, state.Posts.status, state.MyPosts.status, state.User.status, 
         state.answerVotes.status, state.postVotes.status, state.PostComments.status,
         state.AnswerComments.status, state.SendResetPassword.status, state.ChatRooms.status,
         state.ChatMessages.status, state.events.status, state.webinars.status, state.AuthFirebase.status, 
         state.ConfirmEmail.status, state.VerifyAccount.status, state.MyPostsProfile.status, state.MyAnswers.status,
-        state.UpdateProfileImage.status, state.ProfileInterests.status,
+        state.UpdateProfileImage.status, state.ProfileInterests.status, state.SubscribeEmail.subscribe_status,
+        state.SubscribeEmail.unsubscribe_status, state.BecomeModerator.subscribe_status, state.BecomeModerator.subscribe_status,
     ].includes('loading'));
 
     const [showProgressBar, setShowProgressBar] = React.useState(false);

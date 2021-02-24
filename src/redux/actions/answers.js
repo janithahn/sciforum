@@ -24,6 +24,15 @@ export const Answers = (state = {
         case ActionTypes.ANSWER_DELETED:
             return {...state, status: 'idle', changeStatus: 'deleted', errMess: null, changedAnswer: null, answers: state.answers}
 
+        case ActionTypes.ANSWER_CREATED_LOADING:
+            return {...state, changeStatus: 'loading', errMess: null, changedAnswer: null, answers: state.answers}
+            
+        case ActionTypes.ANSWER_UPDATED_LOADING:
+            return {...state, changeStatus: 'loading', errMess: null, changedAnswer: null, answers: state.answers}
+                
+        case ActionTypes.ANSWER_DELETED_LOADING:
+            return {...state, changeStatus: 'loading', errMess: null, changedAnswer: null, answers: state.answers}
+
         case ActionTypes.ANSWER_LIST_LOADING:
             return {...state, status: 'loading', changeStatus: 'idle', errMess: null, changedAnswer: null, answers: state.answers }
         

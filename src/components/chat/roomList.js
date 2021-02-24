@@ -39,8 +39,8 @@ function ChatEnterButton({ roomname, roomKey }) {
         chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
         chat.message = `${auth.currentUser} enter the room`;
         chat.type = 'join';
-        const newMessage = db.ref('chats/').push();
-        newMessage.set(chat);
+        //const newMessage = db.ref('chats/').push();
+        //newMessage.set(chat);
 
         const tempArr = JSON.parse(localStorage.getItem('currentUserRoomKeys'));
         tempArr.push(roomKey);

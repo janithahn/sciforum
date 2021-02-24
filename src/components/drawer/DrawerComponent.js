@@ -22,10 +22,12 @@ function RenderDrawer({ classes, open, variant, handleSelectedItem, selected }) 
             <div className={classes.drawerContainer}>
                 <List>
                     {[
+                        
                         {text: 'Home', url: '/', icon: <Home/>}, 
                         {text: 'My Posts', url: '/myposts', icon: <Inbox/>}, 
                         {text: 'Chat Rooms', url: '/chatrooms', icon: <Chat/>}, 
                         {text: 'Unanswered', url: '/unanswered', icon: <LiveHelp/>}
+
                     ].map((item, index) => (
                         <Link to={item.url} component={NavLink} underline='none' color='inherit' key={index}>
                             <MenuItem button key={index} onClick={() => handleSelectedItem(item.url)} selected={selected === item.url}>
@@ -75,6 +77,8 @@ export default function MainDrawer(props) {
     React.useEffect(() => {
         setLocation(location.pathname);
         if(location.pathname.includes('/chatroom')) setLocation('/chatrooms');
+        if(location.pathname.includes('/home')) setLocation('/');
+        if(location.pathname === '/questions') setLocation('/');
     }, [location.pathname]);
 
     return(

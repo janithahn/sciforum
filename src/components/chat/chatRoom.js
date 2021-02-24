@@ -218,8 +218,8 @@ export default function ChatRoom() {
         chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
         chat.message = `${username} leave the room`;
         chat.type = 'exit';
-        const newMessage = db.ref('chats/').push();
-        newMessage.set(chat);
+        //const newMessage = db.ref('chats/').push();
+        //newMessage.set(chat);
     
         db.ref('roomusers/').orderByChild('roomKey').equalTo(roomKey).once('value', (resp) => {
           let roomuser = [];

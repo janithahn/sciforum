@@ -144,14 +144,19 @@ const Header = (props) => {
         setOpen(false);
     };
 
-    //After snack settings
+//After snack settings
     const emailConfirm = useSelector(state => state.ConfirmEmail);
+    const subscribeEmail = useSelector(state => state.SubscribeEmail);
+    const becomeModerator = useSelector(state => state.BecomeModerator);
+
     const [openSnack, setOpenSnack] = React.useState(false);
     const [snackAfterMessage, setSnackAfterMessage] = React.useState("");
     const [snackSeverity, setSnackSeverity] = React.useState("");
     const handleOpenSnack = () => {
         setOpenSnack(true);
     };
+
+    /* Email confirmation */
     React.useEffect(() => {
         if(emailConfirm.status === "succeeded") {
             handleOpenSnack();
@@ -163,6 +168,63 @@ const Header = (props) => {
             setSnackSeverity("error");
         }
     }, [emailConfirm])
+
+    /* Email subscription */
+    React.useEffect(() => {
+        if(subscribeEmail.subscribe_status === "succeeded") {
+            handleOpenSnack();
+            setSnackAfterMessage("You have successfully subscribed for email notifications");
+            localStorage.setItem('is_email_subscribed', true);
+            setSnackSeverity("success");
+            //setTimeout(() => window.location.reload(), 3);
+        }else if(subscribeEmail.subscribe_status === "failed") {
+            handleOpenSnack();
+            setSnackAfterMessage(subscribeEmail.errMess.toString());
+            setSnackSeverity("error");
+        }
+    }, [subscribeEmail])
+
+    React.useEffect(() => {
+        if(subscribeEmail.unsubscribe_status === "succeeded") {
+            handleOpenSnack();
+            setSnackAfterMessage("You have successfully unsubscribed from email notifications");
+            localStorage.setItem('is_email_subscribed', false);
+            setSnackSeverity("success");
+            //setTimeout(() => window.location.reload(), 3);
+        }else if(subscribeEmail.unsubscribe_status === "failed") {
+            handleOpenSnack();
+            setSnackAfterMessage(subscribeEmail.errMess.toString());
+            setSnackSeverity("error");
+        }
+    }, [subscribeEmail])
+
+    /* Moderator subscription */
+    React.useEffect(() => {
+        if(becomeModerator.subscribe_status === "succeeded") {
+            handleOpenSnack();
+            setSnackAfterMessage("You have successfully became a moderator");
+            localStorage.setItem('currentUserRole', 'MODERATOR');
+            setSnackSeverity("success");
+        }else if(becomeModerator.subscribe_status === "failed") {
+            handleOpenSnack();
+            setSnackAfterMessage(becomeModerator.errMess.toString());
+            setSnackSeverity("error");
+        }
+    }, [becomeModerator])
+
+    React.useEffect(() => {
+        if(becomeModerator.unsubscribe_status === "succeeded") {
+            handleOpenSnack();
+            setSnackAfterMessage("You have successfully unsubscribed from moderator");
+            localStorage.setItem('currentUserRole', 'USER');
+            setSnackSeverity("success");
+        }else if(becomeModerator.unsubscribe_status === "failed") {
+            handleOpenSnack();
+            setSnackAfterMessage(becomeModerator.errMess.toString());
+            setSnackSeverity("error");
+        }
+    }, [becomeModerator])
+//end after snack
 
     return (
         <div className={props.classes.root}>

@@ -125,3 +125,127 @@ export const sendConfirmationToken = (key) => dispatch => {
         //dispatch(resetAccountVerify());
     });
 };
+
+//Become a Moderator
+const moderatorLoading = () => ({
+    type: ActionTypes.BECOME_MODERATOR_LOADING
+});
+
+const moderatorSuccess = (data) => ({
+    type: ActionTypes.BECOME_MODERATOR_SUCCESS,
+    payload: data
+});
+
+const moderatorFailed = (error) => ({
+    type: ActionTypes.BECOME_MODERATOR_FAILED,
+    payload: error
+});
+
+export const becomeModerator = (userId) => (dispatch) => {
+    dispatch(moderatorLoading());
+
+    axios.patch(`${baseUrl}/profile_api/users/viewset/${userId}/`, {
+        profile: {
+            userRole: "MODERATOR"
+        }
+    }, headerWithToken)
+    .then((res) => {
+        dispatch(moderatorSuccess(res.data));
+    })
+    .catch((error) => {
+        dispatch(moderatorFailed(error.message));
+    });
+};
+
+//unsubscribe moderator
+const unsubscribemoderatorLoading = () => ({
+    type: ActionTypes.UNSUBSCRIBE_MODERATOR_LOADING
+});
+
+const unsubscribemoderatorSuccess = (data) => ({
+    type: ActionTypes.UNSUBSCRIBE_MODERATOR_SUCCESS,
+    payload: data
+});
+
+const unsubscribemoderatorFailed = (error) => ({
+    type: ActionTypes.UNSUBSCRIBE_MODERATOR_FAILED,
+    payload: error
+});
+
+export const unsubscribeModerator = (userId) => (dispatch) => {
+    dispatch(unsubscribemoderatorLoading());
+
+    axios.patch(`${baseUrl}/profile_api/users/viewset/${userId}/`, {
+        profile: {
+            userRole: "USER"
+        }
+    }, headerWithToken)
+    .then((res) => {
+        dispatch(unsubscribemoderatorSuccess(res.data));
+    })
+    .catch((error) => {
+        dispatch(unsubscribemoderatorFailed(error.message));
+    });
+};
+
+//Subscribe for emails
+const subscriptionLoading = () => ({
+    type: ActionTypes.SUBSCRIBE_EMAIL_LOADING
+});
+
+const subscriptionSuccess = (data) => ({
+    type: ActionTypes.SUBSCRIBE_EMAIL_SUCCESS,
+    payload: data
+});
+
+const subscriptionFailed = (error) => ({
+    type: ActionTypes.SUBSCRIBE_EMAIL_FAILED,
+    payload: error
+});
+
+export const subscribeForEmails = (userId) => (dispatch) => {
+    dispatch(subscriptionLoading());
+
+    axios.patch(`${baseUrl}/profile_api/users/viewset/${userId}/`, {
+        profile: {
+            is_email_subscribed: true
+        }
+    }, headerWithToken)
+    .then((res) => {
+        dispatch(subscriptionSuccess(res.data));
+    })
+    .catch((error) => {
+        dispatch(subscriptionFailed(error.message));
+    });
+};
+
+//Unsubscribe from emails
+const unsubscriptionLoading = () => ({
+    type: ActionTypes.UNSUBSCRIBE_EMAIL_LOADING
+});
+
+const unsubscriptionSuccess = (data) => ({
+    type: ActionTypes.UNSUBSCRIBE_EMAIL_SUCCESS,
+    payload: data
+});
+
+const unsubscriptionFailed = (error) => ({
+    type: ActionTypes.UNSUBSCRIBE_EMAIL_FAILED,
+    payload: error
+});
+
+export const unsubscribeFromEMails = (userId) => (dispatch) => {
+    dispatch(unsubscriptionLoading());
+
+    axios.patch(`${baseUrl}/profile_api/users/viewset/${userId}/`, {
+        profile: {
+            is_email_subscribed: false
+        }
+    }, headerWithToken)
+    .then((res) => {
+        dispatch(unsubscriptionSuccess(res.data));
+    })
+    .catch((error) => {
+        dispatch(unsubscriptionFailed(error.message));
+    });
+};

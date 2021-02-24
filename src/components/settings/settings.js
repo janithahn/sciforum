@@ -2,7 +2,8 @@ import React from 'react';
 import DeleteAccount from './deleteAccount';
 import ResetPassword from './resetPassword';
 import ConfirmEmail from './confirmEmail';
-import BecomeModerator from './becomeModerator';
+import EmailSubscribe from './EmailSubscribe';
+import ModeratorSubscribe from './moderatorSubscribe';
 import { Grid, ThemeProvider } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import AfterMessage from './afterMessage';
@@ -25,7 +26,10 @@ export default function UserSettings() {
                         <ResetPassword/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12}>
-                        <BecomeModerator/>
+                        <EmailSubscribe/>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12}>
+                        <ModeratorSubscribe/>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12}>
                         <DeleteAccount/>

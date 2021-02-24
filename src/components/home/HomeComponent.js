@@ -20,7 +20,6 @@ export default function Home() {
 
         axios.get(url, headerWithToken)
         .then(posts => {
-            console.log(posts);
             if(posts.data) {
                 let tempData = postData;
                 posts.data.results.map((post) => 
