@@ -17,13 +17,14 @@ const useStyles = makeStyles((theme) => ({
 export default function ConfirmEmailRedirect() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const auth = useSelector(state => state.Auth);
   const verifyAccount = useSelector(state => state.VerifyAccount)
 
   const { token } = useParams();
   const history = useHistory();
 
   React.useEffect(() => {
-    if(verifyAccount.status === 'idle') dispatch(sendConfirmationToken(token));
+    if(auth.isAuthenticated && verifyAccount.status === 'idle') dispatch(sendConfirmationToken(token));
   }, [dispatch, verifyAccount.status, token]);
 
   React.useEffect(() => {
