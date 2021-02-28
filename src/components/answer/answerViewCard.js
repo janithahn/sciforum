@@ -8,7 +8,6 @@ import VoteButtons from '../vote/answerVoteButtons';
 import { AnswerCommentInput, AnswerCommentRender } from './comment/comment';
 import { EditorState } from 'draft-js';
 import { createAnswerComments } from '../../redux/ActionCreators';
-import { useParams } from 'react-router-dom';
 
 export default function AnswerViewCard({answer, handleModalOpen, handleDeleteModalOpen}) {
 
