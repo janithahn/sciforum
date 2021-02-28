@@ -14,7 +14,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
 
     const classes = useStyles();
 
-    const { postId } = useParams();
+    //const { postId } = useParams();
 
     const dispatch = useDispatch();
 
