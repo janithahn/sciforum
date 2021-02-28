@@ -43,11 +43,11 @@ export default function UpdateName(props) {
     },
     onSubmit: (values) => {
       //console.log(values);
-      dispatch(updateUser(auth, values.firstname, values.lastname));
       setName({
-          firstname: values.firstname,
-          lastname: values.lastname,
+        firstname: values.firstname,
+        lastname: values.lastname,
       });
+      dispatch(updateUser(auth, values.firstname, values.lastname));
       handleModalClose();
     },
     validationSchema: profileSchema,

@@ -593,7 +593,7 @@ const updateUserFailed = (error) => ({
 });
 
 export const updateUser = (auth, firstname, lastname, aboutMe) => (dispatch) => {
-    dispatch(updateUserLoading());
+    //dispatch(updateUserLoading());
 
     axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
         first_name: firstname,
@@ -606,15 +606,16 @@ export const updateUser = (auth, firstname, lastname, aboutMe) => (dispatch) => 
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
-        dispatch(updateUserSuccess(res.data));
+        //dispatch(updateUserSuccess(res.data));
+        //dispatch(fetchUser(null, auth.currentUser));
     })
     .catch(error => {
-        dispatch(updateUserFailed(error));
+        //dispatch(updateUserFailed(error));
     })
 }
 
 export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
-    dispatch(updateUserLoading());
+    //dispatch(updateUserLoading());
 
     axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
         profile: {
@@ -625,10 +626,10 @@ export const updateUserAboutMe = (auth, aboutMe) => (dispatch) => {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
-        dispatch(updateUserSuccess(res.data));
+        //dispatch(updateUserSuccess(res.data));
     })
     .catch(error => {
-        dispatch(updateUserFailed(error));
+        //dispatch(updateUserFailed(error));
     })
 }
 
@@ -655,7 +656,7 @@ export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) =
 
     dispatch(profileImageUpateLoading());
 
-    axios.patch(baseUrl + `/profile_api/${auth.currentUserId}/`, profileImage,
+    axios.patch(baseUrl + `/profile_api/users/update_view/${auth.currentUserId}/`, profileImage,
     {
         "headers": headers
     })
@@ -670,7 +671,7 @@ export const updateUserProfileImage = (auth, profileImage, usernameFromTheUrl) =
 }
 
 export const updateUserContact = (auth, contact) => (dispatch) => {
-    dispatch(updateUserLoading());
+    //dispatch(updateUserLoading());
 
     axios.patch(baseUrl + `/users/${auth.currentUser}/update/`, {
         contact
@@ -679,10 +680,10 @@ export const updateUserContact = (auth, contact) => (dispatch) => {
         "headers": localStorage.getItem('token') ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
     })
     .then(res => {
-        dispatch(updateUserSuccess(res.data));
+        //dispatch(updateUserSuccess(res.data));
     })
     .catch(error => {
-        dispatch(updateUserFailed(error));
+        //dispatch(updateUserFailed(error));
     })
 }
 

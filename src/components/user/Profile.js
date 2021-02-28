@@ -69,7 +69,7 @@ const Profile = ({ className, ...rest }) => {
   const [profileImage, setProfileImage] = React.useState(user.user && user.user.profile ? user.user.profile.profileImg: null);
 
   //set tab values
-  const [tabValue, setTabValue] = React.useState(0);
+  //const [tabValue, setTabValue] = React.useState(0);
 
   React.useEffect(() => {
     if(user.status === 'idle') {
