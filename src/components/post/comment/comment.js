@@ -350,7 +350,7 @@ export function PostCommentRender() {
         setSubmitVal({});
         setEdit(false);
         setEditCommentId(undefined);
-    }, [dispatch, postId]);
+    }, [dispatch]);
 
     //Scrolling function
     const location = useLocation();
