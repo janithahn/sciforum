@@ -70,7 +70,7 @@ const Answer = () => {
             else
                 dispatch(fetchAnswers(postId, "-vote_count", answerId));
         }
-    }, [dispatch, answers.status, postId, answerPageNum]);
+    }, [dispatch, answers.status, postId, answerId, answerPageNum]);
 
     React.useEffect(() => {
         if(answers.changedAnswer) {
