@@ -13,6 +13,7 @@ import { UserLanguages } from './actions/credentials/languages';
 import { UserSkills } from './actions/credentials/skills';
 import { UserContact } from './actions/credentials/contact';
 import { UserInterests } from './actions/credentials/interests';
+import { UpdateUser } from './actions/profilePanels/updateUser'
 import { Post } from './actions/post';
 import { Answers } from './actions/answers';
 import { ChatRooms } from './actions/chat/chatRooms';
@@ -25,7 +26,7 @@ import { answerVotes, postVotes } from './actions/votes';
 import { answerCommentVotes, postCommentVotes } from './actions/commentVotes';
 import { Notifications, UnreadNotifications } from './actions/notifications';
 import { MyPosts } from './actions/myposts';
-import { PostComments, AnswerComments } from './actions/comments';
+import { PostComments, AnswerComments, UpdatePostComment, UpdateAnswerComment } from './actions/comments';
 import { events, webinars } from './actions/news';
 import { TopPosts } from './actions/topposts';
 import { LikedPosts } from './actions/profilePanels/liked';
@@ -93,6 +94,9 @@ export const ConfigureStore = () => {
             ProfileInterests,
             BecomeModerator,
             SubscribeEmail,
+            UpdateUser,
+            UpdatePostComment,
+            UpdateAnswerComment,
         }),
         composeEnhancers(applyMiddleware(thunk, logger, routerMiddleware))
     );
