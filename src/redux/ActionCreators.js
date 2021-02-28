@@ -4,7 +4,6 @@ import { baseUrl } from '../shared/baseUrl';
 import { isJWTExpired } from '../shared/AdditionalFunctions';
 import { db, auth } from '../firebase/config';
 import { fetchUnreadNotifications } from '../components/header/actions';
-import { Error } from '@material-ui/icons';
 
 const headerWithToken = {
     "headers": localStorage.getItem('token') && isJWTExpired(localStorage.getItem('token')) ? {Authorization: "JWT " + localStorage.getItem('token')}: undefined
