@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications } from '../../redux/ActionCreators';
 import EnhancedTable from './table';
 import TableLoader from './skeletons/tableSkel';
+import { Helmet } from 'react-helmet';
 
 function createData(id, notification, action_object, date, state, actor) {
     return { id, notification, action_object, date, state, actor };
@@ -38,7 +39,14 @@ export default function Notifications({currentUserId}) {
             notification.actor
         )));
 
-        return(<EnhancedTable rows={rows} currentUser={auth.currentUser}/>);
+        return(
+            <React.Fragment>
+                <Helmet>
+                    <title>{`sciForum - Notifications`}</title>
+                </Helmet>
+                <EnhancedTable rows={rows} currentUser={auth.currentUser}/>
+            </React.Fragment>
+        );
         //return(<TableLoader/>);
     }
 }

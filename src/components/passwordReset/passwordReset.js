@@ -2,6 +2,7 @@ import React from 'react';
 import EmailForm from './emailForm';
 import DescriptionAlerts from './messages/afterMessage';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 export default function PasswordReset() {
 
@@ -12,6 +13,11 @@ export default function PasswordReset() {
   }
 
   return (
-    <EmailForm/>
+    <React.Fragment>
+      <Helmet>
+        <title>{`sciForum - Password Reset`}</title>
+      </Helmet>
+      <EmailForm/>
+    </React.Fragment>
   );
 }

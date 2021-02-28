@@ -201,7 +201,7 @@ export function AnswerCommentRender({ answerId }) {
         setSubmitVal({});
         setEdit(false);
         setEditCommentId(undefined);
-    }, [dispatch, postId]);
+    }, [dispatch]);
 
     //Scrolling function
     const location = useLocation();

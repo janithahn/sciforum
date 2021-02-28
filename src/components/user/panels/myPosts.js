@@ -4,6 +4,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchMyPostsByUsername } from './actions';
 import { useStyles } from './styles';
+import { Helmet } from 'react-helmet';
 
 export default function MyPostsAccount({ usernameFromTheUrl }) {
 
@@ -15,7 +16,7 @@ export default function MyPostsAccount({ usernameFromTheUrl }) {
 
     React.useEffect(() => {
        if(myPosts.status === 'idle' && auth.isAuthenticated) dispatch(fetchMyPostsByUsername(usernameFromTheUrl, 1));
-    }, [dispatch, myPosts, auth]);
+    }, [dispatch, myPosts, auth, usernameFromTheUrl]);
 
     const postsList = myPosts.myposts.results ? myPosts.myposts.results.map(item => (
         <Grid item key={item.id}>
@@ -56,24 +57,29 @@ export default function MyPostsAccount({ usernameFromTheUrl }) {
         return(<p>Error loading</p>);
     }else {
         return(
-            <Grid container direction="column" alignItems="flex-start" justify="center" spacing={2}>
-                {myPosts.myposts.count === 0 ? <Typography variant="subtitle1" color="textPrimary">{"No posts have been posted"}</Typography>: postsList}
-                <Grid item>
-                    {myPosts.myposts.count !== 0 && total_pages > 1 ? 
-                        <Grid container direction="column" justify="center" alignItems="flex-end">
-                            <Pagination 
-                                className={classes.pagination} 
-                                page={current_page} 
-                                count={total_pages} 
-                                variant="outlined"
-                                shape="rounded" 
-                                size="small"
-                                onChange={(event, page) => handlePages(event, page)}
-                            />
-                        </Grid>: 
-                    undefined}
+            <React.Fragment>
+                <Helmet>
+                    <title>{`sciForum | Profile - My Posts`}</title>
+                </Helmet>
+                <Grid container direction="column" alignItems="flex-start" justify="center" spacing={2}>
+                    {myPosts.myposts.count === 0 ? <Typography variant="subtitle1" color="textPrimary">{"No posts have been posted"}</Typography>: postsList}
+                    <Grid item>
+                        {myPosts.myposts.count !== 0 && total_pages > 1 ? 
+                            <Grid container direction="column" justify="center" alignItems="flex-end">
+                                <Pagination 
+                                    className={classes.pagination} 
+                                    page={current_page} 
+                                    count={total_pages} 
+                                    variant="outlined"
+                                    shape="rounded" 
+                                    size="small"
+                                    onChange={(event, page) => handlePages(event, page)}
+                                />
+                            </Grid>: 
+                        undefined}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </React.Fragment>
         );
     }
 }

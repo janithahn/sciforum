@@ -4,6 +4,7 @@ import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 import RenderPosts from './RenderPosts';
 import { headerWithToken } from './headerWithToken';
+import { Helmet } from 'react-helmet';
 
 export default function Home() {
     
@@ -43,6 +44,9 @@ export default function Home() {
 
     return(
         <React.Fragment>
+            <Helmet>
+                <title>{`sciForum`}</title>
+            </Helmet>
             <RenderPosts 
                 PostsList={PostsList} 
                 fetchPostInfinite={fetchPostInfinite} 

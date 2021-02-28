@@ -4,6 +4,7 @@ import QuestionViewCard from '../post/QuestionViewCardComponent';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 import RenderPosts from './RenderPosts';
+import { Helmet } from 'react-helmet';
 
 export default function SearchByTag() {
 
@@ -46,10 +47,15 @@ export default function SearchByTag() {
     const PostsList = postData.map((post, key) => <div key={post.id}><QuestionViewCard item={post}/></div>);
 
     return(
-        <RenderPosts 
-            PostsList={PostsList} 
-            fetchPostInfinite={fetchPostInfinite} 
-            hasMoreItems={hasMoreItems} 
-        />
+        <React.Fragment>
+            <Helmet>
+                <title>{`sciForum | Tagged - ${tagname}`}</title>
+            </Helmet>
+            <RenderPosts 
+                PostsList={PostsList} 
+                fetchPostInfinite={fetchPostInfinite} 
+                hasMoreItems={hasMoreItems} 
+            />
+        </React.Fragment>
     );
 }

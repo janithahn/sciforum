@@ -41,7 +41,7 @@ export default function AnswerViewCard({answer, handleModalOpen, handleDeleteMod
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
-    }, [dispatch, postId]);
+    }, [dispatch]);
 
     return(
         <React.Fragment>

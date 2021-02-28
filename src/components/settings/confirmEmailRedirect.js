@@ -18,14 +18,13 @@ export default function ConfirmEmailRedirect() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const verifyAccount = useSelector(state => state.VerifyAccount)
-  const auth = useSelector(state => state.Auth);
 
   const { token } = useParams();
   const history = useHistory();
 
   React.useEffect(() => {
     if(verifyAccount.status === 'idle') dispatch(sendConfirmationToken(token));
-  }, [dispatch, verifyAccount.status]);
+  }, [dispatch, verifyAccount.status, token]);
 
   React.useEffect(() => {
     if(verifyAccount.status === 'succeeded') {

@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendConfirmationEmail } from './actionCreators';
-import ConfirmationEmailAfterSnack from './afterSnack';
 
 const useStyles = makeStyles({
   root: {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Paper, Typography, Link, Divider } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchLikedPosts } from './actions';
+import { Helmet } from 'react-helmet';
 
 export default function Liked() {
 
@@ -30,9 +31,14 @@ export default function Liked() {
         return(<p>Error loading liked posts</p>);
     }else {
         return(
-            <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
-                {postsList.length === 0 ? <Typography variant="subtitle1" color="textPrimary">{"You haven't liked any post yet"}</Typography>: postsList}
-            </Grid>
+            <React.Fragment>
+                <Helmet>
+                    <title>{`sciForum | Profile - Liked Posts`}</title>
+                </Helmet>
+                <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
+                    {postsList.length === 0 ? <Typography variant="subtitle1" color="textPrimary">{"You haven't liked any post yet"}</Typography>: postsList}
+                </Grid>
+            </React.Fragment>
         );
     }
 }

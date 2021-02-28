@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import Profile from './Profile';
 import Highlights from './Highlights';
+import { Helmet } from 'react-helmet';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,28 +22,33 @@ const Account = (props) => {
   const classes = useStyles();
 
   return (
-    <Container className={classes.root} maxWidth="lg">
-      <Grid container spacing={3}>
-        <Grid
-          item
-          lg={8}
-          md={6}
-          xs={12}
-        >
-          <Profile match={props.match}/>
+    <React.Fragment>
+      <Helmet>
+        <title>{`sciForum | Profile`}</title>
+      </Helmet>
+      <Container className={classes.root} maxWidth="lg">
+        <Grid container spacing={3}>
+          <Grid
+            item
+            lg={8}
+            md={6}
+            xs={12}
+          >
+            <Profile match={props.match}/>
+          </Grid>
+          <Grid
+            item
+            lg={4}
+            md={6}
+            xs={12}
+          >
+            <Hidden smDown>
+              <Highlights match={props.match}/>
+            </Hidden>
+          </Grid>
         </Grid>
-        <Grid
-          item
-          lg={4}
-          md={6}
-          xs={12}
-        >
-          <Hidden smDown>
-            <Highlights match={props.match}/>
-          </Hidden>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </React.Fragment>
   );
 };
 

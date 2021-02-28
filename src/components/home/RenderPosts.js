@@ -118,7 +118,7 @@ const FilterMenu = ({ open, setOpen, anchorRef, filterByDate, filterByMostVoted,
             anchorRef.current.focus();
         }
         prevOpen.current = open;
-    }, [open]);
+    }, [open, anchorRef]);
 
     return(
         <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>

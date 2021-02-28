@@ -26,7 +26,6 @@ import UnansweredPosts from './home/unanswered';
 //import MDBCustomFooter from './footer/MDBFooterComponent';
 //import ProfileDetails from './user/ProfileComponent';
 import Account from './user/index';
-import MyPostsAccount from './user/panels/myPosts';
 import Notifications from './notifications/index';
 import UserSettings from './settings/settings';
 import jwt_decode from 'jwt-decode';

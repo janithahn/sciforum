@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchMyAnswers } from './actions';
 import { useStyles } from './styles';
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import { Helmet } from 'react-helmet';
 
 export default function MyAnswes() {
 
@@ -46,24 +47,29 @@ export default function MyAnswes() {
         return(<p>Error loading your answers</p>);
     }else {
         return(
-            <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
-                {myAnswers.answers.count === 0 ? <Typography variant="subtitle1" color="textPrimary">{"You haven't answered any questions yet"}</Typography>: postsList}
-                <Grid item>
-                    {myAnswers.answers.count !== 0 && total_pages > 1 ? 
-                        <Grid container direction="column" justify="center" alignItems="flex-end">
-                            <Pagination 
-                                className={classes.pagination} 
-                                page={current_page} 
-                                count={total_pages} 
-                                variant="outlined"
-                                shape="rounded" 
-                                size="small"
-                                onChange={(event, page) => handlePages(event, page)}
-                            />
-                        </Grid>: 
-                    undefined}
+            <React.Fragment>
+                <Helmet>
+                    <title>{`sciForum | Profile - My Answers`}</title>
+                </Helmet>
+                <Grid container direction="column" alignItems="flex-start" justify="center" spacing={1}>
+                    {myAnswers.answers.count === 0 ? <Typography variant="subtitle1" color="textPrimary">{"You haven't answered any questions yet"}</Typography>: postsList}
+                    <Grid item>
+                        {myAnswers.answers.count !== 0 && total_pages > 1 ? 
+                            <Grid container direction="column" justify="center" alignItems="flex-end">
+                                <Pagination 
+                                    className={classes.pagination} 
+                                    page={current_page} 
+                                    count={total_pages} 
+                                    variant="outlined"
+                                    shape="rounded" 
+                                    size="small"
+                                    onChange={(event, page) => handlePages(event, page)}
+                                />
+                            </Grid>: 
+                        undefined}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </React.Fragment>
         );
     }
 }

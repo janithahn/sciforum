@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchUserEmployment, fetchUserEducation, fetchUserSkills, fetchUserLanguages, fetchUserInterests } from '../../../redux/ActionCreators';
 import { labels } from '../../post/styles/labelStyles'
+import { Helmet } from 'react-helmet';
 
 export default function ProfilePanel() {
 
@@ -185,6 +186,9 @@ export default function ProfilePanel() {
 
     return(
         <React.Fragment>
+            <Helmet>
+                <title>{`sciForum | Profile - Index`}</title>
+            </Helmet>
             <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={2}>
                 <Grid item>
                     <Grid container direction="column" alignItems="flex-start" justify="flex-start" spacing={1}>

@@ -108,7 +108,7 @@ const Header = (props) => {
     //fetch unread notifications
     React.useEffect(() => {
         dispatch(fetchUnreadNotifications(auth.currentUserId));
-    }, []);
+    }, [dispatch, auth.currentUserId]);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {

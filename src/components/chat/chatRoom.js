@@ -11,9 +11,10 @@ import { db } from '../../firebase/config';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import './Styles.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchData as fetchRooms, fetchMessages, fetchRoomUsers } from './actionCreators';
+import { fetchData as fetchRooms, fetchMessages } from './actionCreators';
 import { RoomDeleteAlert, MessageDeleteAlert } from './alerts';
 import AddRoomModal from './addRoomModal';
+import { Helmet } from 'react-helmet';
 
 const TabEnhanced = withStyles((theme) => ({
     root: {
@@ -350,149 +351,154 @@ export default function ChatRoom() {
     };*/
 
     return (
-        <Container>
-            <Grid container direction="column" spacing={1}>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <Grid container alignItems="center" justify="space-between">
-                        <Grid item>
-                            <Typography variant="h5">{room ? room: undefined}</Typography>
-                        </Grid>
-                        <Grid item>
-                            {room ? 
-                                <Grid container alignItems="center" justify="flex-end" spacing={2}>
-                                    <Grid item>
-                                        <Button variant="outlined" size="small" color="secondary" style={{textTransform: 'none', padding: '0px 4px 0px 4px'}} onClick={() => exitChat() }>
-                                            Exit
-                                        </Button>
+        <div>
+            <Helmet>
+                <title>{`sciForum | Chat Rooms - ${room}`}</title>
+            </Helmet>
+            <Container>
+                <Grid container direction="column" spacing={1}>
+                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <Grid container alignItems="center" justify="space-between">
+                            <Grid item>
+                                <Typography variant="h5">{room ? room: undefined}</Typography>
+                            </Grid>
+                            <Grid item>
+                                {room ? 
+                                    <Grid container alignItems="center" justify="flex-end" spacing={2}>
+                                        <Grid item>
+                                            <Button variant="outlined" size="small" color="secondary" style={{textTransform: 'none', padding: '0px 4px 0px 4px'}} onClick={() => exitChat() }>
+                                                Exit
+                                            </Button>
+                                        </Grid>
+                                        {currentRoom && currentRoom.owner === auth.currentUser ? <Grid item>
+                                            <DropDown 
+                                                id={id} 
+                                                open={open} 
+                                                anchorEl={anchorEl}
+                                                handleClick={handleSettings} 
+                                                handleClose={handleSettingsClose}
+                                                handleEditRoom={handleEditRoom}
+                                                handleDeleteRoom={handleDeleteModalOpen}
+                                            />
+                                        </Grid>: undefined}
                                     </Grid>
-                                    {currentRoom && currentRoom.owner === auth.currentUser ? <Grid item>
-                                        <DropDown 
-                                            id={id} 
-                                            open={open} 
-                                            anchorEl={anchorEl}
-                                            handleClick={handleSettings} 
-                                            handleClose={handleSettingsClose}
-                                            handleEditRoom={handleEditRoom}
-                                            handleDeleteRoom={handleDeleteModalOpen}
-                                        />
-                                    </Grid>: undefined}
-                                </Grid>
-                                : undefined
-                            }
+                                    : undefined
+                                }
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <Grid container direction="row" justify="flex-end" alignItems="center">
-                        <Grid item>
-                            <Tabs
-                                orientation="horizontal"
-                                scrollButtons="desktop"
-                                variant="scrollable"
-                                aria-label="Verticle Tabs for chat online chips"
-                            >
-                                {users.map((item) => (
-                                    <TabEnhanced key={item.key}
-                                        label={
-                                            <Link href={`/profile/${item.username}`} underline="none" style={{textDecoration: 'none'}}>
-                                                <Chip
-                                                    variant="outlined"
-                                                    size="small"
-                                                    avatar={<Avatar alt={item.username} src={item.userAvatar} />}
-                                                    label={item.username}
-                                                    color="secondary"
-                                                    clickable
-                                                />
-                                            </Link>
-                                        }
-                                    />    
-                                ))}
-                            </Tabs>
+                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <Grid container direction="row" justify="flex-end" alignItems="center">
+                            <Grid item>
+                                <Tabs
+                                    orientation="horizontal"
+                                    scrollButtons="desktop"
+                                    variant="scrollable"
+                                    aria-label="Verticle Tabs for chat online chips"
+                                >
+                                    {users.map((item) => (
+                                        <TabEnhanced key={item.key}
+                                            label={
+                                                <Link href={`/profile/${item.username}`} underline="none" style={{textDecoration: 'none'}}>
+                                                    <Chip
+                                                        variant="outlined"
+                                                        size="small"
+                                                        avatar={<Avatar alt={item.username} src={item.userAvatar} />}
+                                                        label={item.username}
+                                                        color="secondary"
+                                                        clickable
+                                                    />
+                                                </Link>
+                                            }
+                                        />    
+                                    ))}
+                                </Tabs>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <div className="ChatBoxDiv">
-                        <Card variant="outlined" style={{paddingBottom: 8}}>
-                            <ScrollToBottom className="ChatContent">
-                                {chats.map((item) => (
-                                    <div key={item.key} className="MessageBox" onMouseLeave={() => handleMouseLeave()} onMouseOver={() => handleOnMouseOver()}>
-                                        {item.type ==='join' || item.type === 'exit' ?
-                                            <div className="ChatStatus">
-                                                <span className="ChatDate">{item.date}</span>
-                                                <span className="ChatContentCenter">{item.message}</span>
-                                            </div>:
-                                            <div className="ChatMessage">
-                                                <div className={`${item.username === username ? "RightBubble": "LeftBubble"}`} >
-                                                    {item.username === username ? 
-                                                        <span className="MsgName">Me</span>:<span className="MsgName">{item.username}</span>
-                                                    }
-                                                    <span className="MsgDate"> at {item.date}</span>
-                                                    {item.username === username && show && 
-                                                        <Button 
-                                                            className={classes.deleteButton} 
-                                                            variant="text" 
-                                                            size="small"
-                                                            onClick={() => handleMessageDeleteModalOpen(item.key)}
-                                                        >
-                                                            delete
-                                                        </Button>}
-                                                    <p>{item.message}</p>
+                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <div className="ChatBoxDiv">
+                            <Card variant="outlined" style={{paddingBottom: 8}}>
+                                <ScrollToBottom className="ChatContent">
+                                    {chats.map((item) => (
+                                        <div key={item.key} className="MessageBox" onMouseLeave={() => handleMouseLeave()} onMouseOver={() => handleOnMouseOver()}>
+                                            {item.type ==='join' || item.type === 'exit' ?
+                                                <div className="ChatStatus">
+                                                    <span className="ChatDate">{item.date}</span>
+                                                    <span className="ChatContentCenter">{item.message}</span>
+                                                </div>:
+                                                <div className="ChatMessage">
+                                                    <div className={`${item.username === username ? "RightBubble": "LeftBubble"}`} >
+                                                        {item.username === username ? 
+                                                            <span className="MsgName">Me</span>:<span className="MsgName">{item.username}</span>
+                                                        }
+                                                        <span className="MsgDate"> at {item.date}</span>
+                                                        {item.username === username && show && 
+                                                            <Button 
+                                                                className={classes.deleteButton} 
+                                                                variant="text" 
+                                                                size="small"
+                                                                onClick={() => handleMessageDeleteModalOpen(item.key)}
+                                                            >
+                                                                delete
+                                                            </Button>}
+                                                        <p>{item.message}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        }
-                                    </div>
-                                ))}
-                            </ScrollToBottom>
-                        </Card>
-                    </div>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8}>
-                    <div>
-                        <footer>
-                            <div className="StickyFooter">
-                                <form onSubmit={submitMessage}>
-                                    <Grid container direction="row" alignItems="center" justify="space-between" spacing={0}>
-                                        <Grid item lg={11} sm={11} md={10} xs={11}>
-                                            <Paper className={classes.paperInput} elevation={0} variant="outlined">
-                                                <div className={classes.inputDiv}>
-                                                    <InputBase disabled={currentRoom ? false: true} multiline fullWidth type="text" name="message" id="message" placeholder="Enter message here" value={newchat.message} onChange={onChange} />
-                                                </div>
-                                            </Paper>
+                                            }
+                                        </div>
+                                    ))}
+                                </ScrollToBottom>
+                            </Card>
+                        </div>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={8} lg={8}>
+                        <div>
+                            <footer>
+                                <div className="StickyFooter">
+                                    <form onSubmit={submitMessage}>
+                                        <Grid container direction="row" alignItems="center" justify="space-between" spacing={0}>
+                                            <Grid item lg={11} sm={11} md={10} xs={11}>
+                                                <Paper className={classes.paperInput} elevation={0} variant="outlined">
+                                                    <div className={classes.inputDiv}>
+                                                        <InputBase disabled={currentRoom ? false: true} multiline fullWidth type="text" name="message" id="message" placeholder="Enter message here" value={newchat.message} onChange={onChange} />
+                                                    </div>
+                                                </Paper>
+                                            </Grid>
+                                            <Grid item lg={1} sm={1} md={2} xs={1}>
+                                                <Button disabled={currentRoom ? false: true} className={classes.sendButton} variant="text" color="secondary" size="small" style={{textTransform: 'none'}} type="submit">Send</Button>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item lg={1} sm={1} md={2} xs={1}>
-                                            <Button disabled={currentRoom ? false: true} className={classes.sendButton} variant="text" color="secondary" size="small" style={{textTransform: 'none'}} type="submit">Send</Button>
-                                        </Grid>
-                                    </Grid>
-                                </form>
-                            </div>
-                        </footer>
-                    </div>
+                                    </form>
+                                </div>
+                            </footer>
+                        </div>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <RoomDeleteAlert 
-                handleDeleteModalClose={handleDeleteModalClose} 
-                openDeleteModal={openDeleteModal}
-                deleteRoom={deleteRoom}
-            />
-            <MessageDeleteAlert
-                handleDeleteModalClose={handleMessageDeleteModalClose} 
-                openDeleteModal={openMessageDeleteModal}
-                deleteMessage={deleteMessage}
-            />
-            <EditModal>
-                <Fade in={openModal}>
-                    <AddRoomModal 
-                        type="edit" 
-                        openModal={openModal} 
-                        handleModalClose={handleModalClose} 
-                        currentRoomname={currentRoom ? currentRoom.roomname: ""} 
-                        currentDescription={currentRoom ? currentRoom.description: ""}
-                        currentRoomKey={currentRoom ? currentRoom.key: ""}
-                    />
-                </Fade>
-            </EditModal>
-        </Container>
+                <RoomDeleteAlert 
+                    handleDeleteModalClose={handleDeleteModalClose} 
+                    openDeleteModal={openDeleteModal}
+                    deleteRoom={deleteRoom}
+                />
+                <MessageDeleteAlert
+                    handleDeleteModalClose={handleMessageDeleteModalClose} 
+                    openDeleteModal={openMessageDeleteModal}
+                    deleteMessage={deleteMessage}
+                />
+                <EditModal>
+                    <Fade in={openModal}>
+                        <AddRoomModal 
+                            type="edit" 
+                            openModal={openModal} 
+                            handleModalClose={handleModalClose} 
+                            currentRoomname={currentRoom ? currentRoom.roomname: ""} 
+                            currentDescription={currentRoom ? currentRoom.description: ""}
+                            currentRoomKey={currentRoom ? currentRoom.key: ""}
+                        />
+                    </Fade>
+                </EditModal>
+            </Container>
+        </div>
     );
 }
 

@@ -27,7 +27,7 @@ export default function AfterMessage() {
           handleProceed()
       }, 3000);
     }
-  }, [deleteUser]);
+  }, [deleteUser, handleProceed]);
 
   const handleProceed = () => {
     dispatch(logout());

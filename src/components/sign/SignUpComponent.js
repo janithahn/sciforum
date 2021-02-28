@@ -24,6 +24,7 @@ import { useGoogleLogin } from 'react-google-login';
 import { clientId } from '../../shared/googleApiClientId';
 import btn_google_light_normal_ios from './styles/btn_google_light_normal_ios.svg';
 import community from './styles/community.svg';
+import { Helmet } from 'react-helmet';
 
 /*function handleSubmit(values) {
   alert("Current State is: " + JSON.stringify(values));
@@ -119,6 +120,9 @@ export default function SignUp() {
 
   return (
     <Container component="main" maxWidth="xs" className={classes.content}>
+      <Helmet>
+          <title>{`sciForum - Signup`}</title>
+        </Helmet>
       <CssBaseline />
       <div className={classes.paper}>
         <img className={classes.logo} alt="sciforum_logo" src={community}/>

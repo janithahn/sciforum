@@ -4,6 +4,7 @@ import QuestionViewCard from '../post/QuestionViewCardComponent';
 import axios from 'axios';
 import { baseUrl } from '../../shared/baseUrl'
 import RenderPosts from './RenderPosts';
+import { Helmet } from 'react-helmet';
 
 export default function SearchByLabel() {
 
@@ -45,10 +46,15 @@ export default function SearchByLabel() {
     const PostsList = postData.map((post) => <div key={post.id}><QuestionViewCard item={post}/></div>);
 
     return(
-        <RenderPosts 
-            PostsList={PostsList} 
-            fetchPostInfinite={fetchPostInfinite} 
-            hasMoreItems={hasMoreItems} 
-        />
+        <React.Fragment>
+            <Helmet>
+                <title>{`sciForum | Labeled - ${label}`}</title>
+            </Helmet>
+            <RenderPosts 
+                PostsList={PostsList} 
+                fetchPostInfinite={fetchPostInfinite} 
+                hasMoreItems={hasMoreItems} 
+            />
+        </React.Fragment>
     );
 }

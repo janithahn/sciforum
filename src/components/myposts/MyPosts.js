@@ -7,6 +7,7 @@ import QuestionViewCard from '../post/QuestionViewCardComponent'
 import Pagination from '@material-ui/lab/Pagination';
 import { useStyles } from './styles/mypostsStyles';
 import MyPostsLoader from './skeletons/mypostsSkels';
+import { Helmet } from 'react-helmet';
 
 export default function MyPosts() {
 
@@ -37,6 +38,9 @@ export default function MyPosts() {
 
         return(
             <React.Fragment>
+                <Helmet>
+                    <title>{`sciForum - My Posts`}</title>
+                </Helmet>
                 <Grid container direction="column" justify="center" alignItems="flex-end">
                     <RouterLink to="/ask" style={{textDecoration: 'none'}}>
                         <Button style={{margin: 4}} color='secondary' variant="outlined">Ask a Question</Button>

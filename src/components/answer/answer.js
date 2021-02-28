@@ -3,7 +3,7 @@ import { ThemeProvider, Grid, Typography, Divider, Modal, Backdrop, Fade,
     Tooltip, IconButton, Popper, Grow, Paper, ClickAwayListener, MenuItem, MenuList } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import { FilterList } from '@material-ui/icons';
-import { fetchAnswers, fetchAnswersForPagination, resetAnswerChangeStatus } from '../../redux/ActionCreators';
+import { fetchAnswers, fetchAnswersForPagination } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams, useHistory } from 'react-router-dom';
 import { useStyles, theme } from './styles/answerStyles';
@@ -70,14 +70,14 @@ const Answer = () => {
             else
                 dispatch(fetchAnswers(postId, "-vote_count", answerId));
         }
-    }, [dispatch, answers.status, postId]);
+    }, [dispatch, answers.status, postId, answerPageNum]);
 
     React.useEffect(() => {
         if(answers.changedAnswer) {
             dispatch(fetchAnswers(postId, "-vote_count", answers.changedAnswer));
             push(`/questions/${postId}/${answers.changedAnswer}#${answers.changedAnswer}`);
         }
-    }, [answers.changedAnswer, postId, push]);
+    }, [dispatch, answers.changedAnswer, postId, push]);
 
     React.useEffect(() => {
         if(answers.changeStatus === 'deleted') {
@@ -128,7 +128,7 @@ const Answer = () => {
                 refs[Number(hash)].current.style.animation = 'answer-background-fade 8s';
             }
         }
-    }, [auth.isAuthenticated, refs, hash, scrollTo, votesStatus]);
+    }, [auth.isAuthenticated, refs, hash, scrollTo, votesStatus, answers.status]);
     
     /*React.useEffect(() => {
         if(refs && refs[Number(hash)]) {
@@ -242,7 +242,7 @@ const Answer = () => {
                                                     <Typography variant="h6">{`${answers.answers.count} Answers`}</Typography>
                                                 </Grid>
                                                 <Grid item>
-                                                    {answers.answers.count !== 0 && total_pages > 1 ? 
+                                                    {total_pages > 1 ? 
                                                         <Grid container direction="column" justify="center" alignItems="flex-end">
                                                             <Pagination 
                                                                 className={classes.pagination} 
@@ -352,7 +352,7 @@ const FilterMenu = ({ open, setOpen, anchorRef, filterByDate, filterByActive, fi
         }
 
         prevOpen.current = open;
-    }, [open]);
+    }, [open, anchorRef]);
 
     return(
         <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>

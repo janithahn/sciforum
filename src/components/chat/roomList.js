@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import Moment from 'moment';
 import { Button, Card, CardActions, CardContent, Typography, Grid, 
     Modal, Backdrop, Fade, InputBase, Link, IconButton, Tooltip, Popper, 
-    Grow, MenuList, MenuItem, ClickAwayListener, Paper, Avatar, Box } from '@material-ui/core';
+    Grow, MenuList, MenuItem, ClickAwayListener, Paper, Avatar } from '@material-ui/core';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import { Search, FilterList } from '@material-ui/icons';
 import { db } from '../../firebase/config';
@@ -12,6 +12,7 @@ import { fetchData as fetchRooms, resetMessages } from './actionCreators';
 import AddRoomModal from './addRoomModal';
 import ChatroomPermissionDenied from './permissionDenied';
 import { useRoomListStyles } from './styles/styles';
+import { Helmet } from 'react-helmet';
 
 const snapshotToArray = (snapshot) => {
     const returnArr = [];
@@ -109,7 +110,7 @@ const FilterMenu = ({ open, setOpen, anchorRef, filterByDate, filterByUsers, fil
         }
 
         prevOpen.current = open;
-    }, [open]);
+    }, [open, anchorRef]);
 
     return(
         <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
@@ -348,8 +349,8 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
                         {`${usersCount} People`}
                     </Typography>
                     <AvatarGroup max={4}>
-                        {avatarList.length !== 0 ? shuffle(avatarList).map((avatar) => (
-                            <Tooltip arrow title={avatar.username}>
+                        {avatarList.length !== 0 ? shuffle(avatarList).map((avatar, key) => (
+                            <Tooltip key={key} arrow title={avatar.username}>
                                 <Avatar className={classes.avatars} alt={avatar.username} src={avatar.avatar} />
                             </Tooltip>
                         )): <div style={{opacity: 0}} className={classes.avatars}></div>}
@@ -391,6 +392,9 @@ export default function RoomList({ setSnackMessage, setSnackOpen }) {
     }else {
         return (
             <div>
+                <Helmet>
+                    <title>{`sciForum - Chat Rooms`}</title>
+                </Helmet>
                 {/*{username} <Button style={{textTransform: 'none'}} onClick={() => logout()} size="small">Logout</Button>*/}
                 <Grid container direction="row" justify="space-between" alignItems="center" spacing={2}>
                     <Grid item>

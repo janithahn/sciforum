@@ -13,6 +13,7 @@ import RenderCard from './RenderCard';
 import Article from './skeletons/post';
 import { PostCommentInput, PostCommentRender } from './comment/comment';
 import { EditorState } from 'draft-js';
+import { Helmet } from 'react-helmet';
 
 function AnswerModal({openModal, answerContent, setAnswerContent, handleModalClose, classes, postId, ...rest}) {
     return(
@@ -115,7 +116,7 @@ export default function PostDetail() {
         }
         setEditorState(() => EditorState.createEmpty());
         setSubmitVal({});
-    }, [dispatch, postId]);
+    }, [dispatch]);
 
     if(post.status === 'loading') {
         return(<div><Article/></div>);
@@ -130,6 +131,9 @@ export default function PostDetail() {
 
         return(
             <div className={classes.root}>
+                <Helmet>
+                    <title>{`sciForum - ${postInfo.title}`}</title>
+                </Helmet>
                 <ThemeProvider theme={theme}>
                     <RenderCard 
                         title={postInfo.title} 
