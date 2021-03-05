@@ -1,3 +1,21 @@
+## Project Overview
+
+**sciForum** is a faculty based online discussion forum where you can find following functionalities. This is the **front-end** of the application and is based on `ReactJS`.
+
+- Create your own account.
+- Filtered out posts based on your favorite subjects.
+- Ask questions and answer others' questions.
+- Label your question for the simplicity of filtering them.
+- Have tags on your questions.
+- Put Likes, Comments and mention people in comments if you want.
+- The notification panel will keep you notified about changes of your posts.
+- Email notifications.
+- Become a moderator/tutor to receive daily question updates about your favorite subjects to your email.
+- Have your own profile panel.
+- Create public chat rooms based on various topics and chat/discuss your problems.
+
+Code for the **back-end** of the application can be found [here](https://github.com/s16417/sciforumDjangoBack).
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
