@@ -1,6 +1,6 @@
 ## Project Overview
 
-**sciForum** is a faculty based online discussion forum where you can find following functionalities.
+**sciForum** is a faculty based online discussion forum where you can find following functionalities. This is the front-end of the application and is based on `ReactJS`.
 
 - Create your own account.
 - Filtered out posts based on your favorite subjects.
@@ -14,7 +14,7 @@
 - Have your own profile panel.
 - Create public chat rooms based on various topics and chat/discuss your problems.
 
-Code for the **backend** of the application can be found [here](https://github.com/s16417/sciforumDjangoBack).
+Code for the **back-end** of the application can be found [here](https://github.com/s16417/sciforumDjangoBack).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
