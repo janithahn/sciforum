@@ -1,6 +1,6 @@
 ## Project Overview
 
-**sciForum** is a faculty based online discussion forum where you can find following functionalities. This is the **front-end** of the application and is based on `ReactJS`.
+**sciForum** is a faculty based online discussion forum where you can find the following major functionalities. This is the **front-end** of the application and is based on `ReactJS`.
 
 - Create your own account.
 - Filtered out posts based on your favorite subjects.
