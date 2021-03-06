@@ -13,6 +13,7 @@
 - Become a moderator/tutor to receive daily question updates about your favorite subjects to your email.
 - Have your own profile panel.
 - Create public chat rooms based on various topics and chat/discuss your problems.
+- Built-in web crawler crawls all the faculty based web sites and grabs news events, webinars happening around the faculty and shows in the web site as news feeds.
 
 Code for the **back-end** of the application can be found [here](https://github.com/s16417/sciforumDjangoBack).
 
