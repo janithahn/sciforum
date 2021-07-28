@@ -126,7 +126,7 @@ export default function PostDetail() {
 
         const RenderPostTags = postTags ? postTags.map((tag, key) => 
             <Grid item key={key} >
-                <Chip className={classes.chip} color="primary" size="small" variant="outlined" label={tag} key={key} component="a" href={`/questions/tagged/${tag}`} clickable/>
+                <Chip className={classes.chip} color="primary" size="small" variant="outlined" label={tag} key={key} component="a" href={`/tagged/${tag}`} clickable/>
             </Grid>): [];
 
         return(
