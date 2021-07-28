@@ -184,6 +184,11 @@ export function AnswerCommentRender({ answerId }) {
         setOpenDeleteModal(false);
     };
 
+    /*const fetchData = React.useCallback(
+        (postId) => dispatch(fetchAnswerComments(postId)),
+        [dispatch]
+    );*/
+
     React.useEffect(() => {
         if(answerComments.status === 'idle') dispatch(fetchAnswerComments(postId));
     }, [dispatch, answerComments, postId]);

@@ -233,7 +233,8 @@ const Comment = React.memo(({item , classes, displayContent, plugins, auth, hand
     //console.log("only one comment");
 
     //draft-js needs this onChange to show decorations even though it is in readOnly mode
-    const [editorState, setEditorState] = React.useState(displayContent);
+    //const [editorState, setEditorState] = React.useState(displayContent); // this was previously given inside the Editor component as the editorState and it makes the comment to not render after it's edited, so, this way works fine
+    const [editorState, setEditorState] = React.useState(EditorState.createEmpty());
 
     const onEditorChange = (editorState) => {
         setEditorState(editorState);
@@ -248,7 +249,7 @@ const Comment = React.memo(({item , classes, displayContent, plugins, auth, hand
                             <Avatar style={{height: 25, width: 25}} src={item.ownerAvatar} />
                         </AvatarTooltip>
                         <div className={classes.input}>
-                            <Editor plugins={plugins} onChange={state => onEditorChange(state)} readOnly editorState={editorState}/>
+                            <Editor plugins={plugins} onChange={state => onEditorChange(state)} readOnly editorState={displayContent}/>
                         </div>
                     </Paper>:
                     undefined
@@ -313,14 +314,14 @@ export function PostCommentRender() {
     const [edit, setEdit] = React.useState(false);
     const [editCommentId, setEditCommentId] = React.useState();
 
-    const fetchData = React.useCallback(
+    /*const fetchData = React.useCallback(
         (postId) => dispatch(fetchPostComments(postId)),
         [dispatch]
-    );
+    );*/
 
     React.useEffect(() => {
-        if(postComments.status === 'idle') fetchData(postId);
-    }, [dispatch, fetchData, postComments.status, postId]);
+        if(postComments.status === 'idle') dispatch(fetchPostComments(postId));
+    }, [dispatch, postComments, postId]);
     
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
 
