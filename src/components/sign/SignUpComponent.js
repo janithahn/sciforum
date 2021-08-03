@@ -20,6 +20,7 @@ import PasswordStrengthBar from 'react-password-strength-bar';
 import { signupUser, loginUserWithGoogle } from '../../redux/ActionCreators';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGoogleLogin } from 'react-google-login';
+import { useHistory, useLocation } from 'react-router-dom';
 import { clientId } from '../../shared/googleApiClientId';
 import btn_google_light_normal_ios from './styles/btn_google_light_normal_ios.svg';
 import community from './styles/community.svg';
@@ -53,6 +54,10 @@ export default function SignUp() {
   const [isPasswordFocused, setPasswordFocus] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
 
+  let history = useHistory();
+  let location = useLocation();
+  let { from } = location.state || { from: { pathname: history.location.pathname } };
+  
   const signupSchema = Yup.object().shape({
     username: Yup.string()
       .min(2, 'Too Short!')
@@ -102,7 +107,7 @@ export default function SignUp() {
 
   const googleResponse = (response) => {
     console.log(response);
-    dispatch(loginUserWithGoogle(response));
+    dispatch(loginUserWithGoogle(response, history, from));
   }
 
   const googleResponseOnFailure = (response) => {
